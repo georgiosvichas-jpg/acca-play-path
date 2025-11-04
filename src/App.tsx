@@ -20,6 +20,7 @@ import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
 import XPConfettiWrapper from "./components/XPConfettiWrapper";
+import FlashcardsContentNew from "./components/FlashcardsContentNew";
 
 const queryClient = new QueryClient();
 
@@ -55,7 +56,7 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Navigation />
-                <Flashcards />
+                <FlashcardsContentNew />
               </ProtectedRoute>
             }
           />

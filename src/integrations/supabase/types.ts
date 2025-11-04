@@ -126,7 +126,11 @@ export type Database = {
           difficulty: string | null
           id: string
           paper_code: string
+          paper_name: string | null
           question: string
+          source_type: string | null
+          unit_title: string | null
+          updated_at: string | null
           xp: number | null
         }
         Insert: {
@@ -136,7 +140,11 @@ export type Database = {
           difficulty?: string | null
           id?: string
           paper_code: string
+          paper_name?: string | null
           question: string
+          source_type?: string | null
+          unit_title?: string | null
+          updated_at?: string | null
           xp?: number | null
         }
         Update: {
@@ -146,7 +154,11 @@ export type Database = {
           difficulty?: string | null
           id?: string
           paper_code?: string
+          paper_name?: string | null
           question?: string
+          source_type?: string | null
+          unit_title?: string | null
+          updated_at?: string | null
           xp?: number | null
         }
         Relationships: [
