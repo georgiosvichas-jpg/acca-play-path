@@ -74,12 +74,10 @@ export default function FlashcardsContentNew() {
             await fetchFlashcards();
           } else {
             toast.error("Failed to import flashcards. Please try again.");
-            setShowImporter(false);
           }
         } catch (error) {
           console.error("Auto-import failed:", error);
           toast.error("Failed to import flashcards. Please refresh the page.");
-          setShowImporter(false);
         }
       }
     };
@@ -209,28 +207,34 @@ export default function FlashcardsContentNew() {
                 </p>
               </div>
 
-              {/* Loading Spinner */}
-              <div className="py-6">
-                <div className="mx-auto w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
-              </div>
+              {!importAttempted ? (
+                <>
+                  {/* Loading Spinner */}
+                  <div className="py-6">
+                    <div className="mx-auto w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+                  </div>
 
-              {/* Progress Text */}
-              <p className="text-sm text-[#94A3B8]">
-                Setting up 500+ flashcards across all ACCA papers
-              </p>
-
-              {/* Retry Button (shown after failed import) */}
-              {importAttempted && (
-                <Button 
-                  onClick={() => {
-                    setImportAttempted(false);
-                    setShowImporter(true);
-                  }}
-                  variant="outline"
-                  className="mt-4"
-                >
-                  Retry Import
-                </Button>
+                  {/* Progress Text */}
+                  <p className="text-sm text-[#94A3B8]">
+                    Setting up 500+ flashcards across all ACCA papers
+                  </p>
+                </>
+              ) : (
+                <>
+                  <p className="text-lg font-semibold mb-2">Import Failed</p>
+                  <p className="text-sm text-[#94A3B8] mb-4">
+                    Unable to import flashcards. Please try again.
+                  </p>
+                  <Button 
+                    onClick={() => {
+                      setImportAttempted(false);
+                      setShowImporter(true);
+                    }}
+                    variant="outline"
+                  >
+                    Retry Import
+                  </Button>
+                </>
               )}
             </CardContent>
           </Card>
