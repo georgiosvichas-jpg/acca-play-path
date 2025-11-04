@@ -31,11 +31,17 @@ serve(async (req) => {
   try {
     console.log("Starting flashcard import...");
 
-    const { csvData } = await req.json();
-
-    if (!csvData) {
-      throw new Error("No CSV data provided");
+    // Fetch CSV from public directory
+    const csvUrl = "https://f96e568f-61ab-4a8c-b65f-315967d1abcd.lovableproject.com/data/acca_flashcards_dataset.csv";
+    console.log("Fetching CSV from:", csvUrl);
+    
+    const csvResponse = await fetch(csvUrl);
+    if (!csvResponse.ok) {
+      throw new Error(`Failed to fetch CSV: ${csvResponse.statusText}`);
     }
+    
+    const csvData = await csvResponse.text();
+    console.log("CSV fetched successfully");
 
     // Parse CSV
     const lines = csvData.trim().split("\n");
