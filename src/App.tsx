@@ -5,7 +5,6 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./components/Landing";
 import Dashboard from "./components/Dashboard";
-import Flashcards from "./components/Flashcards";
 import BadgesReal from "./components/BadgesReal";
 import Analytics from "./components/Analytics";
 import Leaderboard from "./pages/Leaderboard";
