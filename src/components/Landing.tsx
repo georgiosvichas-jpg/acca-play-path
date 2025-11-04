@@ -347,166 +347,195 @@ export default function Landing() {
       </section>
 
       {/* Pricing */}
-      <section id="pricing" className="py-20 px-4 md:px-8 bg-gradient-to-br from-[#F9FAFB] to-white">
-        <div className="max-w-6xl mx-auto">
+      <section id="pricing" className="py-24 px-4 md:px-8 bg-gradient-to-b from-[#F9FAFB] to-white relative overflow-hidden">
+        <div className="max-w-7xl mx-auto">
+          {/* Section Header */}
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Choose the plan that fits your ACCA journey
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#0F172A]" style={{ fontWeight: 700 }}>
+              Choose your plan for smarter ACCA prep
             </h2>
-            <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-              Start free, master one paper, or unlock everything. Cancel anytime.
+            <p className="text-lg md:text-xl text-[#475569] max-w-3xl mx-auto mb-8">
+              Start free, focus on one paper, or unlock everything. Simple pricing. Cancel anytime.
             </p>
-            <div className="w-24 h-px bg-primary mx-auto mb-8" />
-            
-            {/* Monthly/Annual Toggle */}
-            <div className="flex items-center justify-center gap-3 mb-8">
-              <span className={`text-sm font-medium transition-colors ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
-                Monthly
-              </span>
-              <Switch 
-                checked={isAnnual} 
-                onCheckedChange={setIsAnnual}
-                className="data-[state=checked]:bg-primary"
-              />
-              <span className={`text-sm font-medium transition-colors ${isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
-                Annual
-              </span>
-              <Badge variant="secondary" className="ml-2 bg-accent/20 text-accent-foreground">
-                Save 20%
-              </Badge>
-            </div>
+            <div className="w-32 h-px bg-[#E5E7EB] mx-auto" />
+          </div>
+
+          {/* Billing Toggle */}
+          <div className="flex items-center justify-center gap-3 mb-12 animate-fade-in">
+            <span className={`text-sm font-medium transition-colors duration-200 ${!isAnnual ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
+              Monthly
+            </span>
+            <Switch 
+              id="billing-toggle"
+              checked={isAnnual} 
+              onCheckedChange={setIsAnnual}
+              className="data-[state=checked]:bg-[#00A67E]"
+            />
+            <span className={`text-sm font-medium transition-colors duration-200 ${isAnnual ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
+              Annual
+            </span>
+            <Badge className="ml-2 bg-[#00A67E]/10 text-[#00A67E] border-[#00A67E]/20 hover:bg-[#00A67E]/10">
+              Save 20%
+            </Badge>
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {/* Free Plan */}
-            <Card className="p-8 rounded-3xl border-2 border-[#E5E7EB] bg-white hover:shadow-lg transition-all duration-300 hover:scale-105 animate-slide-up">
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold mb-2">Free</h3>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-5xl font-display font-bold">€0</span>
+          <div className="grid md:grid-cols-3 gap-6 mb-12 items-stretch">
+            {/* Card 1 - Free */}
+            <Card className="relative bg-white border-[#E5E7EB] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
+              <div className="flex-1 space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>
+                    Free
+                  </h3>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>€0</span>
+                  </div>
+                  <p className="text-sm text-[#475569] leading-relaxed">
+                    For new learners exploring the app.
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground">
-                  For curious learners exploring the app.
-                </p>
+
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Access to 1 demo paper</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Lock className="w-5 h-5 text-[#64748B] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#64748B]">10 flashcards and mini-problems</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Lock className="w-5 h-5 text-[#64748B] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#64748B]">Basic planner view</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <Lock className="w-5 h-5 text-[#64748B] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#64748B]">Limited XP tracking</span>
+                  </li>
+                </ul>
               </div>
 
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3">
-                  <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm">Access to 1 demo paper</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm">10 flashcards & mini-problems</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm">Basic planner</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
-                  <span className="text-sm">Limited XP tracking</span>
-                </li>
-              </ul>
-
               <Button 
+                id="cta-start-free"
+                aria-label="Start free"
                 variant="outline" 
-                className="w-full rounded-xl border-2 hover:border-primary hover:text-primary transition-all"
+                className="w-full mt-6 h-12 rounded-xl border-2 border-[#00A67E] text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200"
                 onClick={() => navigate("/auth")}
               >
                 Start free
               </Button>
             </Card>
 
-            {/* Per Paper Plan */}
-            <Card className="p-8 rounded-3xl border-2 border-primary bg-white hover:shadow-xl transition-all duration-300 hover:scale-105 animate-slide-up shadow-lg" style={{ animationDelay: "0.1s" }}>
-              <div className="mb-6">
-                <h3 className="text-2xl font-bold mb-2">Per Paper</h3>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-5xl font-display font-bold text-primary">€9</span>
-                  <span className="text-muted-foreground">one-time</span>
+            {/* Card 2 - Per Paper */}
+            <Card className="relative bg-white border-2 border-[#00A67E] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+              <Badge className="absolute top-4 left-4 bg-[#00A67E]/10 text-[#00A67E] border-none text-xs px-3 py-1">
+                Good value
+              </Badge>
+              
+              <div className="flex-1 space-y-6 mt-6">
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>
+                    Per Paper
+                  </h3>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>€9</span>
+                    <span className="text-[#64748B]">one-time</span>
+                  </div>
+                  <p className="text-sm text-[#475569] leading-relaxed">
+                    Perfect if you are focusing on one exam this term.
+                  </p>
                 </div>
-                <p className="text-sm text-muted-foreground mb-2">
-                  For focused learners preparing one paper.
-                </p>
-                <p className="text-xs text-primary font-medium">
-                  Perfect if you're focusing on one exam this term.
-                </p>
+
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Unlimited flashcards and planner for one paper</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Full analytics and readiness score</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Priority support</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Lifetime access to this paper</span>
+                  </li>
+                </ul>
               </div>
 
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-sm">Unlimited flashcards & planner for one paper</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-sm">Analytics and readiness score</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-primary flex-shrink-0" />
-                  <span className="text-sm">Priority support</span>
-                </li>
-              </ul>
-
               <Button 
-                className="w-full rounded-xl bg-primary hover:bg-primary/90 text-white shadow-md hover:shadow-lg transition-all"
+                id="cta-unlock-paper"
+                aria-label="Unlock one paper"
+                className="w-full mt-6 h-12 rounded-xl bg-[#00A67E] hover:bg-[#009D73] text-white transition-all duration-200 shadow-md hover:shadow-lg"
                 onClick={() => navigate("/auth")}
               >
                 Unlock one paper
               </Button>
             </Card>
 
-            {/* Pro Plan (Most Popular) */}
-            <Card className="p-8 rounded-3xl border-2 border-primary bg-gradient-to-br from-[#00A67E] to-[#009A72] text-white hover:shadow-2xl transition-all duration-300 hover:scale-105 animate-slide-up shadow-xl relative overflow-hidden" style={{ animationDelay: "0.2s" }}>
-              <Badge className="absolute -top-1 left-1/2 -translate-x-1/2 bg-accent text-accent-foreground border-none">
-                <Crown className="w-3 h-3 mr-1" />
+            {/* Card 3 - Pro (Most Popular) */}
+            <Card className="relative rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] animate-slide-up overflow-hidden" 
+                  style={{ 
+                    animationDelay: "0.2s",
+                    background: "linear-gradient(135deg, #00A67E 0%, #009D73 100%)"
+                  }}>
+              <Badge className="absolute top-4 left-1/2 -translate-x-1/2 bg-white text-[#00A67E] border-none text-xs px-4 py-1.5 font-semibold">
                 Most Popular
               </Badge>
               
-              <div className="mb-6 mt-6">
-                <h3 className="text-2xl font-bold mb-2">Pro</h3>
-                <div className="flex items-baseline gap-2 mb-2">
-                  <span className="text-5xl font-display font-bold">
-                    €{isAnnual ? "15" : "19"}
-                  </span>
-                  <span className="text-white/80">/{isAnnual ? "month" : "month"}</span>
-                </div>
-                {isAnnual && (
-                  <p className="text-sm text-white/90 mb-2">
-                    Billed annually at €180/year
+              <div className="flex-1 space-y-6 mt-8">
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-white" style={{ fontWeight: 700 }}>
+                    Pro
+                  </h3>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-bold text-white" style={{ fontWeight: 700 }}>
+                      €{isAnnual ? "15" : "19"}
+                    </span>
+                    <span className="text-white/80">/month</span>
+                  </div>
+                  {isAnnual && (
+                    <p className="text-sm text-white/90">
+                      Billed annually at €180/year
+                    </p>
+                  )}
+                  <p className="text-sm text-white/90 leading-relaxed pt-2">
+                    For ambitious ACCA candidates who want full coverage and smart insights.
                   </p>
-                )}
-                <p className="text-sm text-white/90 mb-2">
-                  For serious candidates who want full coverage and insight.
-                </p>
-                <p className="text-xs text-white font-medium">
-                  Best value for ongoing learners preparing multiple papers.
-                </p>
+                </div>
+
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-white">Access to all 13 papers</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-white">Unlimited flashcards, analytics, and readiness score</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-white">Smart planner with adaptive scheduling</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-white">Global leaderboard and full XP rewards</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-white">Priority support and early features</span>
+                  </li>
+                </ul>
               </div>
 
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
-                  <span className="text-sm">Access to all 13 papers</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
-                  <span className="text-sm">Unlimited flashcards, analytics, and readiness score</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
-                  <span className="text-sm">Smart planner with progress tracking</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <CheckCircle className="w-5 h-5 text-white flex-shrink-0" />
-                  <span className="text-sm">Global leaderboard and full XP rewards</span>
-                </li>
-              </ul>
-
               <Button 
-                className="w-full rounded-xl bg-white text-primary hover:bg-white/90 font-semibold shadow-lg hover:shadow-xl transition-all"
+                id="cta-upgrade-pro"
+                aria-label="Upgrade to Pro"
+                className="w-full mt-6 h-12 rounded-xl bg-white text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200 shadow-lg hover:shadow-xl font-semibold"
                 onClick={() => navigate("/auth")}
               >
                 Upgrade to Pro
@@ -514,27 +543,14 @@ export default function Landing() {
             </Card>
           </div>
 
-          {/* Reassurance Text */}
-          <div className="text-center space-y-4 animate-fade-in">
-            <p className="text-sm text-[#6B7280]">
-              14-day money-back guarantee. No hidden fees.<br />
-              You keep your progress even if you downgrade.
+          {/* Trust Layer */}
+          <div className="text-center space-y-3 animate-fade-in">
+            <p className="text-sm font-semibold text-[#0F172A]" style={{ fontWeight: 700 }}>
+              14-day money-back guarantee. No hidden fees.
             </p>
-          </div>
-
-          {/* Footer CTA */}
-          <div className="text-center mt-12 pt-8 border-t border-border">
-            <p className="text-lg text-muted-foreground mb-6">
-              Still unsure? Start free and upgrade anytime — your progress is always saved.
+            <p className="text-sm text-[#64748B]">
+              You keep your progress even if you downgrade. Payments are SSL-secured via Stripe.
             </p>
-            <Button 
-              variant="outline" 
-              size="lg" 
-              className="rounded-xl border-2 hover:border-primary hover:text-primary"
-              onClick={() => navigate("/auth")}
-            >
-              Start Free
-            </Button>
           </div>
         </div>
       </section>
