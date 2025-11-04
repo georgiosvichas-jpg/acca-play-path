@@ -203,10 +203,46 @@ export default function Landing() {
           </div>
           <Accordion type="single" collapsible className="space-y-4">
             {[
-              { q: "Is this officially affiliated with ACCA?", a: "No, but all content aligns with the public ACCA syllabus and is updated regularly." },
-              { q: "Can I use it while working full-time?", a: "Absolutely. The planner adjusts to your schedule and exam targets." },
-              { q: "How are the flashcards created?", a: "They're built from syllabus topics and mini-problems inspired by official learning outcomes." },
-              { q: "Do you have a mobile app?", a: "Yes — the web version works perfectly on mobile and tablets." },
+              { 
+                q: "Is this officially affiliated with ACCA?", 
+                a: "No. Study Buddy is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA." 
+              },
+              { 
+                q: "Can I use it while working full-time?", 
+                a: "Absolutely — the app was designed for busy professionals. Your personalized study plan adapts to your schedule and time until exam day. You can study 15 minutes a day on your commute or during breaks and still make measurable progress." 
+              },
+              { 
+                q: "How are the flashcards and questions created?", 
+                a: "Our content is written by qualified ACCA tutors and graduates, based entirely on ACCA's public syllabus and exam-style logic. Every flashcard, mini-problem, and explanation is original, practical, and updated annually to stay relevant." 
+              },
+              { 
+                q: "Do you have a mobile app?", 
+                a: "Yes — the web version works perfectly on all mobile devices. You can add it to your home screen for one-tap access, track your streaks, and study anywhere. A native app for iOS and Android is coming soon." 
+              },
+              { 
+                q: "Is it really free to start?", 
+                a: "Yes. You can start completely free with one ACCA paper to test the planner, flashcards, and analytics. Upgrade only when you're ready to unlock all 13 papers and premium features like streaks, leaderboards, and progress tracking." 
+              },
+              { 
+                q: "How does the \"readiness score\" work?", 
+                a: "The readiness score combines your XP, completed units, and quiz performance to estimate how prepared you are for your exam. It's a smart, data-driven way to know when you're exam-ready — no more guesswork." 
+              },
+              { 
+                q: "What makes Study Buddy different from traditional courses?", 
+                a: "Unlike static video courses, Study Buddy keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting." 
+              },
+              { 
+                q: "Is my progress and data secure?", 
+                a: "Yes. All your data is encrypted and stored securely in the cloud. We never share user information with third parties or use it for marketing without consent." 
+              },
+              { 
+                q: "Can my employer or tutor track my progress?", 
+                a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default." 
+              },
+              { 
+                q: "How can I contact you?", 
+                a: "You can reach our team anytime at support@studybuddy.ai. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners." 
+              },
             ].map((faq, i) => (
               <AccordionItem key={i} value={`item-${i}`} className="bg-background rounded-xl px-6 shadow-sm">
                 <AccordionTrigger className="text-left font-semibold">{faq.q}</AccordionTrigger>
@@ -214,6 +250,16 @@ export default function Landing() {
               </AccordionItem>
             ))}
           </Accordion>
+          <div className="text-center mt-12 animate-fade-in">
+            <p className="text-xl font-semibold mb-4">Still have questions?</p>
+            <p className="text-muted-foreground mb-6">
+              Chat with us or start your free plan today — and see how Study Buddy can transform your ACCA prep.
+            </p>
+            <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl">
+              Start Free Today
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </div>
         </div>
       </section>
 
