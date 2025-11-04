@@ -9,6 +9,7 @@ import {
   LogOut,
   Settings,
   Crown,
+  Calendar,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -26,6 +27,7 @@ import PeerComparisonDrawer from "./PeerComparisonDrawer";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/planner", label: "Planner", icon: Calendar },
   { path: "/flashcards", label: "Flashcards", icon: BookOpen },
   { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { path: "/badges", label: "Badges", icon: Trophy },
