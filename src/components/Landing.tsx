@@ -59,7 +59,7 @@ export default function Landing() {
                   onClick={() => scrollToSection(item)}
                   className="text-sm font-medium hover:text-primary transition-colors capitalize"
                 >
-                  {item}
+                  {item === "faq" ? "FAQ" : item}
                 </button>
               ))}
               <Button onClick={() => navigate("/auth")} size="sm" className="rounded-xl">
