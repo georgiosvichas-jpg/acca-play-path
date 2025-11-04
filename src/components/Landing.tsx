@@ -8,11 +8,6 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { useNavigate } from "react-router-dom";
 import {
   Sparkles,
-  Calendar,
-  Brain,
-  TrendingUp,
-  Trophy,
-  Globe,
   CheckCircle,
   Star,
   Mail,
@@ -20,6 +15,12 @@ import {
   ArrowRight,
 } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
+import featurePlanner from "@/assets/feature-planner.png";
+import featureFlashcards from "@/assets/feature-flashcards.png";
+import featureAnalytics from "@/assets/feature-analytics.png";
+import featureGamification from "@/assets/feature-gamification.png";
+import featureSyllabus from "@/assets/feature-syllabus.png";
+import featureResponsive from "@/assets/feature-responsive.png";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -106,15 +107,17 @@ export default function Landing() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             {[
-              { icon: Calendar, title: "Smart Planner", desc: "AI-driven study schedules that adapt to your goals and time left." },
-              { icon: Brain, title: "Interactive Flashcards", desc: "5-minute daily drills that boost retention and exam confidence." },
-              { icon: TrendingUp, title: "Progress Analytics", desc: "Visual dashboards that track readiness, XP, and streaks." },
-              { icon: Trophy, title: "Gamification Engine", desc: "Earn XP, unlock badges, and compete with peers worldwide." },
-              { icon: CheckCircle, title: "Officially Aligned", desc: "Based on the public ACCA syllabus, updated every year." },
-              { icon: Globe, title: "Works Everywhere", desc: "Web and mobile responsive for on-the-go learning." },
+              { img: featurePlanner, title: "Smart Planner", desc: "AI-driven study schedules that adapt to your goals and time left." },
+              { img: featureFlashcards, title: "Interactive Flashcards", desc: "5-minute daily drills that boost retention and exam confidence." },
+              { img: featureAnalytics, title: "Progress Analytics", desc: "Visual dashboards that track readiness, XP, and streaks." },
+              { img: featureGamification, title: "Gamification Engine", desc: "Earn XP, unlock badges, and compete with peers worldwide." },
+              { img: featureSyllabus, title: "Officially Aligned", desc: "Based on the public ACCA syllabus, updated every year." },
+              { img: featureResponsive, title: "Works Everywhere", desc: "Web and mobile responsive for on-the-go learning." },
             ].map((feature, i) => (
-              <Card key={i} className="p-6 hover:shadow-lg transition-all hover:-translate-y-1 animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
-                <feature.icon className="w-10 h-10 text-primary mb-4" />
+              <Card key={i} className="p-6 hover:shadow-lg transition-all hover:-translate-y-1 animate-slide-up overflow-hidden" style={{ animationDelay: `${i * 0.1}s` }}>
+                <div className="mb-4 rounded-lg overflow-hidden">
+                  <img src={feature.img} alt={feature.title} className="w-full h-48 object-cover" />
+                </div>
                 <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
                 <p className="text-muted-foreground">{feature.desc}</p>
               </Card>
