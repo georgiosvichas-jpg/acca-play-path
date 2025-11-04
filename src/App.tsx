@@ -11,6 +11,7 @@ import Analytics from "./components/Analytics";
 import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
+import PostSignupOnboarding from "./components/PostSignupOnboarding";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -27,6 +28,14 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route
+            path="/onboarding"
+            element={
+              <ProtectedRoute>
+                <PostSignupOnboarding />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/dashboard"
             element={

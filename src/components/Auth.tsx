@@ -45,7 +45,7 @@ export default function Auth() {
       email,
       password,
       options: {
-        emailRedirectTo: `${window.location.origin}/dashboard`,
+        emailRedirectTo: `${window.location.origin}/onboarding`,
         data: {
           full_name: fullName,
         },
@@ -55,7 +55,7 @@ export default function Auth() {
     if (error) {
       toast.error(error.message);
     } else {
-      toast.success("Account created! You can now sign in.");
+      toast.success("Account created! Signing you in...");
       // Create user profile
       const { data: { user } } = await supabase.auth.getUser();
       if (user) {
@@ -65,7 +65,16 @@ export default function Auth() {
           study_streak: 0,
         });
       }
-      setActiveTab("signin");
+      
+      // Auto sign in and redirect to onboarding
+      const { error: signInError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      });
+      
+      if (!signInError) {
+        navigate("/onboarding");
+      }
     }
 
     setLoading(false);
@@ -84,7 +93,19 @@ export default function Auth() {
       toast.error(error.message);
     } else {
       toast.success("Signed in successfully!");
-      navigate("/dashboard");
+      
+      // Check if user has completed onboarding
+      const { data: profile } = await supabase
+        .from("user_profiles")
+        .select("selected_paper")
+        .single();
+      
+      // Redirect to onboarding if user hasn't selected a paper yet
+      if (!profile?.selected_paper) {
+        navigate("/onboarding");
+      } else {
+        navigate("/dashboard");
+      }
     }
 
     setLoading(false);
@@ -96,7 +117,7 @@ export default function Auth() {
     const { error } = await supabase.auth.signInWithOAuth({
       provider: provider,
       options: {
-        redirectTo: `${window.location.origin}/dashboard`,
+        redirectTo: `${window.location.origin}/onboarding`,
       },
     });
 
