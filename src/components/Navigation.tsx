@@ -6,7 +6,9 @@ import {
   Trophy,
   BarChart3,
   Sparkles,
+  LogOut,
 } from "lucide-react";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -17,9 +19,10 @@ const navItems = [
 
 export default function Navigation() {
   const location = useLocation();
+  const { signOut } = useAuth();
 
-  // Don't show navigation on onboarding page
-  if (location.pathname === "/") {
+  // Don't show navigation on onboarding or auth pages
+  if (location.pathname === "/" || location.pathname === "/auth") {
     return null;
   }
 
@@ -61,6 +64,14 @@ export default function Navigation() {
                 </Button>
               );
             })}
+            <Button
+              variant="ghost"
+              onClick={signOut}
+              className="rounded-xl hover:bg-destructive/10 hover:text-destructive"
+              title="Sign Out"
+            >
+              <LogOut className="w-4 h-4" />
+            </Button>
           </div>
         </div>
       </div>

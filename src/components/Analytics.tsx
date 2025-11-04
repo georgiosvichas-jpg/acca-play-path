@@ -1,3 +1,4 @@
+import ProtectedRoute from "./ProtectedRoute";
 import { Card } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import {
@@ -8,6 +9,7 @@ import {
   Calendar,
   CheckCircle2,
 } from "lucide-react";
+import Footer from "./Footer";
 
 const stats = [
   {
@@ -62,6 +64,7 @@ const paperBreakdown = [
 
 export default function Analytics() {
   return (
+    <ProtectedRoute>
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
@@ -184,5 +187,7 @@ export default function Analytics() {
         </Card>
       </div>
     </div>
+    <Footer />
+    </ProtectedRoute>
   );
 }

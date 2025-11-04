@@ -31,7 +31,7 @@ export default function Onboarding() {
     if (currentSlide < slides.length - 1) {
       setCurrentSlide(currentSlide + 1);
     } else {
-      navigate("/dashboard");
+      navigate("/auth");
     }
   };
 
@@ -95,7 +95,7 @@ export default function Onboarding() {
         {/* Skip button */}
         {currentSlide < slides.length - 1 && (
           <button
-            onClick={() => navigate("/dashboard")}
+            onClick={() => navigate("/auth")}
             className="mt-6 text-muted-foreground hover:text-foreground transition-colors text-sm mx-auto block"
           >
             Skip intro

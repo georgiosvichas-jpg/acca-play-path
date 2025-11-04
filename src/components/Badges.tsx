@@ -1,3 +1,4 @@
+import ProtectedRoute from "./ProtectedRoute";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
@@ -12,6 +13,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import badgesHero from "@/assets/badges-hero.png";
+import Footer from "./Footer";
 
 const unlockedBadges = [
   {
@@ -76,6 +78,7 @@ export default function Badges() {
   const currentLevel = 5;
 
   return (
+    <ProtectedRoute>
     <div className="min-h-screen p-4 md:p-8">
       <div className="max-w-6xl mx-auto">
         {/* Header */}
@@ -200,5 +203,7 @@ export default function Badges() {
         </div>
       </div>
     </div>
+    <Footer />
+    </ProtectedRoute>
   );
 }
