@@ -5,7 +5,6 @@ import { useXP } from "@/hooks/useXP";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import FlashcardFlipCard from "./FlashcardFlipCard";
-import FlashcardImporter from "./FlashcardImporter";
 import Footer from "./Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -48,6 +47,33 @@ export default function FlashcardsContentNew() {
   useEffect(() => {
     fetchFlashcards();
   }, []);
+
+  useEffect(() => {
+    // Auto-import flashcards if none exist
+    const autoImport = async () => {
+      if (showImporter && !loading) {
+        try {
+          const response = await fetch(
+            `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-flashcards`,
+            {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+              },
+            }
+          );
+
+          if (response.ok) {
+            await fetchFlashcards();
+          }
+        } catch (error) {
+          console.error("Auto-import failed:", error);
+        }
+      }
+    };
+
+    autoImport();
+  }, [showImporter, loading]);
 
   useEffect(() => {
     applyFilters();
@@ -149,22 +175,39 @@ export default function FlashcardsContentNew() {
   if (showImporter) {
     return (
       <>
-        <div className="min-h-screen p-4 md:p-8 flex items-center justify-center">
-          <div className="w-full max-w-2xl space-y-6">
-            <div className="text-center space-y-2">
-              <BookOpen className="w-16 h-16 text-primary mx-auto mb-4" />
-              <h1 className="text-3xl font-bold text-foreground">Welcome to Flashcards</h1>
-              <p className="text-muted-foreground">
-                Import the ACCA flashcard dataset to start studying
+        <div className="min-h-screen flex items-center justify-center bg-gradient-to-b from-[#F8FBFA] to-[#EAF8F4] p-4">
+          <Card className="max-w-xl w-full shadow-lg animate-fade-in rounded-3xl">
+            <CardContent className="pt-12 pb-10 px-8 text-center space-y-6">
+              {/* Loading Animation */}
+              <div className="flex justify-center mb-4">
+                <div className="relative">
+                  <div className="w-20 h-20 bg-primary/10 rounded-full flex items-center justify-center">
+                    <BookOpen className="w-10 h-10 text-primary animate-pulse" />
+                  </div>
+                </div>
+              </div>
+
+              {/* Header */}
+              <div className="space-y-3">
+                <h1 className="text-3xl font-bold text-[#0F172A]">
+                  Preparing Your Flashcards
+                </h1>
+                <p className="text-base text-[#475569] max-w-lg mx-auto leading-relaxed">
+                  We're loading your ACCA flashcard collection. This will only take a moment...
+                </p>
+              </div>
+
+              {/* Loading Spinner */}
+              <div className="py-6">
+                <div className="mx-auto w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin" />
+              </div>
+
+              {/* Progress Text */}
+              <p className="text-sm text-[#94A3B8]">
+                Setting up 500+ flashcards across all ACCA papers
               </p>
-            </div>
-            <FlashcardImporter />
-            <div className="text-center">
-              <Button variant="ghost" onClick={fetchFlashcards}>
-                Check if cards are imported
-              </Button>
-            </div>
-          </div>
+            </CardContent>
+          </Card>
         </div>
         <Footer />
       </>

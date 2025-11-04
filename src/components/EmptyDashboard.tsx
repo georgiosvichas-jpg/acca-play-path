@@ -21,7 +21,7 @@ export default function EmptyDashboard() {
 
   return (
     <div className="min-h-[calc(100vh-200px)] flex items-center justify-center bg-gradient-to-b from-[#F8FBFA] to-[#EAF8F4] p-4">
-      <Card className="max-w-2xl w-full shadow-lg animate-fade-in">
+      <Card className="max-w-2xl w-full shadow-lg animate-fade-in rounded-3xl">
         <CardContent className="pt-12 pb-10 px-8 text-center space-y-6">
           {/* Icon */}
           <div className="flex justify-center mb-4">
