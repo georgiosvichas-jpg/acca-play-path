@@ -6,7 +6,7 @@ import heroObjects from "@/assets/hero-objects.png";
 
 const slides = [
   {
-    title: "Plan smarter, not harder",
+    title: "Study smarter, not harder",
     description: "Create your perfect study schedule and track your progress with ease.",
     icon: Sparkles,
     image: heroObjects,
