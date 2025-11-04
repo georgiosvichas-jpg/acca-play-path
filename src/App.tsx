@@ -12,6 +12,9 @@ import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import NotFound from "./pages/NotFound";
+import Checkout from "./pages/Checkout";
+import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentFailure from "./pages/PaymentFailure";
 
 const queryClient = new QueryClient();
 
@@ -57,6 +60,30 @@ const App = () => (
               <ProtectedRoute>
                 <Navigation />
                 <Analytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/checkout"
+            element={
+              <ProtectedRoute>
+                <Checkout />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payment-success"
+            element={
+              <ProtectedRoute>
+                <PaymentSuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payment-failure"
+            element={
+              <ProtectedRoute>
+                <PaymentFailure />
               </ProtectedRoute>
             }
           />

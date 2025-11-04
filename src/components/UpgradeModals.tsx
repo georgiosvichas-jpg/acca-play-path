@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -10,6 +11,9 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { Switch } from "@/components/ui/switch";
 import { Lock, TrendingUp, Award, Sparkles } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import { STRIPE_PRICES } from "@/lib/stripe-config";
 
 interface FlashcardUnlockModalProps {
   open: boolean;
@@ -24,6 +28,38 @@ export function FlashcardUnlockModal({
   onUnlockPaper,
   onUpgradeToPro,
 }: FlashcardUnlockModalProps) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleUnlockPaper = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: { priceId: STRIPE_PRICES.PER_PAPER, mode: "payment" },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+        onOpenChange(false);
+      }
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create checkout session. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpgradeToPro = () => {
+    navigate("/checkout?plan=pro");
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] p-0 gap-0 animate-fade-in">
@@ -48,15 +84,17 @@ export function FlashcardUnlockModal({
 
           <div className="space-y-3 pt-2">
             <Button
-              onClick={onUnlockPaper}
+              onClick={handleUnlockPaper}
               className="w-full h-12 text-base bg-[#00A67E] hover:bg-[#009A72] text-white"
+              disabled={loading}
             >
-              Unlock this paper (€9 one-time)
+              {loading ? "Processing..." : "Unlock this paper (€9 one-time)"}
             </Button>
             <Button
-              onClick={onUpgradeToPro}
+              onClick={handleUpgradeToPro}
               variant="outline"
               className="w-full h-12 text-base border-2"
+              disabled={loading}
             >
               Get all papers with Pro (€19/month)
             </Button>
@@ -88,6 +126,38 @@ export function PaperUnlockModal({
   onUnlockPaper,
   onUpgradeToPro,
 }: PaperUnlockModalProps) {
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
+  const handleUnlockPaper = async () => {
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: { priceId: STRIPE_PRICES.PER_PAPER, mode: "payment" },
+      });
+
+      if (error) throw error;
+      if (data?.url) {
+        window.open(data.url, "_blank");
+        onOpenChange(false);
+      }
+    } catch (error) {
+      console.error("Error creating checkout session:", error);
+      toast({
+        title: "Error",
+        description: "Failed to create checkout session. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleUpgradeToPro = () => {
+    navigate("/checkout?plan=pro");
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] p-0 gap-0 animate-fade-in">
@@ -110,15 +180,17 @@ export function PaperUnlockModal({
 
           <div className="space-y-3 pt-2">
             <Button
-              onClick={onUnlockPaper}
+              onClick={handleUnlockPaper}
               className="w-full h-12 text-base bg-[#00A67E] hover:bg-[#009A72] text-white"
+              disabled={loading}
             >
-              Unlock one paper (€9)
+              {loading ? "Processing..." : "Unlock one paper (€9)"}
             </Button>
             <Button
-              onClick={onUpgradeToPro}
+              onClick={handleUpgradeToPro}
               variant="outline"
               className="w-full h-12 text-base border-2"
+              disabled={loading}
             >
               Go Pro for all papers (€19/month)
             </Button>
@@ -143,6 +215,13 @@ export function AnalyticsUpgradeModal({
   onOpenChange,
   onUpgradeToPro,
 }: AnalyticsUpgradeModalProps) {
+  const navigate = useNavigate();
+
+  const handleUpgrade = () => {
+    navigate("/checkout?plan=pro");
+    onOpenChange(false);
+  };
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-[480px] p-0 gap-0 animate-fade-in relative overflow-hidden">
@@ -170,7 +249,7 @@ export function AnalyticsUpgradeModal({
 
           <div className="space-y-3 pt-2">
             <Button
-              onClick={onUpgradeToPro}
+              onClick={handleUpgrade}
               className="w-full h-12 text-base bg-[#00A67E] hover:bg-[#009A72] text-white"
             >
               Upgrade to Pro (€19/month)
@@ -201,6 +280,12 @@ export function NextLevelModal({
   onUpgradeToPro,
 }: NextLevelModalProps) {
   const [isAnnual, setIsAnnual] = useState(true);
+  const navigate = useNavigate();
+
+  const handleUpgrade = () => {
+    navigate(`/checkout?plan=pro${isAnnual ? "&billing=annual" : ""}`);
+    onOpenChange(false);
+  };
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -246,7 +331,7 @@ export function NextLevelModal({
 
           <div className="space-y-3">
             <Button
-              onClick={() => onUpgradeToPro(isAnnual)}
+              onClick={handleUpgrade}
               className="w-full h-12 text-base bg-[#00A67E] hover:bg-[#009A72] text-white"
             >
               Go Pro ({isAnnual ? "€180/year" : "€19/month"})

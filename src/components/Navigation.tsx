@@ -7,8 +7,20 @@ import {
   BarChart3,
   Sparkles,
   LogOut,
+  Settings,
+  Crown,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
+import { useSubscription } from "@/hooks/useSubscription";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -20,11 +32,18 @@ const navItems = [
 export default function Navigation() {
   const location = useLocation();
   const { signOut } = useAuth();
+  const { planType, openCustomerPortal } = useSubscription();
 
   // Don't show navigation on onboarding or auth pages
   if (location.pathname === "/" || location.pathname === "/auth") {
     return null;
   }
+
+  const getPlanBadge = () => {
+    if (planType === "pro") return <Badge className="bg-primary text-white">Pro</Badge>;
+    if (planType === "per_paper") return <Badge variant="secondary">Per Paper</Badge>;
+    return <Badge variant="outline">Free</Badge>;
+  };
 
   return (
     <nav className="sticky top-0 z-50 bg-card/80 backdrop-blur-lg border-b border-border/40">
@@ -64,14 +83,52 @@ export default function Navigation() {
                 </Button>
               );
             })}
-            <Button
-              variant="ghost"
-              onClick={signOut}
-              className="rounded-xl hover:bg-destructive/10 hover:text-destructive"
-              title="Sign Out"
-            >
-              <LogOut className="w-4 h-4" />
-            </Button>
+            
+            {/* User Menu */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button
+                  variant="ghost"
+                  className="rounded-xl hover:bg-muted"
+                >
+                  <Settings className="w-4 h-4" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end" className="w-56">
+                <DropdownMenuLabel>
+                  <div className="flex items-center justify-between">
+                    <span>My Account</span>
+                    {getPlanBadge()}
+                  </div>
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                
+                {planType === "free" && (
+                  <DropdownMenuItem asChild>
+                    <Link to="/checkout" className="cursor-pointer">
+                      <Crown className="w-4 h-4 mr-2" />
+                      Upgrade to Pro
+                    </Link>
+                  </DropdownMenuItem>
+                )}
+                
+                {planType === "pro" && (
+                  <DropdownMenuItem onClick={openCustomerPortal}>
+                    <Settings className="w-4 h-4 mr-2" />
+                    Manage Subscription
+                  </DropdownMenuItem>
+                )}
+                
+                <DropdownMenuSeparator />
+                <DropdownMenuItem 
+                  onClick={signOut}
+                  className="text-destructive focus:text-destructive"
+                >
+                  <LogOut className="w-4 h-4 mr-2" />
+                  Sign Out
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
       </div>

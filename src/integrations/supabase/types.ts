@@ -198,9 +198,15 @@ export type Database = {
           created_at: string | null
           id: string
           last_study_date: string | null
+          plan_type: Database["public"]["Enums"]["plan_type"] | null
           selected_paper: string | null
+          stripe_customer_id: string | null
           study_streak: number | null
+          subscription_end_date: string | null
+          subscription_product_id: string | null
+          subscription_status: string | null
           total_xp: number | null
+          unlocked_papers: string[] | null
           updated_at: string | null
           user_id: string
         }
@@ -208,9 +214,15 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_study_date?: string | null
+          plan_type?: Database["public"]["Enums"]["plan_type"] | null
           selected_paper?: string | null
+          stripe_customer_id?: string | null
           study_streak?: number | null
+          subscription_end_date?: string | null
+          subscription_product_id?: string | null
+          subscription_status?: string | null
           total_xp?: number | null
+          unlocked_papers?: string[] | null
           updated_at?: string | null
           user_id: string
         }
@@ -218,9 +230,15 @@ export type Database = {
           created_at?: string | null
           id?: string
           last_study_date?: string | null
+          plan_type?: Database["public"]["Enums"]["plan_type"] | null
           selected_paper?: string | null
+          stripe_customer_id?: string | null
           study_streak?: number | null
+          subscription_end_date?: string | null
+          subscription_product_id?: string | null
+          subscription_status?: string | null
           total_xp?: number | null
+          unlocked_papers?: string[] | null
           updated_at?: string | null
           user_id?: string
         }
@@ -290,7 +308,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      plan_type: "free" | "per_paper" | "pro"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -417,6 +435,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      plan_type: ["free", "per_paper", "pro"],
+    },
   },
 } as const

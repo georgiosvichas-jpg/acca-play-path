@@ -11,12 +11,15 @@ import {
   CheckCircle2,
   Circle,
   PlayCircle,
+  Lock,
 } from "lucide-react";
 import studyDesk from "@/assets/study-desk.png";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { usePapers } from "@/hooks/usePapers";
+import { useSubscription } from "@/hooks/useSubscription";
+import { PaperUnlockModal } from "./UpgradeModals";
 import Footer from "./Footer";
 
 interface Task {
@@ -31,8 +34,27 @@ export default function DashboardContent() {
   const { user } = useAuth();
   const { profile, updateProfile } = useUserProfile();
   const { papers } = usePapers();
+  const { planType, unlockedPapers } = useSubscription();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
+  const [showUnlockModal, setShowUnlockModal] = useState(false);
+  const [selectedPaperToUnlock, setSelectedPaperToUnlock] = useState<string | null>(null);
+
+  const hasAccessToPaper = (paperCode: string) => {
+    if (planType === "pro") return true;
+    if (planType === "per_paper" && unlockedPapers.includes(paperCode)) return true;
+    return false;
+  };
+
+  const handlePaperClick = (paper: any) => {
+    if (!hasAccessToPaper(paper.paper_code)) {
+      setSelectedPaperToUnlock(paper.title);
+      setShowUnlockModal(true);
+      return;
+    }
+    // Navigate to paper content
+    updateProfile({ selected_paper: paper.paper_code });
+  };
 
   useEffect(() => {
     if (!user) return;
@@ -245,18 +267,30 @@ export default function DashboardContent() {
                   </p>
                 ) : (
                   <div className="space-y-4">
-                    {papers.slice(0, 3).map((paper) => (
-                      <div key={paper.id}>
-                        <div className="flex items-center justify-between mb-2">
-                          <div>
-                            <span className="font-semibold">{paper.paper_code}</span>
-                            <p className="text-xs text-muted-foreground">{paper.title}</p>
+                    {papers.slice(0, 3).map((paper) => {
+                      const hasAccess = hasAccessToPaper(paper.paper_code);
+                      return (
+                        <div 
+                          key={paper.id}
+                          onClick={() => handlePaperClick(paper)}
+                          className={`${!hasAccess ? 'cursor-pointer' : ''}`}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              {!hasAccess && <Lock className="w-4 h-4 text-muted-foreground" />}
+                              <div>
+                                <span className="font-semibold">{paper.paper_code}</span>
+                                <p className="text-xs text-muted-foreground">{paper.title}</p>
+                              </div>
+                            </div>
+                            <span className="text-sm font-bold text-primary">
+                              {hasAccess ? `${progress}%` : "Locked"}
+                            </span>
                           </div>
-                          <span className="text-sm font-bold text-primary">{progress}%</span>
+                          <Progress value={hasAccess ? progress : 0} className="h-2" />
                         </div>
-                        <Progress value={progress} className="h-2" />
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 )}
               </Card>
@@ -275,6 +309,15 @@ export default function DashboardContent() {
           </div>
         </div>
       </div>
+      
+      <PaperUnlockModal
+        open={showUnlockModal}
+        onOpenChange={setShowUnlockModal}
+        paperTitle={selectedPaperToUnlock || ""}
+        onUnlockPaper={() => {}}
+        onUpgradeToPro={() => {}}
+      />
+      
       <Footer />
     </>
   );
