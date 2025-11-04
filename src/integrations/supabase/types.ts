@@ -47,6 +47,39 @@ export type Database = {
         }
         Relationships: []
       }
+      flags_anti_abuse: {
+        Row: {
+          details: Json | null
+          flagged_at: string
+          id: string
+          reason: string
+          resolved: boolean | null
+          resolved_at: string | null
+          resolved_by: string | null
+          user_id: string
+        }
+        Insert: {
+          details?: Json | null
+          flagged_at?: string
+          id?: string
+          reason: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          user_id: string
+        }
+        Update: {
+          details?: Json | null
+          flagged_at?: string
+          id?: string
+          reason?: string
+          resolved?: boolean | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       flashcard_reviews: {
         Row: {
           correct_count: number | null
@@ -125,6 +158,57 @@ export type Database = {
             referencedColumns: ["paper_code"]
           },
         ]
+      }
+      leaderboard_snapshots: {
+        Row: {
+          captured_on: string
+          created_at: string
+          id: string
+          paper_code: string | null
+          percentile_country: number | null
+          percentile_global: number | null
+          percentile_paper: number | null
+          rank_country: number | null
+          rank_global: number | null
+          rank_paper: number | null
+          user_id: string
+          xp_30d: number
+          xp_7d: number
+          xp_total: number
+        }
+        Insert: {
+          captured_on?: string
+          created_at?: string
+          id?: string
+          paper_code?: string | null
+          percentile_country?: number | null
+          percentile_global?: number | null
+          percentile_paper?: number | null
+          rank_country?: number | null
+          rank_global?: number | null
+          rank_paper?: number | null
+          user_id: string
+          xp_30d?: number
+          xp_7d?: number
+          xp_total?: number
+        }
+        Update: {
+          captured_on?: string
+          created_at?: string
+          id?: string
+          paper_code?: string | null
+          percentile_country?: number | null
+          percentile_global?: number | null
+          percentile_paper?: number | null
+          rank_country?: number | null
+          rank_global?: number | null
+          rank_paper?: number | null
+          user_id?: string
+          xp_30d?: number
+          xp_7d?: number
+          xp_total?: number
+        }
+        Relationships: []
       }
       papers: {
         Row: {
@@ -313,9 +397,12 @@ export type Database = {
       }
       user_profiles: {
         Row: {
+          country: string | null
           created_at: string | null
+          display_name: string | null
           exam_session: string | null
           id: string
+          is_opted_out_of_leaderboard: boolean | null
           last_study_date: string | null
           level: number | null
           plan_type: Database["public"]["Enums"]["plan_type"] | null
@@ -334,9 +421,12 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          country?: string | null
           created_at?: string | null
+          display_name?: string | null
           exam_session?: string | null
           id?: string
+          is_opted_out_of_leaderboard?: boolean | null
           last_study_date?: string | null
           level?: number | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
@@ -355,9 +445,12 @@ export type Database = {
           user_id: string
         }
         Update: {
+          country?: string | null
           created_at?: string | null
+          display_name?: string | null
           exam_session?: string | null
           id?: string
+          is_opted_out_of_leaderboard?: boolean | null
           last_study_date?: string | null
           level?: number | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
@@ -462,7 +555,15 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_user_leaderboard_rank: {
+        Args: { p_user_id: string }
+        Returns: {
+          percentile_country: number
+          percentile_global: number
+          rank_country: number
+          rank_global: number
+        }[]
+      }
     }
     Enums: {
       plan_type: "free" | "per_paper" | "pro"

@@ -8,6 +8,8 @@ import Dashboard from "./components/Dashboard";
 import Flashcards from "./components/Flashcards";
 import BadgesReal from "./components/BadgesReal";
 import Analytics from "./components/Analytics";
+import Leaderboard from "./pages/Leaderboard";
+import Settings from "./pages/Settings";
 import Planner from "./pages/Planner";
 import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
@@ -71,6 +73,22 @@ const App = () => (
               <ProtectedRoute>
                 <Navigation />
                 <Analytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              <ProtectedRoute>
+                <Leaderboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/settings"
+            element={
+              <ProtectedRoute>
+                <Settings />
               </ProtectedRoute>
             }
           />

@@ -22,10 +22,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
 import XPDisplay from "./XPDisplay";
+import PeerComparisonDrawer from "./PeerComparisonDrawer";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/flashcards", label: "Flashcards", icon: BookOpen },
+  { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { path: "/badges", label: "Badges", icon: Trophy },
   { path: "/analytics", label: "Analytics", icon: BarChart3 },
 ];
@@ -63,6 +65,7 @@ export default function Navigation() {
           {/* Navigation Items */}
           <div className="flex items-center gap-2">
             <XPDisplay />
+            <PeerComparisonDrawer />
             
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -121,6 +124,13 @@ export default function Navigation() {
                     Manage Subscription
                   </DropdownMenuItem>
                 )}
+                
+                <DropdownMenuItem asChild>
+                  <Link to="/settings">
+                    <Settings className="w-4 h-4 mr-2" />
+                    Account Settings
+                  </Link>
+                </DropdownMenuItem>
                 
                 <DropdownMenuSeparator />
                 <DropdownMenuItem 

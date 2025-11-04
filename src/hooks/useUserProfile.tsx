@@ -6,10 +6,14 @@ export interface UserProfile {
   id: string;
   user_id: string;
   selected_paper: string | null;
+  selected_papers?: string[];
   total_xp: number;
   study_streak: number;
   last_study_date: string | null;
   level?: number;
+  display_name?: string | null;
+  country?: string | null;
+  is_opted_out_of_leaderboard?: boolean;
 }
 
 export function useUserProfile() {
