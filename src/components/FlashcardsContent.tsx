@@ -17,12 +17,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Footer from "./Footer";
 import { EmptyState } from "./EmptyStates";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
+import { useMotivationalMessage } from "@/hooks/useMotivationalMessage";
 
 export default function FlashcardsContent() {
   const { user } = useAuth();
   const { profile, updateProfile } = useUserProfile();
   const { flashcards, loading } = useFlashcards(profile?.selected_paper);
+  const { getMessage } = useMotivationalMessage();
   const [currentCard, setCurrentCard] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
   const [xpEarned, setXpEarned] = useState(0);
@@ -49,7 +51,7 @@ export default function FlashcardsContent() {
         <EmptyState
           type="flashcards"
           onAction={() => window.location.href = '/dashboard'}
-          onSecondaryAction={() => toast.info("Flashcards flip to reveal answers. Practice daily to earn XP!")}
+          onSecondaryAction={() => toast({ description: "Flashcards flip to reveal answers. Practice daily to earn XP!" })}
         />
         <Footer />
       </>
@@ -74,6 +76,13 @@ export default function FlashcardsContent() {
     setXpEarned(xpEarned + earnedXp);
     setShowXpAnimation(true);
     setTimeout(() => setShowXpAnimation(false), 1000);
+
+    // Show motivational message
+    const motivationalMsg = getMessage("micro_success", "flashcard_complete");
+    toast({
+      description: `+${earnedXp} XP! ${motivationalMsg}`,
+      duration: 2000,
+    });
 
     // Update user profile XP
     if (user && profile) {

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Joyride, { Step, CallBackProps, STATUS, EVENTS } from "react-joyride";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { supabase } from "@/integrations/supabase/client";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@/hooks/use-window-size";
 import {
@@ -15,6 +15,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
+import { useMotivationalMessage } from "@/hooks/useMotivationalMessage";
 
 interface GuidedTourProps {
   onComplete?: () => void;
@@ -27,6 +28,7 @@ export default function GuidedTour({ onComplete }: GuidedTourProps) {
   const [showSuccessModal, setShowSuccessModal] = useState(false);
   const { profile, updateProfile } = useUserProfile();
   const { width, height } = useWindowSize();
+  const { getMessage } = useMotivationalMessage();
 
   const steps: Step[] = [
     {
@@ -132,7 +134,10 @@ export default function GuidedTour({ onComplete }: GuidedTourProps) {
       }, 4000);
     } catch (error) {
       console.error("Error completing tour:", error);
-      toast.error("Failed to save tour progress");
+      toast({
+        variant: "destructive",
+        description: "Failed to save tour progress",
+      });
     }
   };
 
@@ -140,7 +145,8 @@ export default function GuidedTour({ onComplete }: GuidedTourProps) {
     setRun(false);
     setShowSkipDialog(false);
     localStorage.setItem('tour_skipped', 'true');
-    toast.info("You can restart the tour anytime from the help menu");
+    const reminderMsg = getMessage("reminder", "inactive_1day");
+    toast({ description: reminderMsg });
   };
 
   const handleSkipCancel = () => {

@@ -14,6 +14,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@/hooks/use-window-size";
+import { useMotivationalMessage } from "@/hooks/useMotivationalMessage";
 
 const STUDY_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -30,6 +31,7 @@ export default function PostSignupOnboarding() {
   const { updateProfile } = useUserProfile();
   const { toast } = useToast();
   const { width, height } = useWindowSize();
+  const { getMessage } = useMotivationalMessage();
 
   const togglePaper = (paperCode: string) => {
     setSelectedPapers(prev =>
@@ -78,6 +80,12 @@ export default function PostSignupOnboarding() {
       });
 
       setShowConfetti(true);
+      
+      const welcomeMsg = getMessage("celebration", "first_login");
+      toast({
+        description: welcomeMsg,
+        duration: 3000,
+      });
       
       setTimeout(() => {
         navigate("/dashboard");

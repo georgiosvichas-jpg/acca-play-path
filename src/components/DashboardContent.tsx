@@ -22,7 +22,8 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { PaperUnlockModal } from "./UpgradeModals";
 import Footer from "./Footer";
 import { EmptyState } from "./EmptyStates";
-import { toast } from "sonner";
+import { toast } from "@/hooks/use-toast";
+import { useMotivationalMessage } from "@/hooks/useMotivationalMessage";
 
 interface Task {
   id: string;
@@ -37,6 +38,7 @@ export default function DashboardContent() {
   const { profile, updateProfile } = useUserProfile();
   const { papers } = usePapers();
   const { planType, unlockedPapers } = useSubscription();
+  const { getMessage } = useMotivationalMessage();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
@@ -184,8 +186,8 @@ export default function DashboardContent() {
                   <div className="py-4">
                     <EmptyState
                       type="planner"
-                      onAction={() => toast.info("Task creation feature coming soon!")}
-                      onSecondaryAction={() => toast.info("Check out the guided tour for help getting started.")}
+                      onAction={() => toast({ description: "Task creation feature coming soon!" })}
+                      onSecondaryAction={() => toast({ description: "Check out the guided tour for help getting started." })}
                     />
                   </div>
                 ) : (
