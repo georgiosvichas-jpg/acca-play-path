@@ -14,7 +14,274 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      flashcard_reviews: {
+        Row: {
+          correct_count: number | null
+          created_at: string | null
+          flashcard_id: string
+          id: string
+          last_reviewed_at: string | null
+          total_reviews: number | null
+          user_id: string
+        }
+        Insert: {
+          correct_count?: number | null
+          created_at?: string | null
+          flashcard_id: string
+          id?: string
+          last_reviewed_at?: string | null
+          total_reviews?: number | null
+          user_id: string
+        }
+        Update: {
+          correct_count?: number | null
+          created_at?: string | null
+          flashcard_id?: string
+          id?: string
+          last_reviewed_at?: string | null
+          total_reviews?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flashcard_reviews_flashcard_id_fkey"
+            columns: ["flashcard_id"]
+            isOneToOne: false
+            referencedRelation: "flashcards"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flashcards: {
+        Row: {
+          answer: string
+          category: string | null
+          created_at: string | null
+          difficulty: string | null
+          id: string
+          paper_code: string
+          question: string
+          xp: number | null
+        }
+        Insert: {
+          answer: string
+          category?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          id?: string
+          paper_code: string
+          question: string
+          xp?: number | null
+        }
+        Update: {
+          answer?: string
+          category?: string | null
+          created_at?: string | null
+          difficulty?: string | null
+          id?: string
+          paper_code?: string
+          question?: string
+          xp?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flashcards_paper_code_fkey"
+            columns: ["paper_code"]
+            isOneToOne: false
+            referencedRelation: "papers"
+            referencedColumns: ["paper_code"]
+          },
+        ]
+      }
+      papers: {
+        Row: {
+          created_at: string | null
+          id: string
+          level: string
+          paper_code: string
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          level: string
+          paper_code: string
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          level?: string
+          paper_code?: string
+          title?: string
+        }
+        Relationships: []
+      }
+      past_papers_meta: {
+        Row: {
+          created_at: string | null
+          id: string
+          note: string | null
+          paper_code: string
+          session: string
+          year: number
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          note?: string | null
+          paper_code: string
+          session: string
+          year: number
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          note?: string | null
+          paper_code?: string
+          session?: string
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "past_papers_meta_paper_code_fkey"
+            columns: ["paper_code"]
+            isOneToOne: false
+            referencedRelation: "papers"
+            referencedColumns: ["paper_code"]
+          },
+        ]
+      }
+      syllabus_units: {
+        Row: {
+          chapter: string
+          created_at: string | null
+          estimated_minutes: number | null
+          id: string
+          learning_outcome: string | null
+          paper_code: string
+          priority: string | null
+          unit_title: string
+        }
+        Insert: {
+          chapter: string
+          created_at?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          learning_outcome?: string | null
+          paper_code: string
+          priority?: string | null
+          unit_title: string
+        }
+        Update: {
+          chapter?: string
+          created_at?: string | null
+          estimated_minutes?: number | null
+          id?: string
+          learning_outcome?: string | null
+          paper_code?: string
+          priority?: string | null
+          unit_title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "syllabus_units_paper_code_fkey"
+            columns: ["paper_code"]
+            isOneToOne: false
+            referencedRelation: "papers"
+            referencedColumns: ["paper_code"]
+          },
+        ]
+      }
+      user_profiles: {
+        Row: {
+          created_at: string | null
+          id: string
+          last_study_date: string | null
+          selected_paper: string | null
+          study_streak: number | null
+          total_xp: number | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          last_study_date?: string | null
+          selected_paper?: string | null
+          study_streak?: number | null
+          total_xp?: number | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          last_study_date?: string | null
+          selected_paper?: string | null
+          study_streak?: number | null
+          total_xp?: number | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_profiles_selected_paper_fkey"
+            columns: ["selected_paper"]
+            isOneToOne: false
+            referencedRelation: "papers"
+            referencedColumns: ["paper_code"]
+          },
+        ]
+      }
+      user_progress: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          paper_code: string
+          syllabus_unit_id: string | null
+          user_id: string
+          xp_earned: number | null
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          paper_code: string
+          syllabus_unit_id?: string | null
+          user_id: string
+          xp_earned?: number | null
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          paper_code?: string
+          syllabus_unit_id?: string | null
+          user_id?: string
+          xp_earned?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_progress_paper_code_fkey"
+            columns: ["paper_code"]
+            isOneToOne: false
+            referencedRelation: "papers"
+            referencedColumns: ["paper_code"]
+          },
+          {
+            foreignKeyName: "user_progress_syllabus_unit_id_fkey"
+            columns: ["syllabus_unit_id"]
+            isOneToOne: false
+            referencedRelation: "syllabus_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
