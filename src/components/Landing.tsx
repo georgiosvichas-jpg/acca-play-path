@@ -102,30 +102,209 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-20 px-4 md:px-8 bg-muted/30">
+      <section id="features" className="py-24 px-4 md:px-8 bg-gradient-to-b from-white to-[#F8FBFA] relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
-              Study better with tools that make you unstoppable
+          {/* Section Header */}
+          <div className="text-center mb-20 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
+              Study better with tools designed for real ACCA success
             </h2>
+            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+              Everything you need to plan, learn, and track your journey — built by ACCA graduates for ACCA students.
+            </p>
+            <div className="w-24 h-1 bg-primary mx-auto mt-8 rounded-full" />
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { img: featurePlanner, title: "Smart Planner", desc: "AI-driven study schedules that adapt to your goals and time left." },
-              { img: featureFlashcards, title: "Interactive Flashcards", desc: "5-minute daily drills that boost retention and exam confidence." },
-              { img: featureAnalytics, title: "Progress Analytics", desc: "Visual dashboards that track readiness, XP, and streaks." },
-              { img: featureGamification, title: "Gamification Engine", desc: "Earn XP, unlock badges, and compete with peers worldwide." },
-              { img: featureSyllabus, title: "Officially Aligned", desc: "Based on the public ACCA syllabus, updated every year." },
-              { img: featureResponsive, title: "Works Everywhere", desc: "Web and mobile responsive for on-the-go learning." },
-            ].map((feature, i) => (
-              <Card key={i} className="p-6 hover:shadow-lg transition-all hover:-translate-y-1 animate-slide-up overflow-hidden" style={{ animationDelay: `${i * 0.1}s` }}>
-                <div className="mb-4 rounded-lg overflow-hidden">
-                  <img src={feature.img} alt={feature.title} className="w-full h-48 object-cover" />
+
+          {/* Feature Block 1 - Smart Planner */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
+            <div className="order-2 lg:order-1">
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
+                  <img 
+                    src={featurePlanner} 
+                    alt="Smart Planner Interface" 
+                    className="w-full h-auto"
+                  />
                 </div>
-                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
-                <p className="text-muted-foreground">{feature.desc}</p>
-              </Card>
-            ))}
+              </div>
+            </div>
+            <div className="order-1 lg:order-2 space-y-6">
+              <Badge className="rounded-full bg-primary/10 text-primary border-primary/20">Feature 01</Badge>
+              <h3 className="text-3xl md:text-4xl font-display font-bold">
+                Smart Planner
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Plan your studies intelligently with AI-assisted schedules that adapt to your available time and exam date. 
+                No spreadsheets — just automatic balance between topics, difficulty, and deadlines.
+              </p>
+              <div className="flex items-center gap-3 text-sm text-primary font-medium bg-primary/5 p-4 rounded-xl border border-primary/10">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span>"Students who plan with Study Buddy complete 3× more study hours per week."</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Feature Block 2 - Interactive Flashcards */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
+            <div className="space-y-6">
+              <Badge className="rounded-full bg-secondary/10 text-secondary border-secondary/20">Feature 02</Badge>
+              <h3 className="text-3xl md:text-4xl font-display font-bold">
+                Interactive Flashcards
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Turn complex ACCA theory into quick 5-minute learning bursts. 
+                Reinforce memory with mini-problems and smart repetition that keeps you exam-ready anytime.
+              </p>
+              <div className="flex items-center gap-3 text-sm text-secondary font-medium bg-secondary/5 p-4 rounded-xl border border-secondary/10">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span>"Based on proven cognitive recall techniques."</span>
+              </div>
+            </div>
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
+                <img 
+                  src={featureFlashcards} 
+                  alt="Interactive Flashcards Interface" 
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Feature Block 3 - Progress Analytics */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
+            <div className="order-2 lg:order-1">
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 to-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
+                  <img 
+                    src={featureAnalytics} 
+                    alt="Progress Analytics Dashboard" 
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2 space-y-6">
+              <Badge className="rounded-full bg-accent/10 text-accent border-accent/20">Feature 03</Badge>
+              <h3 className="text-3xl md:text-4xl font-display font-bold">
+                Progress Analytics
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Visualize your preparation like never before. 
+                Track your readiness, XP, and streaks — and know exactly when you're exam-ready. 
+                No more guessing if you're prepared enough.
+              </p>
+              <div className="flex items-center gap-3 text-sm text-accent font-medium bg-accent/5 p-4 rounded-xl border border-accent/10">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span>"Your personal data-driven progress coach."</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Feature Block 4 - Gamification Engine */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
+            <div className="space-y-6">
+              <Badge className="rounded-full bg-primary/10 text-primary border-primary/20">Feature 04</Badge>
+              <h3 className="text-3xl md:text-4xl font-display font-bold">
+                Gamification Engine
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Earn XP, unlock badges, and climb leaderboards as you study. 
+                Stay consistent, motivated, and accountable — because progress feels better when it's visible.
+              </p>
+              <div className="flex items-center gap-3 text-sm text-primary font-medium bg-primary/5 p-4 rounded-xl border border-primary/10">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span>"Turn discipline into a daily habit."</span>
+              </div>
+            </div>
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
+                <img 
+                  src={featureGamification} 
+                  alt="Gamification Engine Interface" 
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Feature Block 5 - Officially Aligned */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
+            <div className="order-2 lg:order-1">
+              <div className="relative group">
+                <div className="absolute -inset-4 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
+                  <img 
+                    src={featureSyllabus} 
+                    alt="Officially Aligned Syllabus Tracker" 
+                    className="w-full h-auto"
+                  />
+                </div>
+              </div>
+            </div>
+            <div className="order-1 lg:order-2 space-y-6">
+              <Badge className="rounded-full bg-secondary/10 text-secondary border-secondary/20">Feature 05</Badge>
+              <h3 className="text-3xl md:text-4xl font-display font-bold">
+                Officially Aligned
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                All Study Buddy content is structured directly from the public ACCA syllabus and learning outcomes — updated annually to reflect the latest standards. 
+                You focus on learning, we handle the updates.
+              </p>
+              <div className="flex items-center gap-3 text-sm text-secondary font-medium bg-secondary/5 p-4 rounded-xl border border-secondary/10">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span>"Trusted by ACCA candidates worldwide."</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Feature Block 6 - Learn Anywhere */}
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20 animate-fade-in">
+            <div className="space-y-6">
+              <Badge className="rounded-full bg-accent/10 text-accent border-accent/20">Feature 06</Badge>
+              <h3 className="text-3xl md:text-4xl font-display font-bold">
+                Learn Anywhere
+              </h3>
+              <p className="text-lg text-muted-foreground leading-relaxed">
+                Seamlessly switch between desktop, tablet, and mobile. 
+                Study Buddy is fully responsive, cloud-synced, and built for the modern learner.
+              </p>
+              <div className="flex items-center gap-3 text-sm text-accent font-medium bg-accent/5 p-4 rounded-xl border border-accent/10">
+                <CheckCircle className="w-5 h-5 flex-shrink-0" />
+                <span>"Stay productive wherever you are."</span>
+              </div>
+            </div>
+            <div className="relative group">
+              <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 to-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
+                <img 
+                  src={featureResponsive} 
+                  alt="Multi-device Responsive Design" 
+                  className="w-full h-auto"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* Section Footer CTA */}
+          <div className="text-center pt-16 animate-fade-in">
+            <div className="max-w-2xl mx-auto space-y-8">
+              <h3 className="text-2xl md:text-3xl font-display font-bold">
+                Join thousands of ACCA students studying smarter with Study Buddy
+              </h3>
+              <Button 
+                size="lg" 
+                onClick={() => scrollToSection("pricing")} 
+                className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90"
+              >
+                Start Free
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+            </div>
           </div>
         </div>
       </section>
