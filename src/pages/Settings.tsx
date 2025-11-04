@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { usePapers } from "@/hooks/usePapers";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
@@ -10,8 +11,10 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Settings as SettingsIcon, User, Globe, Shield } from "lucide-react";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Settings as SettingsIcon, User, Globe, Shield, BookOpen } from "lucide-react";
 import { toast } from "sonner";
+import { cn } from "@/lib/utils";
 
 const COUNTRIES = [
   "United States",
@@ -43,9 +46,11 @@ const COUNTRIES = [
 export default function Settings() {
   const { user } = useAuth();
   const { profile, updateProfile, loading } = useUserProfile();
+  const { papers, loading: papersLoading } = usePapers();
   const [displayName, setDisplayName] = useState("");
   const [country, setCountry] = useState("");
   const [isOptedOut, setIsOptedOut] = useState(false);
+  const [selectedPapers, setSelectedPapers] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -53,16 +58,32 @@ export default function Settings() {
       setDisplayName(profile.display_name || "");
       setCountry(profile.country || "");
       setIsOptedOut(profile.is_opted_out_of_leaderboard || false);
+      setSelectedPapers(profile.selected_papers || []);
     }
   }, [profile]);
 
+  const togglePaper = (paperCode: string) => {
+    setSelectedPapers(prev =>
+      prev.includes(paperCode)
+        ? prev.filter(p => p !== paperCode)
+        : [...prev, paperCode]
+    );
+  };
+
   const handleSave = async () => {
+    if (selectedPapers.length === 0) {
+      toast.error("Please select at least one paper");
+      return;
+    }
+    
     setSaving(true);
     try {
       await updateProfile({
         display_name: displayName.trim() || null,
         country: country || null,
         is_opted_out_of_leaderboard: isOptedOut,
+        selected_papers: selectedPapers,
+        selected_paper: selectedPapers[0], // Keep for backward compatibility
       });
       toast.success("Settings saved successfully");
     } catch (error) {
@@ -103,6 +124,71 @@ export default function Settings() {
           </div>
 
           <div className="space-y-6">
+            {/* Study Preferences */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <BookOpen className="w-5 h-5 text-primary" />
+                  Study Preferences
+                </CardTitle>
+                <CardDescription>
+                  Select the ACCA papers you're currently studying
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-2">
+                  <Label>Selected Papers ({selectedPapers.length})</Label>
+                  {papersLoading ? (
+                    <div className="text-sm text-muted-foreground">Loading papers...</div>
+                  ) : (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3 max-h-96 overflow-y-auto border rounded-lg p-4">
+                      {papers.map((paper) => (
+                        <div
+                          key={paper.id}
+                          className={cn(
+                            "flex items-start space-x-3 p-3 rounded-lg border-2 transition-all cursor-pointer",
+                            selectedPapers.includes(paper.paper_code)
+                              ? "border-primary bg-primary/5"
+                              : "border-muted hover:border-primary/50"
+                          )}
+                          onClick={() => togglePaper(paper.paper_code)}
+                        >
+                          <Checkbox
+                            id={paper.paper_code}
+                            checked={selectedPapers.includes(paper.paper_code)}
+                            onCheckedChange={() => togglePaper(paper.paper_code)}
+                            className="mt-1"
+                          />
+                          <div className="flex-1">
+                            <label
+                              htmlFor={paper.paper_code}
+                              className="text-sm font-medium leading-none cursor-pointer"
+                            >
+                              {paper.paper_code}
+                            </label>
+                            <p className="text-xs text-muted-foreground mt-1">
+                              {paper.title}
+                            </p>
+                            <span className={cn(
+                              "text-xs mt-1 inline-block px-2 py-0.5 rounded",
+                              paper.level === "Applied Skills" 
+                                ? "bg-blue-100 text-blue-700" 
+                                : "bg-purple-100 text-purple-700"
+                            )}>
+                              {paper.level}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  <p className="text-xs text-muted-foreground mt-2">
+                    Your flashcards and study plan will be based on these papers
+                  </p>
+                </div>
+              </CardContent>
+            </Card>
+
             {/* Profile Settings */}
             <Card>
               <CardHeader>

@@ -77,6 +77,7 @@ export default function PostSignupOnboarding() {
     try {
       await updateProfile({
         selected_paper: selectedPapers[0],
+        selected_papers: selectedPapers,
       });
 
       setShowConfetti(true);
