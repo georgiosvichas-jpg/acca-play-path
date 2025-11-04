@@ -9,6 +9,7 @@ export interface UserProfile {
   total_xp: number;
   study_streak: number;
   last_study_date: string | null;
+  level?: number;
 }
 
 export function useUserProfile() {

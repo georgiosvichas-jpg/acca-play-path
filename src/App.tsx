@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./components/Landing";
 import Dashboard from "./components/Dashboard";
 import Flashcards from "./components/Flashcards";
-import Badges from "./components/Badges";
+import BadgesReal from "./components/BadgesReal";
 import Analytics from "./components/Analytics";
 import Planner from "./pages/Planner";
 import Navigation from "./components/Navigation";
@@ -17,6 +17,7 @@ import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
+import XPConfettiWrapper from "./components/XPConfettiWrapper";
 
 const queryClient = new QueryClient();
 
@@ -25,6 +26,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
+      <XPConfettiWrapper />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Landing />} />
@@ -59,8 +61,7 @@ const App = () => (
             path="/badges"
             element={
               <ProtectedRoute>
-                <Navigation />
-                <Badges />
+                <BadgesReal />
               </ProtectedRoute>
             }
           />

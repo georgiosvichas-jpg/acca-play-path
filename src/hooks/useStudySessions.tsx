@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "./useAuth";
+import { useXP } from "./useXP";
 import { toast } from "sonner";
 
 export interface StudySession {
@@ -21,8 +22,10 @@ export interface StudySession {
 
 export function useStudySessions() {
   const { user } = useAuth();
+  const { awardXP } = useXP();
   const [sessions, setSessions] = useState<StudySession[]>([]);
   const [loading, setLoading] = useState(true);
+  const [hasCreatedFirstSession, setHasCreatedFirstSession] = useState(false);
 
   const fetchSessions = async () => {
     if (!user) {
@@ -46,7 +49,20 @@ export function useStudySessions() {
   };
 
   useEffect(() => {
+    const checkFirstSession = async () => {
+      if (!user) return;
+      
+      const { data } = await supabase
+        .from("study_sessions")
+        .select("id")
+        .eq("user_id", user.id)
+        .limit(1);
+        
+      setHasCreatedFirstSession((data?.length || 0) > 0);
+    };
+    
     fetchSessions();
+    checkFirstSession();
   }, [user]);
 
   const createSession = async (sessionData: Partial<StudySession>) => {
@@ -75,6 +91,13 @@ export function useStudySessions() {
     }
 
     setSessions((prev) => [...prev, data]);
+    
+    // Award XP for first session
+    if (!hasCreatedFirstSession) {
+      await awardXP("first_session_created");
+      setHasCreatedFirstSession(true);
+    }
+    
     toast.success("Study session scheduled");
     return data;
   };
@@ -82,14 +105,12 @@ export function useStudySessions() {
   const completeSession = async (sessionId: string) => {
     if (!user) return;
 
-    const xpEarned = 25; // Base XP for completing a session
-
     const { error } = await supabase
       .from("study_sessions")
       .update({
         completed: true,
         completed_at: new Date().toISOString(),
-        xp_earned: xpEarned,
+        xp_earned: 15,
       })
       .eq("id", sessionId)
       .eq("user_id", user.id);
@@ -100,20 +121,6 @@ export function useStudySessions() {
       throw error;
     }
 
-    // Update user XP
-    const { data: profile } = await supabase
-      .from("user_profiles")
-      .select("total_xp")
-      .eq("user_id", user.id)
-      .single();
-
-    if (profile) {
-      await supabase
-        .from("user_profiles")
-        .update({ total_xp: (profile.total_xp || 0) + xpEarned })
-        .eq("user_id", user.id);
-    }
-
     setSessions((prev) =>
       prev.map((s) =>
         s.id === sessionId
@@ -121,13 +128,14 @@ export function useStudySessions() {
               ...s,
               completed: true,
               completed_at: new Date().toISOString(),
-              xp_earned: xpEarned,
+              xp_earned: 15,
             }
           : s
       )
     );
 
-    toast.success(`Session completed! +${xpEarned} XP`);
+    // Award XP for completing session
+    await awardXP("session_completed");
   };
 
   const deleteSession = async (sessionId: string) => {

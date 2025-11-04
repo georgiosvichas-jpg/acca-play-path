@@ -21,6 +21,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import XPDisplay from "./XPDisplay";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
@@ -61,6 +62,8 @@ export default function Navigation() {
 
           {/* Navigation Items */}
           <div className="flex items-center gap-2">
+            <XPDisplay />
+            
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = location.pathname === item.path;

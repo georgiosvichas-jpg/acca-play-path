@@ -14,6 +14,39 @@ export type Database = {
   }
   public: {
     Tables: {
+      badges: {
+        Row: {
+          badge_name: string
+          created_at: string
+          criteria_type: string
+          criteria_value: number
+          description: string
+          icon: string
+          id: string
+          tier: string
+        }
+        Insert: {
+          badge_name: string
+          created_at?: string
+          criteria_type: string
+          criteria_value: number
+          description: string
+          icon: string
+          id?: string
+          tier?: string
+        }
+        Update: {
+          badge_name?: string
+          created_at?: string
+          criteria_type?: string
+          criteria_value?: number
+          description?: string
+          icon?: string
+          id?: string
+          tier?: string
+        }
+        Relationships: []
+      }
       flashcard_reviews: {
         Row: {
           correct_count: number | null
@@ -249,12 +282,42 @@ export type Database = {
           },
         ]
       }
+      user_badges: {
+        Row: {
+          badge_id: string
+          earned_at: string
+          id: string
+          user_id: string
+        }
+        Insert: {
+          badge_id: string
+          earned_at?: string
+          id?: string
+          user_id: string
+        }
+        Update: {
+          badge_id?: string
+          earned_at?: string
+          id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_badges_badge_id_fkey"
+            columns: ["badge_id"]
+            isOneToOne: false
+            referencedRelation: "badges"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       user_profiles: {
         Row: {
           created_at: string | null
           exam_session: string | null
           id: string
           last_study_date: string | null
+          level: number | null
           plan_type: Database["public"]["Enums"]["plan_type"] | null
           selected_paper: string | null
           selected_papers: string[] | null
@@ -275,6 +338,7 @@ export type Database = {
           exam_session?: string | null
           id?: string
           last_study_date?: string | null
+          level?: number | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
           selected_paper?: string | null
           selected_papers?: string[] | null
@@ -295,6 +359,7 @@ export type Database = {
           exam_session?: string | null
           id?: string
           last_study_date?: string | null
+          level?: number | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
           selected_paper?: string | null
           selected_papers?: string[] | null
@@ -367,6 +432,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      xp_events: {
+        Row: {
+          created_at: string
+          event_type: string
+          id: string
+          user_id: string
+          xp_value: number
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          id?: string
+          user_id: string
+          xp_value: number
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          id?: string
+          user_id?: string
+          xp_value?: number
+        }
+        Relationships: []
       }
     }
     Views: {

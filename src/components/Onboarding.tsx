@@ -4,6 +4,7 @@ import { ChevronRight, BookOpen, Calendar, Clock, CheckCircle2 } from "lucide-re
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { useXP } from "@/hooks/useXP";
 import { toast } from "sonner";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@/hooks/use-window-size";
@@ -51,6 +52,7 @@ export default function Onboarding() {
   const navigate = useNavigate();
   const { user } = useAuth();
   const { updateProfile } = useUserProfile();
+  const { awardXP } = useXP();
   const { width, height } = useWindowSize();
 
   const progress = ((step + 1) / 4) * 100;
@@ -79,12 +81,14 @@ export default function Onboarding() {
       // Save all onboarding data to user profile
       await updateProfile({
         selected_paper: selectedPapers[0] || null,
-        total_xp: 10,
         ...(selectedPapers.length > 0 && { selected_papers: selectedPapers } as any),
         ...(examSession && { exam_session: examSession } as any),
         ...(studyHours && { study_hours: studyHours } as any),
         ...(studyDays.length > 0 && { study_days: studyDays } as any),
       });
+
+      // Award XP for completing onboarding
+      await awardXP("onboarding_complete");
 
       setShowConfetti(true);
       toast.success("Your personalized plan is ready!");
