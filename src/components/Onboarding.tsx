@@ -76,14 +76,15 @@ export default function Onboarding() {
 
     setIsSubmitting(true);
     try {
-      // Save onboarding data to user profile
+      // Save all onboarding data to user profile
       await updateProfile({
-        selected_paper: selectedPapers[0] || null, // Primary paper
-        total_xp: 10, // Award initial XP
+        selected_paper: selectedPapers[0] || null,
+        total_xp: 10,
+        ...(selectedPapers.length > 0 && { selected_papers: selectedPapers } as any),
+        ...(examSession && { exam_session: examSession } as any),
+        ...(studyHours && { study_hours: studyHours } as any),
+        ...(studyDays.length > 0 && { study_days: studyDays } as any),
       });
-
-      // TODO: Save additional fields (exam_session, study_hours, study_days, all papers)
-      // These require database migration to add new columns
 
       setShowConfetti(true);
       toast.success("Your personalized plan is ready!");

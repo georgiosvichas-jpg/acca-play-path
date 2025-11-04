@@ -8,6 +8,7 @@ import Dashboard from "./components/Dashboard";
 import Flashcards from "./components/Flashcards";
 import Badges from "./components/Badges";
 import Analytics from "./components/Analytics";
+import Planner from "./pages/Planner";
 import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -69,6 +70,15 @@ const App = () => (
               <ProtectedRoute>
                 <Navigation />
                 <Analytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/planner"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <Planner />
               </ProtectedRoute>
             }
           />

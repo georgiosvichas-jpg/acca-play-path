@@ -152,6 +152,62 @@ export type Database = {
           },
         ]
       }
+      study_sessions: {
+        Row: {
+          completed: boolean | null
+          completed_at: string | null
+          created_at: string | null
+          duration_minutes: number | null
+          id: string
+          notes: string | null
+          paper_code: string
+          session_date: string
+          start_time: string | null
+          syllabus_unit_id: string | null
+          updated_at: string | null
+          user_id: string
+          xp_earned: number | null
+        }
+        Insert: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          paper_code: string
+          session_date: string
+          start_time?: string | null
+          syllabus_unit_id?: string | null
+          updated_at?: string | null
+          user_id: string
+          xp_earned?: number | null
+        }
+        Update: {
+          completed?: boolean | null
+          completed_at?: string | null
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          notes?: string | null
+          paper_code?: string
+          session_date?: string
+          start_time?: string | null
+          syllabus_unit_id?: string | null
+          updated_at?: string | null
+          user_id?: string
+          xp_earned?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "study_sessions_syllabus_unit_id_fkey"
+            columns: ["syllabus_unit_id"]
+            isOneToOne: false
+            referencedRelation: "syllabus_units"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       syllabus_units: {
         Row: {
           chapter: string
@@ -196,11 +252,15 @@ export type Database = {
       user_profiles: {
         Row: {
           created_at: string | null
+          exam_session: string | null
           id: string
           last_study_date: string | null
           plan_type: Database["public"]["Enums"]["plan_type"] | null
           selected_paper: string | null
+          selected_papers: string[] | null
           stripe_customer_id: string | null
+          study_days: string[] | null
+          study_hours: number | null
           study_streak: number | null
           subscription_end_date: string | null
           subscription_product_id: string | null
@@ -212,11 +272,15 @@ export type Database = {
         }
         Insert: {
           created_at?: string | null
+          exam_session?: string | null
           id?: string
           last_study_date?: string | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
           selected_paper?: string | null
+          selected_papers?: string[] | null
           stripe_customer_id?: string | null
+          study_days?: string[] | null
+          study_hours?: number | null
           study_streak?: number | null
           subscription_end_date?: string | null
           subscription_product_id?: string | null
@@ -228,11 +292,15 @@ export type Database = {
         }
         Update: {
           created_at?: string | null
+          exam_session?: string | null
           id?: string
           last_study_date?: string | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
           selected_paper?: string | null
+          selected_papers?: string[] | null
           stripe_customer_id?: string | null
+          study_days?: string[] | null
+          study_hours?: number | null
           study_streak?: number | null
           subscription_end_date?: string | null
           subscription_product_id?: string | null
