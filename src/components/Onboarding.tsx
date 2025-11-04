@@ -60,18 +60,13 @@ export default function Onboarding() {
 
         {/* Content */}
         <div className="bg-card rounded-2xl p-8 md:p-12 shadow-card card-float text-center">
-          {/* Icon */}
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-primary/10 mb-6 animate-bounce-soft">
-            <Icon className="w-10 h-10 text-primary" />
-          </div>
-
           {/* Image for first slide */}
           {slide.image && (
-            <div className="mb-8 -mx-4">
+            <div className="mb-6 -mx-8 md:-mx-12">
               <img
                 src={slide.image}
                 alt="ACCA Study Objects"
-                className="w-full max-w-md mx-auto animate-float"
+                className="w-full animate-float"
               />
             </div>
           )}
