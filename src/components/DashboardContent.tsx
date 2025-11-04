@@ -21,6 +21,8 @@ import { usePapers } from "@/hooks/usePapers";
 import { useSubscription } from "@/hooks/useSubscription";
 import { PaperUnlockModal } from "./UpgradeModals";
 import Footer from "./Footer";
+import { EmptyState } from "./EmptyStates";
+import { toast } from "sonner";
 
 interface Task {
   id: string;
@@ -179,9 +181,13 @@ export default function DashboardContent() {
                 </div>
 
                 {tasks.length === 0 ? (
-                  <p className="text-muted-foreground text-center py-8">
-                    No tasks available. Import the ACCA dataset to get started!
-                  </p>
+                  <div className="py-4">
+                    <EmptyState
+                      type="planner"
+                      onAction={() => toast.info("Task creation feature coming soon!")}
+                      onSecondaryAction={() => toast.info("Check out the guided tour for help getting started.")}
+                    />
+                  </div>
                 ) : (
                   <div className="space-y-3">
                     {tasks.map((task, index) => (

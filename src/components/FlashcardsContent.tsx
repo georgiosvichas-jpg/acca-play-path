@@ -16,6 +16,8 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import Footer from "./Footer";
+import { EmptyState } from "./EmptyStates";
+import { toast } from "sonner";
 
 export default function FlashcardsContent() {
   const { user } = useAuth();
@@ -44,15 +46,11 @@ export default function FlashcardsContent() {
   if (flashcards.length === 0) {
     return (
       <>
-        <div className="min-h-screen flex items-center justify-center p-4">
-          <Card className="p-8 max-w-md text-center">
-            <Sparkles className="w-12 h-12 text-primary mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">No Flashcards Available</h2>
-            <p className="text-muted-foreground">
-              Import the ACCA dataset to start learning with flashcards!
-            </p>
-          </Card>
-        </div>
+        <EmptyState
+          type="flashcards"
+          onAction={() => window.location.href = '/dashboard'}
+          onSecondaryAction={() => toast.info("Flashcards flip to reveal answers. Practice daily to earn XP!")}
+        />
         <Footer />
       </>
     );

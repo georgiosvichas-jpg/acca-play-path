@@ -84,8 +84,12 @@ export default function GuidedTour({ onComplete }: GuidedTourProps) {
   ];
 
   useEffect(() => {
-    // Start tour automatically if user hasn't completed it
-    if (profile && !profile.tour_completed) {
+    // Check localStorage for tour completion
+    const tourCompleted = localStorage.getItem('tour_completed') === 'true';
+    const tourSkipped = localStorage.getItem('tour_skipped') === 'true';
+    
+    // Start tour automatically if user hasn't completed or skipped it
+    if (profile && !tourCompleted && !tourSkipped) {
       // Small delay to ensure DOM elements are ready
       setTimeout(() => {
         setRun(true);
@@ -110,11 +114,11 @@ export default function GuidedTour({ onComplete }: GuidedTourProps) {
 
   const completeTour = async () => {
     try {
-      // Award XP and mark tour as completed
+      // Award XP and mark tour as completed in localStorage
+      localStorage.setItem('tour_completed', 'true');
       const newXP = (profile?.total_xp || 0) + 10;
       await updateProfile({
         total_xp: newXP,
-        tour_completed: true,
       });
 
       // Show success modal and confetti
@@ -132,18 +136,11 @@ export default function GuidedTour({ onComplete }: GuidedTourProps) {
     }
   };
 
-  const handleSkipConfirm = async () => {
+  const handleSkipConfirm = () => {
     setRun(false);
     setShowSkipDialog(false);
-    
-    try {
-      await updateProfile({
-        tour_skipped: true,
-      });
-      toast.info("You can restart the tour anytime from the help menu");
-    } catch (error) {
-      console.error("Error skipping tour:", error);
-    }
+    localStorage.setItem('tour_skipped', 'true');
+    toast.info("You can restart the tour anytime from the help menu");
   };
 
   const handleSkipCancel = () => {
