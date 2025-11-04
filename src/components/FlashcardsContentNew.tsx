@@ -33,6 +33,7 @@ export default function FlashcardsContentNew() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showImporter, setShowImporter] = useState(false);
+  const [importAttempted, setImportAttempted] = useState(false);
 
   // Filters
   const [selectedPaper, setSelectedPaper] = useState<string>("all");
@@ -51,8 +52,10 @@ export default function FlashcardsContentNew() {
   useEffect(() => {
     // Auto-import flashcards if none exist
     const autoImport = async () => {
-      if (showImporter && !loading) {
+      if (showImporter && !loading && !importAttempted) {
+        setImportAttempted(true);
         try {
+          console.log("Auto-importing flashcards...");
           const response = await fetch(
             `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-flashcards`,
             {
@@ -63,17 +66,26 @@ export default function FlashcardsContentNew() {
             }
           );
 
-          if (response.ok) {
+          const result = await response.json();
+          console.log("Import result:", result);
+
+          if (response.ok && result.imported > 0) {
+            toast.success(`Successfully imported ${result.imported} flashcards!`);
             await fetchFlashcards();
+          } else {
+            toast.error("Failed to import flashcards. Please try again.");
+            setShowImporter(false);
           }
         } catch (error) {
           console.error("Auto-import failed:", error);
+          toast.error("Failed to import flashcards. Please refresh the page.");
+          setShowImporter(false);
         }
       }
     };
 
     autoImport();
-  }, [showImporter, loading]);
+  }, [showImporter, loading, importAttempted]);
 
   useEffect(() => {
     applyFilters();
@@ -206,6 +218,20 @@ export default function FlashcardsContentNew() {
               <p className="text-sm text-[#94A3B8]">
                 Setting up 500+ flashcards across all ACCA papers
               </p>
+
+              {/* Retry Button (shown after failed import) */}
+              {importAttempted && (
+                <Button 
+                  onClick={() => {
+                    setImportAttempted(false);
+                    setShowImporter(true);
+                  }}
+                  variant="outline"
+                  className="mt-4"
+                >
+                  Retry Import
+                </Button>
+              )}
             </CardContent>
           </Card>
         </div>

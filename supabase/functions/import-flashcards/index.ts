@@ -44,7 +44,7 @@ serve(async (req) => {
     console.log("CSV fetched successfully");
 
     // Parse CSV
-    const lines = csvData.trim().split("\n");
+    const lines = csvData.trim().split(/\r?\n/);
     const headers = lines[0].split(",");
     
     console.log(`Processing ${lines.length - 1} flashcards...`);
