@@ -20,6 +20,8 @@ import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
 import XPConfettiWrapper from "./components/XPConfettiWrapper";
 import FlashcardsContentNew from "./components/FlashcardsContentNew";
+import Coach from "./pages/Coach";
+import Progress from "./pages/Progress";
 
 const queryClient = new QueryClient();
 
@@ -98,6 +100,22 @@ const App = () => (
               <ProtectedRoute>
                 <Navigation />
                 <Planner />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/coach"
+            element={
+              <ProtectedRoute>
+                <Coach />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/progress"
+            element={
+              <ProtectedRoute>
+                <Progress />
               </ProtectedRoute>
             }
           />

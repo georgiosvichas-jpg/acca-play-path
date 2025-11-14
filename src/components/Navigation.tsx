@@ -10,6 +10,8 @@ import {
   Settings,
   Crown,
   Calendar,
+  MessageSquare,
+  TrendingUp,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -27,8 +29,10 @@ import PeerComparisonDrawer from "./PeerComparisonDrawer";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { path: "/coach", label: "Coach", icon: MessageSquare },
   { path: "/planner", label: "Planner", icon: Calendar },
   { path: "/flashcards", label: "Flashcards", icon: BookOpen },
+  { path: "/progress", label: "Progress", icon: TrendingUp },
   { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
   { path: "/badges", label: "Badges", icon: Trophy },
   { path: "/analytics", label: "Analytics", icon: BarChart3 },
