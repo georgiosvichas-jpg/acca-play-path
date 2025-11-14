@@ -1,0 +1,490 @@
+openapi: 3.1.0
+info:
+  title: StudyBuddy - ACCA Exam Coach API
+  description: |
+    Backend API for StudyBuddy ACCA exam preparation platform.
+    Provides user management, study planning, content delivery, session tracking, analytics, and premium subscriptions.
+    
+    **Authentication:** All endpoints use Bearer token authentication with Supabase service role key.
+  version: 1.0.0
+  contact:
+    name: StudyBuddy Support
+    email: support@studybuddy.com
+
+servers:
+  - url: https://irlxegoatcgskhdvbvuo.supabase.co/functions/v1
+    description: Production Supabase Edge Functions
+
+security:
+  - bearerAuth: []
+
+paths:
+  /users-get-or-create:
+    post:
+      operationId: getUserOrCreate
+      summary: Get or create a StudyBuddy user
+      description: |
+        Retrieves an existing user by email, or creates a new user if one doesn't exist.
+        Use this endpoint when a student first interacts with StudyBuddy or updates their exam details.
+      tags:
+        - User Management
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - email
+              properties:
+                email:
+                  type: string
+                  format: email
+                  description: Student's email address (primary identifier)
+                  example: student@example.com
+                exam_paper:
+                  type: string
+                  description: ACCA paper code (e.g., BT, MA, FA)
+                  example: BT
+                exam_date:
+                  type: string
+                  format: date
+                  description: Planned exam date in YYYY-MM-DD format
+                  example: "2025-06-15"
+                weekly_study_hours:
+                  type: integer
+                  description: Hours per week the student plans to study
+                  minimum: 1
+                  maximum: 40
+                  default: 5
+                  example: 10
+      responses:
+        '200':
+          description: User retrieved or created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                    description: Unique user identifier
+                  email:
+                    type: string
+                    format: email
+                  exam_paper:
+                    type: string
+                    nullable: true
+                  exam_date:
+                    type: string
+                    format: date
+                    nullable: true
+                  weekly_study_hours:
+                    type: integer
+                  subscription_status:
+                    type: string
+                    enum: [free, premium]
+                    description: Current subscription tier
+                  created_at:
+                    type: string
+                    format: date-time
+                  updated_at:
+                    type: string
+                    format: date-time
+        '400':
+          description: Invalid request (missing email)
+        '500':
+          description: Server error
+
+  /plans-today-tasks:
+    get:
+      operationId: getTodayTasks
+      summary: Generate today's study plan
+      description: |
+        Returns a personalized daily study plan based on the user's exam paper, 
+        weekly study hours, and current progress. Uses a simple rotation algorithm
+        through syllabus units.
+      tags:
+        - Study Planning
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: User's unique identifier from users-get-or-create
+          example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '200':
+          description: Daily study plan generated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  paper:
+                    type: string
+                    description: ACCA paper code
+                    example: BT
+                  tasks:
+                    type: array
+                    description: List of study tasks for today
+                    items:
+                      type: object
+                      properties:
+                        unit_code:
+                          type: string
+                          description: Syllabus unit to study
+                          example: BT01
+                        type:
+                          type: string
+                          enum: [mcq, flashcard]
+                          description: Type of questions to practice
+                        difficulty:
+                          type: string
+                          enum: [easy, medium, hard]
+                          description: Question difficulty level
+                          example: medium
+                        count:
+                          type: integer
+                          description: Number of questions to complete
+                          example: 10
+        '400':
+          description: Missing or invalid userId
+        '500':
+          description: Server error
+
+  /content-batch:
+    post:
+      operationId: getContentBatch
+      summary: Fetch a batch of study questions
+      description: |
+        Retrieves a randomized set of questions from the question bank based on filters.
+        Use this to get questions for practice sessions, quizzes, or mock exams.
+      tags:
+        - Content Delivery
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - paper
+                - size
+              properties:
+                paper:
+                  type: string
+                  description: ACCA paper code to fetch questions for
+                  example: BT
+                unit_code:
+                  type: string
+                  description: Specific syllabus unit (optional filter)
+                  example: BT01
+                type:
+                  type: string
+                  enum: [flashcard, mcq]
+                  description: Question type filter (optional)
+                  example: mcq
+                difficulty:
+                  type: string
+                  enum: [easy, medium, hard]
+                  description: Difficulty level filter (optional)
+                  example: medium
+                size:
+                  type: integer
+                  minimum: 1
+                  maximum: 100
+                  description: Number of questions to return
+                  example: 10
+      responses:
+        '200':
+          description: Questions retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: string
+                      format: uuid
+                    paper:
+                      type: string
+                      example: BT
+                    unit_code:
+                      type: string
+                      example: BT01
+                    learning_outcome_code:
+                      type: string
+                      nullable: true
+                    type:
+                      type: string
+                      enum: [flashcard, mcq]
+                    difficulty:
+                      type: string
+                      enum: [easy, medium, hard]
+                    question:
+                      type: string
+                      description: The question text
+                    options:
+                      type: array
+                      description: Answer options (for MCQs)
+                      nullable: true
+                      items:
+                        type: string
+                    correct_option_index:
+                      type: integer
+                      description: Index of correct answer (for MCQs)
+                      nullable: true
+                    answer:
+                      type: string
+                      description: Correct answer text (for flashcards)
+                      nullable: true
+                    explanation:
+                      type: string
+                      description: Detailed explanation of the answer
+                      nullable: true
+        '400':
+          description: Invalid request (missing required fields or size out of range)
+        '500':
+          description: Server error
+
+  /sessions-log:
+    post:
+      operationId: logStudySession
+      summary: Log a completed study session
+      description: |
+        Records session details including questions attempted, accuracy, and raw performance data.
+        Use this after every study session to track progress and calculate analytics.
+      tags:
+        - Session Tracking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+                - session_type
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                  description: User identifier
+                  example: 123e4567-e89b-12d3-a456-426614174000
+                session_type:
+                  type: string
+                  enum: [onboarding, daily, quick_drill, mini_test, mock_exam]
+                  description: Type of study session completed
+                  example: daily
+                total_questions:
+                  type: integer
+                  description: Total number of questions attempted
+                  default: 0
+                  example: 10
+                correct_answers:
+                  type: integer
+                  description: Number of questions answered correctly
+                  default: 0
+                  example: 8
+                raw_log:
+                  type: array
+                  description: Detailed question-by-question performance data
+                  nullable: true
+                  items:
+                    type: object
+                    properties:
+                      question_id:
+                        type: string
+                        format: uuid
+                      unit_code:
+                        type: string
+                        example: BT01
+                      difficulty:
+                        type: string
+                        enum: [easy, medium, hard]
+                      correct:
+                        type: boolean
+                      time_taken_seconds:
+                        type: integer
+                  example:
+                    - question_id: abc123
+                      unit_code: BT01
+                      difficulty: medium
+                      correct: true
+                      time_taken_seconds: 45
+      responses:
+        '200':
+          description: Session logged successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                    format: uuid
+                  user_id:
+                    type: string
+                    format: uuid
+                  session_type:
+                    type: string
+                  started_at:
+                    type: string
+                    format: date-time
+                  ended_at:
+                    type: string
+                    format: date-time
+                  total_questions:
+                    type: integer
+                  correct_answers:
+                    type: integer
+                  raw_log:
+                    type: array
+                    items:
+                      type: object
+                  created_at:
+                    type: string
+                    format: date-time
+        '400':
+          description: Invalid request (missing required fields or invalid session_type)
+        '500':
+          description: Server error
+
+  /analytics-summary:
+    get:
+      operationId: getAnalyticsSummary
+      summary: Get user performance analytics
+      description: |
+        Returns comprehensive analytics including overall accuracy, 
+        performance by syllabus unit, and performance by difficulty level.
+        Based on all logged study sessions for the user.
+      tags:
+        - Analytics
+      parameters:
+        - name: userId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: User identifier
+          example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '200':
+          description: Analytics retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  total_questions:
+                    type: integer
+                    description: Total questions answered across all sessions
+                    example: 150
+                  overall_accuracy:
+                    type: integer
+                    description: Overall accuracy percentage (0-100)
+                    example: 78
+                  by_unit:
+                    type: object
+                    description: Accuracy percentage by syllabus unit
+                    additionalProperties:
+                      type: integer
+                    example:
+                      BT01: 85
+                      BT02: 72
+                      BT03: 80
+                  by_difficulty:
+                    type: object
+                    description: Accuracy percentage by difficulty level
+                    properties:
+                      easy:
+                        type: integer
+                        example: 92
+                      medium:
+                        type: integer
+                        example: 75
+                      hard:
+                        type: integer
+                        example: 60
+        '400':
+          description: Missing or invalid userId
+        '500':
+          description: Server error
+
+  /stripe-create-checkout-link:
+    post:
+      operationId: createCheckoutLink
+      summary: Create Stripe premium subscription checkout
+      description: |
+        Generates a Stripe Checkout session URL for upgrading to StudyBuddy Premium.
+        The checkout is configured for monthly subscription at $29/month.
+        After successful payment, the webhook updates the user's subscription status.
+      tags:
+        - Payments
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - userId
+              properties:
+                userId:
+                  type: string
+                  format: uuid
+                  description: User identifier from sb_users table
+                  example: 123e4567-e89b-12d3-a456-426614174000
+      responses:
+        '200':
+          description: Checkout link created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  url:
+                    type: string
+                    format: uri
+                    description: Stripe Checkout session URL to redirect user to
+                    example: https://checkout.stripe.com/c/pay/cs_test_abc123
+        '400':
+          description: Missing userId
+        '500':
+          description: Server error or Stripe API error
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Use your Supabase Service Role Key as the Bearer token.
+        
+        **For ChatGPT GPT Actions:**
+        1. Get your service role key from Supabase dashboard (Settings → API)
+        2. Configure in GPT Actions as: Bearer YOUR_SERVICE_ROLE_KEY
+        
+        **Security Note:** Service role key bypasses RLS policies. Use only in trusted backend contexts.
+
+tags:
+  - name: User Management
+    description: User registration, authentication, and profile management
+  - name: Study Planning
+    description: Personalized study plan generation and task scheduling
+  - name: Content Delivery
+    description: Question bank access and content retrieval
+  - name: Session Tracking
+    description: Study session logging and progress tracking
+  - name: Analytics
+    description: Performance analytics and progress reports
+  - name: Payments
+    description: Subscription management and payments via Stripe
