@@ -91,20 +91,38 @@ serve(async (req) => {
       paper = profile?.selected_paper || "BT";
     }
 
-    // Create study session
+    const today = new Date().toISOString().split('T')[0];
+
+    // Check if this is the first completed session today for daily bonus
+    const { data: todaySessions } = await supabaseAdmin
+      .from("study_sessions")
+      .select("id")
+      .eq("user_id", userId)
+      .eq("session_date", today)
+      .eq("completed", true);
+
+    // Calculate enhanced XP: +10 per correct, +2 per attempt, +50 daily bonus
+    const correctAnswerXP = validatedCorrectAnswers * 10;
+    const attemptXP = validatedTotalQuestions * 2;
+    const dailySessionBonus = (!todaySessions || todaySessions.length === 0) ? 50 : 0;
+    const totalXP = correctAnswerXP + attemptXP + dailySessionBonus;
+
+    console.log(`XP Calculation for user ${userId}: ${validatedCorrectAnswers} correct (${correctAnswerXP}xp) + ${validatedTotalQuestions} attempts (${attemptXP}xp) + daily bonus (${dailySessionBonus}xp) = ${totalXP}xp`);
+
+    // Create study session with enhanced XP
     const { data: session, error } = await supabaseAdmin
       .from("study_sessions")
       .insert({
         user_id: userId,
         paper_code: paper,
-        session_date: new Date().toISOString().split('T')[0],
+        session_date: today,
         session_type,
         total_questions: validatedTotalQuestions,
         correct_answers: validatedCorrectAnswers,
         raw_log,
         completed: true,
         completed_at: new Date().toISOString(),
-        xp_earned: validatedCorrectAnswers * 10,
+        xp_earned: totalXP,
       })
       .select()
       .single();
@@ -114,39 +132,48 @@ serve(async (req) => {
       throw error;
     }
 
-    // Update daily questions count
+    // Log to xp_events for leaderboard time-based tracking
+    const { error: xpEventError } = await supabaseAdmin
+      .from("xp_events")
+      .insert({
+        user_id: userId,
+        event_type: `session_${session_type}`,
+        xp_value: totalXP,
+      });
+
+    if (xpEventError) {
+      console.error("Error logging XP event:", xpEventError);
+    }
+
+    // Get current profile data
     const { data: profile } = await supabaseAdmin
       .from("user_profiles")
-      .select("daily_questions_used, last_question_reset_date")
+      .select("total_xp, daily_questions_used, last_question_reset_date")
       .eq("user_id", userId)
       .single();
 
-    const today = new Date().toISOString().split('T')[0];
     const resetDate = profile?.last_question_reset_date;
-    
     let newCount = (profile?.daily_questions_used || 0) + validatedTotalQuestions;
     
-    // Reset if it's a new day
+    // Reset daily count if it's a new day
     if (resetDate !== today) {
       newCount = validatedTotalQuestions;
-      await supabaseAdmin
-        .from("user_profiles")
-        .update({
-          daily_questions_used: newCount,
-          last_question_reset_date: today,
-        })
-        .eq("user_id", userId);
-    } else {
-      await supabaseAdmin
-        .from("user_profiles")
-        .update({ daily_questions_used: newCount })
-        .eq("user_id", userId);
     }
 
-    console.log(`Session logged for user ${userId}: ${session_type}, ${validatedCorrectAnswers}/${validatedTotalQuestions} correct`);
+    // Update user profile with new XP total and daily questions count
+    await supabaseAdmin
+      .from("user_profiles")
+      .update({
+        total_xp: (profile?.total_xp || 0) + totalXP,
+        daily_questions_used: newCount,
+        last_question_reset_date: today,
+      })
+      .eq("user_id", userId);
+
+    console.log(`Session logged for user ${userId}: ${session_type}, ${validatedCorrectAnswers}/${validatedTotalQuestions} correct, earned ${totalXP}xp`);
 
     return new Response(
-      JSON.stringify({ success: true, session }),
+      JSON.stringify({ success: true, session, xp_earned: totalXP }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
