@@ -152,7 +152,7 @@ paths:
                           example: BT01
                         type:
                           type: string
-                          enum: [mcq, essay, case]
+                          enum: [mcq, flashcard]
                           description: Question type
                         difficulty:
                           type: string
@@ -210,7 +210,7 @@ paths:
                   example: BT01
                 type:
                   type: string
-                  enum: [mcq, essay, case]
+                  enum: [mcq, flashcard]
                   description: Optional filter by question type
                 difficulty:
                   type: string
@@ -248,9 +248,11 @@ paths:
                     question:
                       type: string
                     options:
-                      type: object
+                      type: array
                       nullable: true
-                      description: JSON object with multiple choice options
+                      description: Answer options (for MCQs)
+                      items:
+                        type: string
                     answer:
                       type: string
                       nullable: true
@@ -363,8 +365,10 @@ paths:
                   correct_answers:
                     type: integer
                   raw_log:
-                    type: object
+                    type: array
                     nullable: true
+                    items:
+                      type: object
                   created_at:
                     type: string
                     format: date-time
