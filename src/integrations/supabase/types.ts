@@ -281,6 +281,158 @@ export type Database = {
           },
         ]
       }
+      sb_minitests: {
+        Row: {
+          created_at: string | null
+          duration_minutes: number | null
+          id: string
+          paper: string
+          question_ids: string[]
+          title: string
+        }
+        Insert: {
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          paper: string
+          question_ids: string[]
+          title: string
+        }
+        Update: {
+          created_at?: string | null
+          duration_minutes?: number | null
+          id?: string
+          paper?: string
+          question_ids?: string[]
+          title?: string
+        }
+        Relationships: []
+      }
+      sb_questions: {
+        Row: {
+          answer: string | null
+          correct_option_index: number | null
+          created_at: string | null
+          difficulty: string | null
+          explanation: string | null
+          id: string
+          learning_outcome_code: string | null
+          options: Json | null
+          paper: string
+          question: string
+          type: string
+          unit_code: string | null
+        }
+        Insert: {
+          answer?: string | null
+          correct_option_index?: number | null
+          created_at?: string | null
+          difficulty?: string | null
+          explanation?: string | null
+          id?: string
+          learning_outcome_code?: string | null
+          options?: Json | null
+          paper: string
+          question: string
+          type: string
+          unit_code?: string | null
+        }
+        Update: {
+          answer?: string | null
+          correct_option_index?: number | null
+          created_at?: string | null
+          difficulty?: string | null
+          explanation?: string | null
+          id?: string
+          learning_outcome_code?: string | null
+          options?: Json | null
+          paper?: string
+          question?: string
+          type?: string
+          unit_code?: string | null
+        }
+        Relationships: []
+      }
+      sb_study_sessions: {
+        Row: {
+          correct_answers: number | null
+          created_at: string | null
+          ended_at: string | null
+          id: string
+          raw_log: Json | null
+          session_type: string
+          started_at: string | null
+          total_questions: number | null
+          user_id: string
+        }
+        Insert: {
+          correct_answers?: number | null
+          created_at?: string | null
+          ended_at?: string | null
+          id?: string
+          raw_log?: Json | null
+          session_type: string
+          started_at?: string | null
+          total_questions?: number | null
+          user_id: string
+        }
+        Update: {
+          correct_answers?: number | null
+          created_at?: string | null
+          ended_at?: string | null
+          id?: string
+          raw_log?: Json | null
+          session_type?: string
+          started_at?: string | null
+          total_questions?: number | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sb_study_sessions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "sb_users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      sb_users: {
+        Row: {
+          created_at: string | null
+          email: string
+          exam_date: string | null
+          exam_paper: string | null
+          id: string
+          name: string | null
+          subscription_status: string | null
+          updated_at: string | null
+          weekly_study_hours: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          exam_date?: string | null
+          exam_paper?: string | null
+          id?: string
+          name?: string | null
+          subscription_status?: string | null
+          updated_at?: string | null
+          weekly_study_hours?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          exam_date?: string | null
+          exam_paper?: string | null
+          id?: string
+          name?: string | null
+          subscription_status?: string | null
+          updated_at?: string | null
+          weekly_study_hours?: number | null
+        }
+        Relationships: []
+      }
       study_sessions: {
         Row: {
           completed: boolean | null
