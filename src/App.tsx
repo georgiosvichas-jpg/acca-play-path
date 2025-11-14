@@ -13,7 +13,7 @@ import Planner from "./pages/Planner";
 import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
-import PostSignupOnboarding from "./components/PostSignupOnboarding";
+import StudyBuddyOnboarding from "./components/StudyBuddyOnboarding";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
@@ -39,7 +39,7 @@ const App = () => (
             path="/onboarding"
             element={
               <ProtectedRoute>
-                <PostSignupOnboarding />
+                <StudyBuddyOnboarding />
               </ProtectedRoute>
             }
           />

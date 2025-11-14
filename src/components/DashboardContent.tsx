@@ -12,6 +12,9 @@ import {
   Circle,
   PlayCircle,
   Lock,
+  Zap,
+  BarChart3,
+  Crown,
 } from "lucide-react";
 import studyDesk from "@/assets/study-desk.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,6 +27,7 @@ import Footer from "./Footer";
 import { EmptyState } from "./EmptyStates";
 import { toast } from "@/hooks/use-toast";
 import { useMotivationalMessage } from "@/hooks/useMotivationalMessage";
+import { useNavigate } from "react-router-dom";
 
 interface Task {
   id: string;
@@ -39,6 +43,7 @@ export default function DashboardContent() {
   const { papers } = usePapers();
   const { planType, unlockedPapers } = useSubscription();
   const { getMessage } = useMotivationalMessage();
+  const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
   const [loading, setLoading] = useState(true);
   const [showUnlockModal, setShowUnlockModal] = useState(false);
@@ -58,6 +63,24 @@ export default function DashboardContent() {
     }
     // Navigate to paper content
     updateProfile({ selected_paper: paper.paper_code });
+  };
+
+  const handleStartTodaySession = () => {
+    // Will integrate with StudyBuddy API later
+    navigate("/flashcards");
+  };
+
+  const handleQuickDrill = () => {
+    // Will integrate with StudyBuddy API later
+    navigate("/flashcards");
+  };
+
+  const handleViewAnalytics = () => {
+    navigate("/analytics");
+  };
+
+  const handleUpgradeToPremium = () => {
+    navigate("/checkout");
   };
 
   useEffect(() => {
@@ -153,6 +176,7 @@ export default function DashboardContent() {
                   <Button
                     size="lg"
                     className="bg-white text-primary hover:bg-white/90 font-semibold rounded-xl shadow-lg"
+                    onClick={handleStartTodaySession}
                   >
                     <PlayCircle className="mr-2 h-5 w-5" />
                     Start Today's Session
@@ -161,9 +185,10 @@ export default function DashboardContent() {
                     size="lg"
                     variant="outline"
                     className="border-white/30 text-white hover:bg-white/10 font-semibold rounded-xl"
+                    onClick={handleQuickDrill}
                   >
-                    <Clock className="mr-2 h-5 w-5" />
-                    Set Pomodoro
+                    <Zap className="mr-2 h-5 w-5" />
+                    Quick Drill
                   </Button>
                 </div>
               </div>
@@ -302,6 +327,35 @@ export default function DashboardContent() {
                   </div>
                 )}
               </Card>
+
+              {/* Quick Actions */}
+              <div className="grid grid-cols-2 gap-3">
+                <Card 
+                  className="p-4 shadow-card cursor-pointer hover:shadow-lg transition-all animate-slide-up"
+                  style={{ animationDelay: "0.25s" }}
+                  onClick={handleViewAnalytics}
+                >
+                  <div className="flex flex-col items-center text-center space-y-2">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                      <BarChart3 className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-semibold">Analytics</span>
+                  </div>
+                </Card>
+                
+                <Card 
+                  className="p-4 shadow-card cursor-pointer hover:shadow-lg transition-all animate-slide-up"
+                  style={{ animationDelay: "0.3s" }}
+                  onClick={handleUpgradeToPremium}
+                >
+                  <div className="flex flex-col items-center text-center space-y-2">
+                    <div className="w-10 h-10 bg-primary/10 rounded-full flex items-center justify-center">
+                      <Crown className="w-5 h-5 text-primary" />
+                    </div>
+                    <span className="text-sm font-semibold">Premium</span>
+                  </div>
+                </Card>
+              </div>
 
               {/* Motivational Card */}
               <Card

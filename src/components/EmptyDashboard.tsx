@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Sparkles } from "lucide-react";
+import { BookOpen, Sparkles, PlayCircle, Zap, BarChart3, Crown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -17,6 +17,24 @@ export default function EmptyDashboard() {
 
   const handleStartFlashcards = () => {
     navigate("/flashcards");
+  };
+
+  const handleStartTodaySession = () => {
+    // Will integrate with StudyBuddy API later
+    navigate("/flashcards");
+  };
+
+  const handleQuickDrill = () => {
+    // Will integrate with StudyBuddy API later
+    navigate("/flashcards");
+  };
+
+  const handleViewAnalytics = () => {
+    navigate("/analytics");
+  };
+
+  const handleUpgradeToPremium = () => {
+    navigate("/checkout");
   };
 
   return (
@@ -73,23 +91,55 @@ export default function EmptyDashboard() {
             </div>
           </div>
 
-          {/* CTAs */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
-            <Button
-              size="lg"
-              className="w-full sm:w-auto px-8"
-              onClick={() => setShowFeaturesModal(true)}
-            >
-              Explore Study Tools
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="w-full sm:w-auto px-8"
-              onClick={handleStartFlashcards}
-            >
-              Start with Flashcards
-            </Button>
+          {/* Quick Actions */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+            <Card className="border-2 hover:border-primary/50 transition-colors cursor-pointer" onClick={handleStartTodaySession}>
+              <CardContent className="p-6 text-center space-y-3">
+                <div className="w-12 h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                  <PlayCircle className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">Start Today's Session</h3>
+                  <p className="text-sm text-muted-foreground">Begin your personalized study plan</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-primary/50 transition-colors cursor-pointer" onClick={handleQuickDrill}>
+              <CardContent className="p-6 text-center space-y-3">
+                <div className="w-12 h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                  <Zap className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">Take a Quick Drill</h3>
+                  <p className="text-sm text-muted-foreground">Practice with quick questions</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-primary/50 transition-colors cursor-pointer" onClick={handleViewAnalytics}>
+              <CardContent className="p-6 text-center space-y-3">
+                <div className="w-12 h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                  <BarChart3 className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">View Analytics</h3>
+                  <p className="text-sm text-muted-foreground">Track your progress and insights</p>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-2 hover:border-primary/50 transition-colors cursor-pointer" onClick={handleUpgradeToPremium}>
+              <CardContent className="p-6 text-center space-y-3">
+                <div className="w-12 h-12 mx-auto bg-primary/10 rounded-full flex items-center justify-center">
+                  <Crown className="w-6 h-6 text-primary" />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground">Upgrade to Premium</h3>
+                  <p className="text-sm text-muted-foreground">Unlock all features and papers</p>
+                </div>
+              </CardContent>
+            </Card>
           </div>
 
           {/* Microcopy */}
