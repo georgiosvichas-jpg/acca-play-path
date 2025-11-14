@@ -285,14 +285,18 @@ export type Database = {
         Row: {
           completed: boolean | null
           completed_at: string | null
+          correct_answers: number | null
           created_at: string | null
           duration_minutes: number | null
           id: string
           notes: string | null
           paper_code: string
+          raw_log: Json | null
           session_date: string
+          session_type: string | null
           start_time: string | null
           syllabus_unit_id: string | null
+          total_questions: number | null
           updated_at: string | null
           user_id: string
           xp_earned: number | null
@@ -300,14 +304,18 @@ export type Database = {
         Insert: {
           completed?: boolean | null
           completed_at?: string | null
+          correct_answers?: number | null
           created_at?: string | null
           duration_minutes?: number | null
           id?: string
           notes?: string | null
           paper_code: string
+          raw_log?: Json | null
           session_date: string
+          session_type?: string | null
           start_time?: string | null
           syllabus_unit_id?: string | null
+          total_questions?: number | null
           updated_at?: string | null
           user_id: string
           xp_earned?: number | null
@@ -315,14 +323,18 @@ export type Database = {
         Update: {
           completed?: boolean | null
           completed_at?: string | null
+          correct_answers?: number | null
           created_at?: string | null
           duration_minutes?: number | null
           id?: string
           notes?: string | null
           paper_code?: string
+          raw_log?: Json | null
           session_date?: string
+          session_type?: string | null
           start_time?: string | null
           syllabus_unit_id?: string | null
+          total_questions?: number | null
           updated_at?: string | null
           user_id?: string
           xp_earned?: number | null
