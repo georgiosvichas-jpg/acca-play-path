@@ -12,22 +12,33 @@ serve(async (req) => {
   }
 
   try {
+    // Get authenticated user from JWT
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Missing authorization header" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_ANON_KEY") ?? ""
     );
 
-    const url = new URL(req.url);
-    const userId = url.searchParams.get("userId");
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
 
-    if (!userId) {
+    if (authError || !user) {
       return new Response(
-        JSON.stringify({ error: "userId is required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Get all sessions for the user
+    const userId = user.id;
+
+    // Get all sessions for the authenticated user
     const { data: sessions, error } = await supabaseClient
       .from("study_sessions")
       .select("*")
@@ -48,6 +59,9 @@ serve(async (req) => {
     sessions?.forEach(session => {
       if (session.raw_log && Array.isArray(session.raw_log)) {
         session.raw_log.forEach((q: any) => {
+          // Validate raw_log structure
+          if (typeof q !== "object" || q === null) return;
+          
           const unit = q.unit_code || "unknown";
           const difficulty = q.difficulty || "unknown";
           
@@ -87,6 +101,8 @@ serve(async (req) => {
       .single();
 
     const lastActivity = sessions?.[0]?.session_date || null;
+
+    console.log(`Analytics fetched for user ${userId}: ${totalQuestions} questions answered`);
 
     return new Response(
       JSON.stringify({

@@ -41,28 +41,73 @@ When providing questions, return structured data like:
   "action": "upgrade" | "continue" | "recap"
 }`;
 
+// Input validation
+function validateMessage(message: string): string {
+  if (typeof message !== "string") {
+    throw new Error("Message must be a string");
+  }
+  if (message.length === 0 || message.length > 5000) {
+    throw new Error("Message must be between 1 and 5000 characters");
+  }
+  return message.trim();
+}
+
+function validateConversationHistory(history: any[]): any[] {
+  if (!Array.isArray(history)) {
+    return [];
+  }
+  // Limit to last 20 messages to prevent abuse
+  return history.slice(-20).filter(msg => 
+    msg && typeof msg === "object" && msg.role && msg.content
+  );
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
   }
 
   try {
+    // Get authenticated user from JWT
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: "Missing authorization header" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
     const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = user.id;
+
+    const { message, mode, conversationHistory } = await req.json();
+
+    // Validate inputs
+    const validatedMessage = validateMessage(message);
+    const validatedHistory = validateConversationHistory(conversationHistory || []);
+
+    // Use service role key for database operations
+    const supabaseAdmin = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { userId, message, mode, conversationHistory } = await req.json();
-
-    if (!userId || !message) {
-      return new Response(
-        JSON.stringify({ error: "userId and message are required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
     // Get user profile and check limits
-    const { data: profile } = await supabaseClient
+    const { data: profile } = await supabaseAdmin
       .from("user_profiles")
       .select("*, daily_questions_used, last_question_reset_date, plan_type, exam_date")
       .eq("user_id", userId)
@@ -80,7 +125,7 @@ serve(async (req) => {
     const limitReached = !isPremium && dailyUsed >= 25;
 
     // Get recent sessions for context
-    const { data: recentSessions } = await supabaseClient
+    const { data: recentSessions } = await supabaseAdmin
       .from("study_sessions")
       .select("session_type, total_questions, correct_answers, session_date")
       .eq("user_id", userId)
@@ -105,8 +150,8 @@ ${mode ? `\nCurrent mode: ${mode}` : ""}`;
     const messages = [
       { role: "system", content: SYSTEM_PROMPT },
       { role: "system", content: contextMessage },
-      ...(conversationHistory || []),
-      { role: "user", content: message },
+      ...validatedHistory,
+      { role: "user", content: validatedMessage },
     ];
 
     const aiResponse = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
@@ -129,35 +174,39 @@ ${mode ? `\nCurrent mode: ${mode}` : ""}`;
     }
 
     const aiData = await aiResponse.json();
-    const aiMessage = aiData.choices[0].message.content;
+    const aiMessage = aiData.choices?.[0]?.message?.content || "";
 
-    // Parse if AI returned structured data
-    let response;
+    // Try to parse structured response
+    let parsedResponse: any = { message: aiMessage };
     try {
-      response = JSON.parse(aiMessage);
-    } catch {
-      response = {
-        message: aiMessage,
-        limitReached,
-      };
+      const jsonMatch = aiMessage.match(/\{[\s\S]*\}/);
+      if (jsonMatch) {
+        parsedResponse = JSON.parse(jsonMatch[0]);
+      }
+    } catch (e) {
+      console.log("Could not parse structured response, using plain message");
     }
 
-    // If requesting questions and not at limit, fetch them
-    if (response.needsQuestions && !limitReached) {
-      const { data: questions } = await supabaseClient
+    // If AI wants to give a question and user hasn't hit limit
+    if (parsedResponse.question && !limitReached) {
+      // Fetch a random question from database
+      const { data: questions } = await supabaseAdmin
         .from("questions")
         .select("*")
         .eq("paper", profile?.selected_paper || "BT")
-        .limit(1);
-
+        .limit(10);
+      
       if (questions && questions.length > 0) {
-        response.question = questions[0];
+        const randomQuestion = questions[Math.floor(Math.random() * questions.length)];
+        parsedResponse.question = randomQuestion;
       }
     }
 
-    response.limitReached = limitReached;
+    parsedResponse.limitReached = limitReached;
 
-    return new Response(JSON.stringify(response), {
+    console.log(`Chat response for user ${userId}: ${validatedMessage.substring(0, 50)}...`);
+
+    return new Response(JSON.stringify(parsedResponse), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
