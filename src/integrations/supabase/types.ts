@@ -538,6 +538,27 @@ export type Database = {
           },
         ]
       }
+      user_roles: {
+        Row: {
+          created_at: string | null
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
       xp_events: {
         Row: {
           created_at: string
@@ -576,12 +597,20 @@ export type Database = {
           rank_global: number
         }[]
       }
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
       is_opted_out_of_leaderboard: {
         Args: { _user_id: string }
         Returns: boolean
       }
     }
     Enums: {
+      app_role: "admin" | "moderator" | "user"
       plan_type: "free" | "per_paper" | "pro"
     }
     CompositeTypes: {
@@ -710,6 +739,7 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
+      app_role: ["admin", "moderator", "user"],
       plan_type: ["free", "per_paper", "pro"],
     },
   },
