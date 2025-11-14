@@ -1,19 +1,19 @@
 project_id = "irlxegoatcgskhdvbvuo"
 
 [functions.users-get-or-create]
-verify_jwt = false
+verify_jwt = true
 
 [functions.plans-today-tasks]
-verify_jwt = false
+verify_jwt = true
 
 [functions.content-batch]
 verify_jwt = false
 
 [functions.sessions-log]
-verify_jwt = false
+verify_jwt = true
 
 [functions.analytics-summary]
-verify_jwt = false
+verify_jwt = true
 
 [functions.studybuddy-chat]
 verify_jwt = true
