@@ -12,45 +12,34 @@ serve(async (req) => {
   }
 
   try {
-    // Get authenticated user from JWT
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    const url = new URL(req.url);
+    const userId = url.searchParams.get("userId");
+
+    if (!userId) {
       return new Response(
-        JSON.stringify({ error: "Missing authorization header" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "userId query parameter is required" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
-
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const userId = user.id;
-
-    // Get all sessions for the authenticated user
+    // Get all sessions for the user
     const { data: sessions, error } = await supabaseClient
-      .from("study_sessions")
+      .from("sb_study_sessions")
       .select("*")
       .eq("user_id", userId)
-      .order("session_date", { ascending: false });
+      .order("created_at", { ascending: false });
 
     if (error) throw error;
 
     // Calculate overall stats
     const totalQuestions = sessions?.reduce((sum, s) => sum + (s.total_questions || 0), 0) || 0;
     const totalCorrect = sessions?.reduce((sum, s) => sum + (s.correct_answers || 0), 0) || 0;
-    const overallAccuracy = totalQuestions > 0 ? (totalCorrect / totalQuestions) * 100 : 0;
+    const overallAccuracy = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
 
     // Accuracy by unit (from raw_log)
     const unitStats: Record<string, { correct: number; total: number }> = {};
@@ -59,7 +48,6 @@ serve(async (req) => {
     sessions?.forEach(session => {
       if (session.raw_log && Array.isArray(session.raw_log)) {
         session.raw_log.forEach((q: any) => {
-          // Validate raw_log structure
           if (typeof q !== "object" || q === null) return;
           
           const unit = q.unit_code || "unknown";
@@ -80,40 +68,28 @@ serve(async (req) => {
     });
 
     // Format accuracy by unit
-    const accuracyByUnit = Object.entries(unitStats).map(([unit, stats]) => ({
-      unit_code: unit,
-      accuracy: stats.total > 0 ? (stats.correct / stats.total) * 100 : 0,
-      total: stats.total,
-    }));
+    const byUnit: Record<string, number> = {};
+    Object.entries(unitStats).forEach(([unit, stats]) => {
+      byUnit[unit] = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+    });
 
     // Format accuracy by difficulty
-    const accuracyByDifficulty = Object.entries(difficultyStats).map(([difficulty, stats]) => ({
-      difficulty,
-      accuracy: stats.total > 0 ? (stats.correct / stats.total) * 100 : 0,
-      total: stats.total,
-    }));
+    const byDifficulty: Record<string, number> = {};
+    Object.entries(difficultyStats).forEach(([difficulty, stats]) => {
+      byDifficulty[difficulty] = stats.total > 0 ? Math.round((stats.correct / stats.total) * 100) : 0;
+    });
 
-    // Get last activity and exam date
-    const { data: profile } = await supabaseClient
-      .from("user_profiles")
-      .select("exam_date")
-      .eq("user_id", userId)
-      .single();
+    const summary = {
+      total_questions: totalQuestions,
+      overall_accuracy: overallAccuracy,
+      by_unit: byUnit,
+      by_difficulty: byDifficulty,
+    };
 
-    const lastActivity = sessions?.[0]?.session_date || null;
-
-    console.log(`Analytics fetched for user ${userId}: ${totalQuestions} questions answered`);
+    console.log(`Analytics generated for user ${userId}: ${totalQuestions} questions answered`);
 
     return new Response(
-      JSON.stringify({
-        questions_answered: totalQuestions,
-        overall_accuracy: Math.round(overallAccuracy * 10) / 10,
-        accuracy_by_unit: accuracyByUnit,
-        accuracy_by_difficulty: accuracyByDifficulty,
-        last_activity_date: lastActivity,
-        exam_date: profile?.exam_date,
-        total_sessions: sessions?.length || 0,
-      }),
+      JSON.stringify(summary),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {

@@ -12,46 +12,36 @@ serve(async (req) => {
   }
 
   try {
-    // Get authenticated user from JWT
-    const authHeader = req.headers.get("Authorization");
-    if (!authHeader) {
+    const url = new URL(req.url);
+    const userId = url.searchParams.get("userId");
+
+    if (!userId) {
       return new Response(
-        JSON.stringify({ error: "Missing authorization header" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "userId query parameter is required" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
-      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+      Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const token = authHeader.replace("Bearer ", "");
-    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
-
-    if (authError || !user) {
-      return new Response(
-        JSON.stringify({ error: "Unauthorized" }),
-        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
-
-    const userId = user.id;
-
-    // Get user profile to determine paper
-    const { data: profile } = await supabaseClient
-      .from("user_profiles")
-      .select("selected_paper, weekly_study_hours")
-      .eq("user_id", userId)
+    // Get user profile
+    const { data: user, error } = await supabaseClient
+      .from("sb_users")
+      .select("*")
+      .eq("id", userId)
       .single();
 
-    const paper = profile?.selected_paper || "BT";
-    const weeklyHours = profile?.weekly_study_hours || 5;
-    const dailyQuestions = Math.floor((weeklyHours * 60) / 7 / 3); // Rough estimate: 3 min per question
+    if (error) throw error;
 
-    // Simple rule-based plan: rotate through units
+    const paper = user.exam_paper || "BT";
+    const weeklyHours = user.weekly_study_hours || 5;
+
+    // Simple rule-based plan
     const dayOfWeek = new Date().getDay();
-    const units = ["BT01", "BT02", "BT03", "BT04", "BT05", "BT06"];
+    const units = ["BT01", "BT02", "BT03", "BT04", "BT05", "BT06", "BT07"];
     const todayUnit = units[dayOfWeek % units.length];
 
     const plan = {
@@ -60,17 +50,13 @@ serve(async (req) => {
         {
           unit_code: todayUnit,
           type: "mcq",
-          count: Math.floor(dailyQuestions * 0.7),
-        },
-        {
-          unit_code: todayUnit,
-          type: "flashcard",
-          count: Math.floor(dailyQuestions * 0.3),
+          difficulty: "medium",
+          count: 10,
         },
       ],
     };
 
-    console.log(`Study plan generated for user ${userId}: paper ${paper}, ${dailyQuestions} questions`);
+    console.log(`Generated study plan for user ${userId}: ${paper}, unit ${todayUnit}`);
 
     return new Response(JSON.stringify(plan), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },

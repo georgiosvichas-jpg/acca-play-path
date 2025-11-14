@@ -17,90 +17,69 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Get authenticated user if available
-    const authHeader = req.headers.get("Authorization");
-    let userId: string | null = null;
-    
-    if (authHeader) {
-      const token = authHeader.replace("Bearer ", "");
-      const { data: { user } } = await supabaseClient.auth.getUser(token);
-      userId = user?.id || null;
-    }
-
     const { email, exam_paper, exam_date, weekly_study_hours } = await req.json();
 
-    // Try to find existing user
-    let profile = null;
-    
-    if (userId) {
-      const { data } = await supabaseClient
-        .from("user_profiles")
-        .select("*")
-        .eq("user_id", userId)
-        .maybeSingle();
-      profile = data;
-    } else if (email) {
-      // Find by email in auth.users (for GPT integration)
-      const { data: { users } } = await supabaseClient.auth.admin.listUsers();
-      const matchedUser = users?.find(u => u.email === email);
-      
-      if (matchedUser) {
-        const { data } = await supabaseClient
-          .from("user_profiles")
-          .select("*")
-          .eq("user_id", matchedUser.id)
-          .maybeSingle();
-        profile = data;
-        userId = matchedUser.id;
+    if (!email) {
+      return new Response(
+        JSON.stringify({ error: "Email is required" }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Try to find existing user by email
+    const { data: existingUser } = await supabaseClient
+      .from("sb_users")
+      .select("*")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existingUser) {
+      // Update if new data provided
+      if (exam_paper || exam_date || weekly_study_hours) {
+        const updates: any = {};
+        if (exam_paper) updates.exam_paper = exam_paper;
+        if (exam_date) updates.exam_date = exam_date;
+        if (weekly_study_hours) updates.weekly_study_hours = weekly_study_hours;
+        updates.updated_at = new Date().toISOString();
+
+        const { data: updated } = await supabaseClient
+          .from("sb_users")
+          .update(updates)
+          .eq("id", existingUser.id)
+          .select()
+          .single();
+
+        return new Response(
+          JSON.stringify(updated || existingUser),
+          { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        );
       }
+
+      return new Response(
+        JSON.stringify(existingUser),
+        { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
-    // Create or update profile
-    if (!profile && userId) {
-      const { data: newProfile, error } = await supabaseClient
-        .from("user_profiles")
-        .insert({
-          user_id: userId,
-          selected_paper: exam_paper || null,
-          exam_date: exam_date || null,
-          weekly_study_hours: weekly_study_hours || 5,
-          total_xp: 0,
-          study_streak: 0,
-        })
-        .select()
-        .single();
+    // Create new user
+    const { data: newUser, error } = await supabaseClient
+      .from("sb_users")
+      .insert({
+        email,
+        exam_paper: exam_paper || null,
+        exam_date: exam_date || null,
+        weekly_study_hours: weekly_study_hours || 5,
+        subscription_status: "free",
+      })
+      .select()
+      .single();
 
-      if (error) throw error;
-      profile = newProfile;
-    } else if (profile && (exam_paper || exam_date || weekly_study_hours)) {
-      // Update existing profile
-      const updates: any = {};
-      if (exam_paper) updates.selected_paper = exam_paper;
-      if (exam_date) updates.exam_date = exam_date;
-      if (weekly_study_hours) updates.weekly_study_hours = weekly_study_hours;
+    if (error) throw error;
 
-      const { data: updated } = await supabaseClient
-        .from("user_profiles")
-        .update(updates)
-        .eq("user_id", userId)
-        .select()
-        .single();
-      
-      profile = updated || profile;
-    }
+    console.log(`Created new sb_user for email: ${email}`);
 
     return new Response(
-      JSON.stringify({
-        id: profile?.id,
-        user_id: profile?.user_id,
-        email: email,
-        exam_paper: profile?.selected_paper,
-        exam_date: profile?.exam_date,
-        weekly_study_hours: profile?.weekly_study_hours,
-        subscription_status: profile?.plan_type || "free",
-        created_at: profile?.created_at,
-        updated_at: profile?.updated_at,
-      }),
+      JSON.stringify(newUser),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
