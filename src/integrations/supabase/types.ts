@@ -576,6 +576,10 @@ export type Database = {
           rank_global: number
         }[]
       }
+      is_opted_out_of_leaderboard: {
+        Args: { _user_id: string }
+        Returns: boolean
+      }
     }
     Enums: {
       plan_type: "free" | "per_paper" | "pro"
