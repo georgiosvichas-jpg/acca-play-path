@@ -20,6 +20,18 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Verify cron secret token
+  const authToken = req.headers.get("X-Cron-Token");
+  const cronSecret = Deno.env.get("CRON_SECRET_TOKEN");
+  
+  if (!cronSecret || authToken !== cronSecret) {
+    console.log("Unauthorized leaderboard snapshot attempt");
+    return new Response(JSON.stringify({ error: "Unauthorized" }), {
+      status: 401,
+      headers: { ...corsHeaders, "Content-Type": "application/json" },
+    });
+  }
+
   const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
     Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? "",
