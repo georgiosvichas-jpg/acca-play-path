@@ -44,7 +44,7 @@ paths:
                   example: student@example.com
                 exam_paper:
                   type: string
-                  description: ACCA paper code (e.g., BT, MA, FA)
+                  description: ACCA paper code (e.g., BT, MA, FA, LW, PM, TX, FR, FM, AA, AAA)
                   example: BT
                 exam_date:
                   type: string
@@ -94,8 +94,22 @@ paths:
                     format: date-time
         '400':
           description: Invalid request (missing email)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
   /plans-today-tasks:
     get:
@@ -115,10 +129,9 @@ paths:
             type: string
             format: uuid
           description: User's unique identifier from users-get-or-create
-          example: 123e4567-e89b-12d3-a456-426614174000
       responses:
         '200':
-          description: Daily study plan generated successfully
+          description: Study plan generated successfully
           content:
             application/json:
               schema:
@@ -130,31 +143,43 @@ paths:
                     example: BT
                   tasks:
                     type: array
-                    description: List of study tasks for today
                     items:
                       type: object
                       properties:
                         unit_code:
                           type: string
-                          description: Syllabus unit to study
+                          description: Syllabus unit code
                           example: BT01
                         type:
                           type: string
-                          enum: [mcq, flashcard]
-                          description: Type of questions to practice
+                          enum: [mcq, essay, case]
+                          description: Question type
                         difficulty:
                           type: string
                           enum: [easy, medium, hard]
-                          description: Question difficulty level
-                          example: medium
+                          description: Difficulty level
                         count:
                           type: integer
                           description: Number of questions to complete
                           example: 10
         '400':
           description: Missing or invalid userId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
   /content-batch:
     post:
@@ -177,22 +202,20 @@ paths:
               properties:
                 paper:
                   type: string
-                  description: ACCA paper code to fetch questions for
+                  description: ACCA paper code
                   example: BT
                 unit_code:
                   type: string
-                  description: Specific syllabus unit (optional filter)
+                  description: Optional filter by syllabus unit
                   example: BT01
                 type:
                   type: string
-                  enum: [flashcard, mcq]
-                  description: Question type filter (optional)
-                  example: mcq
+                  enum: [mcq, essay, case]
+                  description: Optional filter by question type
                 difficulty:
                   type: string
                   enum: [easy, medium, hard]
-                  description: Difficulty level filter (optional)
-                  example: medium
+                  description: Optional filter by difficulty
                 size:
                   type: integer
                   minimum: 1
@@ -214,35 +237,25 @@ paths:
                       format: uuid
                     paper:
                       type: string
-                      example: BT
                     unit_code:
-                      type: string
-                      example: BT01
-                    learning_outcome_code:
                       type: string
                       nullable: true
                     type:
                       type: string
-                      enum: [flashcard, mcq]
                     difficulty:
                       type: string
-                      enum: [easy, medium, hard]
+                      nullable: true
                     question:
                       type: string
-                      description: The question text
                     options:
-                      type: array
-                      description: Answer options (for MCQs)
+                      type: object
                       nullable: true
-                      items:
-                        type: string
-                    correct_option_index:
-                      type: integer
-                      description: Index of correct answer (for MCQs)
-                      nullable: true
+                      description: JSON object with multiple choice options
                     answer:
                       type: string
-                      description: Correct answer text (for flashcards)
+                      nullable: true
+                    correct_option_index:
+                      type: integer
                       nullable: true
                     explanation:
                       type: string
@@ -250,8 +263,22 @@ paths:
                       nullable: true
         '400':
           description: Invalid request (missing required fields or size out of range)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
   /sessions-log:
     post:
@@ -275,12 +302,11 @@ paths:
                 userId:
                   type: string
                   format: uuid
-                  description: User identifier
-                  example: 123e4567-e89b-12d3-a456-426614174000
+                  description: User's unique identifier
                 session_type:
                   type: string
                   enum: [onboarding, daily, quick_drill, mini_test, mock_exam]
-                  description: Type of study session completed
+                  description: Type of study session
                   example: daily
                 total_questions:
                   type: integer
@@ -289,13 +315,12 @@ paths:
                   example: 10
                 correct_answers:
                   type: integer
-                  description: Number of questions answered correctly
+                  description: Number of correct answers
                   default: 0
-                  example: 8
+                  example: 7
                 raw_log:
                   type: array
-                  description: Detailed question-by-question performance data
-                  nullable: true
+                  description: Detailed per-question log for analytics
                   items:
                     type: object
                     properties:
@@ -304,20 +329,13 @@ paths:
                         format: uuid
                       unit_code:
                         type: string
-                        example: BT01
                       difficulty:
                         type: string
-                        enum: [easy, medium, hard]
                       correct:
                         type: boolean
-                      time_taken_seconds:
+                      time_spent:
                         type: integer
-                  example:
-                    - question_id: abc123
-                      unit_code: BT01
-                      difficulty: medium
-                      correct: true
-                      time_taken_seconds: 45
+                        description: Time in seconds
       responses:
         '200':
           description: Session logged successfully
@@ -345,25 +363,37 @@ paths:
                   correct_answers:
                     type: integer
                   raw_log:
-                    type: array
-                    items:
-                      type: object
+                    type: object
+                    nullable: true
                   created_at:
                     type: string
                     format: date-time
         '400':
           description: Invalid request (missing required fields or invalid session_type)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
   /analytics-summary:
     get:
       operationId: getAnalyticsSummary
-      summary: Get user performance analytics
+      summary: Get user analytics summary
       description: |
-        Returns comprehensive analytics including overall accuracy, 
-        performance by syllabus unit, and performance by difficulty level.
-        Based on all logged study sessions for the user.
+        Returns overall study performance metrics including accuracy by unit and difficulty.
+        Use this to show progress charts and identify weak areas.
       tags:
         - Analytics
       parameters:
@@ -373,8 +403,7 @@ paths:
           schema:
             type: string
             format: uuid
-          description: User identifier
-          example: 123e4567-e89b-12d3-a456-426614174000
+          description: User's unique identifier
       responses:
         '200':
           description: Analytics retrieved successfully
@@ -386,48 +415,57 @@ paths:
                   total_questions:
                     type: integer
                     description: Total questions answered across all sessions
-                    example: 150
+                    example: 250
                   overall_accuracy:
                     type: integer
-                    description: Overall accuracy percentage (0-100)
-                    example: 78
+                    description: Overall accuracy percentage
+                    example: 72
                   by_unit:
                     type: object
-                    description: Accuracy percentage by syllabus unit
+                    description: Accuracy percentage by unit code
                     additionalProperties:
                       type: integer
                     example:
                       BT01: 85
-                      BT02: 72
-                      BT03: 80
+                      BT02: 68
+                      BT03: 75
                   by_difficulty:
                     type: object
                     description: Accuracy percentage by difficulty level
-                    properties:
-                      easy:
-                        type: integer
-                        example: 92
-                      medium:
-                        type: integer
-                        example: 75
-                      hard:
-                        type: integer
-                        example: 60
+                    additionalProperties:
+                      type: integer
+                    example:
+                      easy: 92
+                      medium: 71
+                      hard: 58
         '400':
           description: Missing or invalid userId
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
           description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
   /stripe-create-checkout-link:
     post:
       operationId: createCheckoutLink
-      summary: Create Stripe premium subscription checkout
+      summary: Create Stripe checkout session
       description: |
-        Generates a Stripe Checkout session URL for upgrading to StudyBuddy Premium.
-        The checkout is configured for monthly subscription at $29/month.
-        After successful payment, the webhook updates the user's subscription status.
+        Creates a Stripe checkout session for premium subscription upgrade.
+        Returns a URL to redirect the user to Stripe's hosted checkout page.
       tags:
-        - Payments
+        - Premium Subscription
       requestBody:
         required: true
         content:
@@ -440,11 +478,10 @@ paths:
                 userId:
                   type: string
                   format: uuid
-                  description: User identifier from sb_users table
-                  example: 123e4567-e89b-12d3-a456-426614174000
+                  description: User's unique identifier
       responses:
         '200':
-          description: Checkout link created successfully
+          description: Checkout session created successfully
           content:
             application/json:
               schema:
@@ -453,12 +490,26 @@ paths:
                   url:
                     type: string
                     format: uri
-                    description: Stripe Checkout session URL to redirect user to
-                    example: https://checkout.stripe.com/c/pay/cs_test_abc123
+                    description: Stripe checkout URL to redirect user to
+                    example: https://checkout.stripe.com/pay/cs_test_...
         '400':
-          description: Missing userId
+          description: Invalid request (missing userId)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
         '500':
-          description: Server error or Stripe API error
+          description: Server error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
 
 components:
   securitySchemes:
@@ -466,25 +517,18 @@ components:
       type: http
       scheme: bearer
       bearerFormat: JWT
-      description: |
-        Use your Supabase Service Role Key as the Bearer token.
-        
-        **For ChatGPT GPT Actions:**
-        1. Get your service role key from Supabase dashboard (Settings → API)
-        2. Configure in GPT Actions as: Bearer YOUR_SERVICE_ROLE_KEY
-        
-        **Security Note:** Service role key bypasses RLS policies. Use only in trusted backend contexts.
+      description: Use your Supabase service role key as the Bearer token
 
 tags:
   - name: User Management
-    description: User registration, authentication, and profile management
+    description: User profile creation and retrieval
   - name: Study Planning
-    description: Personalized study plan generation and task scheduling
+    description: Personalized daily study plan generation
   - name: Content Delivery
-    description: Question bank access and content retrieval
+    description: Question bank and content retrieval
   - name: Session Tracking
-    description: Study session logging and progress tracking
+    description: Study session logging and history
   - name: Analytics
-    description: Performance analytics and progress reports
-  - name: Payments
-    description: Subscription management and payments via Stripe
+    description: Performance analytics and insights
+  - name: Premium Subscription
+    description: Premium upgrade and billing management
