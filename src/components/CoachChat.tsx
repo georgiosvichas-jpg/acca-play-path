@@ -55,7 +55,9 @@ const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
     );
   }
 
-  const options = JSON.parse(question.options || "[]");
+  const options = typeof question.options === 'string' 
+    ? JSON.parse(question.options) 
+    : (question.options || []);
 
   return (
     <Card className="mt-4">
