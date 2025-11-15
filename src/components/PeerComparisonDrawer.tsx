@@ -88,7 +88,7 @@ export default function PeerComparisonDrawer({ children }: PeerComparisonDrawerP
                     {profile.total_xp} XP
                   </span>
                 </div>
-                {userStats?.percentile_global !== null && (
+                {userStats && userStats.percentile_global !== null && (
                   <>
                     <Progress value={userStats.percentile_global} className="h-2" />
                     <p className="text-xs text-muted-foreground text-right">
@@ -120,7 +120,7 @@ export default function PeerComparisonDrawer({ children }: PeerComparisonDrawerP
                       {profile.total_xp} XP
                     </span>
                   </div>
-                  {userStats?.percentile_country !== null && (
+                  {userStats && userStats.percentile_country !== null && (
                     <>
                       <Progress value={userStats.percentile_country} className="h-2" />
                       <p className="text-xs text-muted-foreground text-right">
@@ -160,7 +160,7 @@ export default function PeerComparisonDrawer({ children }: PeerComparisonDrawerP
           </Card>
 
           {/* Motivation Message */}
-          {userStats?.percentile_global && userStats.percentile_global < 75 && (
+          {userStats && userStats.percentile_global !== null && userStats.percentile_global < 75 && (
             <div className="bg-primary/5 border border-primary/20 rounded-lg p-4">
               <p className="text-sm text-foreground">
                 <strong>Keep going!</strong> You're making great progress. Complete more
