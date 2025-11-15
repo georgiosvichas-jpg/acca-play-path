@@ -1,10 +1,19 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
+
+const ContentBatchSchema = z.object({
+  paper: z.string().min(1).max(50),
+  unit_code: z.string().max(50).optional(),
+  type: z.string().max(20).optional(),
+  difficulty: z.string().max(20).optional(),
+  size: z.number().int().min(1).max(100),
+});
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -17,21 +26,22 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { paper, unit_code, type, difficulty, size } = await req.json();
-
-    if (!paper || !size) {
+    // Parse and validate input
+    const body = await req.json();
+    const validation = ContentBatchSchema.safeParse(body);
+    
+    if (!validation.success) {
+      console.error("Validation error:", validation.error);
       return new Response(
-        JSON.stringify({ error: "paper and size are required" }),
+        JSON.stringify({ 
+          error: "Invalid input parameters",
+          details: validation.error.errors 
+        }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    if (size < 1 || size > 100) {
-      return new Response(
-        JSON.stringify({ error: "size must be between 1 and 100" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const { paper, unit_code, type, difficulty, size } = validation.data;
 
     // Build query
     let query = supabaseClient
