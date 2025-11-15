@@ -42,13 +42,12 @@ serve(async (req) => {
     try {
       const webhookSecret = Deno.env.get("STRIPE_WEBHOOK_SECRET");
       if (!webhookSecret) {
-        logStep("WARNING: STRIPE_WEBHOOK_SECRET not configured, skipping signature verification");
-        // Parse without verification in development
-        event = JSON.parse(body);
-      } else {
-        event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
-        logStep("Signature verified", { eventType: event.type });
+        logStep("ERROR: STRIPE_WEBHOOK_SECRET not configured");
+        throw new Error("STRIPE_WEBHOOK_SECRET must be configured");
       }
+      
+      event = stripe.webhooks.constructEvent(body, signature, webhookSecret);
+      logStep("Signature verified", { eventType: event.type });
     } catch (err) {
       logStep("ERROR: Signature verification failed", { error: err instanceof Error ? err.message : String(err) });
       return new Response(JSON.stringify({ error: "Invalid signature" }), {

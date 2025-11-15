@@ -29,7 +29,7 @@ serve(async (req) => {
   );
 
   try {
-    // Verify admin role
+    // Verify authentication
     const authHeader = req.headers.get("Authorization");
     if (!authHeader) {
       return new Response(JSON.stringify({ error: "Authorization required" }), {
@@ -48,7 +48,7 @@ serve(async (req) => {
       });
     }
 
-    // Check if user has admin role
+    // Verify admin role using user_roles table
     const { data: roleData, error: roleError } = await supabaseClient
       .from("user_roles")
       .select("role")
@@ -63,6 +63,8 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+    
+    console.log("Admin user verified:", userData.user.id);
 
     console.log("Starting flashcard import...");
 
