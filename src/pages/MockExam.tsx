@@ -16,6 +16,7 @@ import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock } from "lucide-react";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
+import { UpgradeNudge } from "@/components/UpgradeNudge";
 
 interface Question {
   id: string;
@@ -220,28 +221,37 @@ export default function MockExam() {
                 </div>
 
                 {!usageLoading && (
-                  <Alert>
-                    <AlertCircle className="h-4 w-4" />
-                    <AlertDescription>
-                      {planType === "free" && (
-                        <div>
-                          <strong>Free Plan:</strong> {remainingMocks === 0 ? "No mock exams remaining" : `${remainingMocks} mock exam available`}
-                          {remainingMocks === 0 && <div className="mt-2">Upgrade to Pro for 4 mocks per week or Elite for unlimited mocks.</div>}
-                        </div>
-                      )}
-                      {planType === "pro" && (
-                        <div>
-                          <strong>Pro Plan:</strong> {remainingMocks} of 4 mock exams remaining this week
-                          {remainingMocks === 0 && <div className="mt-2">Resets every Monday. Upgrade to Elite for unlimited mocks.</div>}
-                        </div>
-                      )}
-                      {planType === "elite" && (
-                        <div>
-                          <strong>Elite Plan:</strong> Unlimited mock exams
-                        </div>
-                      )}
-                    </AlertDescription>
-                  </Alert>
+                  <>
+                    {remainingMocks === 0 && planType === "pro" && (
+                      <UpgradeNudge
+                        type="mock-limit-ribbon"
+                        message="Weekly limit reached. Go Elite for unlimited mocks."
+                        tier="elite"
+                        variant="banner"
+                      />
+                    )}
+                    <Alert>
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>
+                        {planType === "free" && (
+                          <div>
+                            <strong>Free Plan:</strong> {remainingMocks === 0 ? "No mock exams remaining" : `${remainingMocks} mock exam available`}
+                          </div>
+                        )}
+                        {planType === "pro" && (
+                          <div>
+                            <strong>Pro Plan:</strong> {remainingMocks} of 4 mock exams remaining this week
+                            {remainingMocks === 0 && <div className="mt-2">Resets every Monday.</div>}
+                          </div>
+                        )}
+                        {planType === "elite" && (
+                          <div>
+                            <strong>Elite Plan:</strong> Unlimited mock exams
+                          </div>
+                        )}
+                      </AlertDescription>
+                    </Alert>
+                  </>
                 )}
 
                 <div className="flex items-center space-x-2">
@@ -332,6 +342,14 @@ export default function MockExam() {
                 </div>
               </CardContent>
             </Card>
+            
+            <UpgradeNudge
+              type="mock-complete"
+              message="See full performance breakdown and heatmaps – unlock with Pro."
+              tier="pro"
+              variant="inline"
+              className="mt-6"
+            />
           </div>
         </div>
       </>

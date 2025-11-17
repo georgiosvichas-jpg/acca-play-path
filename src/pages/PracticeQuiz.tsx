@@ -12,6 +12,8 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { toast } from "sonner";
 import { CheckCircle2, XCircle, ArrowRight, BarChart3 } from "lucide-react";
+import { UpgradeNudge } from "@/components/UpgradeNudge";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 
 interface Question {
   id: string;
@@ -363,6 +365,13 @@ export default function PracticeQuiz() {
             </div>
           </CardContent>
         </Card>
+        
+        <UpgradeNudge
+          type="practice-footer"
+          message="Strengthen your weak areas faster – unlock full analytics in Pro."
+          tier="pro"
+          variant="inline"
+        />
       </div>
     );
   }

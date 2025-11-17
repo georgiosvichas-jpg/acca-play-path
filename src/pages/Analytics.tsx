@@ -5,6 +5,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart3, TrendingUp, Target } from "lucide-react";
 import QuestionAnalytics from "./QuestionAnalytics";
 import ProgressTracking from "./ProgressTracking";
+import { UpgradeNudge } from "@/components/UpgradeNudge";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 
 export default function Analytics() {
   return (
@@ -42,6 +44,12 @@ export default function Analytics() {
             </TabsContent>
 
             <TabsContent value="recommendations">
+              <UpgradeNudge
+                type="elite-insights"
+                message="Want pass probability and projections? Go Elite."
+                tier="elite"
+                variant="inline"
+              />
               <div className="text-center py-12 text-muted-foreground">
                 AI-powered recommendations coming soon...
               </div>
