@@ -43,7 +43,7 @@ export default function DashboardContent() {
   const { user } = useAuth();
   const { profile, updateProfile } = useUserProfile();
   const { papers } = usePapers();
-  const { planType, unlockedPapers } = useSubscription();
+  const { planType } = useSubscription();
   const { getMessage } = useMotivationalMessage();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -52,9 +52,7 @@ export default function DashboardContent() {
   const [selectedPaperToUnlock, setSelectedPaperToUnlock] = useState<string | null>(null);
 
   const hasAccessToPaper = (paperCode: string) => {
-    if (planType === "pro") return true;
-    if (planType === "per_paper" && unlockedPapers.includes(paperCode)) return true;
-    return false;
+    return planType === "pro" || planType === "elite";
   };
 
   const handlePaperClick = (paper: any) => {

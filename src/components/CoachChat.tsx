@@ -102,7 +102,7 @@ const QuestionCard = ({ question, onAnswer }: QuestionCardProps) => {
 
 export default function CoachChat() {
   const { user } = useAuth();
-  const { planType, unlockedPapers } = useSubscription();
+  const { planType } = useSubscription();
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
@@ -114,7 +114,7 @@ export default function CoachChat() {
   const [currentQuestion, setCurrentQuestion] = useState<any>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const isPremium = planType === "pro" || unlockedPapers.length > 0;
+  const isPremium = planType === "pro" || planType === "elite";
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });

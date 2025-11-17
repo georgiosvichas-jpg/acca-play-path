@@ -22,7 +22,7 @@ export default function ProgressPage() {
   const [analytics, setAnalytics] = useState<AnalyticsSummary | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const isPremium = planType === "pro" || planType === "per_paper";
+  const isPremium = planType === "pro" || planType === "elite";
 
   useEffect(() => {
     const fetchAnalytics = async () => {

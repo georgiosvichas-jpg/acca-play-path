@@ -115,10 +115,10 @@ export default function Checkout() {
 
               <Button
                 className="w-full h-12 bg-primary hover:bg-primary/90"
-                onClick={() => handleCheckout(STRIPE_PRICES.PER_PAPER, "payment")}
-                disabled={loading === STRIPE_PRICES.PER_PAPER}
+                onClick={() => handleCheckout(STRIPE_PRICES.PRO_MONTHLY, "subscription")}
+                disabled={loading === STRIPE_PRICES.PRO_MONTHLY}
               >
-                {loading === STRIPE_PRICES.PER_PAPER ? (
+                {loading === STRIPE_PRICES.PRO_MONTHLY ? (
                   <div className="flex items-center gap-2">
                     <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
                     <span>Processing...</span>
