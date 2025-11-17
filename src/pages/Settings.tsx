@@ -12,8 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, Database } from "lucide-react";
-import { BTQuestionImporter } from "@/components/BTQuestionImporter";
+import { Settings as SettingsIcon, User, Globe, Shield, BookOpen } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -286,22 +285,6 @@ export default function Settings() {
                       : "N/A"}
                   </span>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Data Management */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Database className="w-5 h-5 text-primary" />
-                  Data Management
-                </CardTitle>
-                <CardDescription>
-                  Import question banks and manage study content
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <BTQuestionImporter />
               </CardContent>
             </Card>
 

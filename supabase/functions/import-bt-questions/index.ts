@@ -30,43 +30,20 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Fetch the JSON file from the public data folder
-    const baseUrl = supabaseUrl.replace('.supabase.co', '.supabase.co');
-    const jsonUrl = `${baseUrl}/storage/v1/object/public/data/bt_question_bank.json`;
+    // Get questions from request body
+    const { questions: questionsData } = await req.json();
     
-    console.log('Fetching BT questions from public folder...');
-    
-    // Since it's in the public folder, we need to fetch it differently
-    // Let's read it from the uploaded file URL directly
-    const fileResponse = await fetch(`${supabaseUrl.replace('/v1', '')}/storage/v1/object/public/data/bt_question_bank.json`);
-    
-    // If that doesn't work, try fetching from the public folder directly via the app URL
-    let questions: BTQuestion[];
-    
-    try {
-      // Try to get from the origin header if available
-      const origin = req.headers.get('origin') || supabaseUrl;
-      const publicUrl = `${origin}/data/bt_question_bank.json`;
-      console.log(`Attempting to fetch from: ${publicUrl}`);
-      
-      const response = await fetch(publicUrl);
-      if (!response.ok) {
-        throw new Error(`Failed to fetch questions: ${response.statusText}`);
-      }
-      
-      questions = await response.json();
-      console.log(`Loaded ${questions.length} questions from JSON file`);
-    } catch (error) {
-      console.error('Error fetching from public URL:', error);
-      const errorMessage = error instanceof Error ? error.message : String(error);
+    if (!questionsData || !Array.isArray(questionsData)) {
       return new Response(
         JSON.stringify({ 
-          error: 'Failed to fetch question bank file. Please ensure bt_question_bank.json is in the public/data folder.',
-          details: errorMessage 
+          error: 'Invalid request body. Expected { questions: [...] }' 
         }),
-        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 500 }
+        { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
       );
     }
+
+    const questions: BTQuestion[] = questionsData;
+    console.log(`Received ${questions.length} questions from client`);
 
     // Check if questions already exist to avoid duplicates
     const { data: existingQuestions } = await supabase
