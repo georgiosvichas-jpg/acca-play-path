@@ -32,10 +32,10 @@ const navItems = [
   { path: "/coach", label: "Coach", icon: MessageSquare },
   { path: "/practice-quiz", label: "Practice", icon: BookOpen },
   { path: "/question-browser", label: "Questions", icon: BookOpen },
+  { path: "/study-path", label: "Study Path", icon: Calendar },
+  { path: "/progress-tracking", label: "Trends", icon: TrendingUp },
   { path: "/planner", label: "Planner", icon: Calendar },
   { path: "/flashcards", label: "Flashcards", icon: BookOpen },
-  { path: "/progress", label: "Progress", icon: TrendingUp },
-  { path: "/leaderboard", label: "Leaderboard", icon: Trophy },
 ];
 
 export default function Navigation() {

@@ -13,6 +13,8 @@ import Planner from "./pages/Planner";
 import PracticeQuiz from "./pages/PracticeQuiz";
 import QuestionBrowser from "./pages/QuestionBrowser";
 import QuestionAnalytics from "./pages/QuestionAnalytics";
+import ProgressTracking from "./pages/ProgressTracking";
+import StudyPath from "./pages/StudyPath";
 import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -146,6 +148,24 @@ const App = () => (
               <ProtectedRoute>
                 <Navigation />
                 <QuestionAnalytics />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/progress-tracking"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <ProgressTracking />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/study-path"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <StudyPath />
               </ProtectedRoute>
             }
           />
