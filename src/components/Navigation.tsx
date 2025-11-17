@@ -26,22 +26,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Badge } from "@/components/ui/badge";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import XPDisplay from "./XPDisplay";
 import PeerComparisonDrawer from "./PeerComparisonDrawer";
 
 const navItems = [
-  { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { path: "/coach", label: "Coach", icon: MessageSquare },
-  { path: "/practice-quiz", label: "Practice", icon: BookOpen },
-  { path: "/spaced-repetition", label: "Review", icon: Brain },
-  { path: "/mock-exam", label: "Mock Exam", icon: Clock },
-  { path: "/question-browser", label: "Questions", icon: BookOpen },
-  { path: "/question-analytics", label: "Progress", icon: BarChart3 },
-  { path: "/badges", label: "Badges", icon: Trophy },
-  { path: "/study-path", label: "Study Path", icon: Calendar },
-  { path: "/progress-tracking", label: "Trends", icon: TrendingUp },
-  { path: "/planner", label: "Planner", icon: Calendar },
-  { path: "/flashcards", label: "Flashcards", icon: BookOpen },
+  { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, description: "Overview of your study progress and daily goals" },
+  { path: "/coach", label: "Coach", icon: MessageSquare, description: "AI-powered study assistant for personalized guidance" },
+  { path: "/practice-quiz", label: "Practice", icon: BookOpen, description: "Practice questions with immediate feedback" },
+  { path: "/spaced-repetition", label: "Review", icon: Brain, description: "Spaced repetition system for mastering difficult questions" },
+  { path: "/mock-exam", label: "Mock Exam", icon: Clock, description: "Full 2-hour timed exam simulation with 50 questions" },
+  { path: "/question-browser", label: "Questions", icon: BookOpen, description: "Browse and filter the complete question bank" },
+  { path: "/question-analytics", label: "Progress", icon: BarChart3, description: "Detailed analytics and accuracy trends over time" },
+  { path: "/badges", label: "Badges", icon: Trophy, description: "View achievements and earned milestone badges" },
+  { path: "/study-path", label: "Study Path", icon: Calendar, description: "AI-generated personalized study plan" },
+  { path: "/progress-tracking", label: "Trends", icon: TrendingUp, description: "Visualize your performance trends and improvements" },
+  { path: "/planner", label: "Planner", icon: Calendar, description: "Schedule and track your study sessions" },
+  { path: "/flashcards", label: "Flashcards", icon: BookOpen, description: "Study with flashcards for quick review" },
 ];
 
 export default function Navigation() {
@@ -79,28 +85,36 @@ export default function Navigation() {
             <XPDisplay />
             <PeerComparisonDrawer />
             
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = location.pathname === item.path;
-              
-              return (
-                <Button
-                  key={item.path}
-                  variant={isActive ? "default" : "ghost"}
-                  asChild
-                  className={`rounded-xl ${
-                    isActive
-                      ? "bg-primary text-primary-foreground shadow-md"
-                      : "hover:bg-muted"
-                  }`}
-                >
-                  <Link to={item.path}>
-                    <Icon className="w-4 h-4 sm:mr-2" />
-                    <span className="hidden sm:inline">{item.label}</span>
-                  </Link>
-                </Button>
-              );
-            })}
+            <TooltipProvider delayDuration={200}>
+              {navItems.map((item) => {
+                const Icon = item.icon;
+                const isActive = location.pathname === item.path;
+                
+                return (
+                  <Tooltip key={item.path}>
+                    <TooltipTrigger asChild>
+                      <Button
+                        variant={isActive ? "default" : "ghost"}
+                        asChild
+                        className={`rounded-xl ${
+                          isActive
+                            ? "bg-primary text-primary-foreground shadow-md"
+                            : "hover:bg-muted"
+                        }`}
+                      >
+                        <Link to={item.path}>
+                          <Icon className="w-4 h-4 sm:mr-2" />
+                          <span className="hidden sm:inline">{item.label}</span>
+                        </Link>
+                      </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom" className="max-w-xs">
+                      <p className="text-sm">{item.description}</p>
+                    </TooltipContent>
+                  </Tooltip>
+                );
+              })}
+            </TooltipProvider>
             
             {/* User Menu */}
             <DropdownMenu>
