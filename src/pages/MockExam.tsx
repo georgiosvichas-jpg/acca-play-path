@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
+import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,7 @@ export default function MockExam() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkAndAwardBadges } = useBadgeChecker();
+  const { recordBatchReviews } = useSpacedRepetition();
 
   // Exam state
   const [examStarted, setExamStarted] = useState(false);
@@ -128,6 +130,13 @@ export default function MockExam() {
           correct_answers: correctCount,
           raw_log: rawLog,
         });
+
+        // Record in spaced repetition system
+        const reviewData = questions.map((q, idx) => ({
+          questionId: q.id,
+          isCorrect: answers[idx] === q.correct_option_index
+        }));
+        await recordBatchReviews(reviewData);
 
         // Check for badges
         await checkAndAwardBadges();
