@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -34,6 +35,7 @@ interface QuizResult {
 export default function PracticeQuiz() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { checkAndAwardBadges } = useBadgeChecker();
   
   // Setup state
   const [paper, setPaper] = useState<string>("BT");
@@ -202,6 +204,9 @@ export default function PracticeQuiz() {
             raw_log: rawLog
           }
         });
+
+        // Check for badge achievements
+        await checkAndAwardBadges();
       } catch (error) {
         console.error("Error logging session:", error);
       }

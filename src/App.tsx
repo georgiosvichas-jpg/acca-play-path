@@ -11,6 +11,7 @@ import Leaderboard from "./pages/Leaderboard";
 import Settings from "./pages/Settings";
 import Planner from "./pages/Planner";
 import PracticeQuiz from "./pages/PracticeQuiz";
+import MockExam from "./pages/MockExam";
 import QuestionBrowser from "./pages/QuestionBrowser";
 import QuestionAnalytics from "./pages/QuestionAnalytics";
 import ProgressTracking from "./pages/ProgressTracking";
@@ -130,6 +131,14 @@ const App = () => (
               <ProtectedRoute>
                 <Navigation />
                 <PracticeQuiz />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/mock-exam"
+            element={
+              <ProtectedRoute>
+                <MockExam />
               </ProtectedRoute>
             }
           />
