@@ -29,6 +29,7 @@ import { toast } from "@/hooks/use-toast";
 import { useMotivationalMessage } from "@/hooks/useMotivationalMessage";
 import { useNavigate } from "react-router-dom";
 import OnboardingChecklist from "./OnboardingChecklist";
+import CoachPanel from "./CoachPanel";
 
 interface Task {
   id: string;
@@ -270,6 +271,11 @@ export default function DashboardContent() {
               {/* Onboarding Checklist */}
               <div className="animate-slide-up" style={{ animationDelay: "0.05s" }}>
                 <OnboardingChecklist />
+              </div>
+
+              {/* AI Coach Panel */}
+              <div className="animate-slide-up" style={{ animationDelay: "0.08s" }}>
+                <CoachPanel />
               </div>
 
               {/* XP Progress */}
