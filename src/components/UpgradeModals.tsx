@@ -35,7 +35,7 @@ export function FlashcardUnlockModal({
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout-session", {
-        body: { priceId: STRIPE_PRICES.PER_PAPER, mode: "payment" },
+        body: { priceId: STRIPE_PRICES.PRO_MONTHLY, mode: "subscription" },
       });
 
       if (error) throw error;
@@ -133,7 +133,7 @@ export function PaperUnlockModal({
     setLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("create-checkout-session", {
-        body: { priceId: STRIPE_PRICES.PER_PAPER, mode: "payment" },
+        body: { priceId: STRIPE_PRICES.PRO_MONTHLY, mode: "subscription" },
       });
 
       if (error) throw error;

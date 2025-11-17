@@ -24,6 +24,7 @@ import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
+import Pricing from "./pages/Pricing";
 import XPConfettiWrapper from "./components/XPConfettiWrapper";
 import FlashcardsContentNew from "./components/FlashcardsContentNew";
 import Coach from "./pages/Coach";
@@ -116,6 +117,14 @@ const App = () => (
           <Route path="/question-analytics" element={<Analytics />} />
           <Route path="/progress-tracking" element={<Analytics />} />
           <Route path="/study-path" element={<PlannerEnhanced />} />
+          <Route
+            path="/pricing"
+            element={
+              <ProtectedRoute>
+                <Pricing />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="/checkout"
             element={

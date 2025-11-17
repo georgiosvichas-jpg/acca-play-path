@@ -57,8 +57,8 @@ export default function Navigation() {
   }
 
   const getPlanBadge = () => {
+    if (planType === "elite") return <Badge className="bg-gradient-to-r from-primary to-secondary text-white">Elite</Badge>;
     if (planType === "pro") return <Badge className="bg-primary text-white">Pro</Badge>;
-    if (planType === "per_paper") return <Badge variant="secondary">Per Paper</Badge>;
     return <Badge variant="outline">Free</Badge>;
   };
 

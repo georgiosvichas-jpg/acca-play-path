@@ -11,7 +11,7 @@ export function useQuestionLimit() {
   const [dailyUsed, setDailyUsed] = useState(0);
   const [loading, setLoading] = useState(true);
 
-  const isPremium = planType === "pro" || planType === "per_paper";
+  const isPremium = planType === "pro" || planType === "elite";
 
   useEffect(() => {
     if (!user) {

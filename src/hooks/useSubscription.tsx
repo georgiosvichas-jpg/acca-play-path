@@ -9,7 +9,6 @@ export function useSubscription() {
   const [subscriptionInfo, setSubscriptionInfo] = useState<SubscriptionInfo>({
     isSubscribed: false,
     planType: "free",
-    unlockedPapers: [],
     subscriptionEnd: null,
     isLoading: true,
   });
@@ -19,7 +18,6 @@ export function useSubscription() {
       setSubscriptionInfo({
         isSubscribed: false,
         planType: "free",
-        unlockedPapers: [],
         subscriptionEnd: null,
         isLoading: false,
       });
@@ -34,7 +32,6 @@ export function useSubscription() {
       setSubscriptionInfo({
         isSubscribed: data.subscribed || false,
         planType: data.plan_type || "free",
-        unlockedPapers: data.unlocked_papers || [],
         subscriptionEnd: data.subscription_end || null,
         isLoading: false,
       });
