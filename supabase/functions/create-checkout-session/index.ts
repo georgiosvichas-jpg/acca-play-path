@@ -18,12 +18,23 @@ serve(async (req) => {
   );
 
   try {
-    const { userId, priceId, mode } = await req.json();
+    const { userId } = await req.json();
     
     if (!userId) {
       return new Response(JSON.stringify({ error: "Missing userId" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
+      });
+    }
+
+    // Get fixed Stripe configuration from environment
+    const priceId = Deno.env.get("STRIPE_PRICE_ID");
+    const mode: "subscription" | "payment" = "subscription";
+    
+    if (!priceId) {
+      return new Response(JSON.stringify({ error: "Stripe price not configured" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 500,
       });
     }
 
@@ -46,9 +57,6 @@ serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
         status: 400,
       });
-    }
-    if (!priceId || !mode) {
-      throw new Error("Missing priceId or mode");
     }
 
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
@@ -73,6 +81,7 @@ serve(async (req) => {
         },
       ],
       mode: mode,
+      client_reference_id: userId,
       success_url: `${req.headers.get("origin")}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${req.headers.get("origin")}/payment-failure`,
     });
