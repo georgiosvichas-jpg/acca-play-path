@@ -82,8 +82,8 @@ serve(async (req) => {
       ],
       mode: mode,
       client_reference_id: userId,
-      success_url: `${req.headers.get("origin")}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${req.headers.get("origin")}/payment-failure`,
+      success_url: "https://example.com/checkout-success?session_id={CHECKOUT_SESSION_ID}",
+      cancel_url: "https://example.com/checkout-cancelled",
     });
 
     return new Response(JSON.stringify({ url: session.url }), {
