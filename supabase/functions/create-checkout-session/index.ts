@@ -14,17 +14,39 @@ serve(async (req) => {
 
   const supabaseClient = createClient(
     Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
   );
 
   try {
-    const authHeader = req.headers.get("Authorization")!;
-    const token = authHeader.replace("Bearer ", "");
-    const { data } = await supabaseClient.auth.getUser(token);
-    const user = data.user;
-    if (!user?.email) throw new Error("User not authenticated or email not available");
+    const { userId, priceId, mode } = await req.json();
+    
+    if (!userId) {
+      return new Response(JSON.stringify({ error: "Missing userId" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
+    }
 
-    const { priceId, mode } = await req.json();
+    // Fetch user from sb_users table using service role
+    const { data: user, error: userError } = await supabaseClient
+      .from("sb_users")
+      .select("*")
+      .eq("id", userId)
+      .maybeSingle();
+
+    if (userError || !user) {
+      return new Response(JSON.stringify({ error: "User not found" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 404,
+      });
+    }
+
+    if (!user.email) {
+      return new Response(JSON.stringify({ error: "User email not available" }), {
+        headers: { ...corsHeaders, "Content-Type": "application/json" },
+        status: 400,
+      });
+    }
     if (!priceId || !mode) {
       throw new Error("Missing priceId or mode");
     }
