@@ -1,0 +1,907 @@
+[
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which of the following best describes a sole trader?",
+    "options": [
+      "A business owned and run by one individual",
+      "A business owned by at least two shareholders",
+      "A separate legal entity owned by the government",
+      "A not-for-profit organisation"
+    ],
+    "correct_option_index": 0,
+    "explanation": "A sole trader is a business owned and run by one individual, who bears all the risks and rewards."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which stakeholder is MOST interested in the long-term profitability and share price of a company?",
+    "options": [
+      "Employees",
+      "Shareholders",
+      "Suppliers",
+      "Tax authorities"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Shareholders are the owners and are particularly concerned with long-term profitability and share value."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which stakeholder group is typically interested in job security and working conditions?",
+    "options": [
+      "Customers",
+      "Employees",
+      "Lenders",
+      "Government"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Employees focus on job security, pay, benefits and working conditions."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following best describes the primary objective of a commercial business?",
+    "options": [
+      "To maximise sales revenue",
+      "To maximise shareholder wealth",
+      "To minimise operating costs",
+      "To ensure full employment in the economy"
+    ],
+    "correct_option_index": 1,
+    "explanation": "In financial theory, the primary objective of a commercial company is maximising shareholder wealth."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A charity providing educational services is BEST described as which type of organisation?",
+    "options": [
+      "Public sector",
+      "Private sector, profit oriented",
+      "Not-for-profit organisation",
+      "Co-operative"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Charities are classic not-for-profit organisations, focusing on social objectives rather than profit."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which statement about stakeholders is TRUE?",
+    "options": [
+      "Only shareholders are primary stakeholders",
+      "Stakeholders always have financial interests only",
+      "Stakeholders include any group affected by or affecting the organisation",
+      "Customers are external but not stakeholders"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Stakeholders are any parties that can affect or are affected by the organisation’s activities."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "A regulator introduces strict consumer-protection rules that significantly increase compliance costs. Which TWO stakeholder groups are most likely to experience conflicting interests in this situation?",
+    "options": [
+      "Shareholders and customers",
+      "Managers and employees",
+      "Suppliers and customers",
+      "Government and regulators"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Stronger protection benefits customers but may reduce shareholder returns due to higher costs."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which statement best illustrates a stakeholder 'salience' approach to prioritisation?",
+    "options": [
+      "Stakeholders are ranked only by financial investment",
+      "Stakeholders are ranked based on power, legitimacy and urgency",
+      "Stakeholders are ranked solely by legal ownership rights",
+      "Stakeholders are all treated equally regardless of influence"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The salience model assesses stakeholders by power, legitimacy and urgency to prioritise attention."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which of the following is an example of an internal stakeholder?",
+    "options": [
+      "Lenders",
+      "Government",
+      "Employees",
+      "Suppliers"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Employees are internal stakeholders because they work within the organisation."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a public sector organisation, which objective is MOST likely to dominate?",
+    "options": [
+      "Maximising shareholder wealth",
+      "Providing services within a fixed budget",
+      "Maximising profit margin",
+      "Minimising taxation"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Public sector bodies focus on delivering services within resource constraints rather than profit."
+  },
+
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which business function is primarily responsible for recruiting and training staff?",
+    "options": [
+      "Operations",
+      "Marketing",
+      "Human resources",
+      "Finance"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Human resources (HR) manages recruitment, training and employee relations."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which function is MOST directly responsible for producing goods and services?",
+    "options": [
+      "Operations",
+      "Finance",
+      "IT",
+      "Internal audit"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Operations manages the processes that transform inputs into outputs."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which BEST describes corporate governance?",
+    "options": [
+      "The day-to-day management of staff",
+      "The system by which organisations are directed and controlled",
+      "The marketing of products to corporate customers",
+      "The preparation of financial statements"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Corporate governance is the framework of rules and relationships by which organisations are directed and controlled."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a typical role of a non-executive director (NED)?",
+    "options": [
+      "Running day-to-day operations",
+      "Approving detailed production schedules",
+      "Monitoring and challenging executive management",
+      "Preparing management accounts"
+    ],
+    "correct_option_index": 2,
+    "explanation": "NEDs provide independent oversight and challenge to the executive team."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which board committee is MOST associated with the relationship between the company and its external auditors?",
+    "options": [
+      "Nomination committee",
+      "Audit committee",
+      "Remuneration committee",
+      "Risk committee"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The audit committee oversees financial reporting, internal controls and the external audit relationship."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which weakness is MOST likely if a company’s CEO is also the chair of the board?",
+    "options": [
+      "Too many independent directors",
+      "Excessive segregation of duties",
+      "Concentration of power and weak challenge",
+      "Lack of financial expertise"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Combining chair and CEO roles concentrates power and reduces independent oversight."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which combination best demonstrates good corporate governance?",
+    "options": [
+      "Domination of board by executives and no audit committee",
+      "Separate chair and CEO, majority independent NEDs, effective audit committee",
+      "CEO also chairs the audit committee",
+      "No NEDs and no board committees"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Good governance usually includes separation of chair/CEO, independent NEDs and key committees."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which function is MOST responsible for managing cash flows and funding?",
+    "options": [
+      "Finance",
+      "Operations",
+      "Marketing",
+      "HR"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Finance manages cash, funding and financial reporting."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which organisational structure groups employees by similar professional skills (e.g. all accountants together)?",
+    "options": [
+      "Functional structure",
+      "Divisional (product) structure",
+      "Matrix structure",
+      "Network structure"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Functional structures group people by function such as finance, HR or marketing."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which organisational structure is MOST likely where staff report both to a functional manager and a project manager?",
+    "options": [
+      "Simple structure",
+      "Divisional (geographic)",
+      "Matrix structure",
+      "Network structure"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Matrix structures involve dual reporting lines, usually to functional and project managers."
+  },
+
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which PESTEL factor is MOST directly affected when a government changes corporate tax rates?",
+    "options": [
+      "Political",
+      "Economic",
+      "Legal",
+      "Technological"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Tax is usually considered an economic factor, although policy is influenced by politics."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "An ageing population is mainly an example of which PESTEL factor?",
+    "options": [
+      "Social",
+      "Technological",
+      "Environmental",
+      "Legal"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Demographic trends are part of the social environment."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A new competitor enters the market offering significantly lower prices. Which framework is MOST useful to analyse the competitive intensity?",
+    "options": [
+      "PESTEL",
+      "Porter’s Five Forces",
+      "Boston Matrix",
+      "Ansoff Matrix"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Porter’s Five Forces focuses on competitive rivalry, threat of entrants, substitutes, etc."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a potential OPPORTUNITY from the external environment?",
+    "options": [
+      "New regulation increasing reporting costs",
+      "Technological innovation that reduces production cost",
+      "Entry of a powerful new competitor",
+      "Economic recession reducing demand"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Technology that lowers cost can be exploited as an opportunity to improve margins or prices."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A company operates in a market with high entry barriers and few substitutes. What is the MOST likely impact on profitability, all else equal?",
+    "options": [
+      "Low profitability due to intense rivalry",
+      "Moderate profitability due to weak buyers",
+      "High profitability due to limited competitive pressure",
+      "Uncertain profitability unrelated to structure"
+    ],
+    "correct_option_index": 2,
+    "explanation": "High entry barriers and few substitutes generally support higher profitability."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which combination of Five Forces conditions is MOST likely to create strong downward pressure on prices?",
+    "options": [
+      "Low buyer power, low rivalry, low substitutes",
+      "High buyer power, high rivalry, many substitutes",
+      "Low supplier power, low rivalry, few substitutes",
+      "High supplier power, low rivalry, few substitutes"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Strong buyer power, intense rivalry and many substitutes drive prices down."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "A retailer faces new online competitors and changing consumer preferences towards sustainable products. These changes are BEST described as:",
+    "options": [
+      "Internal weaknesses only",
+      "External threats and opportunities",
+      "Controllable cost variances",
+      "Purely legal risks"
+    ],
+    "correct_option_index": 1,
+    "explanation": "New competitors are threats; preference for sustainability can be a threat or opportunity."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which PESTEL factor is MOST closely linked to new data-protection laws?",
+    "options": [
+      "Social",
+      "Legal",
+      "Technological",
+      "Environmental"
+    ],
+    "correct_option_index": 1,
+    "explanation": "New laws and regulations fall under the legal factor."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A business identifies that customers increasingly purchase through mobile apps. Which strategic response is MOST appropriate?",
+    "options": [
+      "Reduce marketing expenditure",
+      "Invest in a user-friendly mobile platform",
+      "Increase prices to offset costs",
+      "Close physical stores immediately"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Aligning channels with customer buying behaviour is a logical response to this trend."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Higher interest rates introduced by the central bank are MOST likely to:",
+    "options": [
+      "Encourage more borrowing by businesses",
+      "Reduce the cost of capital",
+      "Reduce consumer spending and investment",
+      "Have no impact on demand"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Higher interest rates typically dampen borrowing and spending, slowing demand."
+  },
+
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which of the following describes organisational culture?",
+    "options": [
+      "Formal rules and procedures only",
+      "Shared values, beliefs and assumptions within an organisation",
+      "External branding and logos",
+      "The legal structure of the company"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Culture is the shared values and assumptions that influence behaviour."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which term describes doing the 'right thing' even when no one is watching?",
+    "options": [
+      "Compliance",
+      "Ethics",
+      "Governance",
+      "Strategy"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Ethics relates to moral principles guiding behaviour beyond minimum compliance."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which culture type is typically associated with high formalisation and strong emphasis on rules and procedures?",
+    "options": [
+      "Power culture",
+      "Role culture",
+      "Task culture",
+      "Person culture"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Role cultures emphasise rules, job descriptions and formal structures."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Corporate social responsibility (CSR) is BEST described as:",
+    "options": [
+      "Maximising short-term profit",
+      "A voluntary commitment to consider social and environmental impacts",
+      "Compliance with minimum legal requirements only",
+      "A marketing technique to increase sales only"
+    ],
+    "correct_option_index": 1,
+    "explanation": "CSR involves going beyond legal minimum to manage social and environmental impacts."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ethical threat arises when an accountant has a close family relationship with a client?",
+    "options": [
+      "Self-interest threat",
+      "Advocacy threat",
+      "Familiarity threat",
+      "Intimidation threat"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Close relationships can lead to familiarity threats, reducing objectivity."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "A company aggressively manipulates earnings within legal limits to meet bonus targets. This behaviour is BEST described as:",
+    "options": [
+      "Ethical but illegal",
+      "Legal but potentially unethical",
+      "Neither legal nor ethical",
+      "Unethical but required by law"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Earnings management can be legal but conflict with ethical principles of fairness and transparency."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which combination of actions BEST demonstrates a genuine commitment to sustainability?",
+    "options": [
+      "Issuing glossy environmental reports only",
+      "Complying with minimum regulations but no further action",
+      "Embedding environmental targets into strategy, KPIs and investment decisions",
+      "Delegating sustainability solely to the marketing department"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Integrating sustainability into core strategy and performance measures shows genuine commitment."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ethical principle is MOST closely related to avoiding conflicts of interest?",
+    "options": [
+      "Integrity",
+      "Objectivity",
+      "Professional competence",
+      "Confidentiality"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Objectivity is about avoiding bias, conflicts of interest and undue influence."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Greenwashing occurs when a company:",
+    "options": [
+      "Accurately reports its environmental impacts",
+      "Misleads stakeholders about its environmental performance",
+      "Refuses to engage in any environmental reporting",
+      "Invests heavily in clean technology"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Greenwashing is misrepresenting environmental practices to appear more sustainable than reality."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is MOST likely to strengthen an ethical culture?",
+    "options": [
+      "Rewarding only financial performance",
+      "Clear code of ethics and leadership by example",
+      "Ignoring whistle-blowers",
+      "Promoting staff solely on sales results"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Codes of ethics supported by ethical leadership help embed ethical behaviour."
+  },
+
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which leadership style involves the leader making decisions alone with little input from others?",
+    "options": [
+      "Democratic",
+      "Autocratic",
+      "Laissez-faire",
+      "Transformational"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Autocratic leadership is directive, with limited participation from subordinates."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "According to Herzberg, which of the following is a motivator (satisfier)?",
+    "options": [
+      "Salary",
+      "Company policy",
+      "Achievement",
+      "Working conditions"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Achievement is a motivator; salary and conditions are hygiene factors."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A manager gives team members clear goals but allows them freedom in how they are achieved. This leadership style is BEST described as:",
+    "options": [
+      "Autocratic",
+      "Democratic",
+      "Laissez-faire",
+      "Transactional"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Democratic leaders involve subordinates in decisions and empower them within clear goals."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which stage in Tuckman’s model is typically associated with high conflict as roles and norms are challenged?",
+    "options": [
+      "Forming",
+      "Storming",
+      "Norming",
+      "Performing"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Storming is the conflict phase while the team negotiates roles and relationships."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which is the MOST appropriate way to improve team communication?",
+    "options": [
+      "Avoid feedback to reduce conflict",
+      "Use only written memos",
+      "Encourage two-way communication and active listening",
+      "Limit meetings to once per year"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Effective communication is two-way, with feedback and active listening."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "A sales manager offers bonuses purely on short-term sales volume, leading to aggressive selling and customer complaints. Which is the MAIN problem with this reward system?",
+    "options": [
+      "It is too complex",
+      "It is not linked to any targets",
+      "It encourages dysfunctional behaviour misaligned with long-term goals",
+      "It has too many performance measures"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Poorly designed incentives can drive behaviour that harms long-term performance and reputation."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which combination is MOST likely to create a high-performing team?",
+    "options": [
+      "Unclear goals, diverse skills, no feedback",
+      "Clear goals, complementary skills, mutual accountability",
+      "Individual targets only, no shared purpose",
+      "Strong hierarchy, limited communication"
+    ],
+    "correct_option_index": 1,
+    "explanation": "High-performing teams share clear goals, complementary skills and mutual accountability."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which motivational theory is MOST associated with the hierarchy of needs?",
+    "options": [
+      "Taylor",
+      "Maslow",
+      "Herzberg",
+      "McGregor"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Maslow proposed the hierarchy of needs from physiological to self-actualisation."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which leadership style is MOST likely to inspire employees through a compelling vision and personal charisma?",
+    "options": [
+      "Transactional",
+      "Transformational",
+      "Autocratic",
+      "Laissez-faire"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Transformational leaders inspire followers to exceed expectations through vision and charisma."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which communication channel is MOST appropriate for complex, sensitive feedback?",
+    "options": [
+      "Mass email",
+      "Formal memo",
+      "Face-to-face meeting",
+      "Noticeboard announcement"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Face-to-face communication is best for sensitive, complex messages where immediate feedback is needed."
+  },
+
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which of the following is a COMMON reason for organisational change?",
+    "options": [
+      "Stable competition",
+      "Falling sales",
+      "Unchanged technology",
+      "Predictable environment"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Declining performance (e.g. falling sales) often triggers change initiatives."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Resistance to change is MOST likely when:",
+    "options": [
+      "Communication is clear and early",
+      "Employees are involved in planning",
+      "Impacts on staff are unknown and not explained",
+      "Training is provided in advance"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Lack of information and uncertainty fuels resistance to change."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which change approach emphasises small, continuous improvements rather than radical transformation?",
+    "options": [
+      "Big-bang change",
+      "Incremental change",
+      "Transformational change",
+      "Crisis-driven change"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Incremental change focuses on continuous small adjustments."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In Lewin’s three-stage model, which stage involves reinforcing new behaviours so they become 'the way we do things'?",
+    "options": [
+      "Unfreezing",
+      "Changing (moving)",
+      "Refreezing",
+      "Benchmarking"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Refreezing embeds the new state as the normal way of operating."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which action is MOST likely to reduce resistance to change?",
+    "options": [
+      "Imposing change without consultation",
+      "Providing clear communication, involvement and support",
+      "Announcing change on the day it happens",
+      "Punishing staff who question the need for change"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Involvement, communication and support are key to managing resistance."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "A company rapidly adopts new digital tools without training or aligning processes. Productivity falls. The MAIN reason is MOST likely:",
+    "options": [
+      "Over-communication",
+      "Ignoring the human and process aspects of change",
+      "Too much staff involvement",
+      "Excessive incremental improvement"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Technology change fails if people and process changes are not managed in parallel."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which combination BEST characterises transformational change?",
+    "options": [
+      "Small, continuous improvements in existing processes",
+      "Fundamental shifts in strategy, culture and capabilities",
+      "Minor changes to procedures only",
+      "Changes limited to marketing campaigns"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Transformational change alters strategy, culture and core capabilities."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Innovation in a business context is BEST described as:",
+    "options": [
+      "Any new idea, even if never implemented",
+      "Only radical new products",
+      "The successful implementation of new ideas that create value",
+      "Copying competitors' products"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Innovation is about implementing ideas that create value, not just thinking of them."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which practice is MOST likely to encourage innovation?",
+    "options": [
+      "Punishing all failed experiments",
+      "Allocating time and resources for experimentation",
+      "Insisting all processes remain unchanged",
+      "Discouraging cross-functional collaboration"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Providing time and resources for experimentation supports innovation."
+  },
+  {
+    "paper": "BT",
+    "unit_code": "BT06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A manager wants to introduce a new performance-management system. Which is the MOST appropriate first step?",
+    "options": [
+      "Roll out the system immediately to all staff",
+      "Explain the rationale for change and involve key stakeholders in design",
+      "Remove the old system overnight without notice",
+      "Ignore staff concerns to avoid delays"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Explaining the rationale and involving stakeholders increases acceptance and improves design quality."
+  }
+]
