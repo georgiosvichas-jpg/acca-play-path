@@ -10,7 +10,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { toast } from "sonner";
-import { PaywallModal } from "./PaywallModal";
+import { FeaturePaywallModal } from "./FeaturePaywallModal";
 
 interface Message {
   role: "user" | "assistant";
@@ -174,11 +174,10 @@ export default function CoachPanel() {
         </CardContent>
       )}
       
-      <PaywallModal
+      <FeaturePaywallModal
         open={showPaywall}
         onOpenChange={setShowPaywall}
-        feature="AI Tutor Chat"
-        requiredTier={requiredTier}
+        paywallType="ai-tutor"
       />
     </Card>
   );
