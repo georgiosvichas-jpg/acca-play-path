@@ -659,10 +659,13 @@ export type Database = {
         Row: {
           country: string | null
           created_at: string | null
+          daily_flashcards_used: number | null
           display_name: string | null
           exam_session: string | null
           id: string
           is_opted_out_of_leaderboard: boolean | null
+          last_flashcard_reset_date: string | null
+          last_mock_reset_date: string | null
           last_study_date: string | null
           level: number | null
           plan_type: Database["public"]["Enums"]["plan_type"] | null
@@ -675,18 +678,23 @@ export type Database = {
           subscription_end_date: string | null
           subscription_product_id: string | null
           subscription_status: string | null
+          total_mocks_completed: number | null
           total_xp: number | null
           unlocked_papers: string[] | null
           updated_at: string | null
           user_id: string
+          weekly_mocks_used: number | null
         }
         Insert: {
           country?: string | null
           created_at?: string | null
+          daily_flashcards_used?: number | null
           display_name?: string | null
           exam_session?: string | null
           id?: string
           is_opted_out_of_leaderboard?: boolean | null
+          last_flashcard_reset_date?: string | null
+          last_mock_reset_date?: string | null
           last_study_date?: string | null
           level?: number | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
@@ -699,18 +707,23 @@ export type Database = {
           subscription_end_date?: string | null
           subscription_product_id?: string | null
           subscription_status?: string | null
+          total_mocks_completed?: number | null
           total_xp?: number | null
           unlocked_papers?: string[] | null
           updated_at?: string | null
           user_id: string
+          weekly_mocks_used?: number | null
         }
         Update: {
           country?: string | null
           created_at?: string | null
+          daily_flashcards_used?: number | null
           display_name?: string | null
           exam_session?: string | null
           id?: string
           is_opted_out_of_leaderboard?: boolean | null
+          last_flashcard_reset_date?: string | null
+          last_mock_reset_date?: string | null
           last_study_date?: string | null
           level?: number | null
           plan_type?: Database["public"]["Enums"]["plan_type"] | null
@@ -723,10 +736,12 @@ export type Database = {
           subscription_end_date?: string | null
           subscription_product_id?: string | null
           subscription_status?: string | null
+          total_mocks_completed?: number | null
           total_xp?: number | null
           unlocked_papers?: string[] | null
           updated_at?: string | null
           user_id?: string
+          weekly_mocks_used?: number | null
         }
         Relationships: [
           {
@@ -856,6 +871,8 @@ export type Database = {
         Args: { _user_id: string }
         Returns: boolean
       }
+      reset_daily_flashcard_counter: { Args: never; Returns: undefined }
+      reset_weekly_mock_counter: { Args: never; Returns: undefined }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"

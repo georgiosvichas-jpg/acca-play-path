@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useXP } from "@/hooks/useXP";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import FlashcardFlipCard from "./FlashcardFlipCard";
@@ -10,7 +12,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Filter, BookOpen } from "lucide-react";
+import { Filter, BookOpen, Lock, AlertCircle } from "lucide-react";
+import { PaywallModal } from "./PaywallModal";
+import { Alert, AlertDescription } from "./ui/alert";
 
 interface Flashcard {
   id: string;
@@ -28,12 +32,22 @@ export default function FlashcardsContentNew() {
   const { user } = useAuth();
   const { profile } = useUserProfile();
   const { awardXP } = useXP();
+  const { 
+    canUseFlashcard, 
+    remainingFlashcards, 
+    dailyFlashcardsUsed,
+    incrementFlashcardUsage,
+    isLoading: usageLoading 
+  } = useUsageLimits();
+  const { planType, getUpgradeMessage } = useFeatureAccess();
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [filteredCards, setFilteredCards] = useState<Flashcard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [loading, setLoading] = useState(true);
   const [showImporter, setShowImporter] = useState(false);
   const [importAttempted, setImportAttempted] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("pro");
 
   // Filters
   const [selectedPaper, setSelectedPaper] = useState<string>("all");
@@ -135,9 +149,20 @@ export default function FlashcardsContentNew() {
   const handleMarkLearned = async () => {
     if (!user) return;
 
+    // Check if user can use more flashcards
+    if (!canUseFlashcard) {
+      const upgradeInfo = getUpgradeMessage("Unlimited Flashcards");
+      setRequiredTier(upgradeInfo.tier as "pro" | "elite");
+      setShowPaywall(true);
+      return;
+    }
+
     const card = filteredCards[currentIndex];
 
     try {
+      // Increment usage counter
+      await incrementFlashcardUsage();
+      
       // Award XP for completing flashcard
       await awardXP("flashcard_session_10", 1); // +1 XP per card
 
@@ -151,6 +176,9 @@ export default function FlashcardsContentNew() {
       });
 
       toast.success("+1 XP earned!");
+      
+      // Auto-advance to next card
+      handleNext();
     } catch (error) {
       console.error("Error marking flashcard as learned:", error);
     }
@@ -354,6 +382,18 @@ export default function FlashcardsContentNew() {
                   )}
                 </div>
               </div>
+
+              {!usageLoading && planType === "free" && (
+                <Alert className="mt-4">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    <strong>Free Plan:</strong> {remainingFlashcards} of 10 daily flashcards remaining
+                    {remainingFlashcards === 0 && (
+                      <div className="mt-2">Daily limit reached. Upgrade to Pro for unlimited flashcards.</div>
+                    )}
+                  </AlertDescription>
+                </Alert>
+              )}
             </CardContent>
           </Card>
 
@@ -371,6 +411,12 @@ export default function FlashcardsContentNew() {
         </div>
       </div>
       <Footer />
+      <PaywallModal
+        open={showPaywall}
+        onOpenChange={setShowPaywall}
+        feature="Unlimited Flashcards"
+        requiredTier={requiredTier}
+      />
     </>
   );
 }
