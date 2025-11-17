@@ -15,6 +15,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { CheckCircle2 } from "lucide-react";
 
 const COUNTRIES = [
   "United States",
@@ -100,6 +101,15 @@ export default function Settings() {
       toast.success("Starting guided tour...");
     } else {
       toast.error("Tour not available");
+    }
+  };
+
+  const handleReopenChecklist = () => {
+    if ((window as any).reopenOnboardingChecklist) {
+      (window as any).reopenOnboardingChecklist();
+      toast.success("Checklist reopened!");
+    } else {
+      toast.error("Checklist not available");
     }
   };
 
@@ -308,7 +318,7 @@ export default function Settings() {
                   Get help using ACCA Master
                 </CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="space-y-2">
                 <Button 
                   onClick={handleRestartTour}
                   variant="outline"
@@ -316,6 +326,14 @@ export default function Settings() {
                 >
                   <HelpCircle className="w-4 h-4 mr-2" />
                   Restart Guided Tour
+                </Button>
+                <Button 
+                  onClick={handleReopenChecklist}
+                  variant="outline"
+                  className="w-full"
+                >
+                  <CheckCircle2 className="w-4 h-4 mr-2" />
+                  Show Onboarding Checklist
                 </Button>
               </CardContent>
             </Card>
