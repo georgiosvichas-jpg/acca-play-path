@@ -12,6 +12,7 @@ import {
   Calendar,
   MessageSquare,
   TrendingUp,
+  Clock,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -31,7 +32,10 @@ const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/coach", label: "Coach", icon: MessageSquare },
   { path: "/practice-quiz", label: "Practice", icon: BookOpen },
+  { path: "/mock-exam", label: "Mock Exam", icon: Clock },
   { path: "/question-browser", label: "Questions", icon: BookOpen },
+  { path: "/question-analytics", label: "Progress", icon: BarChart3 },
+  { path: "/badges", label: "Badges", icon: Trophy },
   { path: "/study-path", label: "Study Path", icon: Calendar },
   { path: "/progress-tracking", label: "Trends", icon: TrendingUp },
   { path: "/planner", label: "Planner", icon: Calendar },

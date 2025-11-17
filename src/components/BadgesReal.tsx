@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { useXP } from "@/hooks/useXP";
+import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { supabase } from "@/integrations/supabase/client";
 import ProtectedRoute from "./ProtectedRoute";
 import Navigation from "./Navigation";
@@ -41,6 +42,7 @@ export default function BadgesReal() {
   const { user } = useAuth();
   const { profile } = useUserProfile();
   const { currentLevel, currentXP, nextLevelXP, progress } = useXP();
+  const { checkAndAwardBadges } = useBadgeChecker();
   const [badges, setBadges] = useState<Badge[]>([]);
   const [earnedBadges, setEarnedBadges] = useState<UserBadge[]>([]);
   const [loading, setLoading] = useState(true);
