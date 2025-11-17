@@ -128,6 +128,11 @@ export default function CoachChat() {
     setMessages((prev) => [...prev, { role: "user", content: userMessage }]);
     setIsLoading(true);
 
+    // Mark coach as used for onboarding checklist
+    if (user) {
+      localStorage.setItem(`coach_used_${user.id}`, "true");
+    }
+
     try {
       const { data, error } = await supabase.functions.invoke("studybuddy-chat", {
         body: {

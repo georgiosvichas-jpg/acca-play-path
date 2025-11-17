@@ -28,6 +28,7 @@ import { EmptyState } from "./EmptyStates";
 import { toast } from "@/hooks/use-toast";
 import { useMotivationalMessage } from "@/hooks/useMotivationalMessage";
 import { useNavigate } from "react-router-dom";
+import OnboardingChecklist from "./OnboardingChecklist";
 
 interface Task {
   id: string;
@@ -266,6 +267,11 @@ export default function DashboardContent() {
 
             {/* Sidebar */}
             <div className="space-y-6">
+              {/* Onboarding Checklist */}
+              <div className="animate-slide-up" style={{ animationDelay: "0.05s" }}>
+                <OnboardingChecklist />
+              </div>
+
               {/* XP Progress */}
               <Card
                 className="p-6 shadow-card card-float animate-slide-up"
