@@ -12,6 +12,7 @@ import Settings from "./pages/Settings";
 import Planner from "./pages/Planner";
 import PracticeQuiz from "./pages/PracticeQuiz";
 import MockExam from "./pages/MockExam";
+import SpacedRepetition from "./pages/SpacedRepetition";
 import QuestionBrowser from "./pages/QuestionBrowser";
 import QuestionAnalytics from "./pages/QuestionAnalytics";
 import ProgressTracking from "./pages/ProgressTracking";
@@ -139,6 +140,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <MockExam />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/spaced-repetition"
+            element={
+              <ProtectedRoute>
+                <SpacedRepetition />
               </ProtectedRoute>
             }
           />

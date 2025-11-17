@@ -281,6 +281,54 @@ export type Database = {
           },
         ]
       }
+      question_reviews: {
+        Row: {
+          created_at: string
+          ease_factor: number
+          id: string
+          interval_days: number
+          last_reviewed_at: string
+          next_review_at: string
+          question_id: string
+          repetitions: number
+          times_correct: number
+          times_incorrect: number
+          times_seen: number
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          ease_factor?: number
+          id?: string
+          interval_days?: number
+          last_reviewed_at?: string
+          next_review_at: string
+          question_id: string
+          repetitions?: number
+          times_correct?: number
+          times_incorrect?: number
+          times_seen?: number
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          ease_factor?: number
+          id?: string
+          interval_days?: number
+          last_reviewed_at?: string
+          next_review_at?: string
+          question_id?: string
+          repetitions?: number
+          times_correct?: number
+          times_incorrect?: number
+          times_seen?: number
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       sb_minitests: {
         Row: {
           created_at: string | null

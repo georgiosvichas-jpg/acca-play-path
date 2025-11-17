@@ -13,6 +13,7 @@ import {
   MessageSquare,
   TrendingUp,
   Clock,
+  Brain,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -32,6 +33,7 @@ const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
   { path: "/coach", label: "Coach", icon: MessageSquare },
   { path: "/practice-quiz", label: "Practice", icon: BookOpen },
+  { path: "/spaced-repetition", label: "Review", icon: Brain },
   { path: "/mock-exam", label: "Mock Exam", icon: Clock },
   { path: "/question-browser", label: "Questions", icon: BookOpen },
   { path: "/question-analytics", label: "Progress", icon: BarChart3 },

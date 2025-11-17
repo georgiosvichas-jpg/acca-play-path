@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
+import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -36,6 +37,7 @@ export default function PracticeQuiz() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { checkAndAwardBadges } = useBadgeChecker();
+  const { recordBatchReviews } = useSpacedRepetition();
   
   // Setup state
   const [paper, setPaper] = useState<string>("BT");
@@ -204,6 +206,13 @@ export default function PracticeQuiz() {
             raw_log: rawLog
           }
         });
+
+        // Record in spaced repetition system
+        const reviewData = questions.map((q, idx) => ({
+          questionId: q.id,
+          isCorrect: idx < answers.length ? answers[idx].correct : selectedAnswer === q.correct_option_index
+        }));
+        await recordBatchReviews(reviewData);
 
         // Check for badge achievements
         await checkAndAwardBadges();
