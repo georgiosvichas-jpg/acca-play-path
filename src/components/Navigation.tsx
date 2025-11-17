@@ -5,15 +5,16 @@ import {
   BookOpen,
   Trophy,
   BarChart3,
-  Sparkles,
   LogOut,
   Settings,
   Crown,
   Calendar,
-  MessageSquare,
-  TrendingUp,
-  Clock,
+  Target,
   Brain,
+  Award,
+  Home,
+  CalendarDays,
+  GraduationCap,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
@@ -36,18 +37,13 @@ import XPDisplay from "./XPDisplay";
 import PeerComparisonDrawer from "./PeerComparisonDrawer";
 
 const navItems = [
-  { path: "/dashboard", label: "Dashboard", icon: LayoutDashboard, description: "Overview of your study progress and daily goals" },
-  { path: "/coach", label: "Coach", icon: MessageSquare, description: "AI-powered study assistant for personalized guidance" },
-  { path: "/practice-quiz", label: "Practice", icon: BookOpen, description: "Practice questions with immediate feedback" },
-  { path: "/spaced-repetition", label: "Review", icon: Brain, description: "Spaced repetition system for mastering difficult questions" },
-  { path: "/mock-exam", label: "Mock Exam", icon: Clock, description: "Full 2-hour timed exam simulation with 50 questions" },
-  { path: "/question-browser", label: "Questions", icon: BookOpen, description: "Browse and filter the complete question bank" },
-  { path: "/question-analytics", label: "Progress", icon: BarChart3, description: "Detailed analytics and accuracy trends over time" },
-  { path: "/badges", label: "Badges", icon: Trophy, description: "View achievements and earned milestone badges" },
-  { path: "/study-path", label: "Study Path", icon: Calendar, description: "AI-generated personalized study plan" },
-  { path: "/progress-tracking", label: "Trends", icon: TrendingUp, description: "Visualize your performance trends and improvements" },
-  { path: "/planner", label: "Planner", icon: Calendar, description: "Schedule and track your study sessions" },
-  { path: "/flashcards", label: "Flashcards", icon: BookOpen, description: "Study with flashcards for quick review" },
+  { path: "/dashboard", label: "Dashboard", icon: Home, description: "Your study hub and progress overview" },
+  { path: "/study", label: "Study", icon: GraduationCap, description: "Practice, review, and browse questions" },
+  { path: "/flashcards", label: "Flashcards", icon: Brain, description: "Quick revision flashcards" },
+  { path: "/mock-exam", label: "Mock Exam", icon: Target, description: "Timed exam simulation" },
+  { path: "/analytics", label: "Analytics", icon: BarChart3, description: "Performance insights and trends" },
+  { path: "/planner", label: "Planner", icon: CalendarDays, description: "Study schedule and AI path" },
+  { path: "/badges", label: "Badges", icon: Award, description: "Achievements and milestones" },
 ];
 
 export default function Navigation() {
@@ -73,7 +69,7 @@ export default function Navigation() {
           {/* Logo */}
           <Link to="/dashboard" className="flex items-center gap-2 group">
             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
-              <Sparkles className="w-6 h-6 text-white" />
+              <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <span className="font-display font-extrabold text-xl hidden sm:block">
               ACCA Master

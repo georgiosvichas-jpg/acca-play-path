@@ -6,17 +6,16 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Landing from "./components/Landing";
 import Dashboard from "./components/Dashboard";
 import BadgesReal from "./components/BadgesReal";
-import Analytics from "./components/Analytics";
 import Leaderboard from "./pages/Leaderboard";
 import Settings from "./pages/Settings";
 import Planner from "./pages/Planner";
+import PlannerEnhanced from "./pages/PlannerEnhanced";
 import PracticeQuiz from "./pages/PracticeQuiz";
 import MockExam from "./pages/MockExam";
 import SpacedRepetition from "./pages/SpacedRepetition";
 import QuestionBrowser from "./pages/QuestionBrowser";
-import QuestionAnalytics from "./pages/QuestionAnalytics";
-import ProgressTracking from "./pages/ProgressTracking";
-import StudyPath from "./pages/StudyPath";
+import Analytics from "./pages/Analytics";
+import Study from "./pages/Study";
 import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -79,15 +78,6 @@ const App = () => (
             }
           />
           <Route
-            path="/analytics"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <Analytics />
-              </ProtectedRoute>
-            }
-          />
-          <Route
             path="/leaderboard"
             element={
               <ProtectedRoute>
@@ -107,88 +97,25 @@ const App = () => (
             path="/planner"
             element={
               <ProtectedRoute>
-                <Navigation />
-                <Planner />
+                <PlannerEnhanced />
               </ProtectedRoute>
             }
           />
-          <Route
-            path="/coach"
-            element={
-              <ProtectedRoute>
-                <Coach />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/progress"
-            element={
-              <ProtectedRoute>
-                <Progress />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/practice-quiz"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <PracticeQuiz />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/mock-exam"
-            element={
-              <ProtectedRoute>
-                <MockExam />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/spaced-repetition"
-            element={
-              <ProtectedRoute>
-                <SpacedRepetition />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/question-browser"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <QuestionBrowser />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/question-analytics"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <QuestionAnalytics />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/progress-tracking"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <ProgressTracking />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/study-path"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <StudyPath />
-              </ProtectedRoute>
-            }
-          />
+          <Route path="/coach" element={<Coach />} />
+          <Route path="/progress" element={<Progress />} />
+          <Route path="/mock-exam" element={<MockExam />} />
+          
+          {/* Unified sections */}
+          <Route path="/study" element={<Study />} />
+          <Route path="/analytics" element={<Analytics />} />
+          
+          {/* Legacy routes redirect to unified sections */}
+          <Route path="/practice-quiz" element={<Study />} />
+          <Route path="/question-browser" element={<Study />} />
+          <Route path="/spaced-repetition" element={<Study />} />
+          <Route path="/question-analytics" element={<Analytics />} />
+          <Route path="/progress-tracking" element={<Analytics />} />
+          <Route path="/study-path" element={<PlannerEnhanced />} />
           <Route
             path="/checkout"
             element={
