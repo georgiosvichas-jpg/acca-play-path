@@ -15,7 +15,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
 import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock } from "lucide-react";
-import { PaywallModal } from "@/components/PaywallModal";
+import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 
 interface Question {
   id: string;
@@ -274,11 +274,10 @@ export default function MockExam() {
             </Card>
           </div>
         </div>
-        <PaywallModal
+        <FeaturePaywallModal
           open={showPaywall}
           onOpenChange={setShowPaywall}
-          feature="Timed Mock Exams"
-          requiredTier={requiredTier}
+          paywallType={planType === "free" ? "mock-exam-limit" : "mock-weekly-limit"}
         />
       </>
     );
