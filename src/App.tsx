@@ -29,6 +29,7 @@ import XPConfettiWrapper from "./components/XPConfettiWrapper";
 import FlashcardsContentNew from "./components/FlashcardsContentNew";
 import Coach from "./pages/Coach";
 import Progress from "./pages/Progress";
+import GuidedTour from "./components/GuidedTour";
 
 const queryClient = new QueryClient();
 
@@ -39,6 +40,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <XPConfettiWrapper />
+        <GuidedTour />
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />

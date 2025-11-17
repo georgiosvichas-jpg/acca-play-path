@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Settings as SettingsIcon, User, Globe, Shield, BookOpen } from "lucide-react";
+import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, HelpCircle } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -91,6 +91,15 @@ export default function Settings() {
       toast.error("Failed to save settings");
     } finally {
       setSaving(false);
+    }
+  };
+
+  const handleRestartTour = () => {
+    if ((window as any).restartNavigationTour) {
+      (window as any).restartNavigationTour();
+      toast.success("Starting guided tour...");
+    } else {
+      toast.error("Tour not available");
     }
   };
 
@@ -285,6 +294,29 @@ export default function Settings() {
                       : "N/A"}
                   </span>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Help & Support */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <HelpCircle className="w-5 h-5 text-primary" />
+                  Help & Support
+                </CardTitle>
+                <CardDescription>
+                  Get help using ACCA Master
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Button 
+                  onClick={handleRestartTour}
+                  variant="outline"
+                  className="w-full"
+                >
+                  <HelpCircle className="w-4 h-4 mr-2" />
+                  Restart Guided Tour
+                </Button>
               </CardContent>
             </Card>
 
