@@ -5,6 +5,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Progress } from "@/components/ui/progress";
 import { BarChart3, Target, TrendingUp, Award } from "lucide-react";
 import { StudyRecommendations } from "@/components/StudyRecommendations";
+import { UpgradeNudge } from "@/components/UpgradeNudge";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 
 interface AnalyticsData {
   totalQuestions: number;
@@ -201,6 +203,13 @@ export default function QuestionAnalytics() {
           )}
         </CardContent>
       </Card>
+
+      <UpgradeNudge
+        type="weak-areas"
+        message="Fix these topics twice as fast – spaced repetition in Pro."
+        tier="pro"
+        variant="inline"
+      />
 
       <Card>
         <CardHeader>

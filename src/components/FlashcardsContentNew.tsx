@@ -14,6 +14,7 @@ import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Filter, BookOpen, Lock, AlertCircle } from "lucide-react";
 import { PaywallModal } from "./PaywallModal";
+import { UpgradeNudge } from "./UpgradeNudge";
 import { Alert, AlertDescription } from "./ui/alert";
 
 interface Flashcard {
@@ -384,15 +385,23 @@ export default function FlashcardsContentNew() {
               </div>
 
               {!usageLoading && planType === "free" && (
-                <Alert className="mt-4">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    <strong>Free Plan:</strong> {remainingFlashcards} of 10 daily flashcards remaining
-                    {remainingFlashcards === 0 && (
-                      <div className="mt-2">Daily limit reached. Upgrade to Pro for unlimited flashcards.</div>
-                    )}
-                  </AlertDescription>
-                </Alert>
+                <>
+                  <Alert className="mt-4">
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      <strong>Free Plan:</strong> {remainingFlashcards} of 10 daily flashcards remaining
+                    </AlertDescription>
+                  </Alert>
+                  {remainingFlashcards === 0 && (
+                    <UpgradeNudge
+                      type="flashcard-limit"
+                      message="You're on a roll – unlock unlimited flashcards with Pro."
+                      tier="pro"
+                      variant="inline"
+                      className="mt-4"
+                    />
+                  )}
+                </>
               )}
             </CardContent>
           </Card>

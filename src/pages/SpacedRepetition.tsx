@@ -13,6 +13,8 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { Brain, CheckCircle2, XCircle, ArrowRight, Calendar, TrendingUp } from "lucide-react";
+import { UpgradeNudge } from "@/components/UpgradeNudge";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 
 interface Question {
   id: string;
@@ -306,6 +308,13 @@ export default function SpacedRepetition() {
                 </p>
               </CardContent>
             </Card>
+
+            <UpgradeNudge
+              type="srs-section"
+              message="Spaced repetition improves memory retention – activate with Pro."
+              tier="pro"
+              variant="inline"
+            />
 
             {/* Stats */}
             {stats && (
