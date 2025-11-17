@@ -10,6 +10,9 @@ import Analytics from "./components/Analytics";
 import Leaderboard from "./pages/Leaderboard";
 import Settings from "./pages/Settings";
 import Planner from "./pages/Planner";
+import PracticeQuiz from "./pages/PracticeQuiz";
+import QuestionBrowser from "./pages/QuestionBrowser";
+import QuestionAnalytics from "./pages/QuestionAnalytics";
 import Navigation from "./components/Navigation";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -116,6 +119,33 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <Progress />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/practice-quiz"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <PracticeQuiz />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/question-browser"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <QuestionBrowser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/question-analytics"
+            element={
+              <ProtectedRoute>
+                <Navigation />
+                <QuestionAnalytics />
               </ProtectedRoute>
             }
           />
