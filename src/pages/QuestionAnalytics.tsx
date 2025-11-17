@@ -4,6 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { BarChart3, Target, TrendingUp, Award } from "lucide-react";
+import { StudyRecommendations } from "@/components/StudyRecommendations";
 
 interface AnalyticsData {
   totalQuestions: number;
@@ -127,6 +128,9 @@ export default function QuestionAnalytics() {
         <h1 className="text-3xl font-bold">Question Analytics</h1>
         <p className="text-muted-foreground">Track your progress and performance</p>
       </div>
+
+      {/* AI Study Recommendations */}
+      {analytics && analytics.totalQuestions > 0 && <StudyRecommendations />}
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card>
