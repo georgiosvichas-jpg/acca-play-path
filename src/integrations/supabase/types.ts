@@ -433,6 +433,42 @@ export type Database = {
         }
         Relationships: []
       }
+      study_paths: {
+        Row: {
+          created_at: string | null
+          exam_date: string
+          id: string
+          is_active: boolean | null
+          path_data: Json
+          progress: Json | null
+          updated_at: string | null
+          user_id: string
+          weeks_duration: number
+        }
+        Insert: {
+          created_at?: string | null
+          exam_date: string
+          id?: string
+          is_active?: boolean | null
+          path_data: Json
+          progress?: Json | null
+          updated_at?: string | null
+          user_id: string
+          weeks_duration: number
+        }
+        Update: {
+          created_at?: string | null
+          exam_date?: string
+          id?: string
+          is_active?: boolean | null
+          path_data?: Json
+          progress?: Json | null
+          updated_at?: string | null
+          user_id?: string
+          weeks_duration?: number
+        }
+        Relationships: []
+      }
       study_sessions: {
         Row: {
           completed: boolean | null
