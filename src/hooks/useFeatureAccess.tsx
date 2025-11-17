@@ -33,15 +33,22 @@ export function useFeatureAccess() {
     if (proHasFeature === true || proHasFeature === Infinity) {
       return {
         tier: "pro",
-        message: `Upgrade to Pro to access ${feature}`,
+        message: `Upgrade to Pro to unlock ${feature}`,
       };
     }
     
     // Otherwise, Elite is needed
     return {
       tier: "elite",
-      message: `Upgrade to Elite to access ${feature}`,
+      message: `Upgrade to Elite to unlock ${feature}`,
     };
+  };
+
+  const getQuestionLimit = (totalQuestions: number, paperCode: string) => {
+    if (planType === "free") {
+      return Math.floor(totalQuestions * 0.1); // 10% for free
+    }
+    return totalQuestions; // Unlimited for Pro and Elite
   };
 
   return {
@@ -53,6 +60,7 @@ export function useFeatureAccess() {
     getQuestionBankLimit,
     canAccessStudyPlan,
     getUpgradeMessage,
+    getQuestionLimit,
     isLoading,
   };
 }

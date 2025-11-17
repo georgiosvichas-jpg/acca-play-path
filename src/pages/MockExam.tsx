@@ -4,6 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
+import { useUsageLimits } from "@/hooks/useUsageLimits";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -12,7 +14,8 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { toast } from "sonner";
-import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy } from "lucide-react";
+import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock } from "lucide-react";
+import { PaywallModal } from "@/components/PaywallModal";
 
 interface Question {
   id: string;
@@ -29,6 +32,10 @@ export default function MockExam() {
   const navigate = useNavigate();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { recordBatchReviews } = useSpacedRepetition();
+  const { canUseMockExam, remainingMocks, incrementMockUsage, isLoading: usageLoading } = useUsageLimits();
+  const { planType, getUpgradeMessage } = useFeatureAccess();
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("pro");
 
   // Exam state
   const [examStarted, setExamStarted] = useState(false);
@@ -69,6 +76,14 @@ export default function MockExam() {
       return;
     }
 
+    // Check usage limits
+    if (!canUseMockExam) {
+      const upgradeInfo = getUpgradeMessage("Timed Mock Exams");
+      setRequiredTier(upgradeInfo.tier as "pro" | "elite");
+      setShowPaywall(true);
+      return;
+    }
+
     try {
       // Fetch 50 random BT questions
       const { data, error } = await supabase
@@ -87,6 +102,10 @@ export default function MockExam() {
       })));
       setAnswers(new Array(50).fill(null));
       setExamStarted(true);
+      
+      // Increment usage counter
+      await incrementMockUsage();
+      
       toast.success("Mock exam started! Good luck!");
     } catch (error) {
       console.error("Error starting exam:", error);
@@ -200,6 +219,31 @@ export default function MockExam() {
                   </ul>
                 </div>
 
+                {!usageLoading && (
+                  <Alert>
+                    <AlertCircle className="h-4 w-4" />
+                    <AlertDescription>
+                      {planType === "free" && (
+                        <div>
+                          <strong>Free Plan:</strong> {remainingMocks === 0 ? "No mock exams remaining" : `${remainingMocks} mock exam available`}
+                          {remainingMocks === 0 && <div className="mt-2">Upgrade to Pro for 4 mocks per week or Elite for unlimited mocks.</div>}
+                        </div>
+                      )}
+                      {planType === "pro" && (
+                        <div>
+                          <strong>Pro Plan:</strong> {remainingMocks} of 4 mock exams remaining this week
+                          {remainingMocks === 0 && <div className="mt-2">Resets every Monday. Upgrade to Elite for unlimited mocks.</div>}
+                        </div>
+                      )}
+                      {planType === "elite" && (
+                        <div>
+                          <strong>Elite Plan:</strong> Unlimited mock exams
+                        </div>
+                      )}
+                    </AlertDescription>
+                  </Alert>
+                )}
+
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -215,16 +259,27 @@ export default function MockExam() {
 
                 <Button
                   onClick={startExam}
-                  disabled={!agreedToRules}
+                  disabled={!agreedToRules || !canUseMockExam}
                   size="lg"
                   className="w-full"
                 >
-                  Start Mock Exam
+                  {canUseMockExam ? "Start Mock Exam" : (
+                    <span className="flex items-center gap-2">
+                      <Lock className="w-4 h-4" />
+                      Limit Reached - Upgrade Required
+                    </span>
+                  )}
                 </Button>
               </CardContent>
             </Card>
           </div>
         </div>
+        <PaywallModal
+          open={showPaywall}
+          onOpenChange={setShowPaywall}
+          feature="Timed Mock Exams"
+          requiredTier={requiredTier}
+        />
       </>
     );
   }

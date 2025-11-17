@@ -3,11 +3,14 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Maximize2, Minimize2, Send } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Maximize2, Minimize2, Send, Lock, AlertCircle } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { toast } from "sonner";
+import { PaywallModal } from "./PaywallModal";
 
 interface Message {
   role: "user" | "assistant";
@@ -17,13 +20,26 @@ interface Message {
 export default function CoachPanel() {
   const navigate = useNavigate();
   const { user } = useAuth();
+  const { planType, hasFeature, getUpgradeMessage } = useFeatureAccess();
   const [expanded, setExpanded] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [showPaywall, setShowPaywall] = useState(false);
+  const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("elite");
+
+  const canUseAIChat = hasFeature("aiTutor");
 
   const sendMessage = async () => {
     if (!input.trim() || loading) return;
+
+    // Check if user has access to AI tutor
+    if (!canUseAIChat) {
+      const upgradeInfo = getUpgradeMessage("aiTutor");
+      setRequiredTier(upgradeInfo.tier as "pro" | "elite");
+      setShowPaywall(true);
+      return;
+    }
 
     const userMessage = input.trim();
     setInput("");
@@ -90,11 +106,20 @@ export default function CoachPanel() {
       
       {expanded && (
         <CardContent className="flex flex-col gap-3 flex-1">
+          {!canUseAIChat && (
+            <Alert>
+              <Lock className="h-4 w-4" />
+              <AlertDescription>
+                <strong>Elite Feature:</strong> AI Tutor Chat is available only on the Elite plan. Upgrade for unlimited AI-powered coaching.
+              </AlertDescription>
+            </Alert>
+          )}
+          
           <ScrollArea className="h-[300px] pr-4">
             <div className="space-y-4">
               {messages.length === 0 ? (
                 <div className="text-center text-muted-foreground text-sm py-8">
-                  Ask me anything about your studies!
+                  {canUseAIChat ? "Ask me anything about your studies!" : "Upgrade to Elite to unlock AI Coach"}
                 </div>
               ) : (
                 messages.map((msg, idx) => (
@@ -135,15 +160,26 @@ export default function CoachPanel() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyPress={(e) => e.key === "Enter" && sendMessage()}
-              placeholder="Ask a question..."
-              disabled={loading}
+              placeholder={canUseAIChat ? "Ask a question..." : "Upgrade to unlock AI Coach"}
+              disabled={loading || !canUseAIChat}
             />
-            <Button onClick={sendMessage} disabled={loading} size="icon">
-              <Send className="w-4 h-4" />
+            <Button onClick={sendMessage} disabled={loading || !input.trim() || !canUseAIChat} size="icon">
+              {canUseAIChat ? (
+                <Send className="w-4 h-4" />
+              ) : (
+                <Lock className="w-4 h-4" />
+              )}
             </Button>
           </div>
         </CardContent>
       )}
+      
+      <PaywallModal
+        open={showPaywall}
+        onOpenChange={setShowPaywall}
+        feature="AI Tutor Chat"
+        requiredTier={requiredTier}
+      />
     </Card>
   );
 }
