@@ -358,26 +358,30 @@ export default function Landing() {
                   }}>€0</span>
                   </div>
                   <p className="text-sm text-[#475569] leading-relaxed">
-                    For new learners exploring the app.
+                    Perfect for exploring the platform.
                   </p>
                 </div>
 
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Access to 1 demo paper</span>
+                    <span className="text-sm text-[#475569]">10% of each question bank</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">10 flashcards per day</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">1 timed mock exam</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Basic analytics (accuracy only)</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <Lock className="w-5 h-5 text-[#64748B] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#64748B]">10 flashcards and mini-problems</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Lock className="w-5 h-5 text-[#64748B] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#64748B]">Basic planner view</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Lock className="w-5 h-5 text-[#64748B] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#64748B]">Limited XP tracking</span>
+                    <span className="text-sm text-[#64748B]">1-week study plan preview</span>
                   </li>
                 </ul>
               </div>
@@ -387,60 +391,9 @@ export default function Landing() {
               </Button>
             </Card>
 
-            {/* Card 2 - Per Paper */}
-            <Card className="relative bg-white border-2 border-[#00A67E] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
-            animationDelay: "0.1s"
-          }}>
-              <Badge className="absolute top-4 left-4 bg-[#00A67E]/10 text-[#00A67E] border-none text-xs px-3 py-1">
-                Good value
-              </Badge>
-              
-              <div className="flex-1 space-y-6 mt-6">
-                <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{
-                  fontWeight: 700
-                }}>
-                    Per Paper
-                  </h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-[#0F172A]" style={{
-                    fontWeight: 700
-                  }}>€9</span>
-                    <span className="text-[#64748B]">one-time</span>
-                  </div>
-                  <p className="text-sm text-[#475569] leading-relaxed">
-                    Perfect if you are focusing on one exam this term.
-                  </p>
-                </div>
-
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Unlimited flashcards and planner for one paper</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Full analytics and readiness score</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Priority support</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Lifetime access to this paper</span>
-                  </li>
-                </ul>
-              </div>
-
-              <Button id="cta-unlock-paper" aria-label="Unlock one paper" className="w-full mt-6 h-12 rounded-xl bg-[#00A67E] hover:bg-[#009D73] text-white transition-all duration-200 shadow-md hover:shadow-lg" onClick={() => navigate("/auth")}>
-                Unlock one paper
-              </Button>
-            </Card>
-
-            {/* Card 3 - Pro (Most Popular) */}
+            {/* Card 2 - Pro (Most Popular) */}
             <Card className="relative rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] animate-slide-up overflow-hidden" style={{
-            animationDelay: "0.2s",
+            animationDelay: "0.1s",
             background: "linear-gradient(135deg, #00A67E 0%, #009D73 100%)"
           }}>
               <Badge className="absolute top-4 left-1/2 -translate-x-1/2 bg-white text-[#00A67E] border-none text-xs px-4 py-1.5 font-semibold">
@@ -458,44 +411,105 @@ export default function Landing() {
                     <span className="text-5xl font-bold text-white" style={{
                     fontWeight: 700
                   }}>
-                      €{isAnnual ? "15" : "19"}
+                      €{isAnnual ? "5.75" : "9.99"}
                     </span>
                     <span className="text-white/80">/month</span>
                   </div>
                   {isAnnual && <p className="text-sm text-white/90">
-                      Billed annually at €180/year
+                      Billed annually at €69/year
                     </p>}
                   <p className="text-sm text-white/90 leading-relaxed pt-2">
-                    For ambitious ACCA candidates who want full coverage and smart insights.
+                    Full access with AI-powered features.
                   </p>
                 </div>
 
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Access to all 13 papers</span>
+                    <span className="text-sm text-white">Full question banks</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Unlimited flashcards, analytics, and readiness score</span>
+                    <span className="text-sm text-white">Unlimited flashcards</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Smart planner with adaptive scheduling</span>
+                    <span className="text-sm text-white">4 timed mocks per week</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Global leaderboard and full XP rewards</span>
+                    <span className="text-sm text-white">AI explanations & heatmaps</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Priority support and early features</span>
+                    <span className="text-sm text-white">Full study planner & spaced repetition</span>
                   </li>
                 </ul>
               </div>
 
               <Button id="cta-upgrade-pro" aria-label="Upgrade to Pro" className="w-full mt-6 h-12 rounded-xl bg-white text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200 shadow-lg hover:shadow-xl font-semibold" onClick={() => navigate("/auth")}>
                 Upgrade to Pro
+              </Button>
+            </Card>
+
+            {/* Card 3 - Elite */}
+            <Card className="relative bg-white border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
+            animationDelay: "0.2s"
+          }}>
+              <div className="flex items-center justify-center gap-2 mb-4">
+                <Crown className="w-5 h-5 text-[#9333EA]" />
+                <Badge className="bg-[#9333EA]/10 text-[#9333EA] border-none text-xs px-3 py-1">
+                  Elite
+                </Badge>
+              </div>
+              
+              <div className="flex-1 space-y-6">
+                <div className="space-y-2">
+                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{
+                  fontWeight: 700
+                }}>
+                    Elite
+                  </h3>
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-5xl font-bold text-[#0F172A]" style={{
+                    fontWeight: 700
+                  }}>€{isAnnual ? "8.25" : "14.99"}</span>
+                    <span className="text-[#64748B]">/month</span>
+                  </div>
+                  {isAnnual && <p className="text-sm text-[#475569]">
+                      Billed annually at €99/year
+                    </p>}
+                  <p className="text-sm text-[#475569] leading-relaxed pt-2">
+                    Everything in Pro, plus advanced AI tools.
+                  </p>
+                </div>
+
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Everything in Pro</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Unlimited timed mocks</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">AI Tutor chat</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">Predictive analytics & pass probability</span>
+                  </li>
+                  <li className="flex items-start gap-3">
+                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
+                    <span className="text-sm text-[#475569]">AI Copilot & early access</span>
+                  </li>
+                </ul>
+              </div>
+
+              <Button id="cta-upgrade-elite" aria-label="Upgrade to Elite" className="w-full mt-6 h-12 rounded-xl bg-[#9333EA] hover:bg-[#7E22CE] text-white transition-all duration-200 shadow-md hover:shadow-lg" onClick={() => navigate("/auth")}>
+                Upgrade to Elite
               </Button>
             </Card>
           </div>
