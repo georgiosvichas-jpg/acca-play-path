@@ -6,10 +6,12 @@ import { Calendar } from "@/components/ui/calendar";
 import { useStudySessions } from "@/hooks/useStudySessions";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { usePapers } from "@/hooks/usePapers";
-import { format, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay } from "date-fns";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
+import { format, startOfWeek, endOfWeek, eachDayOfInterval, isSameDay, addWeeks } from "date-fns";
 import { CalendarDays, Clock, Target, TrendingUp } from "lucide-react";
 import SessionDetailsDialog from "@/components/SessionDetailsDialog";
 import CreateSessionDialog from "@/components/CreateSessionDialog";
+import { UpgradeNudge } from "@/components/UpgradeNudge";
 
 export default function Planner() {
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -17,11 +19,16 @@ export default function Planner() {
   const { profile } = useUserProfile();
   const { papers } = usePapers();
   const { sessions, loading, completeSession, createSession } = useStudySessions();
+  const { planType, limits } = useFeatureAccess();
 
   // Get sessions for selected week
   const weekStart = startOfWeek(selectedDate, { weekStartsOn: 1 });
   const weekEnd = endOfWeek(selectedDate, { weekStartsOn: 1 });
   const weekDays = eachDayOfInterval({ start: weekStart, end: weekEnd });
+
+  // Check if we're viewing locked weeks for free tier
+  const weeksFromNow = Math.floor((weekStart.getTime() - new Date().getTime()) / (7 * 24 * 60 * 60 * 1000));
+  const isLockedWeek = planType === "free" && weeksFromNow > 0;
 
   const sessionsThisWeek = sessions.filter((s) => {
     const sessionDate = new Date(s.session_date);
@@ -120,6 +127,16 @@ export default function Planner() {
             </CardContent>
           </Card>
         </div>
+
+        {/* Locked weeks nudge for free tier */}
+        {isLockedWeek && (
+          <UpgradeNudge
+            type="planner-locked"
+            message="Plan all the way to exam day – unlock full planner in Pro."
+            variant="inline"
+            tier="pro"
+          />
+        )}
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Calendar */}
