@@ -7,16 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate } from "react-router-dom";
-import {
-  Sparkles,
-  CheckCircle,
-  Star,
-  Mail,
-  Linkedin,
-  ArrowRight,
-  Lock,
-  Crown,
-} from "lucide-react";
+import { Sparkles, CheckCircle, Star, Mail, Linkedin, ArrowRight, Lock, Crown } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import featurePlanner from "@/assets/feature-planner.png";
 import featureFlashcards from "@/assets/feature-flashcards.png";
@@ -24,12 +15,10 @@ import featureAnalytics from "@/assets/feature-analytics.png";
 import featureGamification from "@/assets/feature-gamification.png";
 import featureSyllabus from "@/assets/feature-syllabus.png";
 import featureResponsive from "@/assets/feature-responsive.png";
-
 export default function Landing() {
   const navigate = useNavigate();
   const [navBg, setNavBg] = useState(false);
   const [isAnnual, setIsAnnual] = useState(true);
-
   useEffect(() => {
     const handleScroll = () => {
       setNavBg(window.scrollY > 50);
@@ -37,13 +26,12 @@ export default function Landing() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
   const scrollToSection = (id: string) => {
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    document.getElementById(id)?.scrollIntoView({
+      behavior: "smooth"
+    });
   };
-
-  return (
-    <div className="min-h-screen">
+  return <div className="min-h-screen">
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${navBg ? "bg-background/95 backdrop-blur-lg shadow-sm" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
@@ -53,15 +41,9 @@ export default function Landing() {
               <span className="font-display font-bold text-xl">Outcomeo</span>
             </div>
             <div className="hidden md:flex items-center gap-6">
-              {["features", "pricing", "faq", "contact", "resources"].map((item) => (
-                <button
-                  key={item}
-                  onClick={() => scrollToSection(item)}
-                  className="text-sm font-medium hover:text-primary transition-colors capitalize"
-                >
+              {["features", "pricing", "faq", "contact", "resources"].map(item => <button key={item} onClick={() => scrollToSection(item)} className="text-sm font-medium hover:text-primary transition-colors capitalize">
                   {item === "faq" ? "FAQ" : item}
-                </button>
-              ))}
+                </button>)}
               <Button onClick={() => navigate("/auth")} size="sm" className="rounded-xl">
                 Start Free
               </Button>
@@ -79,10 +61,10 @@ export default function Landing() {
             <div className="animate-fade-in">
               <Badge className="mb-4 rounded-full">Join 10,000+ aspiring accountants</Badge>
               <h1 className="text-5xl md:text-6xl font-display font-extrabold mb-6 leading-tight">
-                Master your exam journey – smarter, faster, gamified
+                Master your ACCA exam journey – smarter, faster, gamified
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Plan, study, and track your progress with personalized goals, XP, and streaks.
+                Daily micro-practice, adaptive difficulty, real-exam style questions and personalised coaching that builds mastery one step at a time                  
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg">
@@ -121,11 +103,7 @@ export default function Landing() {
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                  <img 
-                    src={featurePlanner} 
-                    alt="Smart Planner Interface" 
-                    className="w-full h-auto"
-                  />
+                  <img src={featurePlanner} alt="Smart Planner Interface" className="w-full h-auto" />
                 </div>
               </div>
             </div>
@@ -164,11 +142,7 @@ export default function Landing() {
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                <img 
-                  src={featureFlashcards} 
-                  alt="Interactive Flashcards Interface" 
-                  className="w-full h-auto"
-                />
+                <img src={featureFlashcards} alt="Interactive Flashcards Interface" className="w-full h-auto" />
               </div>
             </div>
           </div>
@@ -179,11 +153,7 @@ export default function Landing() {
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 to-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                  <img 
-                    src={featureAnalytics} 
-                    alt="Progress Analytics Dashboard" 
-                    className="w-full h-auto"
-                  />
+                  <img src={featureAnalytics} alt="Progress Analytics Dashboard" className="w-full h-auto" />
                 </div>
               </div>
             </div>
@@ -223,11 +193,7 @@ export default function Landing() {
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                <img 
-                  src={featureGamification} 
-                  alt="Gamification Engine Interface" 
-                  className="w-full h-auto"
-                />
+                <img src={featureGamification} alt="Gamification Engine Interface" className="w-full h-auto" />
               </div>
             </div>
           </div>
@@ -238,11 +204,7 @@ export default function Landing() {
               <div className="relative group">
                 <div className="absolute -inset-4 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
                 <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                  <img 
-                    src={featureSyllabus} 
-                    alt="Officially Aligned Syllabus Tracker" 
-                    className="w-full h-auto"
-                  />
+                  <img src={featureSyllabus} alt="Officially Aligned Syllabus Tracker" className="w-full h-auto" />
                 </div>
               </div>
             </div>
@@ -281,11 +243,7 @@ export default function Landing() {
             <div className="relative group">
               <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 to-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                <img 
-                  src={featureResponsive} 
-                  alt="Multi-device Responsive Design" 
-                  className="w-full h-auto"
-                />
+                <img src={featureResponsive} alt="Multi-device Responsive Design" className="w-full h-auto" />
               </div>
             </div>
           </div>
@@ -296,11 +254,7 @@ export default function Landing() {
               <h3 className="text-2xl md:text-3xl font-display font-bold">
                 Join thousands of ACCA students studying smarter with Study Buddy
               </h3>
-              <Button 
-                size="lg" 
-                onClick={() => scrollToSection("pricing")} 
-                className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90"
-              >
+              <Button size="lg" onClick={() => scrollToSection("pricing")} className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90">
                 Start Free
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
@@ -321,12 +275,24 @@ export default function Landing() {
             </Badge>
           </div>
           <div className="grid md:grid-cols-3 gap-8 mb-12">
-            {[
-              { name: "Aisha K.", location: "Lagos", paper: "Paper PM", text: "Study Buddy completely changed how I prepare for my exams. The flashcards and progress tracker kept me consistent — and I passed PM on my first try!" },
-              { name: "George L.", location: "London", paper: "Paper FR", text: "It makes studying actually fun. The gamified planner keeps me accountable — I finally enjoy revision." },
-              { name: "Maria P.", location: "Athens", paper: "Paper MA", text: "The readiness score helped me know exactly when I was ready to book my next paper." },
-            ].map((testimonial, i) => (
-              <Card key={i} className="p-6 animate-slide-up hover:shadow-lg transition-all" style={{ animationDelay: `${i * 0.2}s` }}>
+            {[{
+            name: "Aisha K.",
+            location: "Lagos",
+            paper: "Paper PM",
+            text: "Study Buddy completely changed how I prepare for my exams. The flashcards and progress tracker kept me consistent — and I passed PM on my first try!"
+          }, {
+            name: "George L.",
+            location: "London",
+            paper: "Paper FR",
+            text: "It makes studying actually fun. The gamified planner keeps me accountable — I finally enjoy revision."
+          }, {
+            name: "Maria P.",
+            location: "Athens",
+            paper: "Paper MA",
+            text: "The readiness score helped me know exactly when I was ready to book my next paper."
+          }].map((testimonial, i) => <Card key={i} className="p-6 animate-slide-up hover:shadow-lg transition-all" style={{
+            animationDelay: `${i * 0.2}s`
+          }}>
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent text-accent" />)}
                 </div>
@@ -335,8 +301,7 @@ export default function Landing() {
                   <p className="font-semibold">{testimonial.name}</p>
                   <p className="text-sm text-muted-foreground">{testimonial.location} • {testimonial.paper}</p>
                 </div>
-              </Card>
-            ))}
+              </Card>)}
           </div>
           <div className="text-center">
             <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl">
@@ -351,7 +316,9 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#0F172A]" style={{ fontWeight: 700 }}>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#0F172A]" style={{
+            fontWeight: 700
+          }}>
               Choose your plan for smarter ACCA prep
             </h2>
             <p className="text-lg md:text-xl text-[#475569] max-w-3xl mx-auto mb-8">
@@ -365,12 +332,7 @@ export default function Landing() {
             <span className={`text-sm font-medium transition-colors duration-200 ${!isAnnual ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
               Monthly
             </span>
-            <Switch 
-              id="billing-toggle"
-              checked={isAnnual} 
-              onCheckedChange={setIsAnnual}
-              className="data-[state=checked]:bg-[#00A67E]"
-            />
+            <Switch id="billing-toggle" checked={isAnnual} onCheckedChange={setIsAnnual} className="data-[state=checked]:bg-[#00A67E]" />
             <span className={`text-sm font-medium transition-colors duration-200 ${isAnnual ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
               Annual
             </span>
@@ -385,11 +347,15 @@ export default function Landing() {
             <Card className="relative bg-white border-[#E5E7EB] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>
+                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{
+                  fontWeight: 700
+                }}>
                     Free
                   </h3>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>€0</span>
+                    <span className="text-5xl font-bold text-[#0F172A]" style={{
+                    fontWeight: 700
+                  }}>€0</span>
                   </div>
                   <p className="text-sm text-[#475569] leading-relaxed">
                     For new learners exploring the app.
@@ -416,30 +382,30 @@ export default function Landing() {
                 </ul>
               </div>
 
-              <Button 
-                id="cta-start-free"
-                aria-label="Start free"
-                variant="outline" 
-                className="w-full mt-6 h-12 rounded-xl border-2 border-[#00A67E] text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200"
-                onClick={() => navigate("/auth")}
-              >
+              <Button id="cta-start-free" aria-label="Start free" variant="outline" className="w-full mt-6 h-12 rounded-xl border-2 border-[#00A67E] text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200" onClick={() => navigate("/auth")}>
                 Start free
               </Button>
             </Card>
 
             {/* Card 2 - Per Paper */}
-            <Card className="relative bg-white border-2 border-[#00A67E] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: "0.1s" }}>
+            <Card className="relative bg-white border-2 border-[#00A67E] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
+            animationDelay: "0.1s"
+          }}>
               <Badge className="absolute top-4 left-4 bg-[#00A67E]/10 text-[#00A67E] border-none text-xs px-3 py-1">
                 Good value
               </Badge>
               
               <div className="flex-1 space-y-6 mt-6">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>
+                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{
+                  fontWeight: 700
+                }}>
                     Per Paper
                   </h3>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-[#0F172A]" style={{ fontWeight: 700 }}>€9</span>
+                    <span className="text-5xl font-bold text-[#0F172A]" style={{
+                    fontWeight: 700
+                  }}>€9</span>
                     <span className="text-[#64748B]">one-time</span>
                   </div>
                   <p className="text-sm text-[#475569] leading-relaxed">
@@ -467,42 +433,38 @@ export default function Landing() {
                 </ul>
               </div>
 
-              <Button 
-                id="cta-unlock-paper"
-                aria-label="Unlock one paper"
-                className="w-full mt-6 h-12 rounded-xl bg-[#00A67E] hover:bg-[#009D73] text-white transition-all duration-200 shadow-md hover:shadow-lg"
-                onClick={() => navigate("/auth")}
-              >
+              <Button id="cta-unlock-paper" aria-label="Unlock one paper" className="w-full mt-6 h-12 rounded-xl bg-[#00A67E] hover:bg-[#009D73] text-white transition-all duration-200 shadow-md hover:shadow-lg" onClick={() => navigate("/auth")}>
                 Unlock one paper
               </Button>
             </Card>
 
             {/* Card 3 - Pro (Most Popular) */}
-            <Card className="relative rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] animate-slide-up overflow-hidden" 
-                  style={{ 
-                    animationDelay: "0.2s",
-                    background: "linear-gradient(135deg, #00A67E 0%, #009D73 100%)"
-                  }}>
+            <Card className="relative rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] animate-slide-up overflow-hidden" style={{
+            animationDelay: "0.2s",
+            background: "linear-gradient(135deg, #00A67E 0%, #009D73 100%)"
+          }}>
               <Badge className="absolute top-4 left-1/2 -translate-x-1/2 bg-white text-[#00A67E] border-none text-xs px-4 py-1.5 font-semibold">
                 Most Popular
               </Badge>
               
               <div className="flex-1 space-y-6 mt-8">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-white" style={{ fontWeight: 700 }}>
+                  <h3 className="text-2xl font-bold text-white" style={{
+                  fontWeight: 700
+                }}>
                     Pro
                   </h3>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-white" style={{ fontWeight: 700 }}>
+                    <span className="text-5xl font-bold text-white" style={{
+                    fontWeight: 700
+                  }}>
                       €{isAnnual ? "15" : "19"}
                     </span>
                     <span className="text-white/80">/month</span>
                   </div>
-                  {isAnnual && (
-                    <p className="text-sm text-white/90">
+                  {isAnnual && <p className="text-sm text-white/90">
                       Billed annually at €180/year
-                    </p>
-                  )}
+                    </p>}
                   <p className="text-sm text-white/90 leading-relaxed pt-2">
                     For ambitious ACCA candidates who want full coverage and smart insights.
                   </p>
@@ -532,12 +494,7 @@ export default function Landing() {
                 </ul>
               </div>
 
-              <Button 
-                id="cta-upgrade-pro"
-                aria-label="Upgrade to Pro"
-                className="w-full mt-6 h-12 rounded-xl bg-white text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200 shadow-lg hover:shadow-xl font-semibold"
-                onClick={() => navigate("/auth")}
-              >
+              <Button id="cta-upgrade-pro" aria-label="Upgrade to Pro" className="w-full mt-6 h-12 rounded-xl bg-white text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200 shadow-lg hover:shadow-xl font-semibold" onClick={() => navigate("/auth")}>
                 Upgrade to Pro
               </Button>
             </Card>
@@ -545,7 +502,9 @@ export default function Landing() {
 
           {/* Trust Layer */}
           <div className="text-center space-y-3 animate-fade-in">
-            <p className="text-sm font-semibold text-[#0F172A]" style={{ fontWeight: 700 }}>
+            <p className="text-sm font-semibold text-[#0F172A]" style={{
+            fontWeight: 700
+          }}>
               14-day money-back guarantee. No hidden fees.
             </p>
             <p className="text-sm text-[#64748B]">
@@ -562,53 +521,40 @@ export default function Landing() {
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">Frequently Asked Questions</h2>
           </div>
           <Accordion type="single" collapsible className="space-y-4">
-            {[
-              { 
-                q: "Is this officially affiliated with ACCA?", 
-                a: "No. Study Buddy is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA." 
-              },
-              { 
-                q: "Can I use it while working full-time?", 
-                a: "Absolutely — the app was designed for busy professionals. Your personalized study plan adapts to your schedule and time until exam day. You can study 15 minutes a day on your commute or during breaks and still make measurable progress." 
-              },
-              { 
-                q: "How are the flashcards and questions created?", 
-                a: "Our content is written by qualified ACCA tutors and graduates, based entirely on ACCA's public syllabus and exam-style logic. Every flashcard, mini-problem, and explanation is original, practical, and updated annually to stay relevant." 
-              },
-              { 
-                q: "Do you have a mobile app?", 
-                a: "Yes — the web version works perfectly on all mobile devices. You can add it to your home screen for one-tap access, track your streaks, and study anywhere. A native app for iOS and Android is coming soon." 
-              },
-              { 
-                q: "Is it really free to start?", 
-                a: "Yes. You can start completely free with one ACCA paper to test the planner, flashcards, and analytics. Upgrade only when you're ready to unlock all 13 papers and premium features like streaks, leaderboards, and progress tracking." 
-              },
-              { 
-                q: "How does the \"readiness score\" work?", 
-                a: "The readiness score combines your XP, completed units, and quiz performance to estimate how prepared you are for your exam. It's a smart, data-driven way to know when you're exam-ready — no more guesswork." 
-              },
-              { 
-                q: "What makes Study Buddy different from traditional courses?", 
-                a: "Unlike static video courses, Study Buddy keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting." 
-              },
-              { 
-                q: "Is my progress and data secure?", 
-                a: "Yes. All your data is encrypted and stored securely in the cloud. We never share user information with third parties or use it for marketing without consent." 
-              },
-              { 
-                q: "Can my employer or tutor track my progress?", 
-                a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default." 
-              },
-              { 
-                q: "How can I contact you?", 
-                a: "You can reach our team anytime at support@studybuddy.ai. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners." 
-              },
-            ].map((faq, i) => (
-              <AccordionItem key={i} value={`item-${i}`} className="bg-background rounded-xl px-6 shadow-sm">
+            {[{
+            q: "Is this officially affiliated with ACCA?",
+            a: "No. Study Buddy is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA."
+          }, {
+            q: "Can I use it while working full-time?",
+            a: "Absolutely — the app was designed for busy professionals. Your personalized study plan adapts to your schedule and time until exam day. You can study 15 minutes a day on your commute or during breaks and still make measurable progress."
+          }, {
+            q: "How are the flashcards and questions created?",
+            a: "Our content is written by qualified ACCA tutors and graduates, based entirely on ACCA's public syllabus and exam-style logic. Every flashcard, mini-problem, and explanation is original, practical, and updated annually to stay relevant."
+          }, {
+            q: "Do you have a mobile app?",
+            a: "Yes — the web version works perfectly on all mobile devices. You can add it to your home screen for one-tap access, track your streaks, and study anywhere. A native app for iOS and Android is coming soon."
+          }, {
+            q: "Is it really free to start?",
+            a: "Yes. You can start completely free with one ACCA paper to test the planner, flashcards, and analytics. Upgrade only when you're ready to unlock all 13 papers and premium features like streaks, leaderboards, and progress tracking."
+          }, {
+            q: "How does the \"readiness score\" work?",
+            a: "The readiness score combines your XP, completed units, and quiz performance to estimate how prepared you are for your exam. It's a smart, data-driven way to know when you're exam-ready — no more guesswork."
+          }, {
+            q: "What makes Study Buddy different from traditional courses?",
+            a: "Unlike static video courses, Study Buddy keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting."
+          }, {
+            q: "Is my progress and data secure?",
+            a: "Yes. All your data is encrypted and stored securely in the cloud. We never share user information with third parties or use it for marketing without consent."
+          }, {
+            q: "Can my employer or tutor track my progress?",
+            a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default."
+          }, {
+            q: "How can I contact you?",
+            a: "You can reach our team anytime at support@studybuddy.ai. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners."
+          }].map((faq, i) => <AccordionItem key={i} value={`item-${i}`} className="bg-background rounded-xl px-6 shadow-sm">
                 <AccordionTrigger className="text-left font-semibold">{faq.q}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
-              </AccordionItem>
-            ))}
+              </AccordionItem>)}
           </Accordion>
           <div className="text-center mt-12 animate-fade-in">
             <p className="text-xl font-semibold mb-4">Still have questions?</p>
@@ -669,16 +615,21 @@ export default function Landing() {
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">Free resources to supercharge your ACCA prep</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-8 mb-8">
-            {[
-              { title: "How to plan your ACCA studies effectively", desc: "A comprehensive guide to structuring your study schedule" },
-              { title: "Top 10 mistakes ACCA students make", desc: "Learn from others and avoid common pitfalls" },
-              { title: "Ultimate checklist before your exam week", desc: "Everything you need to prepare for exam day" },
-            ].map((resource, i) => (
-              <Card key={i} className="p-6 hover:shadow-lg transition-all cursor-pointer animate-slide-up" style={{ animationDelay: `${i * 0.1}s` }}>
+            {[{
+            title: "How to plan your ACCA studies effectively",
+            desc: "A comprehensive guide to structuring your study schedule"
+          }, {
+            title: "Top 10 mistakes ACCA students make",
+            desc: "Learn from others and avoid common pitfalls"
+          }, {
+            title: "Ultimate checklist before your exam week",
+            desc: "Everything you need to prepare for exam day"
+          }].map((resource, i) => <Card key={i} className="p-6 hover:shadow-lg transition-all cursor-pointer animate-slide-up" style={{
+            animationDelay: `${i * 0.1}s`
+          }}>
                 <h3 className="text-xl font-bold mb-2">{resource.title}</h3>
                 <p className="text-muted-foreground">{resource.desc}</p>
-              </Card>
-            ))}
+              </Card>)}
           </div>
           <div className="text-center">
             <Button variant="outline" className="rounded-xl">
@@ -706,6 +657,5 @@ export default function Landing() {
           </div>
         </div>
       </footer>
-    </div>
-  );
+    </div>;
 }
