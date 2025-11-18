@@ -50,7 +50,7 @@ export default function Landing() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
               <Sparkles className="w-6 h-6 text-primary" />
-              <span className="font-display font-bold text-xl">ACCA Study Buddy</span>
+              <span className="font-display font-bold text-xl">Outcomeo</span>
             </div>
             <div className="hidden md:flex items-center gap-6">
               {["features", "pricing", "faq", "contact", "resources"].map((item) => (
@@ -79,10 +79,10 @@ export default function Landing() {
             <div className="animate-fade-in">
               <Badge className="mb-4 rounded-full">Join 10,000+ aspiring accountants</Badge>
               <h1 className="text-5xl md:text-6xl font-display font-extrabold mb-6 leading-tight">
-                Master your ACCA journey – smarter, faster, gamified
+                Master your exam journey – smarter, faster, gamified
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Plan, study, and track your progress across all 13 ACCA papers with personalized goals, XP, and streaks.
+                Plan, study, and track your progress with personalized goals, XP, and streaks.
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg">

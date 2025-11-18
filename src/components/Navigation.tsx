@@ -72,7 +72,7 @@ export default function Navigation() {
               <GraduationCap className="w-6 h-6 text-white" />
             </div>
             <span className="font-display font-extrabold text-xl hidden sm:block">
-              ACCA Master
+              Outcomeo
             </span>
           </Link>
 
