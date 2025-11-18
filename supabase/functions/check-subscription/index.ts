@@ -12,6 +12,14 @@ const logStep = (step: string, details?: any) => {
   console.log(`[CHECK-SUBSCRIPTION] ${step}${detailsStr}`);
 };
 
+// Product ID mappings for tier detection
+const STRIPE_PRODUCTS = {
+  PRO_MONTHLY: "prod_TMTH1XO11Qbymt",
+  PRO_ANNUAL: "prod_TMTHQA1ZP9vXRz",
+  ELITE_MONTHLY: "prod_elite_monthly_placeholder", // Replace with actual product ID
+  ELITE_ANNUAL: "prod_elite_annual_placeholder", // Replace with actual product ID
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -78,25 +86,50 @@ serve(async (req) => {
     const subscriptions = await stripe.subscriptions.list({
       customer: customerId,
       status: "active",
-      limit: 1,
+      limit: 10, // Get multiple in case user has multiple subscriptions
     });
 
     const hasActiveSub = subscriptions.data.length > 0;
     let productId = null;
     let subscriptionEnd = null;
-    let planType: "free" | "per_paper" | "pro" = "free";
+    let planType: "free" | "per_paper" | "pro" | "elite" = "free";
 
     if (hasActiveSub) {
-      const subscription = subscriptions.data[0];
-      subscriptionEnd = new Date(subscription.current_period_end * 1000).toISOString();
-      productId = subscription.items.data[0].price.product as string;
-      planType = "pro";
-      logStep("Active subscription found", { subscriptionId: subscription.id, endDate: subscriptionEnd, productId });
+      // Find the highest tier subscription
+      for (const subscription of subscriptions.data) {
+        const subProductId = subscription.items.data[0].price.product as string;
+        const subEndDate = new Date(subscription.current_period_end * 1000).toISOString();
+        
+        // Check if it's Elite
+        if (subProductId === STRIPE_PRODUCTS.ELITE_MONTHLY || 
+            subProductId === STRIPE_PRODUCTS.ELITE_ANNUAL) {
+          planType = "elite";
+          productId = subProductId;
+          subscriptionEnd = subEndDate;
+          break; // Elite is highest, no need to check further
+        }
+        
+        // Check if it's Pro
+        if (subProductId === STRIPE_PRODUCTS.PRO_MONTHLY || 
+            subProductId === STRIPE_PRODUCTS.PRO_ANNUAL) {
+          planType = "pro";
+          productId = subProductId;
+          subscriptionEnd = subEndDate;
+          // Continue checking in case there's an Elite subscription
+        }
+      }
+      
+      logStep("Active subscription found", { 
+        subscriptionId: subscriptions.data[0].id, 
+        endDate: subscriptionEnd, 
+        productId,
+        planType 
+      });
     } else {
       logStep("No active subscription found");
     }
-
-    // Get unlocked papers from profile
+    
+    // Check for unlocked papers (per_paper purchases) - moved outside to fix scope
     const { data: profileData } = await supabaseClient
       .from("user_profiles")
       .select("unlocked_papers")
@@ -104,8 +137,7 @@ serve(async (req) => {
       .single();
 
     const unlockedPapers = profileData?.unlocked_papers || [];
-
-    // If user has unlocked papers but no active subscription, they have per_paper plan
+    
     if (!hasActiveSub && unlockedPapers.length > 0) {
       planType = "per_paper";
     }
