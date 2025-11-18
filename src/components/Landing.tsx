@@ -24,6 +24,7 @@ import featureAnalytics from "@/assets/feature-analytics.png";
 import featureGamification from "@/assets/feature-gamification.png";
 import featureSyllabus from "@/assets/feature-syllabus.png";
 import featureResponsive from "@/assets/feature-responsive.png";
+import outcomeoLogo from "@/assets/outcomeo-logo.png";
 
 export default function Landing() {
   const navigate = useNavigate();
@@ -48,9 +49,12 @@ export default function Landing() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${navBg ? "bg-background/95 backdrop-blur-lg shadow-sm" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-primary" />
-              <span className="font-display font-bold text-xl">Outcomeo</span>
+            <div className="flex items-center">
+              <img 
+                src={outcomeoLogo} 
+                alt="Outcomeo" 
+                className="h-10 w-auto object-contain"
+              />
             </div>
             <div className="hidden md:flex items-center gap-6">
               {["features", "pricing", "faq", "contact", "resources"].map((item) => (
