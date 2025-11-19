@@ -30,6 +30,7 @@ import FlashcardsContentNew from "./components/FlashcardsContentNew";
 import Coach from "./pages/Coach";
 import Progress from "./pages/Progress";
 import GuidedTour from "./components/GuidedTour";
+import ResetPassword from "./pages/ResetPassword";
 
 const queryClient = new QueryClient();
 
@@ -44,6 +45,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Landing />} />
           <Route path="/auth" element={<Auth />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
           <Route
             path="/onboarding"
             element={

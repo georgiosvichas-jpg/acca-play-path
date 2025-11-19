@@ -86,7 +86,7 @@ const calculatePasswordStrength = (password: string): PasswordStrength => {
 };
 
 export default function Auth() {
-  const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
+  const [activeTab, setActiveTab] = useState<"signin" | "signup" | "reset">("signin");
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -251,6 +251,42 @@ export default function Auth() {
     }
   };
 
+  const handlePasswordReset = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setErrors({});
+
+    const validation = z.string()
+      .trim()
+      .email("Please enter a valid email address")
+      .max(255, "Email must be less than 255 characters")
+      .safeParse(email);
+
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach((err) => {
+        fieldErrors.email = err.message;
+      });
+      setErrors(fieldErrors);
+      toast.error(fieldErrors.email);
+      return;
+    }
+
+    setLoading(true);
+
+    const { error } = await supabase.auth.resetPasswordForEmail(validation.data, {
+      redirectTo: `${window.location.origin}/reset-password`,
+    });
+
+    if (error) {
+      toast.error(error.message);
+    } else {
+      toast.success("Password reset email sent! Check your inbox.");
+      setActiveTab("signin");
+    }
+
+    setLoading(false);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#F8FBFA] to-[#EAF8F4] relative overflow-hidden">
       {/* Decorative elements */}
@@ -394,6 +430,7 @@ export default function Auth() {
                         </Label>
                         <button
                           type="button"
+                          onClick={() => setActiveTab("reset")}
                           className="text-sm text-[#64748B] hover:text-[#00A67E] transition-colors"
                         >
                           Forgot password?
@@ -630,16 +667,77 @@ export default function Auth() {
                   </form>
                 )}
 
+                {/* Password Reset Form */}
+                {activeTab === "reset" && (
+                  <form onSubmit={handlePasswordReset} className="space-y-5 animate-fade-in">
+                    <div className="text-center mb-6">
+                      <h3 className="text-xl font-semibold text-[#0F172A] mb-2">
+                        Reset Password
+                      </h3>
+                      <p className="text-sm text-[#64748B]">
+                        Enter your email address and we'll send you a link to reset your password.
+                      </p>
+                    </div>
+                    
+                    <div className="space-y-2">
+                      <Label htmlFor="email-reset" className="text-[#0F172A] font-medium">
+                        Email
+                      </Label>
+                      <Input
+                        id="email-reset"
+                        type="email"
+                        placeholder="you@example.com"
+                        value={email}
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setErrors(prev => ({ ...prev, email: "" }));
+                        }}
+                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.email ? "border-red-500" : ""}`}
+                      />
+                      {errors.email && (
+                        <p className="text-sm text-red-500">{errors.email}</p>
+                      )}
+                    </div>
+
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full h-12 bg-[#00A67E] hover:bg-[#009D73] text-white rounded-xl font-semibold transition-all duration-200 hover:scale-[1.03] shadow-md"
+                    >
+                      {loading ? (
+                        <>
+                          <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                          Sending reset link...
+                        </>
+                      ) : (
+                        "Send Reset Link"
+                      )}
+                    </Button>
+
+                    <p className="text-center text-sm text-[#64748B]">
+                      Remember your password?{" "}
+                      <button
+                        type="button"
+                        onClick={() => setActiveTab("signin")}
+                        className="text-[#00A67E] hover:underline font-medium"
+                      >
+                        Sign In
+                      </button>
+                    </p>
+                  </form>
+                )}
+
                 {/* Social Login Section */}
-                <div className="mt-8">
-                  <div className="relative">
-                    <div className="absolute inset-0 flex items-center">
-                      <div className="w-full border-t border-[#E5E7EB]" />
+                {activeTab !== "reset" && (
+                  <div className="mt-8">
+                    <div className="relative">
+                      <div className="absolute inset-0 flex items-center">
+                        <div className="w-full border-t border-[#E5E7EB]" />
+                      </div>
+                      <div className="relative flex justify-center text-sm">
+                        <span className="px-4 bg-white text-[#64748B]">or continue with</span>
+                      </div>
                     </div>
-                    <div className="relative flex justify-center text-sm">
-                      <span className="px-4 bg-white text-[#64748B]">or continue with</span>
-                    </div>
-                  </div>
 
                   <div className="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <Button
@@ -714,7 +812,8 @@ export default function Auth() {
                       )}
                     </Button>
                   </div>
-                </div>
+                  </div>
+                )}
 
                 {/* Trust Indicators */}
                 <div className="mt-8 space-y-3">
