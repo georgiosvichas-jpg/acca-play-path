@@ -2,9 +2,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { usePapers } from "@/hooks/usePapers";
+import { useSubscription } from "@/hooks/useSubscription";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import { Link } from "react-router-dom";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -12,7 +14,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, HelpCircle } from "lucide-react";
+import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, HelpCircle, CreditCard, ExternalLink } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
@@ -59,6 +61,7 @@ export default function Settings() {
   const { user } = useAuth();
   const { profile, updateProfile, loading } = useUserProfile();
   const { papers, loading: papersLoading } = usePapers();
+  const { planType, isSubscribed, subscriptionEnd, openCustomerPortal } = useSubscription();
   const [displayName, setDisplayName] = useState("");
   const [country, setCountry] = useState("");
   const [isOptedOut, setIsOptedOut] = useState(false);
@@ -348,6 +351,63 @@ export default function Settings() {
                       : "N/A"}
                   </span>
                 </div>
+              </CardContent>
+            </Card>
+
+            {/* Subscription Management */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <CreditCard className="w-5 h-5 text-primary" />
+                  Subscription
+                </CardTitle>
+                <CardDescription>
+                  Manage your billing and subscription
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-sm text-muted-foreground">Current Plan</span>
+                  <span className="text-sm font-semibold capitalize">
+                    {planType === "free" && <span className="text-muted-foreground">Free</span>}
+                    {planType === "pro" && <span className="text-primary">Pro</span>}
+                    {planType === "elite" && <span className="bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">Elite</span>}
+                  </span>
+                </div>
+                
+                {isSubscribed && subscriptionEnd && (
+                  <div className="flex justify-between items-center">
+                    <span className="text-sm text-muted-foreground">Renewal Date</span>
+                    <span className="text-sm font-medium">
+                      {new Date(subscriptionEnd).toLocaleDateString()}
+                    </span>
+                  </div>
+                )}
+
+                {planType === "free" ? (
+                  <Button asChild className="w-full">
+                    <Link to="/checkout">
+                      <CreditCard className="w-4 h-4 mr-2" />
+                      Upgrade to Pro
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button 
+                    onClick={openCustomerPortal} 
+                    variant="outline" 
+                    className="w-full"
+                  >
+                    <ExternalLink className="w-4 h-4 mr-2" />
+                    Manage Subscription
+                  </Button>
+                )}
+                
+                <p className="text-xs text-muted-foreground">
+                  {planType === "free" 
+                    ? "Upgrade to unlock unlimited access to all features"
+                    : "Update payment method, view invoices, or cancel subscription"
+                  }
+                </p>
               </CardContent>
             </Card>
 
