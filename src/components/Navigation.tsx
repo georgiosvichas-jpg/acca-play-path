@@ -140,7 +140,7 @@ export default function Navigation() {
                   </DropdownMenuItem>
                 )}
                 
-                {planType === "pro" && (
+                {(planType === "pro" || planType === "elite") && (
                   <DropdownMenuItem onClick={openCustomerPortal}>
                     <Settings className="w-4 h-4 mr-2" />
                     Manage Subscription
