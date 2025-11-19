@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Sparkles, CheckCircle, Lock, Globe, Loader2, Eye, EyeOff } from "lucide-react";
+import { Sparkles, CheckCircle, Lock, Globe, Loader2, Eye, EyeOff, Mail } from "lucide-react";
 import studyDesk from "@/assets/study-desk.png";
 import featureAnalytics from "@/assets/feature-analytics.png";
 import featureFlashcards from "@/assets/feature-flashcards.png";
@@ -96,6 +96,7 @@ export default function Auth() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [showPassword, setShowPassword] = useState(false);
   const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [verificationEmailSent, setVerificationEmailSent] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>({
     score: 0,
     label: "",
@@ -145,11 +146,11 @@ export default function Auth() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email: validation.data.email,
       password: validation.data.password,
       options: {
-        emailRedirectTo: `${window.location.origin}/onboarding`,
+        emailRedirectTo: `${window.location.origin}/verify-email`,
         data: {
           full_name: validation.data.fullName,
         },
@@ -158,30 +159,40 @@ export default function Auth() {
 
     if (error) {
       toast.error(error.message);
+      setLoading(false);
     } else {
-      toast.success("Account created! Signing you in...");
-      // Create user profile
-      const { data: { user } } = await supabase.auth.getUser();
-      if (user) {
-        await supabase.from("user_profiles").insert({
-          user_id: user.id,
-          total_xp: 0,
-          study_streak: 0,
+      // Check if email confirmation is required
+      if (data.user && !data.user.email_confirmed_at) {
+        setVerificationEmailSent(true);
+        toast.success("Verification email sent! Please check your inbox.");
+        setLoading(false);
+      } else {
+        // Auto-confirmed - create profile and sign in
+        toast.success("Account created! Signing you in...");
+        
+        // Create user profile
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          await supabase.from("user_profiles").insert({
+            user_id: user.id,
+            total_xp: 0,
+            study_streak: 0,
+          });
+        }
+        
+        // Auto sign in and redirect to onboarding
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: validation.data.email,
+          password: validation.data.password,
         });
-      }
-      
-      // Auto sign in and redirect to onboarding
-      const { error: signInError } = await supabase.auth.signInWithPassword({
-        email: validation.data.email,
-        password: validation.data.password,
-      });
-      
-      if (!signInError) {
-        navigate("/onboarding");
+        
+        if (!signInError) {
+          navigate("/onboarding");
+        }
+        
+        setLoading(false);
       }
     }
-
-    setLoading(false);
   };
 
   const handleSignIn = async (e: React.FormEvent) => {
@@ -208,28 +219,43 @@ export default function Auth() {
 
     setLoading(true);
 
-    const { error } = await supabase.auth.signInWithPassword({
+    const { data, error } = await supabase.auth.signInWithPassword({
       email: validation.data.email,
       password: validation.data.password,
     });
 
     if (error) {
-      toast.error(error.message);
-    } else {
-      toast.success("Signed in successfully!");
-      
-      // Check if user has completed onboarding
-      const { data: profile } = await supabase
-        .from("user_profiles")
-        .select("selected_paper")
-        .single();
-      
-      // Redirect to onboarding if user hasn't selected a paper yet
-      if (!profile?.selected_paper) {
-        navigate("/onboarding");
+      // Check if error is due to unverified email
+      if (error.message.includes("Email not confirmed")) {
+        toast.error("Please verify your email address before signing in. Check your inbox for the verification link.");
       } else {
-        navigate("/dashboard");
+        toast.error(error.message);
       }
+      setLoading(false);
+      return;
+    }
+
+    // Check if email is verified
+    if (data.user && !data.user.email_confirmed_at) {
+      toast.error("Please verify your email address before signing in. Check your inbox for the verification link.");
+      await supabase.auth.signOut();
+      setLoading(false);
+      return;
+    }
+
+    toast.success("Signed in successfully!");
+    
+    // Check if user has completed onboarding
+    const { data: profile } = await supabase
+      .from("user_profiles")
+      .select("selected_paper")
+      .single();
+    
+    // Redirect to onboarding if user hasn't selected a paper yet
+    if (!profile?.selected_paper) {
+      navigate("/onboarding");
+    } else {
+      navigate("/dashboard");
     }
 
     setLoading(false);
@@ -493,7 +519,7 @@ export default function Auth() {
                 )}
 
                 {/* Sign Up Form */}
-                {activeTab === "signup" && (
+                {activeTab === "signup" && !verificationEmailSent && (
                   <form onSubmit={handleSignUp} className="space-y-5 animate-fade-in">
                     <div className="space-y-2">
                       <Label htmlFor="fullname-signup" className="text-[#0F172A] font-medium">
@@ -665,6 +691,66 @@ export default function Auth() {
                       </button>
                     </p>
                   </form>
+                )}
+
+                {/* Email Verification Sent */}
+                {activeTab === "signup" && verificationEmailSent && (
+                  <div className="space-y-5 animate-fade-in text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 bg-[#00A67E]/10 rounded-full mb-4">
+                      <Mail className="w-8 h-8 text-[#00A67E]" />
+                    </div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-[#0F172A] mb-2">
+                        Verify Your Email
+                      </h3>
+                      <p className="text-[#64748B] mb-6">
+                        We've sent a verification link to <span className="font-semibold text-[#0F172A]">{email}</span>
+                      </p>
+                    </div>
+                    
+                    <div className="bg-[#F8FBFA] border border-[#00A67E]/20 rounded-xl p-4 text-left">
+                      <p className="text-sm text-[#64748B] mb-3">
+                        <strong className="text-[#0F172A]">What's next?</strong>
+                      </p>
+                      <ol className="text-sm text-[#64748B] space-y-2 list-decimal list-inside">
+                        <li>Check your email inbox (and spam folder)</li>
+                        <li>Click the verification link in the email</li>
+                        <li>Return here to sign in and start studying!</li>
+                      </ol>
+                    </div>
+
+                    <Button
+                      onClick={async () => {
+                        const { error } = await supabase.auth.resend({
+                          type: 'signup',
+                          email: email,
+                        });
+                        if (error) {
+                          toast.error(error.message);
+                        } else {
+                          toast.success("Verification email resent!");
+                        }
+                      }}
+                      variant="outline"
+                      className="w-full h-12 border-[#00A67E] text-[#00A67E] hover:bg-[#00A67E]/5 rounded-xl"
+                    >
+                      Resend Verification Email
+                    </Button>
+
+                    <p className="text-center text-sm text-[#64748B]">
+                      Already verified?{" "}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveTab("signin");
+                          setVerificationEmailSent(false);
+                        }}
+                        className="text-[#00A67E] hover:underline font-medium"
+                      >
+                        Sign In
+                      </button>
+                    </p>
+                  </div>
                 )}
 
                 {/* Password Reset Form */}
