@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
-import { Sparkles, CheckCircle, Lock, Globe, Loader2 } from "lucide-react";
+import { Sparkles, CheckCircle, Lock, Globe, Loader2, Eye, EyeOff } from "lucide-react";
 import studyDesk from "@/assets/study-desk.png";
 import featureAnalytics from "@/assets/feature-analytics.png";
 import featureFlashcards from "@/assets/feature-flashcards.png";
@@ -94,6 +94,8 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>({
     score: 0,
     label: "",
@@ -397,17 +399,31 @@ export default function Auth() {
                           Forgot password?
                         </button>
                       </div>
-                      <Input
-                        id="password-signin"
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => {
-                          setPassword(e.target.value);
-                          setErrors(prev => ({ ...prev, password: "" }));
-                        }}
-                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.password ? "border-red-500" : ""}`}
-                      />
+                      <div className="relative">
+                        <Input
+                          id="password-signin"
+                          type={showPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => {
+                            setPassword(e.target.value);
+                            setErrors(prev => ({ ...prev, password: "" }));
+                          }}
+                          className={`h-12 pr-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.password ? "border-red-500" : ""}`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#00A67E] transition-colors"
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
+                        </button>
+                      </div>
                       {errors.password && (
                         <p className="text-sm text-red-500">{errors.password}</p>
                       )}
@@ -484,19 +500,33 @@ export default function Auth() {
                       <Label htmlFor="password-signup" className="text-[#0F172A] font-medium">
                         Password
                       </Label>
-                      <Input
-                        id="password-signup"
-                        type="password"
-                        placeholder="••••••••"
-                        value={password}
-                        onChange={(e) => {
-                          const newPassword = e.target.value;
-                          setPassword(newPassword);
-                          setPasswordStrength(calculatePasswordStrength(newPassword));
-                          setErrors(prev => ({ ...prev, password: "" }));
-                        }}
-                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.password ? "border-red-500" : ""}`}
-                      />
+                      <div className="relative">
+                        <Input
+                          id="password-signup"
+                          type={showSignupPassword ? "text" : "password"}
+                          placeholder="••••••••"
+                          value={password}
+                          onChange={(e) => {
+                            const newPassword = e.target.value;
+                            setPassword(newPassword);
+                            setPasswordStrength(calculatePasswordStrength(newPassword));
+                            setErrors(prev => ({ ...prev, password: "" }));
+                          }}
+                          className={`h-12 pr-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.password ? "border-red-500" : ""}`}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowSignupPassword(!showSignupPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#64748B] hover:text-[#00A67E] transition-colors"
+                          aria-label={showSignupPassword ? "Hide password" : "Show password"}
+                        >
+                          {showSignupPassword ? (
+                            <EyeOff className="w-5 h-5" />
+                          ) : (
+                            <Eye className="w-5 h-5" />
+                          )}
+                        </button>
+                      </div>
                       {errors.password && (
                         <p className="text-sm text-red-500">{errors.password}</p>
                       )}
