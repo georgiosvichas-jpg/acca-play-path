@@ -95,7 +95,7 @@ export default function Pricing() {
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
           {/* Free Tier */}
-          <Card className="relative p-8 border-2 hover:shadow-lg hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}>
+          <Card className="group relative p-8 border-2 hover:shadow-lg hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}>
             <div className="space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -127,23 +127,23 @@ export default function Pricing() {
                 <p className="text-sm font-semibold">What's included:</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm">10% of each question bank</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm">10 daily flashcards</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm">1 timed mock exam/week</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm">Basic analytics</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-muted-foreground shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm">1-week study plan preview</span>
                   </li>
                 </ul>
@@ -152,7 +152,7 @@ export default function Pricing() {
           </Card>
 
           {/* Pro Tier - Featured */}
-          <Card className="relative p-8 border-2 border-primary shadow-xl hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] hover:scale-110 md:hover:scale-[1.15] hover:-translate-y-2 transition-all duration-300 scale-105 md:scale-110 animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "backwards" }}>
+          <Card className="group relative p-8 border-2 border-primary shadow-xl hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] hover:scale-110 md:hover:scale-[1.15] hover:-translate-y-2 transition-all duration-300 scale-105 md:scale-110 animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "backwards" }}>
             <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-4 py-1">
               <Star className="h-3 w-3 mr-1" />
               Most Popular
@@ -207,35 +207,35 @@ export default function Pricing() {
                 <p className="text-sm font-semibold">Everything in Free, plus:</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Full question banks (100%)</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Unlimited flashcards</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">4 timed mocks/week</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">AI explanations</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Full analytics + heatmaps</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Unlimited study planner</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Spaced repetition engine</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-primary shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">AI study path generator</span>
                   </li>
                 </ul>
@@ -244,7 +244,7 @@ export default function Pricing() {
           </Card>
 
           {/* Elite Tier */}
-          <Card className="relative p-8 border-2 border-accent/50 hover:shadow-[0_20px_60px_-15px_hsl(var(--accent)/0.4)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}>
+          <Card className="group relative p-8 border-2 border-accent/50 hover:shadow-[0_20px_60px_-15px_hsl(var(--accent)/0.4)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}>
             <Badge variant="secondary" className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent px-4 py-1">
               <Crown className="h-3 w-3 mr-1" />
               Premium
@@ -300,43 +300,43 @@ export default function Pricing() {
                 <p className="text-sm font-semibold">Everything in Pro, plus:</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Unlimited timed mocks</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Unlimited AI tutor chat</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Advanced spaced repetition</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Predictive analytics</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Pass probability tracker</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Performance benchmarking</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Exam-week mode</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Multi-paper dashboard</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">AI Copilot with dynamic plans</span>
                   </li>
                   <li className="flex items-start gap-3">
-                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5" />
+                    <Check className="h-5 w-5 text-accent shrink-0 mt-0.5 transition-transform duration-300 group-hover:scale-125" />
                     <span className="text-sm font-medium">Early access to new features</span>
                   </li>
                 </ul>
