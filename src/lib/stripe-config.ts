@@ -1,19 +1,19 @@
 // Stripe configuration with 3-tier pricing
 export const STRIPE_PRICES = {
-  // Pro tier - EXISTING PRODUCTS (need to create new ones at correct prices)
-  PRO_MONTHLY: "price_1SPkKpC3L0h223NunPhQLBAk", // Current: €19/month - CREATE NEW at €9.99/month
-  PRO_ANNUAL: "price_1SPkLHC3L0h223NuHhJaYMh8", // Current: €180/year - CREATE NEW at €69/year
+  // Pro tier - €9.99/month or €69/year
+  PRO_MONTHLY: "price_1SVBw6C00m6oIeSrvbUSmQbK",
+  PRO_ANNUAL: "price_1SVByEC00m6oIeSrPKNL8gal",
   
-  // Elite tier - CREATE THESE IN STRIPE DASHBOARD
-  ELITE_MONTHLY: "price_elite_monthly_placeholder", // €14.99/month - CREATE IN STRIPE
-  ELITE_ANNUAL: "price_elite_annual_placeholder", // €99/year - CREATE IN STRIPE
+  // Elite tier - €14.99/month or €99/year
+  ELITE_MONTHLY: "price_1SVC7YC00m6oIeSrdyMATzGJ",
+  ELITE_ANNUAL: "price_1SVC4XC00m6oIeSryt2whiQ2",
 } as const;
 
 export const STRIPE_PRODUCTS = {
-  PRO_MONTHLY: "prod_TMTH1XO11Qbymt",
-  PRO_ANNUAL: "prod_TMTHQA1ZP9vXRz",
-  ELITE_MONTHLY: "prod_elite_monthly_placeholder", // CREATE IN STRIPE
-  ELITE_ANNUAL: "prod_elite_annual_placeholder", // CREATE IN STRIPE
+  PRO_MONTHLY: "prod_TMTH1XO11Qbymt", // TODO: Update with new Outcomeo Pro product ID
+  PRO_ANNUAL: "prod_TMTHQA1ZP9vXRz", // TODO: Update with new Outcomeo Pro product ID
+  ELITE_MONTHLY: "prod_elite_monthly_placeholder", // TODO: Update with Outcomeo Elite product ID
+  ELITE_ANNUAL: "prod_elite_annual_placeholder", // TODO: Update with Outcomeo Elite product ID
 } as const;
 
 export type PlanType = "free" | "pro" | "elite";
