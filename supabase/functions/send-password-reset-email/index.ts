@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
           <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Reset your StudyBuddy password</title>
+            <title>Reset your Outcomeo password</title>
           </head>
           <body style="margin: 0; padding: 0; background-color: #f6f9fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
             <table role="presentation" style="width: 100%; border-collapse: collapse;">
@@ -55,7 +55,7 @@ Deno.serve(async (req) => {
                     <tr>
                       <td style="padding: 40px 40px 30px 40px;">
                         <h1 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 600; color: #1a1a1a;">Reset your password 🔐</h1>
-                        <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 24px; color: #4a5568;">We received a request to reset your StudyBuddy password. Click the button below to set a new password.</p>
+                        <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 24px; color: #4a5568;">We received a request to reset your Outcomeo password. Click the button below to set a new password.</p>
                         <table role="presentation" style="margin: 30px 0;">
                           <tr>
                             <td style="border-radius: 6px; background-color: #6366f1;">
@@ -74,7 +74,7 @@ Deno.serve(async (req) => {
                       </td>
                     </tr>
                   </table>
-                  <p style="margin: 20px 0 0 0; font-size: 12px; color: #a0aec0;">© ${new Date().getFullYear()} StudyBuddy. All rights reserved.</p>
+                  <p style="margin: 20px 0 0 0; font-size: 12px; color: #a0aec0;">© ${new Date().getFullYear()} Outcomeo. All rights reserved.</p>
                 </td>
               </tr>
             </table>
@@ -83,9 +83,9 @@ Deno.serve(async (req) => {
       `
 
       const { error } = await resend.emails.send({
-        from: 'StudyBuddy <onboarding@resend.dev>',
+        from: 'Outcomeo <onboarding@resend.dev>',
         to: [user.email],
-        subject: 'Reset your StudyBuddy password',
+        subject: 'Reset your Outcomeo password',
         html,
       })
 

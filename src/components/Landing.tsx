@@ -564,7 +564,7 @@ export default function Landing() {
             a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default."
           }, {
             q: "How can I contact you?",
-            a: "You can reach our team anytime at support@studybuddy.ai. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners."
+            a: "You can reach our team anytime at support@outcomeo.ai. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners."
           }].map((faq, i) => <AccordionItem key={i} value={`item-${i}`} className="bg-background rounded-xl px-6 shadow-sm">
                 <AccordionTrigger className="text-left font-semibold">{faq.q}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
@@ -573,7 +573,7 @@ export default function Landing() {
           <div className="text-center mt-12 animate-fade-in">
             <p className="text-xl font-semibold mb-4">Still have questions?</p>
             <p className="text-muted-foreground mb-6">
-              Chat with us or start your free plan today — and see how Study Buddy can transform your ACCA prep.
+              Chat with us or start your free plan today — and see how Outcomeo can transform your ACCA prep.
             </p>
             <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl">
               Start Free Today
@@ -589,13 +589,13 @@ export default function Landing() {
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-8">Let's connect</h2>
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-              <a href="mailto:support@studybuddy.ai" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">
+              <a href="mailto:support@outcomeo.ai" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">
                 <Mail className="w-5 h-5" />
-                support@studybuddy.ai
+                support@outcomeo.ai
               </a>
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">
                 <Linkedin className="w-5 h-5" />
-                Study Buddy ACCA
+                Outcomeo ACCA
               </a>
             </div>
           </div>

@@ -106,7 +106,7 @@ export default function CoachChat() {
   const [messages, setMessages] = useState<Message[]>([
     {
       role: "assistant",
-      content: "Hi! I'm StudyBuddy, your AI study coach. Ready to start your session today?",
+      content: "Hi! I'm your AI study coach from Outcomeo. Ready to start your session today?",
     },
   ]);
   const [input, setInput] = useState("");

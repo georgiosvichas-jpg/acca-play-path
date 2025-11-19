@@ -45,7 +45,7 @@ Deno.serve(async (req) => {
           <head>
             <meta charset="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Verify your StudyBuddy account</title>
+            <title>Verify your Outcomeo account</title>
           </head>
           <body style="margin: 0; padding: 0; background-color: #f6f9fc; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;">
             <table role="presentation" style="width: 100%; border-collapse: collapse;">
@@ -54,7 +54,7 @@ Deno.serve(async (req) => {
                   <table role="presentation" style="width: 600px; border-collapse: collapse; background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.05);">
                     <tr>
                       <td style="padding: 40px 40px 30px 40px;">
-                        <h1 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 600; color: #1a1a1a;">Welcome to StudyBuddy! 🎓</h1>
+                        <h1 style="margin: 0 0 20px 0; font-size: 24px; font-weight: 600; color: #1a1a1a;">Welcome to Outcomeo! 🎓</h1>
                         <p style="margin: 0 0 20px 0; font-size: 16px; line-height: 24px; color: #4a5568;">Thanks for signing up! Please verify your email address to get started with your ACCA exam preparation journey.</p>
                         <table role="presentation" style="margin: 30px 0;">
                           <tr>
@@ -69,11 +69,11 @@ Deno.serve(async (req) => {
                     </tr>
                     <tr>
                       <td style="padding: 20px 40px; background-color: #f7fafc; border-top: 1px solid #e2e8f0; border-radius: 0 0 8px 8px;">
-                        <p style="margin: 0; font-size: 12px; line-height: 18px; color: #718096;">If you didn't create a StudyBuddy account, you can safely ignore this email.</p>
+                        <p style="margin: 0; font-size: 12px; line-height: 18px; color: #718096;">If you didn't create an Outcomeo account, you can safely ignore this email.</p>
                       </td>
                     </tr>
                   </table>
-                  <p style="margin: 20px 0 0 0; font-size: 12px; color: #a0aec0;">© ${new Date().getFullYear()} StudyBuddy. All rights reserved.</p>
+                  <p style="margin: 20px 0 0 0; font-size: 12px; color: #a0aec0;">© ${new Date().getFullYear()} Outcomeo. All rights reserved.</p>
                 </td>
               </tr>
             </table>
@@ -82,9 +82,9 @@ Deno.serve(async (req) => {
       `
 
       const { error } = await resend.emails.send({
-        from: 'StudyBuddy <onboarding@resend.dev>',
+        from: 'Outcomeo <onboarding@resend.dev>',
         to: [user.email],
-        subject: 'Verify your StudyBuddy account',
+        subject: 'Verify your Outcomeo account',
         html,
       })
 

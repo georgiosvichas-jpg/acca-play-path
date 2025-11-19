@@ -6,7 +6,7 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-const SYSTEM_PROMPT = `You are StudyBuddy, an AI assistant helping ACCA students prepare for their exams.
+const SYSTEM_PROMPT = `You are an AI assistant from Outcomeo, helping ACCA students prepare for their exams.
 
 YOUR IDENTITY:
 - You're encouraging, knowledgeable, and understand the pressure of professional exams
