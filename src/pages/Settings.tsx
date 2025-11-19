@@ -16,6 +16,17 @@ import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, HelpCircle } f
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
+import { z } from "zod";
+
+const settingsSchema = z.object({
+  displayName: z.string()
+    .max(100, "Display name must be less than 100 characters")
+    .optional()
+    .transform(val => val?.trim() || null),
+  country: z.string().optional(),
+  selectedPapers: z.array(z.string())
+    .min(1, "Please select at least one paper")
+});
 
 const COUNTRIES = [
   "United States",
@@ -53,6 +64,7 @@ export default function Settings() {
   const [isOptedOut, setIsOptedOut] = useState(false);
   const [selectedPapers, setSelectedPapers] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (profile) {
@@ -72,19 +84,35 @@ export default function Settings() {
   };
 
   const handleSave = async () => {
-    if (selectedPapers.length === 0) {
-      toast.error("Please select at least one paper");
+    setErrors({});
+
+    // Validate inputs
+    const validation = settingsSchema.safeParse({
+      displayName,
+      country,
+      selectedPapers
+    });
+
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach(err => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      toast.error(Object.values(fieldErrors)[0]);
       return;
     }
     
     setSaving(true);
     try {
       await updateProfile({
-        display_name: displayName.trim() || null,
-        country: country || null,
+        display_name: validation.data.displayName,
+        country: validation.data.country || null,
         is_opted_out_of_leaderboard: isOptedOut,
-        selected_papers: selectedPapers,
-        selected_paper: selectedPapers[0], // Keep for backward compatibility
+        selected_papers: validation.data.selectedPapers,
+        selected_paper: validation.data.selectedPapers[0], // Keep for backward compatibility
       });
       toast.success("Settings saved successfully");
     } catch (error) {
@@ -170,12 +198,18 @@ export default function Settings() {
                               ? "border-primary bg-primary/5"
                               : "border-muted hover:border-primary/50"
                           )}
-                          onClick={() => togglePaper(paper.paper_code)}
+                          onClick={() => {
+                            togglePaper(paper.paper_code);
+                            setErrors(prev => ({ ...prev, selectedPapers: "" }));
+                          }}
                         >
                           <Checkbox
                             id={paper.paper_code}
                             checked={selectedPapers.includes(paper.paper_code)}
-                            onCheckedChange={() => togglePaper(paper.paper_code)}
+                            onCheckedChange={() => {
+                              togglePaper(paper.paper_code);
+                              setErrors(prev => ({ ...prev, selectedPapers: "" }));
+                            }}
                             className="mt-1"
                           />
                           <div className="flex-1">
@@ -200,6 +234,9 @@ export default function Settings() {
                         </div>
                       ))}
                     </div>
+                  )}
+                  {errors.selectedPapers && (
+                    <p className="text-sm text-red-500">{errors.selectedPapers}</p>
                   )}
                   <p className="text-xs text-muted-foreground mt-2">
                     Your flashcards and study plan will be based on these papers
@@ -226,9 +263,16 @@ export default function Settings() {
                     id="displayName"
                     placeholder="Enter your display name"
                     value={displayName}
-                    onChange={(e) => setDisplayName(e.target.value)}
-                    maxLength={50}
+                    onChange={(e) => {
+                      setDisplayName(e.target.value);
+                      setErrors(prev => ({ ...prev, displayName: "" }));
+                    }}
+                    maxLength={100}
+                    className={errors.displayName ? "border-red-500" : ""}
                   />
+                  {errors.displayName && (
+                    <p className="text-sm text-red-500">{errors.displayName}</p>
+                  )}
                   <p className="text-xs text-muted-foreground">
                     Leave blank to show as "Learner-{user?.id.slice(0, 4)}"
                   </p>
