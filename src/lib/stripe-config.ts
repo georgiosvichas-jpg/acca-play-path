@@ -10,10 +10,10 @@ export const STRIPE_PRICES = {
 } as const;
 
 export const STRIPE_PRODUCTS = {
-  PRO_MONTHLY: "prod_TMTH1XO11Qbymt", // TODO: Update with new Outcomeo Pro product ID
-  PRO_ANNUAL: "prod_TMTHQA1ZP9vXRz", // TODO: Update with new Outcomeo Pro product ID
-  ELITE_MONTHLY: "prod_elite_monthly_placeholder", // TODO: Update with Outcomeo Elite product ID
-  ELITE_ANNUAL: "prod_elite_annual_placeholder", // TODO: Update with Outcomeo Elite product ID
+  PRO_MONTHLY: "prod_TS68zu6h4qaE7j",
+  PRO_ANNUAL: "prod_TS6AfVuTENSF9j",
+  ELITE_MONTHLY: "prod_TS6FrtFjCMj5IJ",
+  ELITE_ANNUAL: "prod_TS6HMg03CT5CuM",
 } as const;
 
 export type PlanType = "free" | "pro" | "elite";
