@@ -12,23 +12,40 @@ serve(async (req) => {
   }
 
   try {
-    const url = new URL(req.url);
-    const userId = url.searchParams.get("userId");
-
-    if (!userId) {
+    // Verify user from JWT token
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: "userId query parameter is required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "Missing authorization header" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = user.id;
+
+    // Use service role key for database operations
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     // Get user profile
-    const { data: user, error } = await supabaseClient
+    const { data: userProfile, error } = await supabaseAdmin
       .from("sb_users")
       .select("*")
       .eq("id", userId)
@@ -36,8 +53,8 @@ serve(async (req) => {
 
     if (error) throw error;
 
-    const paper = user.exam_paper || "BT";
-    const weeklyHours = user.weekly_study_hours || 5;
+    const paper = userProfile.exam_paper || "BT";
+    const weeklyHours = userProfile.weekly_study_hours || 5;
 
     // Simple rule-based plan
     const dayOfWeek = new Date().getDay();
