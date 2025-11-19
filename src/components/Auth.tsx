@@ -11,6 +11,34 @@ import { Sparkles, CheckCircle, Lock, Globe, Loader2 } from "lucide-react";
 import studyDesk from "@/assets/study-desk.png";
 import featureAnalytics from "@/assets/feature-analytics.png";
 import featureFlashcards from "@/assets/feature-flashcards.png";
+import { z } from "zod";
+
+const signUpSchema = z.object({
+  fullName: z.string()
+    .trim()
+    .min(1, "Full name is required")
+    .max(100, "Full name must be less than 100 characters"),
+  email: z.string()
+    .trim()
+    .email("Please enter a valid email address")
+    .max(255, "Email must be less than 255 characters"),
+  password: z.string()
+    .min(8, "Password must be at least 8 characters")
+    .max(100, "Password must be less than 100 characters"),
+  agreeToTerms: z.boolean().refine(val => val === true, {
+    message: "You must agree to the Terms and Privacy Policy"
+  })
+});
+
+const signInSchema = z.object({
+  email: z.string()
+    .trim()
+    .email("Please enter a valid email address")
+    .max(255, "Email must be less than 255 characters"),
+  password: z.string()
+    .min(1, "Password is required")
+    .max(100, "Password must be less than 100 characters")
+});
 
 export default function Auth() {
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
@@ -20,6 +48,7 @@ export default function Auth() {
   const [agreeToTerms, setAgreeToTerms] = useState(false);
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<string | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -33,21 +62,37 @@ export default function Auth() {
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
     
-    if (!agreeToTerms) {
-      toast.error("Please agree to the Terms and Privacy Policy");
+    // Validate inputs
+    const validation = signUpSchema.safeParse({
+      fullName,
+      email,
+      password,
+      agreeToTerms
+    });
+
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach(err => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      toast.error(Object.values(fieldErrors)[0]);
       return;
     }
 
     setLoading(true);
 
     const { error } = await supabase.auth.signUp({
-      email,
-      password,
+      email: validation.data.email,
+      password: validation.data.password,
       options: {
         emailRedirectTo: `${window.location.origin}/onboarding`,
         data: {
-          full_name: fullName,
+          full_name: validation.data.fullName,
         },
       },
     });
@@ -68,8 +113,8 @@ export default function Auth() {
       
       // Auto sign in and redirect to onboarding
       const { error: signInError } = await supabase.auth.signInWithPassword({
-        email,
-        password,
+        email: validation.data.email,
+        password: validation.data.password,
       });
       
       if (!signInError) {
@@ -82,11 +127,31 @@ export default function Auth() {
 
   const handleSignIn = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrors({});
+
+    // Validate inputs
+    const validation = signInSchema.safeParse({
+      email,
+      password
+    });
+
+    if (!validation.success) {
+      const fieldErrors: Record<string, string> = {};
+      validation.error.errors.forEach(err => {
+        if (err.path[0]) {
+          fieldErrors[err.path[0] as string] = err.message;
+        }
+      });
+      setErrors(fieldErrors);
+      toast.error(Object.values(fieldErrors)[0]);
+      return;
+    }
+
     setLoading(true);
 
     const { error } = await supabase.auth.signInWithPassword({
-      email,
-      password,
+      email: validation.data.email,
+      password: validation.data.password,
     });
 
     if (error) {
@@ -253,10 +318,15 @@ export default function Auth() {
                         type="email"
                         placeholder="you@example.com"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E]"
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setErrors(prev => ({ ...prev, email: "" }));
+                        }}
+                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.email ? "border-red-500" : ""}`}
                       />
+                      {errors.email && (
+                        <p className="text-sm text-red-500">{errors.email}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <div className="flex items-center justify-between">
@@ -275,10 +345,15 @@ export default function Auth() {
                         type="password"
                         placeholder="••••••••"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        className="h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E]"
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          setErrors(prev => ({ ...prev, password: "" }));
+                        }}
+                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.password ? "border-red-500" : ""}`}
                       />
+                      {errors.password && (
+                        <p className="text-sm text-red-500">{errors.password}</p>
+                      )}
                     </div>
                     <Button
                       type="submit"
@@ -319,10 +394,15 @@ export default function Auth() {
                         type="text"
                         placeholder="John Doe"
                         value={fullName}
-                        onChange={(e) => setFullName(e.target.value)}
-                        required
-                        className="h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E]"
+                        onChange={(e) => {
+                          setFullName(e.target.value);
+                          setErrors(prev => ({ ...prev, fullName: "" }));
+                        }}
+                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.fullName ? "border-red-500" : ""}`}
                       />
+                      {errors.fullName && (
+                        <p className="text-sm text-red-500">{errors.fullName}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="email-signup" className="text-[#0F172A] font-medium">
@@ -333,10 +413,15 @@ export default function Auth() {
                         type="email"
                         placeholder="you@example.com"
                         value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                        className="h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E]"
+                        onChange={(e) => {
+                          setEmail(e.target.value);
+                          setErrors(prev => ({ ...prev, email: "" }));
+                        }}
+                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.email ? "border-red-500" : ""}`}
                       />
+                      {errors.email && (
+                        <p className="text-sm text-red-500">{errors.email}</p>
+                      )}
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="password-signup" className="text-[#0F172A] font-medium">
@@ -347,18 +432,26 @@ export default function Auth() {
                         type="password"
                         placeholder="••••••••"
                         value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                        minLength={6}
-                        className="h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E]"
+                        onChange={(e) => {
+                          setPassword(e.target.value);
+                          setErrors(prev => ({ ...prev, password: "" }));
+                        }}
+                        className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.password ? "border-red-500" : ""}`}
                       />
+                      {errors.password && (
+                        <p className="text-sm text-red-500">{errors.password}</p>
+                      )}
+                      <p className="text-xs text-[#64748B]">Minimum 8 characters</p>
                     </div>
                     <div className="flex items-start gap-3">
                       <Checkbox
                         id="terms"
                         checked={agreeToTerms}
-                        onCheckedChange={(checked) => setAgreeToTerms(checked as boolean)}
-                        className="mt-1 border-[#E5E7EB] data-[state=checked]:bg-[#00A67E] data-[state=checked]:border-[#00A67E]"
+                        onCheckedChange={(checked) => {
+                          setAgreeToTerms(checked as boolean);
+                          setErrors(prev => ({ ...prev, agreeToTerms: "" }));
+                        }}
+                        className={`mt-1 border-[#E5E7EB] data-[state=checked]:bg-[#00A67E] data-[state=checked]:border-[#00A67E] ${errors.agreeToTerms ? "border-red-500" : ""}`}
                       />
                       <label
                         htmlFor="terms"
@@ -374,6 +467,9 @@ export default function Auth() {
                         </a>
                       </label>
                     </div>
+                    {errors.agreeToTerms && (
+                      <p className="text-sm text-red-500 -mt-3">{errors.agreeToTerms}</p>
+                    )}
                     <Button
                       type="submit"
                       disabled={loading}
