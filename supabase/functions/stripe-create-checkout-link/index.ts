@@ -74,7 +74,7 @@ serve(async (req) => {
           price_data: {
             currency: "usd",
             product_data: {
-              name: "StudyBuddy Premium",
+              name: "Outcomeo Premium",
               description: "Unlimited access to all ACCA exam features",
             },
             unit_amount: 2900, // $29.00
