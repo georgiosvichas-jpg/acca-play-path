@@ -14,11 +14,26 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, HelpCircle, CreditCard, ExternalLink } from "lucide-react";
+import { Settings as SettingsIcon, User, Globe, Shield, BookOpen, HelpCircle, CreditCard, ExternalLink, Download, Receipt } from "lucide-react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
+import { supabase } from "@/integrations/supabase/client";
+
+interface Invoice {
+  id: string;
+  number: string | null;
+  amount: number;
+  currency: string;
+  status: string | null;
+  paid: boolean;
+  created: number;
+  period_start: number;
+  period_end: number;
+  invoice_pdf: string | null;
+  hosted_invoice_url: string | null;
+}
 
 const settingsSchema = z.object({
   displayName: z.string()
@@ -68,6 +83,8 @@ export default function Settings() {
   const [selectedPapers, setSelectedPapers] = useState<string[]>([]);
   const [saving, setSaving] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [invoices, setInvoices] = useState<Invoice[]>([]);
+  const [loadingInvoices, setLoadingInvoices] = useState(false);
 
   useEffect(() => {
     if (profile) {
@@ -77,6 +94,27 @@ export default function Settings() {
       setSelectedPapers(profile.selected_papers || []);
     }
   }, [profile]);
+
+  useEffect(() => {
+    const fetchInvoices = async () => {
+      if (!isSubscribed) return;
+      
+      setLoadingInvoices(true);
+      try {
+        const { data, error } = await supabase.functions.invoke("billing-history");
+        
+        if (error) throw error;
+        
+        setInvoices(data.invoices || []);
+      } catch (error) {
+        console.error("Error fetching billing history:", error);
+      } finally {
+        setLoadingInvoices(false);
+      }
+    };
+
+    fetchInvoices();
+  }, [isSubscribed]);
 
   const togglePaper = (paperCode: string) => {
     setSelectedPapers(prev =>
@@ -410,6 +448,101 @@ export default function Settings() {
                 </p>
               </CardContent>
             </Card>
+
+            {/* Billing History */}
+            {isSubscribed && (
+              <Card>
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Receipt className="w-5 h-5 text-primary" />
+                    Billing History
+                  </CardTitle>
+                  <CardDescription>
+                    View and download your past invoices
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  {loadingInvoices ? (
+                    <div className="text-sm text-muted-foreground py-4 text-center">
+                      Loading invoices...
+                    </div>
+                  ) : invoices.length === 0 ? (
+                    <div className="text-sm text-muted-foreground py-4 text-center">
+                      No invoices found
+                    </div>
+                  ) : (
+                    <div className="space-y-3">
+                      {invoices.map((invoice) => (
+                        <div
+                          key={invoice.id}
+                          className="flex items-center justify-between p-4 border rounded-lg hover:bg-muted/50 transition-colors"
+                        >
+                          <div className="space-y-1">
+                            <div className="flex items-center gap-2">
+                              <span className="font-medium">
+                                {invoice.number || invoice.id}
+                              </span>
+                              <span
+                                className={cn(
+                                  "text-xs px-2 py-0.5 rounded-full",
+                                  invoice.paid
+                                    ? "bg-green-100 text-green-700"
+                                    : "bg-yellow-100 text-yellow-700"
+                                )}
+                              >
+                                {invoice.paid ? "Paid" : invoice.status}
+                              </span>
+                            </div>
+                            <div className="text-sm text-muted-foreground">
+                              {new Date(invoice.created * 1000).toLocaleDateString()} •{" "}
+                              {invoice.currency} {invoice.amount.toFixed(2)}
+                            </div>
+                            <div className="text-xs text-muted-foreground">
+                              Period: {new Date(invoice.period_start * 1000).toLocaleDateString()} -{" "}
+                              {new Date(invoice.period_end * 1000).toLocaleDateString()}
+                            </div>
+                          </div>
+                          <div className="flex gap-2">
+                            {invoice.invoice_pdf && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                asChild
+                              >
+                                <a
+                                  href={invoice.invoice_pdf}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <Download className="w-4 h-4 mr-1" />
+                                  PDF
+                                </a>
+                              </Button>
+                            )}
+                            {invoice.hosted_invoice_url && (
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                asChild
+                              >
+                                <a
+                                  href={invoice.hosted_invoice_url}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <ExternalLink className="w-4 h-4 mr-1" />
+                                  View
+                                </a>
+                              </Button>
+                            )}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </CardContent>
+              </Card>
+            )}
 
             {/* Help & Support */}
             <Card>
