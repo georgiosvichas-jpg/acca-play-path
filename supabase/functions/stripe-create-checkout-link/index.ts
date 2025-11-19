@@ -13,22 +13,40 @@ serve(async (req) => {
   }
 
   try {
-    const { userId } = await req.json();
-
-    if (!userId) {
+    // Verify user from JWT token
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ error: "userId is required" }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+        JSON.stringify({ error: "Missing authorization header" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
     const supabaseClient = createClient(
       Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: "Unauthorized" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const userId = user.id;
+
+    // Use service role key for database operations
+    const supabaseAdmin = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
     // Get user info
-    const { data: user, error } = await supabaseClient
+    const { data: userProfile, error } = await supabaseAdmin
       .from("sb_users")
       .select("*")
       .eq("id", userId)
@@ -41,7 +59,7 @@ serve(async (req) => {
     });
 
     // Check if customer exists
-    const customers = await stripe.customers.list({ email: user.email, limit: 1 });
+    const customers = await stripe.customers.list({ email: userProfile.email, limit: 1 });
     let customerId;
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
@@ -50,7 +68,7 @@ serve(async (req) => {
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
       customer: customerId,
-      customer_email: customerId ? undefined : user.email,
+      customer_email: customerId ? undefined : userProfile.email,
       line_items: [
         {
           price_data: {
