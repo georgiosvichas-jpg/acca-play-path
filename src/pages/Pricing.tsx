@@ -95,7 +95,7 @@ export default function Pricing() {
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
           {/* Free Tier */}
-          <Card className="relative p-8 border-2 hover:shadow-lg transition-all animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}>
+          <Card className="relative p-8 border-2 hover:shadow-lg hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}>
             <div className="space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export default function Pricing() {
           </Card>
 
           {/* Pro Tier - Featured */}
-          <Card className="relative p-8 border-2 border-primary shadow-xl hover:shadow-2xl transition-all scale-105 md:scale-110 animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "backwards" }}>
+          <Card className="relative p-8 border-2 border-primary shadow-xl hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] hover:scale-110 md:hover:scale-[1.15] hover:-translate-y-2 transition-all duration-300 scale-105 md:scale-110 animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "backwards" }}>
             <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-4 py-1">
               <Star className="h-3 w-3 mr-1" />
               Most Popular
@@ -244,7 +244,7 @@ export default function Pricing() {
           </Card>
 
           {/* Elite Tier */}
-          <Card className="relative p-8 border-2 border-accent/50 hover:shadow-lg transition-all animate-fade-in" style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}>
+          <Card className="relative p-8 border-2 border-accent/50 hover:shadow-[0_20px_60px_-15px_hsl(var(--accent)/0.4)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}>
             <Badge variant="secondary" className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent px-4 py-1">
               <Crown className="h-3 w-3 mr-1" />
               Premium
