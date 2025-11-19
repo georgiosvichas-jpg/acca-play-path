@@ -53,7 +53,7 @@ export default function Pricing() {
       
       <main className="flex-1 container mx-auto px-4 py-16">
         {/* Header */}
-        <div className="text-center mb-16 space-y-4">
+        <div className="text-center mb-16 space-y-4 animate-fade-in">
           <Badge variant="secondary" className="mb-2">
             <Star className="h-3 w-3 mr-1" />
             Pricing Plans
@@ -67,7 +67,7 @@ export default function Pricing() {
           </p>
 
           {/* Billing Toggle */}
-          <div className="flex items-center justify-center gap-4 pt-8">
+          <div className="flex items-center justify-center gap-4 pt-8 animate-fade-in" style={{ animationDelay: "0.1s", animationFillMode: "backwards" }}>
             <Label 
               htmlFor="billing-switch" 
               className={`text-lg font-medium transition-colors ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}
@@ -95,7 +95,7 @@ export default function Pricing() {
         {/* Pricing Cards */}
         <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
           {/* Free Tier */}
-          <Card className="relative p-8 border-2 hover:shadow-lg transition-shadow">
+          <Card className="relative p-8 border-2 hover:shadow-lg transition-all animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}>
             <div className="space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
@@ -152,7 +152,7 @@ export default function Pricing() {
           </Card>
 
           {/* Pro Tier - Featured */}
-          <Card className="relative p-8 border-2 border-primary shadow-xl hover:shadow-2xl transition-shadow scale-105 md:scale-110">
+          <Card className="relative p-8 border-2 border-primary shadow-xl hover:shadow-2xl transition-all scale-105 md:scale-110 animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "backwards" }}>
             <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-4 py-1">
               <Star className="h-3 w-3 mr-1" />
               Most Popular
@@ -244,7 +244,7 @@ export default function Pricing() {
           </Card>
 
           {/* Elite Tier */}
-          <Card className="relative p-8 border-2 border-accent/50 hover:shadow-lg transition-shadow">
+          <Card className="relative p-8 border-2 border-accent/50 hover:shadow-lg transition-all animate-fade-in" style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}>
             <Badge variant="secondary" className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent px-4 py-1">
               <Crown className="h-3 w-3 mr-1" />
               Premium
@@ -346,7 +346,7 @@ export default function Pricing() {
         </div>
 
         {/* FAQ or Trust Indicators */}
-        <div className="mt-20 text-center space-y-4">
+        <div className="mt-20 text-center space-y-4 animate-fade-in" style={{ animationDelay: "0.5s", animationFillMode: "backwards" }}>
           <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground">
             <div className="flex items-center gap-2">
               <Check className="h-4 w-4 text-primary" />
