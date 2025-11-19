@@ -40,6 +40,51 @@ const signInSchema = z.object({
     .max(100, "Password must be less than 100 characters")
 });
 
+type PasswordStrength = {
+  score: number;
+  label: string;
+  color: string;
+  requirements: {
+    minLength: boolean;
+    hasUpperCase: boolean;
+    hasLowerCase: boolean;
+    hasNumber: boolean;
+    hasSpecial: boolean;
+  };
+};
+
+const calculatePasswordStrength = (password: string): PasswordStrength => {
+  const requirements = {
+    minLength: password.length >= 8,
+    hasUpperCase: /[A-Z]/.test(password),
+    hasLowerCase: /[a-z]/.test(password),
+    hasNumber: /[0-9]/.test(password),
+    hasSpecial: /[!@#$%^&*(),.?":{}|<>]/.test(password),
+  };
+
+  const metRequirements = Object.values(requirements).filter(Boolean).length;
+  
+  let score = 0;
+  let label = "Weak";
+  let color = "bg-red-500";
+
+  if (metRequirements >= 5) {
+    score = 3;
+    label = "Strong";
+    color = "bg-green-500";
+  } else if (metRequirements >= 3) {
+    score = 2;
+    label = "Medium";
+    color = "bg-yellow-500";
+  } else if (password.length > 0) {
+    score = 1;
+    label = "Weak";
+    color = "bg-red-500";
+  }
+
+  return { score, label, color, requirements };
+};
+
 export default function Auth() {
   const [activeTab, setActiveTab] = useState<"signin" | "signup">("signin");
   const [fullName, setFullName] = useState("");
@@ -49,6 +94,18 @@ export default function Auth() {
   const [loading, setLoading] = useState(false);
   const [socialLoading, setSocialLoading] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [passwordStrength, setPasswordStrength] = useState<PasswordStrength>({
+    score: 0,
+    label: "",
+    color: "",
+    requirements: {
+      minLength: false,
+      hasUpperCase: false,
+      hasLowerCase: false,
+      hasNumber: false,
+      hasSpecial: false,
+    }
+  });
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -433,7 +490,9 @@ export default function Auth() {
                         placeholder="••••••••"
                         value={password}
                         onChange={(e) => {
-                          setPassword(e.target.value);
+                          const newPassword = e.target.value;
+                          setPassword(newPassword);
+                          setPasswordStrength(calculatePasswordStrength(newPassword));
                           setErrors(prev => ({ ...prev, password: "" }));
                         }}
                         className={`h-12 border-[#E5E7EB] focus:border-[#00A67E] focus:ring-[#00A67E] ${errors.password ? "border-red-500" : ""}`}
@@ -441,7 +500,51 @@ export default function Auth() {
                       {errors.password && (
                         <p className="text-sm text-red-500">{errors.password}</p>
                       )}
-                      <p className="text-xs text-[#64748B]">Minimum 8 characters</p>
+                      
+                      {/* Password Strength Indicator */}
+                      {password && (
+                        <div className="space-y-2 mt-3">
+                          <div className="flex items-center justify-between">
+                            <span className="text-xs text-[#64748B]">Password strength:</span>
+                            <span className={`text-xs font-medium ${
+                              passwordStrength.score === 3 ? "text-green-600" :
+                              passwordStrength.score === 2 ? "text-yellow-600" :
+                              "text-red-600"
+                            }`}>
+                              {passwordStrength.label}
+                            </span>
+                          </div>
+                          <div className="flex gap-1">
+                            {[1, 2, 3].map((level) => (
+                              <div
+                                key={level}
+                                className={`h-1.5 flex-1 rounded-full transition-all ${
+                                  level <= passwordStrength.score
+                                    ? passwordStrength.color
+                                    : "bg-gray-200"
+                                }`}
+                              />
+                            ))}
+                          </div>
+                          <div className="space-y-1 text-xs">
+                            <div className={`flex items-center gap-1 ${passwordStrength.requirements.minLength ? "text-green-600" : "text-[#64748B]"}`}>
+                              {passwordStrength.requirements.minLength ? "✓" : "○"} At least 8 characters
+                            </div>
+                            <div className={`flex items-center gap-1 ${passwordStrength.requirements.hasUpperCase ? "text-green-600" : "text-[#64748B]"}`}>
+                              {passwordStrength.requirements.hasUpperCase ? "✓" : "○"} One uppercase letter
+                            </div>
+                            <div className={`flex items-center gap-1 ${passwordStrength.requirements.hasLowerCase ? "text-green-600" : "text-[#64748B]"}`}>
+                              {passwordStrength.requirements.hasLowerCase ? "✓" : "○"} One lowercase letter
+                            </div>
+                            <div className={`flex items-center gap-1 ${passwordStrength.requirements.hasNumber ? "text-green-600" : "text-[#64748B]"}`}>
+                              {passwordStrength.requirements.hasNumber ? "✓" : "○"} One number
+                            </div>
+                            <div className={`flex items-center gap-1 ${passwordStrength.requirements.hasSpecial ? "text-green-600" : "text-[#64748B]"}`}>
+                              {passwordStrength.requirements.hasSpecial ? "✓" : "○"} One special character (!@#$%^&*)
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
                     <div className="flex items-start gap-3">
                       <Checkbox
