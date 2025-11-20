@@ -103,9 +103,48 @@ export default function CoachWidget() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState<any>(null);
+  const [messagesRemaining, setMessagesRemaining] = useState<number | null>(null);
+  const [dailyLimit, setDailyLimit] = useState<number | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const isPremium = planType === "pro" || planType === "elite";
+  const isUnlimited = planType === "elite";
+
+  // Fetch initial usage stats
+  useEffect(() => {
+    const fetchUsageStats = async () => {
+      if (!user) return;
+      
+      try {
+        const { data: profile } = await supabase
+          .from("user_profiles")
+          .select("daily_coach_messages_used, last_coach_reset_date, plan_type")
+          .eq("user_id", user.id)
+          .single();
+
+        if (profile) {
+          const today = new Date().toISOString().split('T')[0];
+          const resetDate = profile.last_coach_reset_date;
+          const used = resetDate === today ? (profile.daily_coach_messages_used || 0) : 0;
+          
+          const limits: Record<string, number> = {
+            free: 5,
+            pro: 20,
+            elite: -1,
+            per_paper: 20,
+          };
+          
+          const limit = limits[profile.plan_type || 'free'] || 5;
+          setDailyLimit(limit);
+          setMessagesRemaining(limit === -1 ? -1 : Math.max(0, limit - used));
+        }
+      } catch (error) {
+        console.error("Failed to fetch usage stats:", error);
+      }
+    };
+
+    fetchUsageStats();
+  }, [user, isOpen]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -143,19 +182,38 @@ export default function CoachWidget() {
         setCurrentQuestion(data.question);
       }
 
+      // Update usage info
+      if (typeof data.messagesRemaining === 'number') {
+        setMessagesRemaining(data.messagesRemaining);
+      }
+      if (typeof data.dailyLimit === 'number') {
+        setDailyLimit(data.dailyLimit);
+      }
+
       if (data.limitReached) {
         toast({
           title: "Daily Limit Reached",
           description: "You've reached your daily question limit. Upgrade for unlimited access!",
         });
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Chat error:", error);
-      toast({
-        title: "Error",
-        description: "Failed to send message. Please try again.",
-        variant: "destructive",
-      });
+      
+      // Check if it's a 429 limit error
+      if (error?.status === 429 || error?.message?.includes("limit")) {
+        const errorData = error?.data || {};
+        toast({
+          title: "Daily Limit Reached",
+          description: errorData.message || "You've reached your daily AI coach message limit. Upgrade for more!",
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to send message. Please try again.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
@@ -207,14 +265,24 @@ export default function CoachWidget() {
           <MessageCircle className="h-5 w-5" />
           <div>
             <h3 className="font-semibold text-sm">AI Study Coach</h3>
-            <div
-              className={`text-xs px-2 py-0.5 rounded-full inline-flex items-center ${
-                isPremium
-                  ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-white"
-                  : "bg-secondary text-secondary-foreground"
-              }`}
-            >
-              {isPremium ? <><Crown className="w-3 h-3 mr-1" />Premium</> : "Free"}
+            <div className="flex items-center gap-2">
+              <div
+                className={`text-xs px-2 py-0.5 rounded-full inline-flex items-center ${
+                  isPremium
+                    ? "bg-gradient-to-r from-yellow-400 to-orange-500 text-white"
+                    : "bg-secondary text-secondary-foreground"
+                }`}
+              >
+                {isPremium ? <><Crown className="w-3 h-3 mr-1" />Premium</> : "Free"}
+              </div>
+              {!isUnlimited && messagesRemaining !== null && dailyLimit !== null && (
+                <span className="text-xs text-muted-foreground">
+                  {messagesRemaining}/{dailyLimit} left
+                </span>
+              )}
+              {isUnlimited && (
+                <span className="text-xs text-muted-foreground">∞ unlimited</span>
+              )}
             </div>
           </div>
         </div>

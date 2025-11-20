@@ -106,23 +106,60 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    // Get user profile and check limits
+    // Get user profile and check AI coach message limits
     const { data: profile } = await supabaseAdmin
       .from("user_profiles")
-      .select("*, daily_questions_used, last_question_reset_date, plan_type, exam_date")
+      .select("*")
       .eq("user_id", userId)
       .single();
 
-    const isPremium = profile?.plan_type === "pro" || profile?.plan_type === "per_paper";
+    const planType = profile?.plan_type || "free";
     const today = new Date().toISOString().split('T')[0];
-    const resetDate = profile?.last_question_reset_date;
+    const resetDate = profile?.last_coach_reset_date;
     
-    let dailyUsed = profile?.daily_questions_used || 0;
+    // Reset counter if it's a new day
+    let dailyCoachMessages = profile?.daily_coach_messages_used || 0;
     if (resetDate !== today) {
-      dailyUsed = 0;
+      dailyCoachMessages = 0;
+      await supabaseAdmin
+        .from("user_profiles")
+        .update({ 
+          daily_coach_messages_used: 0, 
+          last_coach_reset_date: today 
+        })
+        .eq("user_id", userId);
     }
 
-    const limitReached = !isPremium && dailyUsed >= 25;
+    // Define limits per plan: Free=5, Pro=20, Elite=unlimited
+    const MESSAGE_LIMITS: Record<string, number> = {
+      free: 5,
+      pro: 20,
+      elite: -1, // unlimited
+      per_paper: 20, // same as pro
+    };
+
+    const dailyLimit = MESSAGE_LIMITS[planType] || 5;
+    const limitReached = dailyLimit !== -1 && dailyCoachMessages >= dailyLimit;
+    const messagesRemaining = dailyLimit === -1 ? -1 : Math.max(0, dailyLimit - dailyCoachMessages);
+
+    // Block if limit reached
+    if (limitReached) {
+      return new Response(
+        JSON.stringify({ 
+          error: "Daily message limit reached",
+          message: `You've reached your daily limit of ${dailyLimit} AI coach messages. ${
+            planType === "free" 
+              ? "Upgrade to Pro for 20 messages/day or Elite for unlimited!"
+              : "Upgrade to Elite for unlimited messages!"
+          }`,
+          limitReached: true,
+          messagesRemaining: 0,
+          dailyLimit,
+          planType
+        }),
+        { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
 
     // Get recent sessions for context
     const { data: recentSessions } = await supabaseAdmin
@@ -136,8 +173,8 @@ serve(async (req) => {
     const contextMessage = `User context:
 - Paper: ${profile?.selected_paper || "BT"}
 - Exam date: ${profile?.exam_date || "Not set"}
-- Plan type: ${isPremium ? "Premium" : "Free"}
-- Daily questions used: ${dailyUsed}/25
+- Plan type: ${planType}
+- AI Coach messages today: ${dailyCoachMessages}/${dailyLimit === -1 ? "unlimited" : dailyLimit}
 - Recent performance: ${recentSessions?.map(s => 
   `${s.session_type}: ${s.correct_answers}/${s.total_questions} correct`
 ).join(", ") || "No recent sessions"}
@@ -187,11 +224,10 @@ ${mode ? `\nCurrent mode: ${mode}` : ""}`;
       console.log("Could not parse structured response, using plain message");
     }
 
-    // If AI wants to give a question and user hasn't hit limit
-    if (parsedResponse.question && !limitReached) {
-      // Fetch a random question from database
+    // If AI wants to give a question, fetch from database
+    if (parsedResponse.question) {
       const { data: questions } = await supabaseAdmin
-        .from("questions")
+        .from("sb_questions")
         .select("*")
         .eq("paper", profile?.selected_paper || "BT")
         .limit(10);
@@ -202,9 +238,20 @@ ${mode ? `\nCurrent mode: ${mode}` : ""}`;
       }
     }
 
-    parsedResponse.limitReached = limitReached;
+    // Increment message counter
+    await supabaseAdmin
+      .from("user_profiles")
+      .update({ 
+        daily_coach_messages_used: dailyCoachMessages + 1 
+      })
+      .eq("user_id", userId);
 
-    console.log(`Chat response for user ${userId}: ${validatedMessage.substring(0, 50)}...`);
+    // Add usage info to response
+    parsedResponse.messagesRemaining = messagesRemaining - 1; // -1 because we just used one
+    parsedResponse.dailyLimit = dailyLimit;
+    parsedResponse.planType = planType;
+
+    console.log(`Chat response for user ${userId} (${dailyCoachMessages + 1}/${dailyLimit}): ${validatedMessage.substring(0, 50)}...`);
 
     return new Response(JSON.stringify(parsedResponse), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
