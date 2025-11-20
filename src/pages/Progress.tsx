@@ -1,5 +1,4 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Navigation from "@/components/Navigation";
 import ProgressPage from "@/components/ProgressPage";
 import Footer from "@/components/Footer";
 

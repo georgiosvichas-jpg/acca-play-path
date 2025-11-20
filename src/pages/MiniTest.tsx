@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import Navigation from "@/components/Navigation";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -156,7 +155,6 @@ export default function MiniTest() {
   if (!user) {
     return (
       <>
-        <Navigation />
         <div className="min-h-screen bg-background pt-20 px-4">
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
@@ -189,7 +187,6 @@ export default function MiniTest() {
 
     return (
       <>
-        <Navigation />
         <div className="min-h-screen bg-background pt-20 px-4 pb-8">
           <div className="max-w-4xl mx-auto space-y-6">
             <Card>
@@ -256,7 +253,6 @@ export default function MiniTest() {
   if (!testStarted) {
     return (
       <>
-        <Navigation />
         <div className="min-h-screen bg-background pt-20 px-4">
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
@@ -289,7 +285,6 @@ export default function MiniTest() {
 
   return (
     <>
-      <Navigation />
       <div className="min-h-screen bg-background pt-20 px-4 pb-8">
         <div className="max-w-4xl mx-auto space-y-6">
           <Card>

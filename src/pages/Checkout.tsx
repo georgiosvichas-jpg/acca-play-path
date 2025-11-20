@@ -8,7 +8,6 @@ import { Check, Sparkles, TrendingUp } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { STRIPE_PRICES } from "@/lib/stripe-config";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export default function Checkout() {

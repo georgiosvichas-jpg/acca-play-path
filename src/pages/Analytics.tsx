@@ -1,5 +1,4 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { BarChart3, TrendingUp, Target } from "lucide-react";
@@ -12,7 +11,6 @@ export default function Analytics() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-background">
-        <Navigation />
         <main className="container mx-auto px-4 py-8">
           <div className="mb-6">
             <h1 className="text-3xl font-bold">Analytics & Insights</h1>

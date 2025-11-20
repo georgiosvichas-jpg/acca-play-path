@@ -1,5 +1,4 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
-import Navigation from "@/components/Navigation";
 import CoachChat from "@/components/CoachChat";
 import Footer from "@/components/Footer";
 
