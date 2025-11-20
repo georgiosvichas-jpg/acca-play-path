@@ -602,12 +602,12 @@ export default function Landing() {
               <div className="flex items-center gap-2 text-lg text-muted-foreground">
                 <MessageCircle className="w-5 h-5" />
                 
-                <Badge variant="secondary" className="ml-1 text-xs">Coming Soon</Badge>
+                <Badge variant="secondary" className="ml-1 text-xs bg-blue-100">Coming Soon</Badge>
               </div>
               <div className="flex items-center gap-2 text-lg text-muted-foreground">
                 <Linkedin className="w-5 h-5" />
                 
-                <Badge variant="secondary" className="ml-1 text-xs">Coming Soon</Badge>
+                <Badge variant="secondary" className="ml-1 text-xs bg-blue-100">Coming Soon</Badge>
               </div>
             </div>
           </div>
