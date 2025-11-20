@@ -20,6 +20,13 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
+import { BTQuestionImporter } from "@/components/BTQuestionImporter";
+import { FAQuestionImporter } from "@/components/FAQuestionImporter";
+import { FRQuestionImporter } from "@/components/FRQuestionImporter";
+import { LWQuestionImporter } from "@/components/LWQuestionImporter";
+import { MAQuestionImporter } from "@/components/MAQuestionImporter";
+import PMQuestionImporter from "@/components/PMQuestionImporter";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Invoice {
   id: string;
@@ -505,7 +512,7 @@ export default function Settings() {
                           <div className="flex gap-2">
                             {invoice.invoice_pdf && (
                               <Button
-                                variant="outline"
+                                variant="ghost"
                                 size="sm"
                                 asChild
                               >
@@ -514,8 +521,7 @@ export default function Settings() {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <Download className="w-4 h-4 mr-1" />
-                                  PDF
+                                  <Download className="w-4 h-4" />
                                 </a>
                               </Button>
                             )}
@@ -530,8 +536,7 @@ export default function Settings() {
                                   target="_blank"
                                   rel="noopener noreferrer"
                                 >
-                                  <ExternalLink className="w-4 h-4 mr-1" />
-                                  View
+                                  View Invoice
                                 </a>
                               </Button>
                             )}
@@ -543,6 +548,49 @@ export default function Settings() {
                 </CardContent>
               </Card>
             )}
+
+            {/* Data Management - Question Import */}
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <Download className="w-5 h-5 text-primary" />
+                  Import Question Banks
+                </CardTitle>
+                <CardDescription>
+                  Import questions for practice quizzes, mock exams, and spaced repetition
+                </CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Tabs defaultValue="BT">
+                  <TabsList className="grid w-full grid-cols-6">
+                    <TabsTrigger value="BT">BT</TabsTrigger>
+                    <TabsTrigger value="MA">MA</TabsTrigger>
+                    <TabsTrigger value="FA">FA</TabsTrigger>
+                    <TabsTrigger value="LW">LW</TabsTrigger>
+                    <TabsTrigger value="FR">FR</TabsTrigger>
+                    <TabsTrigger value="PM">PM</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value="BT" className="mt-4">
+                    <BTQuestionImporter />
+                  </TabsContent>
+                  <TabsContent value="MA" className="mt-4">
+                    <MAQuestionImporter />
+                  </TabsContent>
+                  <TabsContent value="FA" className="mt-4">
+                    <FAQuestionImporter />
+                  </TabsContent>
+                  <TabsContent value="LW" className="mt-4">
+                    <LWQuestionImporter />
+                  </TabsContent>
+                  <TabsContent value="FR" className="mt-4">
+                    <FRQuestionImporter />
+                  </TabsContent>
+                  <TabsContent value="PM" className="mt-4">
+                    <PMQuestionImporter />
+                  </TabsContent>
+                </Tabs>
+              </CardContent>
+            </Card>
 
             {/* Help & Support */}
             <Card>
