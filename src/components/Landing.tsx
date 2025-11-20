@@ -666,8 +666,9 @@ export default function Landing() {
             </div>
             <p className="text-sm text-muted-foreground">Copyright © ACCA Outcomeo 2025</p>
             <p className="text-xs text-muted-foreground max-w-2xl mx-auto">
-              ACCA is a registered trademark of the Association of Chartered Certified Accountants.
-              Outcomeo is an independent product inspired by the official syllabus.
+              ACCA is a registered trademark of the Association of Chartered Certified Accountants. 
+              Outcomeo is an independent product and is not affiliated with, sponsored by, or endorsed by ACCA. 
+              Our content is original and simply aligned with the public ACCA syllabus.
             </p>
           </div>
         </div>
