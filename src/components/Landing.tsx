@@ -643,25 +643,32 @@ export default function Landing() {
           <div className="grid md:grid-cols-3 gap-8 mb-8">
             {[{
             title: "How to plan your ACCA studies effectively",
-            desc: "A comprehensive guide to structuring your study schedule"
+            desc: "A comprehensive guide to structuring your study schedule",
+            link: "/blog/planning-studies"
           }, {
             title: "Top 10 mistakes ACCA students make",
-            desc: "Learn from others and avoid common pitfalls"
+            desc: "Learn from others and avoid common pitfalls",
+            link: "/blog/common-mistakes"
           }, {
             title: "Ultimate checklist before your exam week",
-            desc: "Everything you need to prepare for exam day"
-          }].map((resource, i) => <Card key={i} className="p-6 hover:shadow-lg transition-all cursor-pointer animate-slide-up" style={{
+            desc: "Everything you need to prepare for exam day",
+            link: "/blog/exam-checklist"
+          }].map((resource, i) => <Link key={i} to={resource.link}>
+                <Card className="p-6 hover:shadow-lg transition-all cursor-pointer animate-slide-up h-full" style={{
             animationDelay: `${i * 0.1}s`
           }}>
-                <h3 className="text-xl font-bold mb-2">{resource.title}</h3>
-                <p className="text-muted-foreground">{resource.desc}</p>
-              </Card>)}
+                  <h3 className="text-xl font-bold mb-2">{resource.title}</h3>
+                  <p className="text-muted-foreground">{resource.desc}</p>
+                </Card>
+              </Link>)}
           </div>
           <div className="text-center">
-            <Button variant="outline" className="rounded-xl">
-              View all resources
-              <ArrowRight className="ml-2 h-4 w-4" />
-            </Button>
+            <Link to="/resources">
+              <Button variant="outline" className="rounded-xl">
+                View all resources
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            </Link>
           </div>
         </div>
       </section>
