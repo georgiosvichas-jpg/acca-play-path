@@ -54,31 +54,27 @@ export default function Landing() {
       </nav>
 
       {/* Hero Section */}
-      <section className="pt-32 pb-20 px-4 md:px-8 relative overflow-hidden">
+      <section className="pt-32 pb-20 px-4 md:px-8 relative overflow-hidden bg-cover bg-center bg-no-repeat" style={{ backgroundImage: `url(${heroObjects})` }}>
+        <div className="absolute inset-0 bg-background/90" />
         <div className="absolute top-20 left-10 w-16 h-16 rounded-full bg-secondary/20 animate-float" />
         <div className="absolute bottom-32 right-20 w-24 h-24 rounded-full bg-primary/10 animate-bounce-soft" />
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="animate-fade-in">
-              <Badge className="mb-4 rounded-full">Join 10,000+ aspiring accountants</Badge>
-              <h1 className="text-5xl md:text-6xl font-display font-extrabold mb-6 leading-tight">
-                Master your ACCA exam journey – smarter, faster, gamified
-              </h1>
-              <p className="text-xl text-muted-foreground mb-8">
-                Daily micro-practice, adaptive difficulty, real-exam style questions and personalised coaching that builds mastery one step at a time                  
-              </p>
-              <div className="flex flex-wrap gap-4">
-                <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg">
-                  Start for free
-                  <ArrowRight className="ml-2 h-5 w-5" />
-                </Button>
-                <Button size="lg" variant="outline" onClick={() => scrollToSection("features")} className="rounded-xl">
-                  See how it works
-                </Button>
-              </div>
-            </div>
-            <div className="animate-slide-up">
-              <img src={heroObjects} alt="ACCA Study Tools" className="w-full animate-float" />
+        <div className="max-w-7xl mx-auto relative z-10">
+          <div className="max-w-3xl animate-fade-in">
+            <Badge className="mb-4 rounded-full">Join 10,000+ aspiring accountants</Badge>
+            <h1 className="text-5xl md:text-6xl font-display font-extrabold mb-6 leading-tight">
+              Master your ACCA exam journey – smarter, faster, gamified
+            </h1>
+            <p className="text-xl text-muted-foreground mb-8">
+              Daily micro-practice, adaptive difficulty, real-exam style questions and personalised coaching that builds mastery one step at a time                  
+            </p>
+            <div className="flex flex-wrap gap-4">
+              <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg">
+                Start for free
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button size="lg" variant="outline" onClick={() => scrollToSection("features")} className="rounded-xl">
+                See how it works
+              </Button>
             </div>
           </div>
         </div>
