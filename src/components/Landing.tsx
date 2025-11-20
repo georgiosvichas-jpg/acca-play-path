@@ -345,7 +345,7 @@ export default function Landing() {
           {/* Pricing Cards */}
           <div className="grid md:grid-cols-3 gap-6 mb-12 items-stretch">
             {/* Card 1 - Free */}
-            <Card className="relative bg-white border-[#E5E7EB] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
+            <Card className="relative bg-white border-[#E5E7EB] rounded-[24px] p-8 flex flex-col h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
                   <h3 className="text-2xl font-bold text-[#0F172A]" style={{
@@ -393,7 +393,7 @@ export default function Landing() {
             </Card>
 
             {/* Card 2 - Pro (Most Popular) */}
-            <Card className="relative rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] animate-slide-up overflow-hidden" style={{
+            <Card className="relative rounded-[24px] p-8 flex flex-col h-full transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] animate-slide-up overflow-hidden" style={{
             animationDelay: "0.1s",
             background: "linear-gradient(135deg, #00A67E 0%, #009D73 100%)"
           }}>
@@ -456,7 +456,7 @@ export default function Landing() {
             {/* Card 3 - Elite */}
             <Card style={{
             animationDelay: "0.2s"
-          }} className="relative border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up bg-primary-foreground">
+          }} className="relative border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col h-full transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up bg-primary-foreground">
               <div className="flex items-center justify-center gap-2 mb-4">
                 
                 <Badge className="bg-[#9333EA]/10 text-[#9333EA] border-none text-xs px-4 py-1.5 font-semibold min-w-[120px] justify-center">
