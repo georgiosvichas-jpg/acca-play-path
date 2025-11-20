@@ -43,7 +43,6 @@ export default function Checkout() {
 
   return (
     <>
-      <Navigation />
       <div className="min-h-screen p-4 md:p-8">
         <div className="max-w-5xl mx-auto">
           {/* Header */}

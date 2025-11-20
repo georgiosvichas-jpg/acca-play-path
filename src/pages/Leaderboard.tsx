@@ -51,8 +51,6 @@ export default function Leaderboard() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-        <Navigation />
-
         <main className="container mx-auto px-4 py-8 mt-16 max-w-7xl">
           {/* Header */}
           <div className="text-center mb-8">

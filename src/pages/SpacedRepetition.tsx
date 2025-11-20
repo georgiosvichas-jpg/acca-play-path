@@ -153,7 +153,6 @@ export default function SpacedRepetition() {
 
     return (
       <>
-        <Navigation />
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Card>
@@ -201,7 +200,6 @@ export default function SpacedRepetition() {
 
     return (
       <>
-        <Navigation />
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Card>
@@ -285,7 +283,6 @@ export default function SpacedRepetition() {
 
   return (
     <>
-      <Navigation />
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
         <div className="container mx-auto px-4 py-8 max-w-4xl">
           <div className="space-y-6">

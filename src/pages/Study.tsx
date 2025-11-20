@@ -11,7 +11,6 @@ export default function Study() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-background">
-        <Navigation />
         <main className="container mx-auto px-4 py-8">
           <div className="mb-6">
             <h1 className="text-3xl font-bold">Study Hub</h1>
