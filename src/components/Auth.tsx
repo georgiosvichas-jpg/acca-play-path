@@ -399,7 +399,7 @@ export default function Auth() {
                       <Sparkles className="w-6 h-6 text-[#00A67E]" />
                     </div>
                   </div>
-                  <h1 className="text-2xl font-bold text-[#0F172A]">ACCA Study Buddy</h1>
+                  <h1 className="text-2xl font-bold text-[#0F172A]">ACCA Outcomeo</h1>
                   <p className="text-[#64748B] text-sm mt-2">Your gamified study companion</p>
                 </div>
 

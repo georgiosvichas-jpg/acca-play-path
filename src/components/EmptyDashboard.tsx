@@ -153,7 +153,7 @@ export default function EmptyDashboard() {
       <Dialog open={showFeaturesModal} onOpenChange={setShowFeaturesModal}>
         <DialogContent className="max-w-2xl">
           <DialogHeader>
-            <DialogTitle className="text-2xl">Study Buddy Features</DialogTitle>
+            <DialogTitle className="text-2xl">Outcomeo Features</DialogTitle>
             <DialogDescription className="text-base pt-2">
               Everything you need to master your ACCA exams
             </DialogDescription>

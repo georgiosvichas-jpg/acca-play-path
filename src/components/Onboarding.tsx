@@ -128,7 +128,7 @@ export default function Onboarding() {
             </div>
 
             <h1 className="text-3xl font-bold text-[#0F172A] mb-4">
-              Welcome to Study Buddy
+              Welcome to Outcomeo
             </h1>
 
             <p className="text-base text-[#475569] mb-8 leading-relaxed">

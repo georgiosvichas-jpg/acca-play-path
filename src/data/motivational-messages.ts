@@ -251,7 +251,7 @@ export const motivationalMessages: MotivationalMessage[] = [
   },
   {
     category: "reminder",
-    message: "Momentum is calling — open Study Buddy and start small.",
+    message: "Momentum is calling — open Outcomeo and start small.",
     trigger: "inactive_5days",
     tone: "energetic",
   },

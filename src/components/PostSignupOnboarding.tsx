@@ -128,7 +128,7 @@ export default function PostSignupOnboarding() {
               </div>
             </div>
             <h1 className="text-4xl md:text-5xl font-bold mb-4 text-[#0F172A]">
-              Welcome to Study Buddy 🎓
+              Welcome to Outcomeo 🎓
             </h1>
             <p className="text-lg text-[#475569] mb-8 max-w-md mx-auto">
               Let's set up your personal ACCA journey — it takes less than 1 minute.
