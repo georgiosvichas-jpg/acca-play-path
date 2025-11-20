@@ -454,9 +454,9 @@ export default function Landing() {
             </Card>
 
             {/* Card 3 - Elite */}
-            <Card className="relative bg-white border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
+            <Card style={{
             animationDelay: "0.2s"
-          }}>
+          }} className="relative border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up bg-primary-foreground">
               <div className="flex items-center justify-center gap-2 mb-4">
                 <Crown className="w-5 h-5 text-[#9333EA]" />
                 <Badge className="bg-[#9333EA]/10 text-[#9333EA] border-none text-xs px-3 py-1">
