@@ -5,7 +5,6 @@ import { useXP } from "@/hooks/useXP";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { supabase } from "@/integrations/supabase/client";
 import ProtectedRoute from "./ProtectedRoute";
-import Navigation from "./Navigation";
 import Footer from "./Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "./ui/card";
 import { Progress } from "./ui/progress";
@@ -110,8 +109,6 @@ export default function BadgesReal() {
   return (
     <ProtectedRoute>
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20">
-        <Navigation />
-
         <main className="container mx-auto px-4 py-8 mt-16">
           {/* Hero Section */}
           <div className="text-center mb-12">

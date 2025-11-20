@@ -4,7 +4,6 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { CheckCircle, Sparkles } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
-import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 
 export default function PaymentSuccess() {

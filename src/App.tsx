@@ -18,7 +18,7 @@ import SpacedRepetition from "./pages/SpacedRepetition";
 import QuestionBrowser from "./pages/QuestionBrowser";
 import Analytics from "./pages/Analytics";
 import Study from "./pages/Study";
-import Navigation from "./components/Navigation";
+import { AppLayout } from "./components/AppLayout";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
 import OutcomeoOnboarding from "./components/StudyBuddyOnboarding";
@@ -56,89 +56,151 @@ const App = () => (
         <CookieConsent />
         <XPConfettiWrapper />
         <GuidedTour />
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/auth" element={<Auth />} />
-          <Route path="/reset-password" element={<ResetPassword />} />
-          <Route path="/verify-email" element={<VerifyEmail />} />
-          <Route
-            path="/onboarding"
-            element={
+        <AppLayout>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
+            <Route path="/verify-email" element={<VerifyEmail />} />
+            <Route
+              path="/onboarding"
+              element={
+                <ProtectedRoute>
+                  <OutcomeoOnboarding />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <ProtectedRoute>
+                  <Dashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/flashcards"
+              element={
+                <ProtectedRoute>
+                  <FlashcardsContentNew />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/badges"
+              element={
+                <ProtectedRoute>
+                  <BadgesReal />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/leaderboard"
+              element={
+                <ProtectedRoute>
+                  <Leaderboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/settings"
+              element={
+                <ProtectedRoute>
+                  <Settings />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/planner"
+              element={
+                <ProtectedRoute>
+                  <PlannerEnhanced />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/coach" element={<Coach />} />
+            <Route path="/progress" element={<Progress />} />
+            <Route 
+              path="/mock-exam" 
+              element={
+                <ProtectedRoute>
+                  <MockExam />
+                </ProtectedRoute>
+              }
+            />
+            <Route path="/mini-test" element={
               <ProtectedRoute>
-                <OutcomeoOnboarding />
+                <MiniTest />
               </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <Dashboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/flashcards"
-            element={
-              <ProtectedRoute>
-                <Navigation />
-                <FlashcardsContentNew />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/badges"
-            element={
-              <ProtectedRoute>
-                <BadgesReal />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/leaderboard"
-            element={
-              <ProtectedRoute>
-                <Leaderboard />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/settings"
-            element={
-              <ProtectedRoute>
-                <Settings />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/planner"
-            element={
-              <ProtectedRoute>
-                <PlannerEnhanced />
-              </ProtectedRoute>
-            }
-          />
-          <Route path="/coach" element={<Coach />} />
-          <Route path="/progress" element={<Progress />} />
-          <Route path="/mock-exam" element={<MockExam />} />
-          <Route path="/mini-test" element={
-            <ProtectedRoute>
-              <MiniTest />
-            </ProtectedRoute>
-          } />
-          
-          {/* Unified sections */}
-          <Route path="/study" element={<Study />} />
-          <Route path="/analytics" element={<Analytics />} />
-          
-          {/* Legacy routes redirect to unified sections */}
-          <Route path="/practice-quiz" element={<Study />} />
-          <Route path="/question-browser" element={<Study />} />
-          <Route path="/spaced-repetition" element={<Study />} />
-          <Route path="/question-analytics" element={<Analytics />} />
-          <Route path="/progress-tracking" element={<Analytics />} />
-          <Route path="/study-path" element={<PlannerEnhanced />} />
+            } />
+            
+            {/* Unified sections */}
+            <Route 
+              path="/study" 
+              element={
+                <ProtectedRoute>
+                  <Study />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/analytics" 
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* Legacy routes redirect to unified sections */}
+            <Route 
+              path="/practice-quiz" 
+              element={
+                <ProtectedRoute>
+                  <Study />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/question-browser" 
+              element={
+                <ProtectedRoute>
+                  <Study />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/spaced-repetition" 
+              element={
+                <ProtectedRoute>
+                  <Study />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/question-analytics" 
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/progress-tracking" 
+              element={
+                <ProtectedRoute>
+                  <Analytics />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/study-path" 
+              element={
+                <ProtectedRoute>
+                  <PlannerEnhanced />
+                </ProtectedRoute>
+              }
+            />
           <Route
             path="/pricing"
             element={
@@ -183,7 +245,8 @@ const App = () => (
           <Route path="/blog/paper-strategies" element={<PaperStrategies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
-        </Routes>
+          </Routes>
+        </AppLayout>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
