@@ -60,7 +60,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
-              <Badge className="mb-4 rounded-full">Join 10,000+ aspiring accountants</Badge>
+              <Badge className="mb-4 rounded-full bg-sidebar-ring">Join 10,000+ aspiring accountants</Badge>
               <h1 className="text-5xl md:text-6xl font-display font-extrabold mb-6 leading-tight">
                 Master your ACCA exam journey – smarter, faster, gamified
               </h1>
@@ -72,7 +72,7 @@ export default function Landing() {
                   Start for free
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => scrollToSection("features")} className="rounded-xl">
+                <Button size="lg" variant="outline" onClick={() => scrollToSection("features")} className="rounded-xl bg-sidebar-ring">
                   See how it works
                 </Button>
               </div>
@@ -271,7 +271,7 @@ export default function Landing() {
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
               Trusted by ACCA students around the world
             </h2>
-            <Badge variant="secondary" className="rounded-full">
+            <Badge variant="secondary" className="rounded-full text-card bg-sidebar-ring">
               92% of users say they study more consistently
             </Badge>
           </div>
