@@ -10,6 +10,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import CoachWidget from "./CoachWidget";
 
 interface AppLayoutProps {
   children: React.ReactNode;
@@ -76,6 +77,7 @@ export function AppLayout({ children }: AppLayoutProps) {
             {children}
           </main>
         </SidebarInset>
+        <CoachWidget />
       </div>
     </SidebarProvider>
   );

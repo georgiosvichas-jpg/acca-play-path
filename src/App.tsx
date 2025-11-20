@@ -29,8 +29,6 @@ import PaymentFailure from "./pages/PaymentFailure";
 import Pricing from "./pages/Pricing";
 import XPConfettiWrapper from "./components/XPConfettiWrapper";
 import FlashcardsContentNew from "./components/FlashcardsContentNew";
-import Coach from "./pages/Coach";
-import Progress from "./pages/Progress";
 import GuidedTour from "./components/GuidedTour";
 import ResetPassword from "./pages/ResetPassword";
 import VerifyEmail from "./pages/VerifyEmail";
@@ -79,14 +77,6 @@ const App = () => (
               }
             />
             <Route
-              path="/flashcards"
-              element={
-                <ProtectedRoute>
-                  <FlashcardsContentNew />
-                </ProtectedRoute>
-              }
-            />
-            <Route
               path="/badges"
               element={
                 <ProtectedRoute>
@@ -118,9 +108,7 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-            <Route path="/coach" element={<Coach />} />
-            <Route path="/progress" element={<Progress />} />
-            <Route 
+            <Route
               path="/mock-exam" 
               element={
                 <ProtectedRoute>
@@ -153,54 +141,15 @@ const App = () => (
             />
             
             {/* Legacy routes redirect to unified sections */}
-            <Route 
-              path="/practice-quiz" 
-              element={
-                <ProtectedRoute>
-                  <Study />
-                </ProtectedRoute>
-              }
-            />
-            <Route 
-              path="/question-browser" 
-              element={
-                <ProtectedRoute>
-                  <Study />
-                </ProtectedRoute>
-              }
-            />
-            <Route 
-              path="/spaced-repetition" 
-              element={
-                <ProtectedRoute>
-                  <Study />
-                </ProtectedRoute>
-              }
-            />
-            <Route 
-              path="/question-analytics" 
-              element={
-                <ProtectedRoute>
-                  <Analytics />
-                </ProtectedRoute>
-              }
-            />
-            <Route 
-              path="/progress-tracking" 
-              element={
-                <ProtectedRoute>
-                  <Analytics />
-                </ProtectedRoute>
-              }
-            />
-            <Route 
-              path="/study-path" 
-              element={
-                <ProtectedRoute>
-                  <PlannerEnhanced />
-                </ProtectedRoute>
-              }
-            />
+            <Route path="/flashcards" element={<Study />} />
+            <Route path="/practice-quiz" element={<Study />} />
+            <Route path="/question-browser" element={<Study />} />
+            <Route path="/spaced-repetition" element={<Study />} />
+            <Route path="/question-analytics" element={<Analytics />} />
+            <Route path="/progress-tracking" element={<Analytics />} />
+            <Route path="/progress" element={<Analytics />} />
+            <Route path="/coach" element={<Dashboard />} />
+            <Route path="/study-path" element={<PlannerEnhanced />} />
           <Route
             path="/pricing"
             element={

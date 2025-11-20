@@ -1,9 +1,10 @@
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { BarChart3, TrendingUp, Target } from "lucide-react";
+import { BarChart3, TrendingUp, Target, Activity } from "lucide-react";
 import QuestionAnalytics from "./QuestionAnalytics";
 import ProgressTracking from "./ProgressTracking";
+import ProgressPage from "@/components/ProgressPage";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 
@@ -18,10 +19,14 @@ export default function Analytics() {
           </div>
 
           <Tabs defaultValue="overview" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+            <TabsList className="grid w-full grid-cols-4 lg:w-[500px]">
               <TabsTrigger value="overview" className="flex items-center gap-2">
                 <BarChart3 className="w-4 h-4" />
                 Overview
+              </TabsTrigger>
+              <TabsTrigger value="progress" className="flex items-center gap-2">
+                <Activity className="w-4 h-4" />
+                Progress
               </TabsTrigger>
               <TabsTrigger value="trends" className="flex items-center gap-2">
                 <TrendingUp className="w-4 h-4" />
@@ -35,6 +40,10 @@ export default function Analytics() {
 
             <TabsContent value="overview">
               <QuestionAnalytics />
+            </TabsContent>
+
+            <TabsContent value="progress">
+              <ProgressPage />
             </TabsContent>
 
             <TabsContent value="trends">
