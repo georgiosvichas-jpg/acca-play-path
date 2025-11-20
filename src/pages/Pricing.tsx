@@ -93,10 +93,10 @@ export default function Pricing() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-3 gap-6 lg:gap-8 max-w-7xl mx-auto items-stretch">
           {/* Free Tier */}
-          <Card className="group relative p-8 border-2 hover:shadow-lg hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}>
-            <div className="space-y-6">
+          <Card className="group relative p-8 border-2 hover:shadow-lg hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in flex flex-col" style={{ animationDelay: "0.2s", animationFillMode: "backwards" }}>
+            <div className="flex flex-col h-full space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="p-2 rounded-lg bg-muted">
@@ -107,7 +107,7 @@ export default function Pricing() {
                 <p className="text-sm text-muted-foreground">Perfect to get started</p>
               </div>
               
-              <div>
+              <div className="h-[120px] flex flex-col justify-start">
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-bold">€0</span>
                 </div>
@@ -123,7 +123,7 @@ export default function Pricing() {
                 {planType === "free" ? "Current Plan" : "Get Started"}
               </Button>
 
-              <div className="space-y-4 pt-4 border-t">
+              <div className="space-y-4 pt-4 border-t flex-1">
                 <p className="text-sm font-semibold">What's included:</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
@@ -152,13 +152,13 @@ export default function Pricing() {
           </Card>
 
           {/* Pro Tier - Featured */}
-          <Card className="group relative p-8 border-2 border-primary shadow-xl hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] hover:scale-110 md:hover:scale-[1.15] hover:-translate-y-2 transition-all duration-300 scale-105 md:scale-110 animate-fade-in" style={{ animationDelay: "0.3s", animationFillMode: "backwards" }}>
+          <Card className="group relative p-8 border-2 border-primary shadow-xl hover:shadow-[0_20px_60px_-15px_hsl(var(--primary)/0.4)] hover:scale-110 md:hover:scale-[1.15] hover:-translate-y-2 transition-all duration-300 scale-105 md:scale-110 animate-fade-in flex flex-col" style={{ animationDelay: "0.3s", animationFillMode: "backwards" }}>
             <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary px-4 py-1">
               <Star className="h-3 w-3 mr-1" />
               Most Popular
             </Badge>
             
-            <div className="space-y-6">
+            <div className="flex flex-col h-full space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="p-2 rounded-lg bg-primary/10">
@@ -169,7 +169,7 @@ export default function Pricing() {
                 <p className="text-sm text-muted-foreground">For serious students</p>
               </div>
               
-              <div>
+              <div className="h-[120px] flex flex-col justify-start">
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-bold text-primary">
                     €{isAnnual ? "69" : "9.99"}
@@ -203,7 +203,7 @@ export default function Pricing() {
                 </Button>
               )}
 
-              <div className="space-y-4 pt-4 border-t">
+              <div className="space-y-4 pt-4 border-t flex-1">
                 <p className="text-sm font-semibold">Everything in Free, plus:</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
@@ -244,13 +244,13 @@ export default function Pricing() {
           </Card>
 
           {/* Elite Tier */}
-          <Card className="group relative p-8 border-2 border-accent/50 hover:shadow-[0_20px_60px_-15px_hsl(var(--accent)/0.4)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in" style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}>
+          <Card className="group relative p-8 border-2 border-accent/50 hover:shadow-[0_20px_60px_-15px_hsl(var(--accent)/0.4)] hover:scale-105 hover:-translate-y-1 transition-all duration-300 animate-fade-in flex flex-col" style={{ animationDelay: "0.4s", animationFillMode: "backwards" }}>
             <Badge variant="secondary" className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent px-4 py-1">
               <Crown className="h-3 w-3 mr-1" />
               Premium
             </Badge>
             
-            <div className="space-y-6">
+            <div className="flex flex-col h-full space-y-6">
               <div className="space-y-2">
                 <div className="flex items-center gap-2">
                   <div className="p-2 rounded-lg bg-accent/10">
@@ -261,7 +261,7 @@ export default function Pricing() {
                 <p className="text-sm text-muted-foreground">Maximum exam preparation</p>
               </div>
               
-              <div>
+              <div className="h-[120px] flex flex-col justify-start">
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-bold">
                     €{isAnnual ? "99" : "14.99"}
@@ -296,7 +296,7 @@ export default function Pricing() {
                 </Button>
               )}
 
-              <div className="space-y-4 pt-4 border-t">
+              <div className="space-y-4 pt-4 border-t flex-1">
                 <p className="text-sm font-semibold">Everything in Pro, plus:</p>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
