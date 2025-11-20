@@ -26,9 +26,6 @@ import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
 import PaymentFailure from "./pages/PaymentFailure";
 import Pricing from "./pages/Pricing";
-import PrivacyPolicy from "./pages/PrivacyPolicy";
-import TermsOfUse from "./pages/TermsOfUse";
-import Disclaimer from "./pages/Disclaimer";
 import XPConfettiWrapper from "./components/XPConfettiWrapper";
 import FlashcardsContentNew from "./components/FlashcardsContentNew";
 import Coach from "./pages/Coach";
@@ -162,9 +159,6 @@ const App = () => (
               </ProtectedRoute>
             }
           />
-          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="/terms-of-use" element={<TermsOfUse />} />
-          <Route path="/disclaimer" element={<Disclaimer />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
