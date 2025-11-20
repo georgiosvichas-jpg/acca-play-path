@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, CheckCircle, Star, Mail, Linkedin, ArrowRight, Lock, Crown } from "lucide-react";
+import { Sparkles, CheckCircle, Star, Mail, Linkedin, ArrowRight, Lock } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import featurePlanner from "@/assets/feature-planner.png";
 import featureFlashcards from "@/assets/feature-flashcards.png";
@@ -458,7 +458,7 @@ export default function Landing() {
             animationDelay: "0.2s"
           }} className="relative border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up bg-primary-foreground">
               <div className="flex items-center justify-center gap-2 mb-4">
-                <Crown className="w-5 h-5 text-[#9333EA]" />
+                
                 <Badge className="bg-[#9333EA]/10 text-[#9333EA] border-none text-xs px-3 py-1">
                   Elite
                 </Badge>
