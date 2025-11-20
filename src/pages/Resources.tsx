@@ -57,27 +57,49 @@ const Resources = () => {
       title: "ACCA Study Planner Template",
       description: "A customizable Excel template to plan your study schedule",
       format: "XLSX",
-      size: "2.4 MB"
+      size: "2.4 MB",
+      downloadUrl: null,
+      comingSoon: true
     },
     {
       title: "Flashcard Starter Pack",
       description: "500+ essential flashcards covering key topics",
-      format: "PDF",
-      size: "8.1 MB"
+      format: "CSV",
+      size: "8.1 MB",
+      downloadUrl: "/data/acca_flashcards_dataset.csv",
+      comingSoon: false
     },
     {
       title: "Formula Sheet Collection",
       description: "All important formulas for quantitative papers",
       format: "PDF",
-      size: "1.8 MB"
+      size: "1.8 MB",
+      downloadUrl: null,
+      comingSoon: true
     },
     {
-      title: "Exam Technique Guide",
-      description: "Proven strategies to maximize your exam performance",
-      format: "PDF",
-      size: "3.2 MB"
+      title: "Complete Seed Pack",
+      description: "Comprehensive study materials bundle",
+      format: "ZIP",
+      size: "3.2 MB",
+      downloadUrl: "/data/acca_seed_pack.zip",
+      comingSoon: false
     }
   ];
+
+  const handleDownload = (url: string | null, title: string) => {
+    if (!url) {
+      alert("This resource is coming soon! Sign up to get notified when it's available.");
+      return;
+    }
+    
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = title;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-background via-background to-primary/5">
@@ -166,9 +188,14 @@ const Resources = () => {
               <CardContent>
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">{resource.size}</span>
-                  <Button size="sm" variant="outline">
+                  <Button 
+                    size="sm" 
+                    variant={resource.comingSoon ? "ghost" : "outline"}
+                    onClick={() => handleDownload(resource.downloadUrl, resource.title)}
+                    disabled={resource.comingSoon}
+                  >
                     <Download className="h-4 w-4 mr-2" />
-                    Download
+                    {resource.comingSoon ? "Coming Soon" : "Download"}
                   </Button>
                 </div>
               </CardContent>
