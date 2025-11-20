@@ -41,6 +41,9 @@ import Resources from "./pages/Resources";
 import PlanningStudies from "./pages/blog/PlanningStudies";
 import CommonMistakes from "./pages/blog/CommonMistakes";
 import ExamChecklist from "./pages/blog/ExamChecklist";
+import ExamTechniques from "./pages/blog/ExamTechniques";
+import TimeManagement from "./pages/blog/TimeManagement";
+import PaperStrategies from "./pages/blog/PaperStrategies";
 
 const queryClient = new QueryClient();
 
@@ -175,6 +178,9 @@ const App = () => (
           <Route path="/blog/planning-studies" element={<PlanningStudies />} />
           <Route path="/blog/common-mistakes" element={<CommonMistakes />} />
           <Route path="/blog/exam-checklist" element={<ExamChecklist />} />
+          <Route path="/blog/exam-techniques" element={<ExamTechniques />} />
+          <Route path="/blog/time-management" element={<TimeManagement />} />
+          <Route path="/blog/paper-strategies" element={<PaperStrategies />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
