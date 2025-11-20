@@ -42,6 +42,8 @@ import ExamChecklist from "./pages/blog/ExamChecklist";
 import ExamTechniques from "./pages/blog/ExamTechniques";
 import TimeManagement from "./pages/blog/TimeManagement";
 import PaperStrategies from "./pages/blog/PaperStrategies";
+import MultiPaperDashboard from "./pages/MultiPaperDashboard";
+import ExamWeekMode from "./pages/ExamWeekMode";
 
 const queryClient = new QueryClient();
 
@@ -150,6 +152,22 @@ const App = () => (
             <Route path="/progress" element={<Analytics />} />
             <Route path="/coach" element={<Dashboard />} />
             <Route path="/study-path" element={<PlannerEnhanced />} />
+            <Route
+              path="/multi-paper-dashboard"
+              element={
+                <ProtectedRoute>
+                  <MultiPaperDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/exam-week-mode"
+              element={
+                <ProtectedRoute>
+                  <ExamWeekMode />
+                </ProtectedRoute>
+              }
+            />
           <Route
             path="/pricing"
             element={

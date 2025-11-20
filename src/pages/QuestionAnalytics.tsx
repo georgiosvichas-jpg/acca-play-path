@@ -7,6 +7,7 @@ import { BarChart3, Target, TrendingUp, Award } from "lucide-react";
 import { StudyRecommendations } from "@/components/StudyRecommendations";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
+import { PerformanceHeatmap } from "@/components/PerformanceHeatmap";
 
 interface AnalyticsData {
   totalQuestions: number;
@@ -17,6 +18,7 @@ interface AnalyticsData {
 
 export default function QuestionAnalytics() {
   const { user } = useAuth();
+  const { hasFeature } = useFeatureAccess();
   const [analytics, setAnalytics] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
 
@@ -210,6 +212,8 @@ export default function QuestionAnalytics() {
         tier="pro"
         variant="inline"
       />
+
+      {hasFeature("heatmaps") && <PerformanceHeatmap />}
 
       <Card>
         <CardHeader>
