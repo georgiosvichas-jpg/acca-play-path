@@ -659,11 +659,13 @@ export type Database = {
         Row: {
           country: string | null
           created_at: string | null
+          daily_coach_messages_used: number | null
           daily_flashcards_used: number | null
           display_name: string | null
           exam_session: string | null
           id: string
           is_opted_out_of_leaderboard: boolean | null
+          last_coach_reset_date: string | null
           last_flashcard_reset_date: string | null
           last_mock_reset_date: string | null
           last_study_date: string | null
@@ -688,11 +690,13 @@ export type Database = {
         Insert: {
           country?: string | null
           created_at?: string | null
+          daily_coach_messages_used?: number | null
           daily_flashcards_used?: number | null
           display_name?: string | null
           exam_session?: string | null
           id?: string
           is_opted_out_of_leaderboard?: boolean | null
+          last_coach_reset_date?: string | null
           last_flashcard_reset_date?: string | null
           last_mock_reset_date?: string | null
           last_study_date?: string | null
@@ -717,11 +721,13 @@ export type Database = {
         Update: {
           country?: string | null
           created_at?: string | null
+          daily_coach_messages_used?: number | null
           daily_flashcards_used?: number | null
           display_name?: string | null
           exam_session?: string | null
           id?: string
           is_opted_out_of_leaderboard?: boolean | null
+          last_coach_reset_date?: string | null
           last_flashcard_reset_date?: string | null
           last_mock_reset_date?: string | null
           last_study_date?: string | null
