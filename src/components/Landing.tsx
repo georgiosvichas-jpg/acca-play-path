@@ -664,7 +664,7 @@ export default function Landing() {
               <Link to="/terms-of-use" className="hover:text-primary transition-colors">Terms of Use</Link>
               <Link to="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link>
             </div>
-            <p className="text-sm text-muted-foreground">Copyright © ACCA Outcomeo 2025</p>
+            <p className="text-sm text-muted-foreground">Copyright © Outcomeo 2025</p>
             <p className="text-xs text-muted-foreground max-w-2xl mx-auto">
               ACCA is a registered trademark of the Association of Chartered Certified Accountants. 
               Outcomeo is an independent product and is not affiliated with, sponsored by, or endorsed by ACCA. 
