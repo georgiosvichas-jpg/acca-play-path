@@ -15,6 +15,7 @@ import featureAnalytics from "@/assets/feature-analytics.png";
 import featureGamification from "@/assets/feature-gamification.png";
 import featureSyllabus from "@/assets/feature-syllabus.png";
 import featureResponsive from "@/assets/feature-responsive.png";
+import logo from "@/assets/logo.png";
 export default function Landing() {
   const navigate = useNavigate();
   const [navBg, setNavBg] = useState(false);
@@ -37,7 +38,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-primary" />
+              <img src={logo} alt="Outcomeo" className="w-8 h-8 rounded-lg" />
               <span className="font-display font-bold text-xl">Outcomeo</span>
             </div>
             <div className="hidden md:flex items-center gap-6">
