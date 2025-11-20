@@ -1,15 +1,15 @@
 openapi: 3.1.0
 info:
-  title: StudyBuddy - ACCA Exam Coach API
+  title: Outcomeo - ACCA Exam Coach API
   description: |
-    Backend API for StudyBuddy ACCA exam preparation platform.
+    Backend API for Outcomeo ACCA exam preparation platform.
     Provides user management, study planning, content delivery, session tracking, analytics, and premium subscriptions.
     
     **Authentication:** All endpoints use Bearer token authentication with Supabase service role key.
   version: 1.0.0
   contact:
-    name: StudyBuddy Support
-    email: support@studybuddy.com
+    name: Outcomeo Support
+    email: support@outcomeo.com
 
 servers:
   - url: https://irlxegoatcgskhdvbvuo.supabase.co/functions/v1
@@ -22,10 +22,10 @@ paths:
   /users-get-or-create:
     post:
       operationId: getUserOrCreate
-      summary: Get or create a StudyBuddy user
+      summary: Get or create an Outcomeo user
       description: |
         Retrieves an existing user by email, or creates a new user if one doesn't exist.
-        Use this endpoint when a student first interacts with StudyBuddy or updates their exam details.
+        Use this endpoint when a student first interacts with Outcomeo or updates their exam details.
       tags:
         - User Management
       requestBody:

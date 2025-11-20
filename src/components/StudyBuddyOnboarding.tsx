@@ -11,7 +11,7 @@ import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import Confetti from "react-confetti";
 import { useWindowSize } from "@/hooks/use-window-size";
-import { studyBuddyAPI } from "@/lib/studybuddy-api";
+import { outcomeoAPI } from "@/lib/studybuddy-api";
 import { toast } from "sonner";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -28,7 +28,7 @@ const ACCA_PAPERS = [
   { code: "AAA", name: "Advanced Audit & Assurance" },
 ];
 
-export default function StudyBuddyOnboarding() {
+export default function OutcomeoOnboarding() {
   const [step, setStep] = useState(1);
   const [selectedPaper, setSelectedPaper] = useState("");
   const [examDate, setExamDate] = useState<Date>();
@@ -69,7 +69,7 @@ export default function StudyBuddyOnboarding() {
   const handleFinish = async () => {
     setIsSubmitting(true);
     try {
-      // Call the StudyBuddy API to create/update user
+      // Call the Outcomeo API to create/update user
       const emailToUse = email || user?.email;
       if (!emailToUse) {
         toast.error("Email is required");
@@ -77,7 +77,7 @@ export default function StudyBuddyOnboarding() {
         return;
       }
 
-      await studyBuddyAPI.getUserOrCreate(
+      await outcomeoAPI.getUserOrCreate(
         emailToUse,
         selectedPaper,
         examDate ? format(examDate, "yyyy-MM-dd") : undefined,
