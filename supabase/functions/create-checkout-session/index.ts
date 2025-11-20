@@ -1,6 +1,7 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -18,14 +19,26 @@ serve(async (req) => {
   );
 
   try {
-    const { userId } = await req.json();
+    // Validate input
+    const requestSchema = z.object({
+      userId: z.string().uuid("Invalid user ID format"),
+    });
+
+    const body = await req.json();
+    const validation = requestSchema.safeParse(body);
     
-    if (!userId) {
-      return new Response(JSON.stringify({ error: "Missing userId" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 400,
-      });
+    if (!validation.success) {
+      console.error("Validation error:", validation.error);
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input parameters",
+          details: validation.error.errors 
+        }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
+
+    const { userId } = validation.data;
 
     // Get fixed Stripe configuration from environment
     const priceId = Deno.env.get("STRIPE_PRICE_ID");
