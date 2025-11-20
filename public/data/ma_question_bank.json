@@ -1,0 +1,2252 @@
+[
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is MOST likely to be classified as a fixed production overhead?",
+    "options": [
+      "Factory rent paid monthly under a lease",
+      "Direct materials",
+      "Piecework wages paid per unit produced",
+      "Royalties paid per unit sold"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Factory rent tends to be incurred regardless of volume in the short term and is a fixed production overhead."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is MOST likely to be classified as a fixed production overhead?",
+    "options": [
+      "Factory rent paid monthly under a lease",
+      "Direct materials",
+      "Piecework wages paid per unit produced",
+      "Royalties paid per unit sold"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Factory rent tends to be incurred regardless of volume in the short term and is a fixed production overhead."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is MOST likely to be classified as a fixed production overhead?",
+    "options": [
+      "Factory rent paid monthly under a lease",
+      "Direct materials",
+      "Piecework wages paid per unit produced",
+      "Royalties paid per unit sold"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Factory rent tends to be incurred regardless of volume in the short term and is a fixed production overhead."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is MOST likely to be classified as a fixed production overhead?",
+    "options": [
+      "Factory rent paid monthly under a lease",
+      "Direct materials",
+      "Piecework wages paid per unit produced",
+      "Royalties paid per unit sold"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Factory rent tends to be incurred regardless of volume in the short term and is a fixed production overhead."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is MOST likely to be classified as a fixed production overhead?",
+    "options": [
+      "Factory rent paid monthly under a lease",
+      "Direct materials",
+      "Piecework wages paid per unit produced",
+      "Royalties paid per unit sold"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Factory rent tends to be incurred regardless of volume in the short term and is a fixed production overhead."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A product has variable production cost of $ 8 per unit and fixed production overheads of $ 12,000 per period. Planned output is 500 units. What is the production cost per unit (to 2 d.p.)?",
+    "options": [
+      "$30.4",
+      "$32.0",
+      "$33.6",
+      "$8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Total cost = fixed + variable = 12000 + 8\u00d7500 = 16000. Cost per unit = 16000/500 = $32.0."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A product has variable production cost of $ 8 per unit and fixed production overheads of $ 12,000 per period. Planned output is 600 units. What is the production cost per unit (to 2 d.p.)?",
+    "options": [
+      "$26.67",
+      "$28.0",
+      "$29.33",
+      "$8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Total cost = fixed + variable = 12000 + 8\u00d7600 = 16800. Cost per unit = 16800/600 = $28.0."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A product has variable production cost of $ 8 per unit and fixed production overheads of $ 12,000 per period. Planned output is 700 units. What is the production cost per unit (to 2 d.p.)?",
+    "options": [
+      "$24.0",
+      "$25.14",
+      "$26.29",
+      "$8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Total cost = fixed + variable = 12000 + 8\u00d7700 = 17600. Cost per unit = 17600/700 = $25.14."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A product has variable production cost of $ 8 per unit and fixed production overheads of $ 12,000 per period. Planned output is 800 units. What is the production cost per unit (to 2 d.p.)?",
+    "options": [
+      "$22.0",
+      "$23.0",
+      "$24.0",
+      "$8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Total cost = fixed + variable = 12000 + 8\u00d7800 = 18400. Cost per unit = 18400/800 = $23.0."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A product has variable production cost of $ 8 per unit and fixed production overheads of $ 12,000 per period. Planned output is 900 units. What is the production cost per unit (to 2 d.p.)?",
+    "options": [
+      "$20.44",
+      "$21.33",
+      "$22.22",
+      "$8"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Total cost = fixed + variable = 12000 + 8\u00d7900 = 19200. Cost per unit = 19200/900 = $21.33."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Budgeted overheads are $ 90,000 and budgeted machine hours are 4000. What is the overhead absorption rate per machine hour (to 2 d.p.)?",
+    "options": [
+      "$22.0",
+      "$22.5",
+      "$23.0",
+      "$23.5"
+    ],
+    "correct_option_index": 1,
+    "explanation": "OAR = overheads / hours = 90000/4000 = $22.5 per machine hour."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Budgeted overheads are $ 90,000 and budgeted machine hours are 5000. What is the overhead absorption rate per machine hour (to 2 d.p.)?",
+    "options": [
+      "$17.5",
+      "$18.0",
+      "$18.5",
+      "$19.0"
+    ],
+    "correct_option_index": 1,
+    "explanation": "OAR = overheads / hours = 90000/5000 = $18.0 per machine hour."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Budgeted overheads are $ 90,000 and budgeted machine hours are 6000. What is the overhead absorption rate per machine hour (to 2 d.p.)?",
+    "options": [
+      "$14.5",
+      "$15.0",
+      "$15.5",
+      "$16.0"
+    ],
+    "correct_option_index": 1,
+    "explanation": "OAR = overheads / hours = 90000/6000 = $15.0 per machine hour."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Budgeted overheads are $ 90,000 and budgeted machine hours are 7000. What is the overhead absorption rate per machine hour (to 2 d.p.)?",
+    "options": [
+      "$12.36",
+      "$12.86",
+      "$13.36",
+      "$13.86"
+    ],
+    "correct_option_index": 1,
+    "explanation": "OAR = overheads / hours = 90000/7000 = $12.86 per machine hour."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Budgeted overheads are $ 90,000 and budgeted machine hours are 8000. What is the overhead absorption rate per machine hour (to 2 d.p.)?",
+    "options": [
+      "$10.75",
+      "$11.25",
+      "$11.75",
+      "$12.25"
+    ],
+    "correct_option_index": 1,
+    "explanation": "OAR = overheads / hours = 90000/8000 = $11.25 per machine hour."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A company sells 2000 units at $ 30 each. Variable cost is $ 18 per unit. What is the total contribution for the period?",
+    "options": [
+      "$24000",
+      "$60000",
+      "$36000",
+      "$19000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Contribution = (selling price \u2212 variable cost) \u00d7 volume = (30-18)\u00d72000 = $24000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A company sells 2500 units at $ 30 each. Variable cost is $ 18 per unit. What is the total contribution for the period?",
+    "options": [
+      "$30000",
+      "$75000",
+      "$45000",
+      "$25000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Contribution = (selling price \u2212 variable cost) \u00d7 volume = (30-18)\u00d72500 = $30000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A company sells 3000 units at $ 30 each. Variable cost is $ 18 per unit. What is the total contribution for the period?",
+    "options": [
+      "$36000",
+      "$90000",
+      "$54000",
+      "$31000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Contribution = (selling price \u2212 variable cost) \u00d7 volume = (30-18)\u00d73000 = $36000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A company sells 3500 units at $ 30 each. Variable cost is $ 18 per unit. What is the total contribution for the period?",
+    "options": [
+      "$42000",
+      "$105000",
+      "$63000",
+      "$37000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Contribution = (selling price \u2212 variable cost) \u00d7 volume = (30-18)\u00d73500 = $42000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A company sells 4000 units at $ 30 each. Variable cost is $ 18 per unit. What is the total contribution for the period?",
+    "options": [
+      "$48000",
+      "$120000",
+      "$72000",
+      "$43000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Contribution = (selling price \u2212 variable cost) \u00d7 volume = (30-18)\u00d74000 = $48000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Under marginal costing, which ONE of the following is treated as a period cost rather than included in inventory valuation?",
+    "options": [
+      "Direct materials",
+      "Direct labour",
+      "Variable production overhead",
+      "Fixed production overhead"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Under marginal costing only variable production costs are inventoried; fixed production overheads are written off as a period cost."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Under marginal costing, which ONE of the following is treated as a period cost rather than included in inventory valuation?",
+    "options": [
+      "Direct materials",
+      "Direct labour",
+      "Variable production overhead",
+      "Fixed production overhead"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Under marginal costing only variable production costs are inventoried; fixed production overheads are written off as a period cost."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Under marginal costing, which ONE of the following is treated as a period cost rather than included in inventory valuation?",
+    "options": [
+      "Direct materials",
+      "Direct labour",
+      "Variable production overhead",
+      "Fixed production overhead"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Under marginal costing only variable production costs are inventoried; fixed production overheads are written off as a period cost."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Under marginal costing, which ONE of the following is treated as a period cost rather than included in inventory valuation?",
+    "options": [
+      "Direct materials",
+      "Direct labour",
+      "Variable production overhead",
+      "Fixed production overhead"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Under marginal costing only variable production costs are inventoried; fixed production overheads are written off as a period cost."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Under marginal costing, which ONE of the following is treated as a period cost rather than included in inventory valuation?",
+    "options": [
+      "Direct materials",
+      "Direct labour",
+      "Variable production overhead",
+      "Fixed production overhead"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Under marginal costing only variable production costs are inventoried; fixed production overheads are written off as a period cost."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Budgeted sales are 800 units. Opening inventory is 150 units and closing inventory is planned at 200 units. How many units should be produced?",
+    "options": [
+      "800",
+      "850",
+      "800",
+      "900"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Production = sales + closing inventory \u2212 opening inventory = 800 + 200 \u2212 150 = 850 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Budgeted sales are 900 units. Opening inventory is 200 units and closing inventory is planned at 250 units. How many units should be produced?",
+    "options": [
+      "900",
+      "950",
+      "900",
+      "1000"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Production = sales + closing inventory \u2212 opening inventory = 900 + 250 \u2212 200 = 950 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Budgeted sales are 1000 units. Opening inventory is 250 units and closing inventory is planned at 300 units. How many units should be produced?",
+    "options": [
+      "1000",
+      "1050",
+      "1000",
+      "1100"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Production = sales + closing inventory \u2212 opening inventory = 1000 + 300 \u2212 250 = 1050 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Budgeted sales are 1100 units. Opening inventory is 200 units and closing inventory is planned at 250 units. How many units should be produced?",
+    "options": [
+      "1100",
+      "1150",
+      "1100",
+      "1200"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Production = sales + closing inventory \u2212 opening inventory = 1100 + 250 \u2212 200 = 1150 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Budgeted sales are 1200 units. Opening inventory is 300 units and closing inventory is planned at 350 units. How many units should be produced?",
+    "options": [
+      "1200",
+      "1250",
+      "1200",
+      "1300"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Production = sales + closing inventory \u2212 opening inventory = 1200 + 350 \u2212 300 = 1250 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a particular month cash sales are $ 50,000 and credit sales are $ 70,000. 60% of credit sales are received in the same month. What are cash receipts from sales in that month?",
+    "options": [
+      "$50000",
+      "$70000",
+      "$92000",
+      "$120000"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Receipts = cash sales + 60% of credit sales = 50000 + 0.6\u00d770000 = $92,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a particular month cash sales are $ 60,000 and credit sales are $ 80,000. 60% of credit sales are received in the same month. What are cash receipts from sales in that month?",
+    "options": [
+      "$60000",
+      "$80000",
+      "$108000",
+      "$140000"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Receipts = cash sales + 60% of credit sales = 60000 + 0.6\u00d780000 = $108,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a particular month cash sales are $ 55,000 and credit sales are $ 90,000. 60% of credit sales are received in the same month. What are cash receipts from sales in that month?",
+    "options": [
+      "$55000",
+      "$90000",
+      "$109000",
+      "$145000"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Receipts = cash sales + 60% of credit sales = 55000 + 0.6\u00d790000 = $109,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a particular month cash sales are $ 65,000 and credit sales are $ 75,000. 60% of credit sales are received in the same month. What are cash receipts from sales in that month?",
+    "options": [
+      "$65000",
+      "$75000",
+      "$110000",
+      "$140000"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Receipts = cash sales + 60% of credit sales = 65000 + 0.6\u00d775000 = $110,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a particular month cash sales are $ 70,000 and credit sales are $ 85,000. 60% of credit sales are received in the same month. What are cash receipts from sales in that month?",
+    "options": [
+      "$70000",
+      "$85000",
+      "$121000",
+      "$155000"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Receipts = cash sales + 60% of credit sales = 70000 + 0.6\u00d785000 = $121,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A budget at 100 activity units shows variable cost of $ 4 per unit and fixed cost of $ 20,000. If activity is 60 units, what is the TOTAL flexed cost?",
+    "options": [
+      "$44000",
+      "$20400",
+      "$20000",
+      "$24000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Flexed cost = fixed 20000 + variable 4\u00d760\u00d7100 = $44,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A budget at 100 activity units shows variable cost of $ 4 per unit and fixed cost of $ 20,000. If activity is 70 units, what is the TOTAL flexed cost?",
+    "options": [
+      "$48000",
+      "$20400",
+      "$20000",
+      "$28000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Flexed cost = fixed 20000 + variable 4\u00d770\u00d7100 = $48,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A budget at 100 activity units shows variable cost of $ 4 per unit and fixed cost of $ 20,000. If activity is 80 units, what is the TOTAL flexed cost?",
+    "options": [
+      "$52000",
+      "$20400",
+      "$20000",
+      "$32000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Flexed cost = fixed 20000 + variable 4\u00d780\u00d7100 = $52,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A budget at 100 activity units shows variable cost of $ 4 per unit and fixed cost of $ 20,000. If activity is 90 units, what is the TOTAL flexed cost?",
+    "options": [
+      "$56000",
+      "$20400",
+      "$20000",
+      "$36000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Flexed cost = fixed 20000 + variable 4\u00d790\u00d7100 = $56,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A budget at 100 activity units shows variable cost of $ 4 per unit and fixed cost of $ 20,000. If activity is 100 units, what is the TOTAL flexed cost?",
+    "options": [
+      "$60000",
+      "$20400",
+      "$20000",
+      "$40000"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Flexed cost = fixed 20000 + variable 4\u00d7100\u00d7100 = $60,000."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A rolling budget is best described as:",
+    "options": [
+      "A budget that is updated by adding a further period as the current period is completed",
+      "A budget set once every five years",
+      "A budget that flexes automatically with activity",
+      "A budget based only on last year's actual results"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Rolling budgets continuously add a new period when one is completed, maintaining a constant planning horizon."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A rolling budget is best described as:",
+    "options": [
+      "A budget that is updated by adding a further period as the current period is completed",
+      "A budget set once every five years",
+      "A budget that flexes automatically with activity",
+      "A budget based only on last year's actual results"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Rolling budgets continuously add a new period when one is completed, maintaining a constant planning horizon."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A rolling budget is best described as:",
+    "options": [
+      "A budget that is updated by adding a further period as the current period is completed",
+      "A budget set once every five years",
+      "A budget that flexes automatically with activity",
+      "A budget based only on last year's actual results"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Rolling budgets continuously add a new period when one is completed, maintaining a constant planning horizon."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Zero-based budgeting (ZBB) requires managers to:",
+    "options": [
+      "Increase last year\u2019s budget by inflation",
+      "Justify all budgeted costs from a zero base",
+      "Prepare budgets only for variable costs",
+      "Focus solely on capital expenditure"
+    ],
+    "correct_option_index": 1,
+    "explanation": "ZBB involves justifying all costs as if the activity were being undertaken for the first time."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Zero-based budgeting (ZBB) requires managers to:",
+    "options": [
+      "Increase last year\u2019s budget by inflation",
+      "Justify all budgeted costs from a zero base",
+      "Prepare budgets only for variable costs",
+      "Focus solely on capital expenditure"
+    ],
+    "correct_option_index": 1,
+    "explanation": "ZBB involves justifying all costs as if the activity were being undertaken for the first time."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard price is $ 3.00 per kg. Actual price is $ 3.20 per kg for 1000 kg. Is the material price variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If the actual price is higher than standard, the variance is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard price is $ 3.00 per kg. Actual price is $ 3.20 per kg for 1100 kg. Is the material price variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If the actual price is higher than standard, the variance is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard price is $ 3.00 per kg. Actual price is $ 3.20 per kg for 1200 kg. Is the material price variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If the actual price is higher than standard, the variance is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard price is $ 3.00 per kg. Actual price is $ 3.20 per kg for 1300 kg. Is the material price variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If the actual price is higher than standard, the variance is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard price is $ 3.00 per kg. Actual price is $ 3.20 per kg for 1400 kg. Is the material price variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If the actual price is higher than standard, the variance is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard hours for actual output are 800 hours; actual hours worked are 750. Is the labour efficiency variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Efficiency variance compares standard hours with actual hours. Using fewer hours than standard is favourable; more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard hours for actual output are 900 hours; actual hours worked are 950. Is the labour efficiency variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Efficiency variance compares standard hours with actual hours. Using fewer hours than standard is favourable; more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard hours for actual output are 1000 hours; actual hours worked are 980. Is the labour efficiency variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Efficiency variance compares standard hours with actual hours. Using fewer hours than standard is favourable; more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard hours for actual output are 1100 hours; actual hours worked are 1150. Is the labour efficiency variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Efficiency variance compares standard hours with actual hours. Using fewer hours than standard is favourable; more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard hours for actual output are 1200 hours; actual hours worked are 1180. Is the labour efficiency variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Efficiency variance compares standard hours with actual hours. Using fewer hours than standard is favourable; more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard material quantity for the period is 1000 kg; actual usage is 950 kg. Is the material usage variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 0,
+    "explanation": "If actual quantity is lower than standard, cost is saved and the variance is favourable; using more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard material quantity for the period is 1000 kg; actual usage is 1050 kg. Is the material usage variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If actual quantity is lower than standard, cost is saved and the variance is favourable; using more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard material quantity for the period is 1200 kg; actual usage is 1180 kg. Is the material usage variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 0,
+    "explanation": "If actual quantity is lower than standard, cost is saved and the variance is favourable; using more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard material quantity for the period is 1200 kg; actual usage is 1250 kg. Is the material usage variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If actual quantity is lower than standard, cost is saved and the variance is favourable; using more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Standard material quantity for the period is 1400 kg; actual usage is 1350 kg. Is the material usage variance favourable or adverse?",
+    "options": [
+      "Favourable",
+      "Adverse",
+      "Zero",
+      "Cannot be determined"
+    ],
+    "correct_option_index": 0,
+    "explanation": "If actual quantity is lower than standard, cost is saved and the variance is favourable; using more is adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A favourable material price variance and an adverse usage variance TOGETHER may indicate that:",
+    "options": [
+      "Cheaper, lower-quality material has been purchased",
+      "Material of higher quality than standard was purchased",
+      "There were unexpected changes in wage rates",
+      "Sales volume was lower than expected"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Cheaper materials can give a favourable price variance but may increase wastage, causing an adverse usage variance."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A favourable material price variance and an adverse usage variance TOGETHER may indicate that:",
+    "options": [
+      "Cheaper, lower-quality material has been purchased",
+      "Material of higher quality than standard was purchased",
+      "There were unexpected changes in wage rates",
+      "Sales volume was lower than expected"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Cheaper materials can give a favourable price variance but may increase wastage, causing an adverse usage variance."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A favourable material price variance and an adverse usage variance TOGETHER may indicate that:",
+    "options": [
+      "Cheaper, lower-quality material has been purchased",
+      "Material of higher quality than standard was purchased",
+      "There were unexpected changes in wage rates",
+      "Sales volume was lower than expected"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Cheaper materials can give a favourable price variance but may increase wastage, causing an adverse usage variance."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which ONE of the following is MOST likely to be a planning variance rather than an operational variance?",
+    "options": [
+      "Machine breakdowns due to poor maintenance",
+      "Incorrect standard times set for a new process",
+      "Idle time caused by poor scheduling",
+      "Overtime premiums due to rush orders"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Planning variances arise because the standard itself was set incorrectly, e.g. wrong standard times."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which ONE of the following is MOST likely to be a planning variance rather than an operational variance?",
+    "options": [
+      "Machine breakdowns due to poor maintenance",
+      "Incorrect standard times set for a new process",
+      "Idle time caused by poor scheduling",
+      "Overtime premiums due to rush orders"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Planning variances arise because the standard itself was set incorrectly, e.g. wrong standard times."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Fixed costs are $ 40,000, selling price is $ 50 per unit and variable cost is $ 30 per unit. What is the break-even point in units (nearest whole unit)?",
+    "options": [
+      "1800",
+      "2000",
+      "2200",
+      "2400"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Break-even units = fixed costs / contribution per unit = 40000/(50-30) \u2248 2000 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Fixed costs are $ 30,000, selling price is $ 40 per unit and variable cost is $ 24 per unit. What is the break-even point in units (nearest whole unit)?",
+    "options": [
+      "1675",
+      "1875",
+      "2075",
+      "2275"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Break-even units = fixed costs / contribution per unit = 30000/(40-24) \u2248 1875 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Fixed costs are $ 50,000, selling price is $ 60 per unit and variable cost is $ 36 per unit. What is the break-even point in units (nearest whole unit)?",
+    "options": [
+      "1883",
+      "2083",
+      "2283",
+      "2483"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Break-even units = fixed costs / contribution per unit = 50000/(60-36) \u2248 2083 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Fixed costs are $ 45,000, selling price is $ 45 per unit and variable cost is $ 27 per unit. What is the break-even point in units (nearest whole unit)?",
+    "options": [
+      "2300",
+      "2500",
+      "2700",
+      "2900"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Break-even units = fixed costs / contribution per unit = 45000/(45-27) \u2248 2500 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Fixed costs are $ 36,000, selling price is $ 40 per unit and variable cost is $ 28 per unit. What is the break-even point in units (nearest whole unit)?",
+    "options": [
+      "2800",
+      "3000",
+      "3200",
+      "3400"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Break-even units = fixed costs / contribution per unit = 36000/(40-28) \u2248 3000 units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When labour hours are the limiting factor, which product should be prioritised?",
+    "options": [
+      "The product with the highest total contribution",
+      "The product with the highest selling price",
+      "The product with the highest contribution per labour hour",
+      "The product with the lowest variable cost per unit"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Where a resource is limiting, contribution per unit of the limiting factor should be maximised."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When labour hours are the limiting factor, which product should be prioritised?",
+    "options": [
+      "The product with the highest total contribution",
+      "The product with the highest selling price",
+      "The product with the highest contribution per labour hour",
+      "The product with the lowest variable cost per unit"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Where a resource is limiting, contribution per unit of the limiting factor should be maximised."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When labour hours are the limiting factor, which product should be prioritised?",
+    "options": [
+      "The product with the highest total contribution",
+      "The product with the highest selling price",
+      "The product with the highest contribution per labour hour",
+      "The product with the lowest variable cost per unit"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Where a resource is limiting, contribution per unit of the limiting factor should be maximised."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When labour hours are the limiting factor, which product should be prioritised?",
+    "options": [
+      "The product with the highest total contribution",
+      "The product with the highest selling price",
+      "The product with the highest contribution per labour hour",
+      "The product with the lowest variable cost per unit"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Where a resource is limiting, contribution per unit of the limiting factor should be maximised."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When labour hours are the limiting factor, which product should be prioritised?",
+    "options": [
+      "The product with the highest total contribution",
+      "The product with the highest selling price",
+      "The product with the highest contribution per labour hour",
+      "The product with the lowest variable cost per unit"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Where a resource is limiting, contribution per unit of the limiting factor should be maximised."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Relevant costs for a short-term decision are best described as:",
+    "options": [
+      "All variable costs only",
+      "All fixed costs only",
+      "Future costs that will be changed by the decision",
+      "All sunk costs incurred in the past"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Relevant costs are FUTURE cash flows that differ between alternatives."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Relevant costs for a short-term decision are best described as:",
+    "options": [
+      "All variable costs only",
+      "All fixed costs only",
+      "Future costs that will be changed by the decision",
+      "All sunk costs incurred in the past"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Relevant costs are FUTURE cash flows that differ between alternatives."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Relevant costs for a short-term decision are best described as:",
+    "options": [
+      "All variable costs only",
+      "All fixed costs only",
+      "Future costs that will be changed by the decision",
+      "All sunk costs incurred in the past"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Relevant costs are FUTURE cash flows that differ between alternatives."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Relevant costs for a short-term decision are best described as:",
+    "options": [
+      "All variable costs only",
+      "All fixed costs only",
+      "Future costs that will be changed by the decision",
+      "All sunk costs incurred in the past"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Relevant costs are FUTURE cash flows that differ between alternatives."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Relevant costs for a short-term decision are best described as:",
+    "options": [
+      "All variable costs only",
+      "All fixed costs only",
+      "Future costs that will be changed by the decision",
+      "All sunk costs incurred in the past"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Relevant costs are FUTURE cash flows that differ between alternatives."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a make-or-buy decision, which ONE of the following is LEAST likely to be relevant?",
+    "options": [
+      "Variable production costs that would be avoided if the component were bought in",
+      "The purchase price quoted by the external supplier",
+      "Allocated head office costs that will not change",
+      "Additional fixed costs required to enable in-house production"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Allocated fixed costs that will not change are not affected by the decision and are therefore not relevant."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a make-or-buy decision, which ONE of the following is LEAST likely to be relevant?",
+    "options": [
+      "Variable production costs that would be avoided if the component were bought in",
+      "The purchase price quoted by the external supplier",
+      "Allocated head office costs that will not change",
+      "Additional fixed costs required to enable in-house production"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Allocated fixed costs that will not change are not affected by the decision and are therefore not relevant."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a make-or-buy decision, which ONE of the following is LEAST likely to be relevant?",
+    "options": [
+      "Variable production costs that would be avoided if the component were bought in",
+      "The purchase price quoted by the external supplier",
+      "Allocated head office costs that will not change",
+      "Additional fixed costs required to enable in-house production"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Allocated fixed costs that will not change are not affected by the decision and are therefore not relevant."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a make-or-buy decision, which ONE of the following is LEAST likely to be relevant?",
+    "options": [
+      "Variable production costs that would be avoided if the component were bought in",
+      "The purchase price quoted by the external supplier",
+      "Allocated head office costs that will not change",
+      "Additional fixed costs required to enable in-house production"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Allocated fixed costs that will not change are not affected by the decision and are therefore not relevant."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a make-or-buy decision, which ONE of the following is LEAST likely to be relevant?",
+    "options": [
+      "Variable production costs that would be avoided if the component were bought in",
+      "The purchase price quoted by the external supplier",
+      "Allocated head office costs that will not change",
+      "Additional fixed costs required to enable in-house production"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Allocated fixed costs that will not change are not affected by the decision and are therefore not relevant."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A business has sales of $ 200,000 and profit of $ 40,000. What is its profit margin percentage (to one decimal place)?",
+    "options": [
+      "18.0%",
+      "20.0%",
+      "22.0%",
+      "10.0%"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Margin = profit / sales \u00d7 100 = 40000/200000 \u00d7 100 = 20.0%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A business has sales of $ 220,000 and profit of $ 42,000. What is its profit margin percentage (to one decimal place)?",
+    "options": [
+      "17.1%",
+      "19.1%",
+      "21.1%",
+      "10.0%"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Margin = profit / sales \u00d7 100 = 42000/220000 \u00d7 100 = 19.1%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A business has sales of $ 250,000 and profit of $ 50,000. What is its profit margin percentage (to one decimal place)?",
+    "options": [
+      "18.0%",
+      "20.0%",
+      "22.0%",
+      "10.0%"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Margin = profit / sales \u00d7 100 = 50000/250000 \u00d7 100 = 20.0%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A business has sales of $ 260,000 and profit of $ 52,000. What is its profit margin percentage (to one decimal place)?",
+    "options": [
+      "18.0%",
+      "20.0%",
+      "22.0%",
+      "10.0%"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Margin = profit / sales \u00d7 100 = 52000/260000 \u00d7 100 = 20.0%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "A business has sales of $ 280,000 and profit of $ 56,000. What is its profit margin percentage (to one decimal place)?",
+    "options": [
+      "18.0%",
+      "20.0%",
+      "22.0%",
+      "10.0%"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Margin = profit / sales \u00d7 100 = 56000/280000 \u00d7 100 = 20.0%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Operating profit is $ 30,000 and capital employed is $ 150,000. What is the return on capital employed (ROCE) (to one decimal place)?",
+    "options": [
+      "20.0%",
+      "10.0%",
+      "15.0%",
+      "20.0%"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ROCE = operating profit / capital employed \u00d7 100 = 30000/150000 \u00d7 100 = 20.0%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Operating profit is $ 30,000 and capital employed is $ 160,000. What is the return on capital employed (ROCE) (to one decimal place)?",
+    "options": [
+      "18.8%",
+      "10.0%",
+      "15.0%",
+      "20.0%"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ROCE = operating profit / capital employed \u00d7 100 = 30000/160000 \u00d7 100 = 18.8%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Operating profit is $ 30,000 and capital employed is $ 170,000. What is the return on capital employed (ROCE) (to one decimal place)?",
+    "options": [
+      "17.6%",
+      "10.0%",
+      "15.0%",
+      "20.0%"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ROCE = operating profit / capital employed \u00d7 100 = 30000/170000 \u00d7 100 = 17.6%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Operating profit is $ 30,000 and capital employed is $ 180,000. What is the return on capital employed (ROCE) (to one decimal place)?",
+    "options": [
+      "16.7%",
+      "10.0%",
+      "15.0%",
+      "20.0%"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ROCE = operating profit / capital employed \u00d7 100 = 30000/180000 \u00d7 100 = 16.7%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Operating profit is $ 30,000 and capital employed is $ 200,000. What is the return on capital employed (ROCE) (to one decimal place)?",
+    "options": [
+      "15.0%",
+      "10.0%",
+      "15.0%",
+      "20.0%"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ROCE = operating profit / capital employed \u00d7 100 = 30000/200000 \u00d7 100 = 15.0%."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a NON-FINANCIAL performance indicator?",
+    "options": [
+      "Gross profit margin",
+      "Labour turnover rate",
+      "Return on investment",
+      "Current ratio"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Labour turnover rate is a people-based (non-financial) performance indicator."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a NON-FINANCIAL performance indicator?",
+    "options": [
+      "Gross profit margin",
+      "Labour turnover rate",
+      "Return on investment",
+      "Current ratio"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Labour turnover rate is a people-based (non-financial) performance indicator."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a NON-FINANCIAL performance indicator?",
+    "options": [
+      "Gross profit margin",
+      "Labour turnover rate",
+      "Return on investment",
+      "Current ratio"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Labour turnover rate is a people-based (non-financial) performance indicator."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A balanced scorecard typically includes which set of perspectives?",
+    "options": [
+      "Financial, customer, internal processes and learning & growth",
+      "Financial only",
+      "Customer and shareholder only",
+      "Operations and finance only"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Kaplan and Norton\u2019s balanced scorecard includes financial, customer, internal business process and learning & growth perspectives."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A balanced scorecard typically includes which set of perspectives?",
+    "options": [
+      "Financial, customer, internal processes and learning & growth",
+      "Financial only",
+      "Customer and shareholder only",
+      "Operations and finance only"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Kaplan and Norton\u2019s balanced scorecard includes financial, customer, internal business process and learning & growth perspectives."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "In a spreadsheet, which reference keeps ROW 1 fixed when copied across columns but allows the column letter to change?",
+    "options": [
+      "$A$1",
+      "A$1",
+      "$A1",
+      "A1$"
+    ],
+    "correct_option_index": 1,
+    "explanation": "A$1 fixes row 1 (the $ before 1) but leaves the column as a relative reference."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "In a spreadsheet, which reference keeps ROW 1 fixed when copied across columns but allows the column letter to change?",
+    "options": [
+      "$A$1",
+      "A$1",
+      "$A1",
+      "A1$"
+    ],
+    "correct_option_index": 1,
+    "explanation": "A$1 fixes row 1 (the $ before 1) but leaves the column as a relative reference."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "In a spreadsheet, which reference keeps ROW 1 fixed when copied across columns but allows the column letter to change?",
+    "options": [
+      "$A$1",
+      "A$1",
+      "$A1",
+      "A1$"
+    ],
+    "correct_option_index": 1,
+    "explanation": "A$1 fixes row 1 (the $ before 1) but leaves the column as a relative reference."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "In a spreadsheet, which reference keeps ROW 1 fixed when copied across columns but allows the column letter to change?",
+    "options": [
+      "$A$1",
+      "A$1",
+      "$A1",
+      "A1$"
+    ],
+    "correct_option_index": 1,
+    "explanation": "A$1 fixes row 1 (the $ before 1) but leaves the column as a relative reference."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "In a spreadsheet, which reference keeps ROW 1 fixed when copied across columns but allows the column letter to change?",
+    "options": [
+      "$A$1",
+      "A$1",
+      "$A1",
+      "A1$"
+    ],
+    "correct_option_index": 1,
+    "explanation": "A$1 fixes row 1 (the $ before 1) but leaves the column as a relative reference."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which spreadsheet function would you MOST likely use to sum only positive values in a range?",
+    "options": [
+      "SUM",
+      "SUMIF",
+      "COUNT",
+      "AVERAGE"
+    ],
+    "correct_option_index": 1,
+    "explanation": "SUMIF can sum values that meet a given condition, such as >0."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which spreadsheet function would you MOST likely use to sum only positive values in a range?",
+    "options": [
+      "SUM",
+      "SUMIF",
+      "COUNT",
+      "AVERAGE"
+    ],
+    "correct_option_index": 1,
+    "explanation": "SUMIF can sum values that meet a given condition, such as >0."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which spreadsheet function would you MOST likely use to sum only positive values in a range?",
+    "options": [
+      "SUM",
+      "SUMIF",
+      "COUNT",
+      "AVERAGE"
+    ],
+    "correct_option_index": 1,
+    "explanation": "SUMIF can sum values that meet a given condition, such as >0."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is a benefit of using named ranges in spreadsheets?",
+    "options": [
+      "They automatically remove all errors",
+      "They make formulas easier to read and maintain",
+      "They prevent any changes to data",
+      "They encrypt the worksheet"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Named ranges make formulas clearer and reduce the risk of referencing the wrong cells."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is a benefit of using named ranges in spreadsheets?",
+    "options": [
+      "They automatically remove all errors",
+      "They make formulas easier to read and maintain",
+      "They prevent any changes to data",
+      "They encrypt the worksheet"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Named ranges make formulas clearer and reduce the risk of referencing the wrong cells."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a common RISK associated with extensive use of spreadsheets in management accounting?",
+    "options": [
+      "Guaranteed accuracy of all reports",
+      "Hidden errors in complex formulas and lack of version control",
+      "Inability to perform any what\u2011if analysis",
+      "Mandatory programming knowledge for all users"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Spreadsheet models can contain hidden errors and suffer from weak documentation and version control."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a common RISK associated with extensive use of spreadsheets in management accounting?",
+    "options": [
+      "Guaranteed accuracy of all reports",
+      "Hidden errors in complex formulas and lack of version control",
+      "Inability to perform any what\u2011if analysis",
+      "Mandatory programming knowledge for all users"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Spreadsheet models can contain hidden errors and suffer from weak documentation and version control."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a common RISK associated with extensive use of spreadsheets in management accounting?",
+    "options": [
+      "Guaranteed accuracy of all reports",
+      "Hidden errors in complex formulas and lack of version control",
+      "Inability to perform any what\u2011if analysis",
+      "Mandatory programming knowledge for all users"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Spreadsheet models can contain hidden errors and suffer from weak documentation and version control."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a common RISK associated with extensive use of spreadsheets in management accounting?",
+    "options": [
+      "Guaranteed accuracy of all reports",
+      "Hidden errors in complex formulas and lack of version control",
+      "Inability to perform any what\u2011if analysis",
+      "Mandatory programming knowledge for all users"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Spreadsheet models can contain hidden errors and suffer from weak documentation and version control."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which ONE of the following is a common RISK associated with extensive use of spreadsheets in management accounting?",
+    "options": [
+      "Guaranteed accuracy of all reports",
+      "Hidden errors in complex formulas and lack of version control",
+      "Inability to perform any what\u2011if analysis",
+      "Mandatory programming knowledge for all users"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Spreadsheet models can contain hidden errors and suffer from weak documentation and version control."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Data validation in a spreadsheet is used primarily to:",
+    "options": [
+      "Secure the file with a password",
+      "Restrict the type or range of data that can be entered",
+      "Automatically back up the workbook",
+      "Change all text into numbers"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Data validation constrains the values users can enter, helping to prevent input errors."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Data validation in a spreadsheet is used primarily to:",
+    "options": [
+      "Secure the file with a password",
+      "Restrict the type or range of data that can be entered",
+      "Automatically back up the workbook",
+      "Change all text into numbers"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Data validation constrains the values users can enter, helping to prevent input errors."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Data validation in a spreadsheet is used primarily to:",
+    "options": [
+      "Secure the file with a password",
+      "Restrict the type or range of data that can be entered",
+      "Automatically back up the workbook",
+      "Change all text into numbers"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Data validation constrains the values users can enter, helping to prevent input errors."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A simple performance dashboard for management should:",
+    "options": [
+      "Show a focused set of key indicators clearly and consistently",
+      "Use as many colours and charts as possible",
+      "Hide trends to avoid confusing users",
+      "Replace all detailed reports completely"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Effective dashboards present a small number of key indicators clearly; detail can be provided in supporting reports."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A simple performance dashboard for management should:",
+    "options": [
+      "Show a focused set of key indicators clearly and consistently",
+      "Use as many colours and charts as possible",
+      "Hide trends to avoid confusing users",
+      "Replace all detailed reports completely"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Effective dashboards present a small number of key indicators clearly; detail can be provided in supporting reports."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is a characteristic of semi\u2011variable cost?",
+    "options": [
+      "It remains fixed regardless of activity level",
+      "It varies in direct proportion to activity",
+      "It contains both fixed and variable elements",
+      "It is always treated as a sunk cost"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Semi\u2011variable (mixed) costs have a fixed element plus a variable element that changes with activity."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is a characteristic of semi\u2011variable cost?",
+    "options": [
+      "It remains fixed regardless of activity level",
+      "It varies in direct proportion to activity",
+      "It contains both fixed and variable elements",
+      "It is always treated as a sunk cost"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Semi\u2011variable (mixed) costs have a fixed element plus a variable element that changes with activity."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is a characteristic of semi\u2011variable cost?",
+    "options": [
+      "It remains fixed regardless of activity level",
+      "It varies in direct proportion to activity",
+      "It contains both fixed and variable elements",
+      "It is always treated as a sunk cost"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Semi\u2011variable (mixed) costs have a fixed element plus a variable element that changes with activity."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is a characteristic of semi\u2011variable cost?",
+    "options": [
+      "It remains fixed regardless of activity level",
+      "It varies in direct proportion to activity",
+      "It contains both fixed and variable elements",
+      "It is always treated as a sunk cost"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Semi\u2011variable (mixed) costs have a fixed element plus a variable element that changes with activity."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is a characteristic of semi\u2011variable cost?",
+    "options": [
+      "It remains fixed regardless of activity level",
+      "It varies in direct proportion to activity",
+      "It contains both fixed and variable elements",
+      "It is always treated as a sunk cost"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Semi\u2011variable (mixed) costs have a fixed element plus a variable element that changes with activity."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which budgeting approach is MOST likely to improve participation and motivation of lower\u2011level managers?",
+    "options": [
+      "Top\u2011down budgeting",
+      "Imposed budgeting",
+      "Bottom\u2011up (participative) budgeting",
+      "Zero\u2011based budgeting"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Participative (bottom\u2011up) budgeting involves managers in setting their own budgets, which can improve motivation."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which budgeting approach is MOST likely to improve participation and motivation of lower\u2011level managers?",
+    "options": [
+      "Top\u2011down budgeting",
+      "Imposed budgeting",
+      "Bottom\u2011up (participative) budgeting",
+      "Zero\u2011based budgeting"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Participative (bottom\u2011up) budgeting involves managers in setting their own budgets, which can improve motivation."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which budgeting approach is MOST likely to improve participation and motivation of lower\u2011level managers?",
+    "options": [
+      "Top\u2011down budgeting",
+      "Imposed budgeting",
+      "Bottom\u2011up (participative) budgeting",
+      "Zero\u2011based budgeting"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Participative (bottom\u2011up) budgeting involves managers in setting their own budgets, which can improve motivation."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which budgeting approach is MOST likely to improve participation and motivation of lower\u2011level managers?",
+    "options": [
+      "Top\u2011down budgeting",
+      "Imposed budgeting",
+      "Bottom\u2011up (participative) budgeting",
+      "Zero\u2011based budgeting"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Participative (bottom\u2011up) budgeting involves managers in setting their own budgets, which can improve motivation."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which budgeting approach is MOST likely to improve participation and motivation of lower\u2011level managers?",
+    "options": [
+      "Top\u2011down budgeting",
+      "Imposed budgeting",
+      "Bottom\u2011up (participative) budgeting",
+      "Zero\u2011based budgeting"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Participative (bottom\u2011up) budgeting involves managers in setting their own budgets, which can improve motivation."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is MOST likely to cause an ADVERSE labour rate variance?",
+    "options": [
+      "Using a higher proportion of trainee labour than planned",
+      "General wage rates increasing above the level assumed in the standard",
+      "Improved efficiency of skilled workers",
+      "Using cheaper materials than standard"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If actual wage rates are higher than the standard rate, the labour rate variance will be adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is MOST likely to cause an ADVERSE labour rate variance?",
+    "options": [
+      "Using a higher proportion of trainee labour than planned",
+      "General wage rates increasing above the level assumed in the standard",
+      "Improved efficiency of skilled workers",
+      "Using cheaper materials than standard"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If actual wage rates are higher than the standard rate, the labour rate variance will be adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is MOST likely to cause an ADVERSE labour rate variance?",
+    "options": [
+      "Using a higher proportion of trainee labour than planned",
+      "General wage rates increasing above the level assumed in the standard",
+      "Improved efficiency of skilled workers",
+      "Using cheaper materials than standard"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If actual wage rates are higher than the standard rate, the labour rate variance will be adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is MOST likely to cause an ADVERSE labour rate variance?",
+    "options": [
+      "Using a higher proportion of trainee labour than planned",
+      "General wage rates increasing above the level assumed in the standard",
+      "Improved efficiency of skilled workers",
+      "Using cheaper materials than standard"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If actual wage rates are higher than the standard rate, the labour rate variance will be adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following is MOST likely to cause an ADVERSE labour rate variance?",
+    "options": [
+      "Using a higher proportion of trainee labour than planned",
+      "General wage rates increasing above the level assumed in the standard",
+      "Improved efficiency of skilled workers",
+      "Using cheaper materials than standard"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If actual wage rates are higher than the standard rate, the labour rate variance will be adverse."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The margin of safety in units is defined as:",
+    "options": [
+      "Budgeted sales \u2212 break\u2011even sales",
+      "Break\u2011even sales \u2212 budgeted sales",
+      "Contribution \u00f7 fixed costs",
+      "Fixed costs \u00f7 contribution per unit"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Margin of safety (units) = budgeted or actual sales units minus break\u2011even sales units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The margin of safety in units is defined as:",
+    "options": [
+      "Budgeted sales \u2212 break\u2011even sales",
+      "Break\u2011even sales \u2212 budgeted sales",
+      "Contribution \u00f7 fixed costs",
+      "Fixed costs \u00f7 contribution per unit"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Margin of safety (units) = budgeted or actual sales units minus break\u2011even sales units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The margin of safety in units is defined as:",
+    "options": [
+      "Budgeted sales \u2212 break\u2011even sales",
+      "Break\u2011even sales \u2212 budgeted sales",
+      "Contribution \u00f7 fixed costs",
+      "Fixed costs \u00f7 contribution per unit"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Margin of safety (units) = budgeted or actual sales units minus break\u2011even sales units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The margin of safety in units is defined as:",
+    "options": [
+      "Budgeted sales \u2212 break\u2011even sales",
+      "Break\u2011even sales \u2212 budgeted sales",
+      "Contribution \u00f7 fixed costs",
+      "Fixed costs \u00f7 contribution per unit"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Margin of safety (units) = budgeted or actual sales units minus break\u2011even sales units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The margin of safety in units is defined as:",
+    "options": [
+      "Budgeted sales \u2212 break\u2011even sales",
+      "Break\u2011even sales \u2212 budgeted sales",
+      "Contribution \u00f7 fixed costs",
+      "Fixed costs \u00f7 contribution per unit"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Margin of safety (units) = budgeted or actual sales units minus break\u2011even sales units."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which ONE of the following BEST describes residual income (RI)?",
+    "options": [
+      "Profit after tax \u00f7 capital employed",
+      "Operating profit less a notional interest charge on capital employed",
+      "Net profit margin \u00d7 asset turnover",
+      "Earnings per share divided by market price"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Residual income = operating profit \u2212 (required return \u00d7 capital employed)."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which ONE of the following BEST describes residual income (RI)?",
+    "options": [
+      "Profit after tax \u00f7 capital employed",
+      "Operating profit less a notional interest charge on capital employed",
+      "Net profit margin \u00d7 asset turnover",
+      "Earnings per share divided by market price"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Residual income = operating profit \u2212 (required return \u00d7 capital employed)."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which ONE of the following BEST describes residual income (RI)?",
+    "options": [
+      "Profit after tax \u00f7 capital employed",
+      "Operating profit less a notional interest charge on capital employed",
+      "Net profit margin \u00d7 asset turnover",
+      "Earnings per share divided by market price"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Residual income = operating profit \u2212 (required return \u00d7 capital employed)."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which ONE of the following BEST describes residual income (RI)?",
+    "options": [
+      "Profit after tax \u00f7 capital employed",
+      "Operating profit less a notional interest charge on capital employed",
+      "Net profit margin \u00d7 asset turnover",
+      "Earnings per share divided by market price"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Residual income = operating profit \u2212 (required return \u00d7 capital employed)."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which ONE of the following BEST describes residual income (RI)?",
+    "options": [
+      "Profit after tax \u00f7 capital employed",
+      "Operating profit less a notional interest charge on capital employed",
+      "Net profit margin \u00d7 asset turnover",
+      "Earnings per share divided by market price"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Residual income = operating profit \u2212 (required return \u00d7 capital employed)."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following spreadsheet practices BEST supports good auditability and control?",
+    "options": [
+      "Embedding long, complex formulas without documentation",
+      "Using consistent layout, clear labels and separating input, workings and output areas",
+      "Protecting all worksheets so that no data can ever be changed",
+      "Allowing all users to freely edit any formula"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Good spreadsheet control includes clear structure, labelling and separation of input, workings and outputs."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following spreadsheet practices BEST supports good auditability and control?",
+    "options": [
+      "Embedding long, complex formulas without documentation",
+      "Using consistent layout, clear labels and separating input, workings and output areas",
+      "Protecting all worksheets so that no data can ever be changed",
+      "Allowing all users to freely edit any formula"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Good spreadsheet control includes clear structure, labelling and separation of input, workings and outputs."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following spreadsheet practices BEST supports good auditability and control?",
+    "options": [
+      "Embedding long, complex formulas without documentation",
+      "Using consistent layout, clear labels and separating input, workings and output areas",
+      "Protecting all worksheets so that no data can ever be changed",
+      "Allowing all users to freely edit any formula"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Good spreadsheet control includes clear structure, labelling and separation of input, workings and outputs."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following spreadsheet practices BEST supports good auditability and control?",
+    "options": [
+      "Embedding long, complex formulas without documentation",
+      "Using consistent layout, clear labels and separating input, workings and output areas",
+      "Protecting all worksheets so that no data can ever be changed",
+      "Allowing all users to freely edit any formula"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Good spreadsheet control includes clear structure, labelling and separation of input, workings and outputs."
+  },
+  {
+    "paper": "MA",
+    "unit_code": "MA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which ONE of the following spreadsheet practices BEST supports good auditability and control?",
+    "options": [
+      "Embedding long, complex formulas without documentation",
+      "Using consistent layout, clear labels and separating input, workings and output areas",
+      "Protecting all worksheets so that no data can ever be changed",
+      "Allowing all users to freely edit any formula"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Good spreadsheet control includes clear structure, labelling and separation of input, workings and outputs."
+  }
+]
