@@ -1,11 +1,12 @@
-import { useState } from "react";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { GraduationCap, BookOpen, Brain } from "lucide-react";
+import { GraduationCap, BookOpen, Brain, Target, Layers } from "lucide-react";
 import PracticeQuiz from "./PracticeQuiz";
 import QuestionBrowser from "./QuestionBrowser";
 import SpacedRepetition from "./SpacedRepetition";
+import FlashcardsContentNew from "@/components/FlashcardsContentNew";
+import MockExam from "./MockExam";
 
 export default function Study() {
   return (
@@ -18,23 +19,39 @@ export default function Study() {
           </div>
 
           <Tabs defaultValue="practice" className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 lg:w-[400px]">
+            <TabsList className="grid w-full grid-cols-5 lg:w-auto">
               <TabsTrigger value="practice" className="flex items-center gap-2">
                 <GraduationCap className="w-4 h-4" />
-                Practice
+                <span className="hidden sm:inline">Practice</span>
+              </TabsTrigger>
+              <TabsTrigger value="flashcards" className="flex items-center gap-2">
+                <Layers className="w-4 h-4" />
+                <span className="hidden sm:inline">Flashcards</span>
+              </TabsTrigger>
+              <TabsTrigger value="mock" className="flex items-center gap-2">
+                <Target className="w-4 h-4" />
+                <span className="hidden sm:inline">Mock</span>
               </TabsTrigger>
               <TabsTrigger value="review" className="flex items-center gap-2">
                 <Brain className="w-4 h-4" />
-                Review
+                <span className="hidden sm:inline">Review</span>
               </TabsTrigger>
               <TabsTrigger value="browse" className="flex items-center gap-2">
                 <BookOpen className="w-4 h-4" />
-                Browse
+                <span className="hidden sm:inline">Browse</span>
               </TabsTrigger>
             </TabsList>
 
             <TabsContent value="practice">
               <PracticeQuiz />
+            </TabsContent>
+
+            <TabsContent value="flashcards">
+              <FlashcardsContentNew />
+            </TabsContent>
+
+            <TabsContent value="mock">
+              <MockExam />
             </TabsContent>
 
             <TabsContent value="review">
