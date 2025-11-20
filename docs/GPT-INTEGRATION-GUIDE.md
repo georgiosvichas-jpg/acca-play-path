@@ -1,10 +1,10 @@
-# StudyBuddy GPT Integration Guide
+# Outcomeo GPT Integration Guide
 
-Complete guide for integrating StudyBuddy backend with a ChatGPT GPT using Actions.
+Complete guide for integrating Outcomeo backend with a ChatGPT GPT using Actions.
 
 ## 🎯 Overview
 
-StudyBuddy provides a backend API for ACCA exam preparation that can be accessed from:
+Outcomeo provides a backend API for ACCA exam preparation that can be accessed from:
 - Web application (React/TypeScript)
 - ChatGPT GPT (via Actions API)
 
@@ -16,7 +16,7 @@ Both clients use the same Supabase Edge Functions endpoints.
 
 Before setting up GPT Actions, ensure you have:
 
-1. **Supabase Project** with StudyBuddy deployed
+1. **Supabase Project** with Outcomeo deployed
 2. **Project URL**: `https://irlxegoatcgskhdvbvuo.supabase.co`
 3. **Service Role Key** (found in Supabase Dashboard → Settings → API)
 4. **Edge Functions** deployed (automatic with this project)
@@ -28,7 +28,7 @@ Before setting up GPT Actions, ensure you have:
 ### Step 1: Create Your GPT
 
 1. Go to [ChatGPT GPT Builder](https://chat.openai.com/gpts/editor)
-2. Create a new GPT named "StudyBuddy - ACCA Exam Coach"
+2. Create a new GPT named "Outcomeo - ACCA Exam Coach"
 3. Add this description:
    ```
    Your personal ACCA exam preparation coach. I help you:
@@ -61,7 +61,7 @@ Before setting up GPT Actions, ensure you have:
 
 Add a privacy policy URL (required by OpenAI):
 ```
-https://studybuddy.app/privacy
+https://outcomeo.app/privacy
 ```
 
 ---
@@ -291,7 +291,7 @@ GPT: [Calls createCheckoutLink with userId]
 
 **GPT Follow-up**:
 ```
-🌟 StudyBuddy Premium - $29/month
+🌟 Outcomeo Premium - $29/month
 
 Premium Features:
 ✓ Unlimited questions
@@ -360,7 +360,7 @@ GPT: [Calls getAnalyticsSummary]
 1. Use `supabase.auth` for user authentication
 2. Pass JWT tokens to edge functions
 3. Let RLS policies handle data access
-4. Use the provided `studyBuddyAPI` client helper
+4. Use the provided `outcomeoAPI` client helper
 
 ---
 
@@ -429,7 +429,7 @@ For issues or questions:
 1. Check edge function logs in Supabase dashboard
 2. Review this documentation
 3. Test endpoints manually with curl/Postman
-4. Contact: support@studybuddy.com
+4. Contact: support@outcomeo.com
 
 ---
 

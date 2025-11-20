@@ -1,6 +1,6 @@
 import { supabase } from "@/integrations/supabase/client";
 
-export const studyBuddyAPI = {
+export const outcomeoAPI = {
   // Get or create user
   async getUserOrCreate(email: string, examPaper?: string, examDate?: string, weeklyStudyHours?: number) {
     const { data, error } = await supabase.functions.invoke("users-get-or-create", {

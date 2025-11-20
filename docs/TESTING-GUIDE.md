@@ -1,6 +1,6 @@
-# StudyBuddy API Testing Guide
+# Outcomeo API Testing Guide
 
-Quick reference for testing all StudyBuddy backend endpoints.
+Quick reference for testing all Outcomeo backend endpoints.
 
 ## 🔑 Authentication
 
@@ -252,8 +252,8 @@ echo -e "\n✅ All tests passed!"
 
 Make executable and run:
 ```bash
-chmod +x test-studybuddy.sh
-./test-studybuddy.sh
+chmod +x test-outcomeo.sh
+./test-outcomeo.sh
 ```
 
 ---
