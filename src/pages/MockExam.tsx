@@ -22,6 +22,8 @@ interface Question {
   id: string;
   paper: string;
   unit_code: string | null;
+  type: string;
+  difficulty: string | null;
   question: string;
   options: string[];
   correct_option_index: number;
@@ -86,17 +88,18 @@ export default function MockExam() {
     }
 
     try {
-      // Fetch 50 random BT questions
-      const { data, error } = await supabase
-        .from("sb_questions")
-        .select("*")
-        .eq("paper", "BT")
-        .limit(1000);
+      // Use content-batch to fetch 50 MCQ questions
+      const { data, error } = await supabase.functions.invoke("content-batch", {
+        body: { 
+          paper: "BT", 
+          type: "mcq",
+          size: 50 
+        },
+      });
 
       if (error) throw error;
 
-      // Randomly select 50 questions
-      const shuffled = data?.sort(() => Math.random() - 0.5).slice(0, 50) || [];
+      const shuffled = data || [];
       setQuestions(shuffled.map(q => ({
         ...q,
         options: Array.isArray(q.options) ? q.options as string[] : []
@@ -132,24 +135,29 @@ export default function MockExam() {
 
         rawLog.push({
           question_id: q.id,
-          unit: q.unit_code,
-          user_answer: answers[idx],
-          correct_answer: q.correct_option_index,
-          is_correct: isCorrect,
+          unit_code: q.unit_code,
+          difficulty: q.difficulty,
+          correct: isCorrect,
+          time_spent: 0, // Could track per-question time if needed
         });
       });
 
       const accuracy = (correctCount / 50) * 100;
 
-      // Log session
+      // Log session via edge function
       if (user) {
-        await supabase.from("sb_study_sessions").insert({
-          user_id: user.id,
-          session_type: "mock_exam",
-          total_questions: 50,
-          correct_answers: correctCount,
-          raw_log: rawLog,
+        const { error: sessionError } = await supabase.functions.invoke("sessions-log", {
+          body: {
+            session_type: "mock_exam",
+            total_questions: 50,
+            correct_answers: correctCount,
+            raw_log: rawLog,
+          },
         });
+
+        if (sessionError) {
+          console.error("Error logging session:", sessionError);
+        }
 
         // Record in spaced repetition system
         const reviewData = questions.map((q, idx) => ({

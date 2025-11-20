@@ -14,19 +14,8 @@ export function BTQuestionImporter() {
     setStatus("idle");
 
     try {
-      // Fetch the JSON file from public folder
-      const response = await fetch("/data/bt_question_bank.json");
-      if (!response.ok) {
-        throw new Error("Failed to fetch question bank file");
-      }
-      
-      const questions = await response.json();
-      console.log(`Loaded ${questions.length} questions from file`);
-
-      // Send to edge function
-      const { data, error } = await supabase.functions.invoke("import-bt-questions", {
-        body: { questions },
-      });
+      // Call edge function - it will fetch the JSON from public storage
+      const { data, error } = await supabase.functions.invoke("import-bt-questions");
 
       if (error) throw error;
 
