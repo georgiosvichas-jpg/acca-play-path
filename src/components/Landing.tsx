@@ -509,7 +509,7 @@ export default function Landing() {
                 </ul>
               </div>
 
-              <Button id="cta-upgrade-elite" aria-label="Upgrade to Elite" className="w-full mt-6 h-12 rounded-xl bg-[#9333EA] hover:bg-[#7E22CE] text-white transition-all duration-200 shadow-md hover:shadow-lg" onClick={() => navigate("/auth")}>
+              <Button id="cta-upgrade-elite" aria-label="Upgrade to Elite" onClick={() => navigate("/auth")} className="w-full mt-6 h-12 rounded-xl text-white transition-all duration-200 shadow-md hover:shadow-lg bg-sidebar-ring">
                 Upgrade to Elite
               </Button>
             </Card>
