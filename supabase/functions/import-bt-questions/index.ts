@@ -30,20 +30,27 @@ Deno.serve(async (req) => {
     const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, supabaseServiceKey);
 
-    // Get questions from request body
-    const { questions: questionsData } = await req.json();
+    // Fetch JSON file from public storage
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/data/bt_question_bank.json`;
+    console.log(`Fetching questions from: ${publicUrl}`);
     
-    if (!questionsData || !Array.isArray(questionsData)) {
+    const fileResponse = await fetch(publicUrl);
+    if (!fileResponse.ok) {
+      throw new Error(`Failed to fetch question bank file: ${fileResponse.statusText}`);
+    }
+    
+    const questions: BTQuestion[] = await fileResponse.json();
+    
+    if (!Array.isArray(questions)) {
       return new Response(
         JSON.stringify({ 
-          error: 'Invalid request body. Expected { questions: [...] }' 
+          error: 'Invalid JSON format. Expected array of questions.' 
         }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
       );
     }
-
-    const questions: BTQuestion[] = questionsData;
-    console.log(`Received ${questions.length} questions from client`);
+    
+    console.log(`Loaded ${questions.length} questions from file`);
 
     // Check if questions already exist to avoid duplicates
     const { data: existingQuestions } = await supabase

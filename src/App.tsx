@@ -12,6 +12,7 @@ import Planner from "./pages/Planner";
 import PlannerEnhanced from "./pages/PlannerEnhanced";
 import PracticeQuiz from "./pages/PracticeQuiz";
 import MockExam from "./pages/MockExam";
+import MiniTest from "./pages/MiniTest";
 import SpacedRepetition from "./pages/SpacedRepetition";
 import QuestionBrowser from "./pages/QuestionBrowser";
 import Analytics from "./pages/Analytics";
@@ -109,6 +110,11 @@ const App = () => (
           <Route path="/coach" element={<Coach />} />
           <Route path="/progress" element={<Progress />} />
           <Route path="/mock-exam" element={<MockExam />} />
+          <Route path="/mini-test" element={
+            <ProtectedRoute>
+              <MiniTest />
+            </ProtectedRoute>
+          } />
           
           {/* Unified sections */}
           <Route path="/study" element={<Study />} />
