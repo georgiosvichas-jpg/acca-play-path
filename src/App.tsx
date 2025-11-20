@@ -38,6 +38,9 @@ import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsOfUse from "./pages/TermsOfUse";
 import Disclaimer from "./pages/Disclaimer";
 import Resources from "./pages/Resources";
+import PlanningStudies from "./pages/blog/PlanningStudies";
+import CommonMistakes from "./pages/blog/CommonMistakes";
+import ExamChecklist from "./pages/blog/ExamChecklist";
 
 const queryClient = new QueryClient();
 
@@ -169,6 +172,9 @@ const App = () => (
           <Route path="/terms-of-use" element={<TermsOfUse />} />
           <Route path="/disclaimer" element={<Disclaimer />} />
           <Route path="/resources" element={<Resources />} />
+          <Route path="/blog/planning-studies" element={<PlanningStudies />} />
+          <Route path="/blog/common-mistakes" element={<CommonMistakes />} />
+          <Route path="/blog/exam-checklist" element={<ExamChecklist />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
