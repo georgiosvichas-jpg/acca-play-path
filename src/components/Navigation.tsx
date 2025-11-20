@@ -35,6 +35,7 @@ import {
 } from "@/components/ui/tooltip";
 import XPDisplay from "./XPDisplay";
 import PeerComparisonDrawer from "./PeerComparisonDrawer";
+import logo from "@/assets/logo.png";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: Home, description: "Your study hub and progress overview" },
@@ -68,9 +69,7 @@ export default function Navigation() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link to="/dashboard" className="flex items-center gap-2 group">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
-              <GraduationCap className="w-6 h-6 text-white" />
-            </div>
+            <img src={logo} alt="Outcomeo" className="w-10 h-10 rounded-xl group-hover:scale-110 transition-transform" />
             <span className="font-display font-extrabold text-xl hidden sm:block">
               Outcomeo
             </span>
