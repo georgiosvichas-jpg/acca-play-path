@@ -118,7 +118,7 @@ export default function Landing() {
               </p>
               <div className="flex items-center gap-3 text-sm text-primary font-medium bg-primary/5 p-4 rounded-xl border border-primary/10">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span>"Students who plan with Study Buddy complete 3× more study hours per week."</span>
+                <span>"Students who plan with Outcomeo complete 3× more study hours per week."</span>
               </div>
             </div>
           </div>
@@ -214,7 +214,7 @@ export default function Landing() {
                 Officially Aligned
               </h3>
               <p className="text-lg text-muted-foreground leading-relaxed">
-                All Study Buddy content is structured directly from the public ACCA syllabus and learning outcomes — updated annually to reflect the latest standards. 
+                All Outcomeo content is structured directly from the public ACCA syllabus and learning outcomes — updated annually to reflect the latest standards. 
                 You focus on learning, we handle the updates.
               </p>
               <div className="flex items-center gap-3 text-sm text-secondary font-medium bg-secondary/5 p-4 rounded-xl border border-secondary/10">
@@ -233,7 +233,7 @@ export default function Landing() {
               </h3>
               <p className="text-lg text-muted-foreground leading-relaxed">
                 Seamlessly switch between desktop, tablet, and mobile. 
-                Study Buddy is fully responsive, cloud-synced, and built for the modern learner.
+                Outcomeo is fully responsive, cloud-synced, and built for the modern learner.
               </p>
               <div className="flex items-center gap-3 text-sm text-accent font-medium bg-accent/5 p-4 rounded-xl border border-accent/10">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
@@ -252,7 +252,7 @@ export default function Landing() {
           <div className="text-center pt-16 animate-fade-in">
             <div className="max-w-2xl mx-auto space-y-8">
               <h3 className="text-2xl md:text-3xl font-display font-bold">
-                Join thousands of ACCA students studying smarter with Study Buddy
+                Join thousands of ACCA students studying smarter with Outcomeo
               </h3>
               <Button size="lg" onClick={() => scrollToSection("pricing")} className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90">
                 Start Free
@@ -279,7 +279,7 @@ export default function Landing() {
             name: "Aisha K.",
             location: "Lagos",
             paper: "Paper PM",
-            text: "Study Buddy completely changed how I prepare for my exams. The flashcards and progress tracker kept me consistent — and I passed PM on my first try!"
+            text: "Outcomeo completely changed how I prepare for my exams. The flashcards and progress tracker kept me consistent — and I passed PM on my first try!"
           }, {
             name: "George L.",
             location: "London",
@@ -537,7 +537,7 @@ export default function Landing() {
           <Accordion type="single" collapsible className="space-y-4">
             {[{
             q: "Is this officially affiliated with ACCA?",
-            a: "No. Study Buddy is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA."
+            a: "No. Outcomeo is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA."
           }, {
             q: "Can I use it while working full-time?",
             a: "Absolutely — the app was designed for busy professionals. Your personalized study plan adapts to your schedule and time until exam day. You can study 15 minutes a day on your commute or during breaks and still make measurable progress."
@@ -554,8 +554,8 @@ export default function Landing() {
             q: "How does the \"readiness score\" work?",
             a: "The readiness score combines your XP, completed units, and quiz performance to estimate how prepared you are for your exam. It's a smart, data-driven way to know when you're exam-ready — no more guesswork."
           }, {
-            q: "What makes Study Buddy different from traditional courses?",
-            a: "Unlike static video courses, Study Buddy keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting."
+            q: "What makes Outcomeo different from traditional courses?",
+            a: "Unlike static video courses, Outcomeo keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting."
           }, {
             q: "Is my progress and data secure?",
             a: "Yes. All your data is encrypted and stored securely in the cloud. We never share user information with third parties or use it for marketing without consent."
@@ -663,10 +663,10 @@ export default function Landing() {
               <a href="#" className="hover:text-primary transition-colors">Terms of Use</a>
               <a href="#" className="hover:text-primary transition-colors">Disclaimer</a>
             </div>
-            <p className="text-sm text-muted-foreground">Copyright © ACCA Study Buddy 2025</p>
+            <p className="text-sm text-muted-foreground">Copyright © ACCA Outcomeo 2025</p>
             <p className="text-xs text-muted-foreground max-w-2xl mx-auto">
               ACCA is a registered trademark of the Association of Chartered Certified Accountants.
-              Study Buddy is an independent product inspired by the official syllabus.
+              Outcomeo is an independent product inspired by the official syllabus.
             </p>
           </div>
         </div>

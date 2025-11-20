@@ -1,6 +1,6 @@
 # Motivational Messages System
 
-This directory contains the centralized motivational messaging system for ACCA Study Buddy.
+This directory contains the centralized motivational messaging system for ACCA Outcomeo.
 
 ## Overview
 
@@ -51,7 +51,7 @@ Reinforces gamification and XP rewards.
 ### 8. **reminder**
 Re-engagement messages for inactive users.
 - "Your planner misses you — ready to continue?"
-- "Momentum is calling — open Study Buddy and start small."
+- "Momentum is calling — open Outcomeo and start small."
 
 ### 9. **celebration**
 Major milestones and first-time achievements.
