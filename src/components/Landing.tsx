@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, CheckCircle, Star, Mail, Linkedin, ArrowRight, Lock } from "lucide-react";
+import { Sparkles, CheckCircle, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import featurePlanner from "@/assets/feature-planner.png";
 import featureFlashcards from "@/assets/feature-flashcards.png";
@@ -590,13 +590,25 @@ export default function Landing() {
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-8">Let's connect</h2>
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-              <a href="mailto:support@outcomeo.ai" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">hello@outcomeo.com<Mail className="w-5 h-5" />
-                support@outcomeo.ai
+              <a href="mailto:hello@outcomeo.com" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">
+                <Mail className="w-5 h-5" />
+                hello@outcomeo.com
               </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">
-              <Linkedin className="w-5 h-5" />
-                Outcomeo ACCA
-              </a>
+              <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                <Instagram className="w-5 h-5" />
+                <span>Instagram</span>
+                <Badge variant="secondary" className="ml-1 text-xs">Coming Soon</Badge>
+              </div>
+              <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                <MessageCircle className="w-5 h-5" />
+                <span>TikTok</span>
+                <Badge variant="secondary" className="ml-1 text-xs">Coming Soon</Badge>
+              </div>
+              <div className="flex items-center gap-2 text-lg text-muted-foreground">
+                <Linkedin className="w-5 h-5" />
+                <span>LinkedIn</span>
+                <Badge variant="secondary" className="ml-1 text-xs">Coming Soon</Badge>
+              </div>
             </div>
           </div>
           <Card className="p-8">
