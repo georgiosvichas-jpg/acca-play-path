@@ -187,7 +187,6 @@ export default function MockExam() {
   if (!examStarted) {
     return (
       <>
-        <Navigation />
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Card>
@@ -303,7 +302,6 @@ export default function MockExam() {
   if (examSubmitted && results) {
     return (
       <>
-        <Navigation />
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Card>
@@ -368,7 +366,6 @@ export default function MockExam() {
 
   return (
     <>
-      <Navigation />
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
         {/* Timer Bar */}
         <div className="fixed top-16 left-0 right-0 bg-background border-b z-40">

@@ -48,8 +48,6 @@ export default function Pricing() {
 
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-background via-background to-secondary/10">
-      <Navigation />
-      
       <main className="flex-1 container mx-auto px-4 py-16">
         {/* Header */}
         <div className="text-center mb-16 space-y-4 animate-fade-in">

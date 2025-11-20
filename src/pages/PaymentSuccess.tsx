@@ -17,7 +17,6 @@ export default function PaymentSuccess() {
 
   return (
     <>
-      <Navigation />
       <div className="min-h-screen flex items-center justify-center p-4">
         <Card className="p-8 md:p-12 max-w-2xl text-center shadow-card animate-fade-in">
           {/* Success Icon */}
