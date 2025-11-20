@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import {
   Home,
   GraduationCap,
@@ -96,6 +97,18 @@ export function AppSidebar() {
   const { planType, openCustomerPortal } = useSubscription();
   const collapsed = state === "collapsed";
 
+  // Persistent collapsible state
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
+    const saved = localStorage.getItem("sidebar-expanded-sections");
+    return saved ? JSON.parse(saved) : { study: true, analytics: true };
+  });
+
+  const toggleSection = (section: string, isOpen: boolean) => {
+    const newState = { ...expandedSections, [section]: isOpen };
+    setExpandedSections(newState);
+    localStorage.setItem("sidebar-expanded-sections", JSON.stringify(newState));
+  };
+
   const getPlanBadge = () => {
     if (planType === "elite") return <Badge className="bg-gradient-to-r from-primary to-secondary text-white text-xs">Elite</Badge>;
     if (planType === "pro") return <Badge className="bg-primary text-white text-xs">Pro</Badge>;
@@ -141,10 +154,16 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainNavItems.map((item) => {
                 const Icon = item.icon;
+                const sectionKey = item.label.toLowerCase();
                 
                 if (item.children) {
                   return (
-                    <Collapsible key={item.path} className="group/collapsible" defaultOpen>
+                    <Collapsible 
+                      key={item.path} 
+                      className="group/collapsible"
+                      open={expandedSections[sectionKey]}
+                      onOpenChange={(isOpen) => toggleSection(sectionKey, isOpen)}
+                    >
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
                           <SidebarMenuButton>
