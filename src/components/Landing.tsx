@@ -590,12 +590,11 @@ export default function Landing() {
           <div className="text-center mb-16 animate-fade-in">
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-8">Let's connect</h2>
             <div className="flex flex-col sm:flex-row gap-6 justify-center mb-12">
-              <a href="mailto:support@outcomeo.ai" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">
-                <Mail className="w-5 h-5" />
+              <a href="mailto:support@outcomeo.ai" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">hello@outcomeo.com<Mail className="w-5 h-5" />
                 support@outcomeo.ai
               </a>
               <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 text-lg hover:text-primary transition-colors">
-                <Linkedin className="w-5 h-5" />
+              <Linkedin className="w-5 h-5" />
                 Outcomeo ACCA
               </a>
             </div>
