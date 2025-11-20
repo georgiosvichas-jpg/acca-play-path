@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -44,23 +45,29 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { session_type, total_questions, correct_answers, raw_log } = await req.json();
+    // Validate input
+    const requestSchema = z.object({
+      session_type: z.enum(["onboarding", "daily", "quick_drill", "mini_test", "mock_exam"]),
+      total_questions: z.number().int().min(0).max(1000).optional(),
+      correct_answers: z.number().int().min(0).max(1000).optional(),
+      raw_log: z.array(z.any()).optional(),
+    });
 
-    if (!session_type) {
+    const body = await req.json();
+    const validation = requestSchema.safeParse(body);
+    
+    if (!validation.success) {
+      console.error("Validation error:", validation.error);
       return new Response(
-        JSON.stringify({ error: "session_type is required" }),
+        JSON.stringify({ 
+          error: "Invalid input parameters",
+          details: validation.error.errors 
+        }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Validate session_type
-    const validTypes = ["onboarding", "daily", "quick_drill", "mini_test", "mock_exam"];
-    if (!validTypes.includes(session_type)) {
-      return new Response(
-        JSON.stringify({ error: `session_type must be one of: ${validTypes.join(", ")}` }),
-        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
-      );
-    }
+    const { session_type, total_questions, correct_answers, raw_log } = validation.data;
 
     // Create session log
     const { data: session, error } = await supabaseAdmin

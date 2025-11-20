@@ -1,5 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import { createClient } from "npm:@supabase/supabase-js@2";
+import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -17,7 +18,29 @@ serve(async (req) => {
       Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
     );
 
-    const { email, exam_paper, exam_date, weekly_study_hours } = await req.json();
+    // Validate input
+    const requestSchema = z.object({
+      email: z.string().email("Invalid email format").max(255),
+      exam_paper: z.string().max(50).optional(),
+      exam_date: z.string().max(50).optional(),
+      weekly_study_hours: z.number().int().min(1).max(168).optional(),
+    });
+
+    const body = await req.json();
+    const validation = requestSchema.safeParse(body);
+    
+    if (!validation.success) {
+      console.error("Validation error:", validation.error);
+      return new Response(
+        JSON.stringify({ 
+          error: "Invalid input parameters",
+          details: validation.error.errors 
+        }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const { email, exam_paper, exam_date, weekly_study_hours } = validation.data;
 
     if (!email) {
       return new Response(
