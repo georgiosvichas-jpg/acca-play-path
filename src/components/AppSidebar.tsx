@@ -60,11 +60,23 @@ const mainNavItems = [
     path: "/study", 
     label: "Study", 
     icon: GraduationCap,
+    children: [
+      { path: "/study?tab=practice", label: "Practice Quiz" },
+      { path: "/study?tab=flashcards", label: "Flashcards" },
+      { path: "/study?tab=mock", label: "Mock Exam" },
+      { path: "/study?tab=review", label: "Spaced Repetition" },
+      { path: "/study?tab=browse", label: "Question Browser" },
+    ]
   },
   { 
     path: "/analytics", 
     label: "Analytics", 
     icon: BarChart3,
+    children: [
+      { path: "/analytics?tab=overview", label: "Question Analytics" },
+      { path: "/analytics?tab=progress", label: "Progress Tracking" },
+      { path: "/analytics?tab=trends", label: "Trends" },
+    ]
   },
   { 
     path: "/planner", 
@@ -129,6 +141,42 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainNavItems.map((item) => {
                 const Icon = item.icon;
+                
+                if (item.children) {
+                  return (
+                    <Collapsible key={item.path} className="group/collapsible" defaultOpen>
+                      <SidebarMenuItem>
+                        <CollapsibleTrigger asChild>
+                          <SidebarMenuButton>
+                            <Icon className="h-4 w-4" />
+                            {!collapsed && <span>{item.label}</span>}
+                            {!collapsed && (
+                              <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
+                            )}
+                          </SidebarMenuButton>
+                        </CollapsibleTrigger>
+                        {!collapsed && (
+                          <CollapsibleContent>
+                            <SidebarMenuSub>
+                              {item.children.map((child) => (
+                                <SidebarMenuSubItem key={child.path}>
+                                  <SidebarMenuSubButton asChild>
+                                    <NavLink 
+                                      to={child.path}
+                                      activeClassName="bg-muted text-primary font-medium"
+                                    >
+                                      {child.label}
+                                    </NavLink>
+                                  </SidebarMenuSubButton>
+                                </SidebarMenuSubItem>
+                              ))}
+                            </SidebarMenuSub>
+                          </CollapsibleContent>
+                        )}
+                      </SidebarMenuItem>
+                    </Collapsible>
+                  );
+                }
 
                 return (
                   <SidebarMenuItem key={item.path}>
