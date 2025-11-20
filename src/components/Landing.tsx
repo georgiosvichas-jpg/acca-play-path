@@ -397,7 +397,7 @@ export default function Landing() {
             animationDelay: "0.1s",
             background: "linear-gradient(135deg, #00A67E 0%, #009D73 100%)"
           }}>
-              <Badge className="absolute top-4 left-1/2 -translate-x-1/2 bg-white text-[#00A67E] border-none text-xs px-4 py-1.5 font-semibold">
+              <Badge className="absolute top-4 left-1/2 -translate-x-1/2 bg-white text-[#00A67E] border-none text-xs px-4 py-1.5 font-semibold min-w-[120px] justify-center">
                 Most Popular
               </Badge>
               
@@ -459,7 +459,7 @@ export default function Landing() {
           }} className="relative border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up bg-primary-foreground">
               <div className="flex items-center justify-center gap-2 mb-4">
                 
-                <Badge className="bg-[#9333EA]/10 text-[#9333EA] border-none text-xs px-3 py-1">
+                <Badge className="bg-[#9333EA]/10 text-[#9333EA] border-none text-xs px-4 py-1.5 font-semibold min-w-[120px] justify-center">
                   Elite
                 </Badge>
               </div>
