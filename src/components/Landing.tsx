@@ -6,7 +6,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { Sparkles, CheckCircle, Star, Mail, Linkedin, ArrowRight, Lock, Crown } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import featurePlanner from "@/assets/feature-planner.png";
@@ -660,9 +660,9 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto">
           <div className="text-center space-y-4">
             <div className="flex flex-wrap justify-center gap-6 text-sm text-muted-foreground">
-              <a href="#" className="hover:text-primary transition-colors">Privacy Policy</a>
-              <a href="#" className="hover:text-primary transition-colors">Terms of Use</a>
-              <a href="#" className="hover:text-primary transition-colors">Disclaimer</a>
+              <Link to="/privacy-policy" className="hover:text-primary transition-colors">Privacy Policy</Link>
+              <Link to="/terms-of-use" className="hover:text-primary transition-colors">Terms of Use</Link>
+              <Link to="/disclaimer" className="hover:text-primary transition-colors">Disclaimer</Link>
             </div>
             <p className="text-sm text-muted-foreground">Copyright © ACCA Outcomeo 2025</p>
             <p className="text-xs text-muted-foreground max-w-2xl mx-auto">
