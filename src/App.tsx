@@ -45,8 +45,8 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      <CookieConsent />
       <BrowserRouter>
+        <CookieConsent />
         <XPConfettiWrapper />
         <GuidedTour />
         <Routes>
