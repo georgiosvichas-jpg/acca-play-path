@@ -109,7 +109,7 @@ export default function Landing() {
               </div>
             </div>
             <div className="order-1 lg:order-2 space-y-6">
-              <Badge className="rounded-full bg-primary/10 text-primary border-primary/20">Feature 01</Badge>
+              
               <h3 className="text-3xl md:text-4xl font-display font-bold">
                 Smart Planner
               </h3>
@@ -117,7 +117,7 @@ export default function Landing() {
                 Plan your studies intelligently with AI-assisted schedules that adapt to your available time and exam date. 
                 No spreadsheets — just automatic balance between topics, difficulty, and deadlines.
               </p>
-              <div className="flex items-center gap-3 text-sm text-primary font-medium bg-primary/5 p-4 rounded-xl border border-primary/10">
+              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-primary/10 bg-blue-100 text-blue-800">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span>"Students who plan with Outcomeo complete 3× more study hours per week."</span>
               </div>
@@ -127,7 +127,7 @@ export default function Landing() {
           {/* Feature Block 2 - Interactive Flashcards */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
             <div className="space-y-6">
-              <Badge className="rounded-full bg-secondary/10 text-secondary border-secondary/20">Feature 02</Badge>
+              
               <h3 className="text-3xl md:text-4xl font-display font-bold">
                 Interactive Flashcards
               </h3>
@@ -135,7 +135,7 @@ export default function Landing() {
                 Turn complex ACCA theory into quick 5-minute learning bursts. 
                 Reinforce memory with mini-problems and smart repetition that keeps you exam-ready anytime.
               </p>
-              <div className="flex items-center gap-3 text-sm text-secondary font-medium bg-secondary/5 p-4 rounded-xl border border-secondary/10">
+              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-secondary/10 text-blue-800 bg-blue-100">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span>"Based on proven cognitive recall techniques."</span>
               </div>
@@ -159,7 +159,7 @@ export default function Landing() {
               </div>
             </div>
             <div className="order-1 lg:order-2 space-y-6">
-              <Badge className="rounded-full bg-accent/10 text-accent border-accent/20">Feature 03</Badge>
+              
               <h3 className="text-3xl md:text-4xl font-display font-bold">
                 Progress Analytics
               </h3>
@@ -168,7 +168,7 @@ export default function Landing() {
                 Track your readiness, XP, and streaks — and know exactly when you're exam-ready. 
                 No more guessing if you're prepared enough.
               </p>
-              <div className="flex items-center gap-3 text-sm text-accent font-medium bg-accent/5 p-4 rounded-xl border border-accent/10">
+              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-accent/10 text-blue-800 bg-blue-100">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span>"Your personal data-driven progress coach."</span>
               </div>
@@ -178,7 +178,7 @@ export default function Landing() {
           {/* Feature Block 4 - Gamification Engine */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
             <div className="space-y-6">
-              <Badge className="rounded-full bg-primary/10 text-primary border-primary/20">Feature 04</Badge>
+              
               <h3 className="text-3xl md:text-4xl font-display font-bold">
                 Gamification Engine
               </h3>
@@ -186,7 +186,7 @@ export default function Landing() {
                 Earn XP, unlock badges, and climb leaderboards as you study. 
                 Stay consistent, motivated, and accountable — because progress feels better when it's visible.
               </p>
-              <div className="flex items-center gap-3 text-sm text-primary font-medium bg-primary/5 p-4 rounded-xl border border-primary/10">
+              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-primary/10 bg-blue-100 text-blue-800">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span>"Turn discipline into a daily habit."</span>
               </div>
@@ -210,7 +210,7 @@ export default function Landing() {
               </div>
             </div>
             <div className="order-1 lg:order-2 space-y-6">
-              <Badge className="rounded-full bg-secondary/10 text-secondary border-secondary/20">Feature 05</Badge>
+              
               <h3 className="text-3xl md:text-4xl font-display font-bold">
                 Officially Aligned
               </h3>
@@ -218,7 +218,7 @@ export default function Landing() {
                 All Outcomeo content is structured directly from the public ACCA syllabus and learning outcomes — updated annually to reflect the latest standards. 
                 You focus on learning, we handle the updates.
               </p>
-              <div className="flex items-center gap-3 text-sm text-secondary font-medium bg-secondary/5 p-4 rounded-xl border border-secondary/10">
+              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-secondary/10 text-blue-800 bg-blue-100">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span>"Trusted by ACCA candidates worldwide."</span>
               </div>
@@ -228,7 +228,7 @@ export default function Landing() {
           {/* Feature Block 6 - Learn Anywhere */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20 animate-fade-in">
             <div className="space-y-6">
-              <Badge className="rounded-full bg-accent/10 text-accent border-accent/20">Feature 06</Badge>
+              
               <h3 className="text-3xl md:text-4xl font-display font-bold">
                 Learn Anywhere
               </h3>
@@ -236,7 +236,7 @@ export default function Landing() {
                 Seamlessly switch between desktop, tablet, and mobile. 
                 Outcomeo is fully responsive, cloud-synced, and built for the modern learner.
               </p>
-              <div className="flex items-center gap-3 text-sm text-accent font-medium bg-accent/5 p-4 rounded-xl border border-accent/10">
+              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-accent/10 bg-blue-100 text-blue-800">
                 <CheckCircle className="w-5 h-5 flex-shrink-0" />
                 <span>"Stay productive wherever you are."</span>
               </div>
