@@ -46,7 +46,7 @@ export default function Landing() {
                   {item === "faq" ? "FAQ" : item}
                 </button>)}
               <Button onClick={() => navigate("/auth")} size="sm" className="rounded-xl">
-                Start Free
+                Start for free
               </Button>
             </div>
           </div>
@@ -256,7 +256,7 @@ export default function Landing() {
                 Join thousands of ACCA students studying smarter with Outcomeo
               </h3>
               <Button size="lg" onClick={() => scrollToSection("pricing")} className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90">
-                Start Free
+                Start for free
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </div>
@@ -577,7 +577,7 @@ export default function Landing() {
               Chat with us or start your free plan today — and see how Outcomeo can transform your ACCA prep.
             </p>
             <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl">
-              Start Free Today
+              Start for free today
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
           </div>
