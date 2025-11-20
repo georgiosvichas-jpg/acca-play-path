@@ -15,7 +15,12 @@ export type NudgeType =
   | "streak-popup"
   | "elite-insights"
   | "mock-limit-ribbon"
-  | "dashboard-footer";
+  | "dashboard-footer"
+  | "multi-paper-dashboard"
+  | "exam-week-mode"
+  | "predictive-analytics"
+  | "pass-probability"
+  | "study-tips";
 
 interface UpgradeNudgeProps {
   type: NudgeType;

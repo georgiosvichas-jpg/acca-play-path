@@ -50,6 +50,8 @@ export const TIER_LIMITS = {
     studyPlanDays: Infinity,
     aiTutor: false,
     predictiveAnalytics: false,
+    advancedSpacedRepetition: false,
+    passProbability: false,
   },
   elite: {
     questionBankPercent: 100,
@@ -66,5 +68,7 @@ export const TIER_LIMITS = {
     examWeekMode: true,
     multiPaperDashboard: true,
     aiCopilot: true,
+    advancedSpacedRepetition: true,
+    passProbability: true,
   },
 } as const;

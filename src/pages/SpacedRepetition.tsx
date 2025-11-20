@@ -11,9 +11,10 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { Brain, CheckCircle2, XCircle, ArrowRight, Calendar, TrendingUp } from "lucide-react";
+import { Brain, CheckCircle2, XCircle, ArrowRight, Calendar, TrendingUp, Settings } from "lucide-react";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
+import { AdvancedSpacedRepetition } from "@/components/AdvancedSpacedRepetition";
 
 interface Question {
   id: string;
@@ -30,10 +31,12 @@ export default function SpacedRepetition() {
   const navigate = useNavigate();
   const { recordReview, getDueReviews, getReviewStats } = useSpacedRepetition();
   const { checkAndAwardBadges } = useBadgeChecker();
+  const { hasFeature } = useFeatureAccess();
 
   // Stats state
   const [stats, setStats] = useState<any>(null);
   const [dueQuestionIds, setDueQuestionIds] = useState<string[]>([]);
+  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
 
   // Review session state
   const [reviewStarted, setReviewStarted] = useState(false);
