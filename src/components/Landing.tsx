@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain, ArrowUp } from "lucide-react";
+import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain, ArrowUp, AlertTriangle, CheckCircle2, Clock, Tag } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -24,7 +24,9 @@ export default function Landing() {
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [visibleTestimonials, setVisibleTestimonials] = useState<boolean[]>([false, false, false]);
   const [showCTABanner, setShowCTABanner] = useState(false);
+  const [visibleResources, setVisibleResources] = useState<boolean[]>([false, false, false]);
   const testimonialRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const resourceRefs = useRef<(HTMLDivElement | null)[]>([]);
   const featuresRef = useRef<HTMLElement | null>(null);
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
@@ -114,6 +116,33 @@ export default function Landing() {
     observer.observe(featuresRef.current);
 
     return () => observer.disconnect();
+  }, []);
+
+  // Intersection Observer for resources
+  useEffect(() => {
+    const observers = resourceRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleResources(prev => {
+              const newVisible = [...prev];
+              newVisible[index] = true;
+              return newVisible;
+            });
+          }
+        },
+        { threshold: 0.2 }
+      );
+      
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
   }, []);
 
   const scrollToTop = () => {
@@ -851,38 +880,140 @@ export default function Landing() {
       </section>
 
       {/* Resources */}
-      <section id="resources" className="py-20 px-4 md:px-8 bg-muted/30">
-        <div className="max-w-7xl mx-auto">
+      <section id="resources" className="py-20 px-4 md:px-8 bg-gradient-to-br from-muted/30 via-background to-muted/20 relative overflow-hidden">
+        {/* Background decorative elements */}
+        <div className="absolute top-10 left-10 w-32 h-32 rounded-full bg-primary/5 blur-3xl" />
+        <div className="absolute bottom-20 right-10 w-40 h-40 rounded-full bg-secondary/5 blur-3xl" />
+        
+        <div className="max-w-7xl mx-auto relative">
           <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">Free resources to supercharge your ACCA prep</h2>
+            <Badge className="mb-4 rounded-full bg-primary/10 text-primary border-primary/20">
+              100% Free Resources
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 bg-gradient-to-r from-foreground to-foreground/70 bg-clip-text text-transparent">
+              Free resources to supercharge your ACCA prep
+            </h2>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+              Expert advice and proven strategies to help you succeed
+            </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-8 mb-8">
+          
+          <div className="grid md:grid-cols-3 gap-8 mb-12">
             {[{
-            title: "How to plan your ACCA studies effectively",
-            desc: "A comprehensive guide to structuring your study schedule",
-            link: "/blog/planning-studies"
-          }, {
-            title: "Top 10 mistakes ACCA students make",
-            desc: "Learn from others and avoid common pitfalls",
-            link: "/blog/common-mistakes"
-          }, {
-            title: "Ultimate checklist before your exam week",
-            desc: "Everything you need to prepare for exam day",
-            link: "/blog/exam-checklist"
-          }].map((resource, i) => <Link key={i} to={resource.link}>
-                <Card className="p-6 hover:shadow-lg transition-all cursor-pointer animate-slide-up h-full" style={{
-              animationDelay: `${i * 0.1}s`
-            }}>
-                  <h3 className="text-xl font-bold mb-2">{resource.title}</h3>
-                  <p className="text-muted-foreground">{resource.desc}</p>
-                </Card>
-              </Link>)}
+              title: "How to plan your ACCA studies effectively",
+              desc: "A comprehensive guide to structuring your study schedule and maximizing your study time",
+              link: "/blog/planning-studies",
+              icon: BookOpen,
+              category: "Planning",
+              readTime: "5 min read",
+              gradient: "from-blue-500/10 to-cyan-500/10",
+              iconBg: "bg-blue-500/10",
+              iconColor: "text-blue-600",
+              accentColor: "bg-blue-500"
+            }, {
+              title: "Top 10 mistakes ACCA students make",
+              desc: "Learn from others and avoid common pitfalls that can derail your progress",
+              link: "/blog/common-mistakes",
+              icon: AlertTriangle,
+              category: "Tips & Advice",
+              readTime: "7 min read",
+              gradient: "from-amber-500/10 to-orange-500/10",
+              iconBg: "bg-amber-500/10",
+              iconColor: "text-amber-600",
+              accentColor: "bg-amber-500"
+            }, {
+              title: "Ultimate checklist before your exam week",
+              desc: "Everything you need to prepare for exam day and ensure you're fully ready",
+              link: "/blog/exam-checklist",
+              icon: CheckCircle2,
+              category: "Exam Prep",
+              readTime: "4 min read",
+              gradient: "from-green-500/10 to-emerald-500/10",
+              iconBg: "bg-green-500/10",
+              iconColor: "text-green-600",
+              accentColor: "bg-green-500"
+            }].map((resource, i) => {
+              const Icon = resource.icon;
+              return (
+                <div
+                  key={i}
+                  ref={el => resourceRefs.current[i] = el}
+                  className={`transition-all duration-700 ${
+                    visibleResources[i] 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-8'
+                  }`}
+                  style={{ transitionDelay: `${i * 150}ms` }}
+                >
+                  <Link to={resource.link} className="block h-full group">
+                    <Card className="relative p-8 hover:shadow-2xl hover:-translate-y-2 transition-all duration-300 cursor-pointer h-full overflow-hidden border-2 border-border/50 hover:border-primary/20 bg-card">
+                      {/* Accent bar that expands on hover */}
+                      <div className={`absolute top-0 left-0 h-full w-1 ${resource.accentColor} transition-all duration-300 group-hover:w-2`} />
+                      
+                      {/* Gradient background overlay */}
+                      <div className={`absolute inset-0 bg-gradient-to-br ${resource.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} />
+                      
+                      {/* FREE Badge */}
+                      <div className="absolute top-4 right-4 bg-gradient-to-r from-primary to-secondary text-primary-foreground text-xs font-bold px-3 py-1 rounded-full shadow-md transform rotate-3 group-hover:rotate-6 transition-transform duration-300">
+                        FREE
+                      </div>
+                      
+                      <div className="relative z-10">
+                        {/* Icon with animated background */}
+                        <div className={`w-14 h-14 rounded-xl ${resource.iconBg} flex items-center justify-center mb-6 group-hover:scale-110 group-hover:rotate-3 transition-all duration-300 shadow-sm`}>
+                          <Icon className={`w-7 h-7 ${resource.iconColor}`} strokeWidth={2} />
+                        </div>
+                        
+                        {/* Category tag */}
+                        <div className="flex items-center gap-2 mb-3">
+                          <Badge variant="outline" className="text-xs font-medium border-border/50">
+                            <Tag className="w-3 h-3 mr-1" />
+                            {resource.category}
+                          </Badge>
+                        </div>
+                        
+                        {/* Title */}
+                        <h3 className="text-xl font-bold mb-3 text-foreground group-hover:text-primary transition-colors duration-300">
+                          {resource.title}
+                        </h3>
+                        
+                        {/* Description */}
+                        <p className="text-sm text-muted-foreground leading-relaxed mb-4">
+                          {resource.desc}
+                        </p>
+                        
+                        {/* Metadata and Read more */}
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t border-border/50">
+                          <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+                            <Clock className="w-3.5 h-3.5" />
+                            <span>{resource.readTime}</span>
+                          </div>
+                          <div className="flex items-center gap-1 text-sm font-medium text-primary group-hover:gap-2 transition-all duration-300">
+                            Read more
+                            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform duration-300" />
+                          </div>
+                        </div>
+                      </div>
+                    </Card>
+                  </Link>
+                </div>
+              );
+            })}
           </div>
+          
+          {/* Enhanced CTA Button */}
           <div className="text-center">
             <Link to="/resources">
-              <Button variant="outline" className="rounded-xl bg-amber-100">
-                View all resources
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button 
+                size="lg"
+                className="rounded-xl bg-gradient-to-r from-primary via-primary to-secondary hover:from-primary/90 hover:via-primary/90 hover:to-secondary/90 text-primary-foreground shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 group relative overflow-hidden"
+              >
+                <span className="relative z-10 flex items-center gap-2">
+                  View all resources
+                  <ArrowRight className="h-5 w-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </span>
+                {/* Animated gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-r from-secondary to-primary opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Button>
             </Link>
           </div>
