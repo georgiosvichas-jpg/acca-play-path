@@ -86,10 +86,57 @@ export function useSubscription() {
   useEffect(() => {
     checkSubscription();
 
-    // Auto-refresh every 60 seconds
+    // Set up realtime subscription for user_profiles changes
+    if (user) {
+      const channel = supabase
+        .channel(`user-profile-${user.id}`)
+        .on(
+          'postgres_changes',
+          {
+            event: '*', // Listen to all events (INSERT, UPDATE, DELETE)
+            schema: 'public',
+            table: 'user_profiles',
+            filter: `user_id=eq.${user.id}`,
+          },
+          (payload) => {
+            console.log('Subscription status changed in realtime:', payload);
+            
+            // Extract the new data from the payload
+            const newData = payload.new as any;
+            if (newData) {
+              setSubscriptionInfo({
+                isSubscribed: newData.subscription_status === "active",
+                planType: (newData.plan_type as PlanType) || "free",
+                subscriptionEnd: newData.subscription_end_date || null,
+                isLoading: false,
+              });
+              
+              // Show a toast notification when plan changes
+              if (payload.eventType === 'UPDATE' && newData.plan_type !== payload.old?.plan_type) {
+                const planNames = { free: "Free", per_paper: "Per Paper", pro: "Pro", elite: "Elite" };
+                toast({
+                  title: "Plan Updated!",
+                  description: `Your plan has been upgraded to ${planNames[newData.plan_type as keyof typeof planNames] || newData.plan_type}`,
+                });
+              }
+            }
+          }
+        )
+        .subscribe();
+
+      // Auto-refresh every 60 seconds as backup
+      const interval = setInterval(checkSubscription, 60000);
+      
+      return () => {
+        supabase.removeChannel(channel);
+        clearInterval(interval);
+      };
+    }
+
+    // Auto-refresh every 60 seconds if no user
     const interval = setInterval(checkSubscription, 60000);
     return () => clearInterval(interval);
-  }, [checkSubscription]);
+  }, [checkSubscription, user]);
 
   const openCustomerPortal = async () => {
     try {
