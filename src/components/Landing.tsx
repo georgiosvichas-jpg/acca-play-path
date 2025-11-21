@@ -74,7 +74,7 @@ export default function Landing() {
                   Start for free
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
-                <Button size="lg" variant="outline" onClick={() => scrollToSection("features")} className="rounded-xl bg-amber-200 hover:bg-amber-100 text-card-foreground">
+                <Button size="lg" variant="outline" onClick={() => scrollToSection("features")} className="rounded-xl text-card-foreground bg-amber-100">
                   See how it works
                 </Button>
               </div>
