@@ -9,6 +9,13 @@ export const STRIPE_PRICES = {
   ELITE_ANNUAL: "price_1SVtGfC00m6oIeSr87tL5cus",
 } as const;
 
+export const STRIPE_PRODUCTS = {
+  PRO_MONTHLY: "prod_TSovoEevwjBlAJ",
+  PRO_ANNUAL: "prod_TSovAlz3AJldbA",
+  ELITE_MONTHLY: "prod_TSovxpBecu5RAg",
+  ELITE_ANNUAL: "prod_TSou39pPeUsXRY",
+} as const;
+
 export type PlanType = "free" | "pro" | "elite";
 
 export interface SubscriptionInfo {
