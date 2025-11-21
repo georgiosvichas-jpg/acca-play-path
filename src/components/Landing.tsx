@@ -817,52 +817,52 @@ export default function Landing() {
               icon: Building2,
               q: "Is this officially affiliated with ACCA?",
               a: "No. Outcomeo is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA.",
-              color: "from-primary/80 to-primary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Clock,
               q: "Can I use it while working full-time?",
               a: "Absolutely — the app was designed for busy professionals. Your personalized study plan adapts to your schedule and time until exam day. You can study 15 minutes a day on your commute or during breaks and still make measurable progress.",
-              color: "from-secondary/80 to-secondary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: FileQuestion,
               q: "How are the flashcards and questions created?",
               a: "Our content is written by qualified ACCA tutors and graduates, based entirely on ACCA's public syllabus and exam-style logic. Every flashcard, mini-problem, and explanation is original, practical, and updated annually to stay relevant.",
-              color: "from-primary/80 to-primary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Smartphone,
               q: "Do you have a mobile app?",
               a: "Yes — the web version works perfectly on all mobile devices. You can add it to your home screen for one-tap access, track your streaks, and study anywhere. A native app for iOS and Android is coming soon.",
-              color: "from-secondary/80 to-secondary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Gift,
               q: "Is it really free to start?",
               a: "Yes. You can start completely free with one ACCA paper to test the planner, flashcards, and analytics. Upgrade only when you're ready to unlock all 13 papers and premium features like streaks, leaderboards, and progress tracking.",
-              color: "from-primary/80 to-primary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Target,
               q: "How does the \"readiness score\" work?",
               a: "The readiness score combines your XP, completed units, and quiz performance to estimate how prepared you are for your exam. It's a smart, data-driven way to know when you're exam-ready — no more guesswork.",
-              color: "from-secondary/80 to-secondary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Sparkles,
               q: "What makes Outcomeo different from traditional courses?",
               a: "Unlike static video courses, Outcomeo keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting.",
-              color: "from-primary/80 to-primary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Shield,
               q: "Is my progress and data secure?",
               a: "Yes. All your data is encrypted and stored securely in the cloud. We never share user information with third parties or use it for marketing without consent.",
-              color: "from-secondary/80 to-secondary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Users,
               q: "Can my employer or tutor track my progress?",
               a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default.",
-              color: "from-primary/80 to-primary"
+              color: "from-emerald-500/80 to-emerald-600"
             }, {
               icon: Mail,
               q: "How can I contact you?",
               a: "You can reach our team anytime at hello@outcomeo.com. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners.",
-              color: "from-secondary/80 to-secondary"
+              color: "from-emerald-500/80 to-emerald-600"
             }].map((faq, i) => {
               const Icon = faq.icon;
               return (
