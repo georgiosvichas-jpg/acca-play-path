@@ -581,9 +581,9 @@ export default function Landing() {
           }, {
             q: "How can I contact you?",
             a: "You can reach our team anytime at hello@outcomeo.com. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners."
-          }].map((faq, i) => <AccordionItem key={i} value={`item-${i}`} className="bg-background rounded-xl px-6 shadow-sm">
-                <AccordionTrigger className="text-left font-semibold">{faq.q}</AccordionTrigger>
-                <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
+          }].map((faq, i) => <AccordionItem key={i} value={`item-${i}`} className="bg-amber-100 rounded-xl px-6 shadow-sm">
+                <AccordionTrigger className="text-left font-semibold text-card-foreground">{faq.q}</AccordionTrigger>
+                <AccordionContent className="text-card-foreground/80">{faq.a}</AccordionContent>
               </AccordionItem>)}
           </Accordion>
           <div className="text-center mt-12 animate-fade-in">
