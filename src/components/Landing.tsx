@@ -10,7 +10,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { Sparkles, CheckCircle, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
-import StickyScrollFeatures from "@/components/StickyScrollFeatures";
+import SwipeableCardStack from "@/components/SwipeableCardStack";
 export default function Landing() {
   const navigate = useNavigate();
   const [navBg, setNavBg] = useState(false);
@@ -95,8 +95,8 @@ export default function Landing() {
             <div className="w-24 h-1 bg-primary mx-auto mt-8 rounded-full" />
           </div>
 
-          {/* Sticky Scroll Features */}
-          <StickyScrollFeatures />
+          {/* 3D Swipeable Card Stack */}
+          <SwipeableCardStack />
 
           {/* Section Footer CTA */}
           <div className="text-center pt-16 animate-fade-in">
