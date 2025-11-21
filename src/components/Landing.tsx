@@ -226,72 +226,70 @@ export default function Landing() {
           <div className="grid md:grid-cols-3 gap-6 mb-12 items-stretch">
             {/* Card 1 - Free */}
             <Card className="relative bg-card border-2 border-border rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
-              <div className="flex-1 space-y-6">
-                <div className="space-y-2">
-                  <div className="gap-2 mb-2 flex items-center justify-center">
-                    <h3 className="text-2xl font-bold text-foreground">FREE</h3>
-                  </div>
-                  
-                  <div className="gap-2 pt-2 flex items-baseline justify-center">
-                    <span className="text-4xl font-bold text-foreground">€0</span>
-                    <span className="text-sm text-muted-foreground">— Forever Free</span>
-                  </div>
-                  
-                  <p className="text-sm text-muted-foreground text-center pt-4 leading-relaxed">
-                    Discover how Outcomeo works — with just enough access to explore the tool, but not enough to prepare for a real exam.
-                  </p>
+              <div className="space-y-2">
+                <div className="gap-2 mb-2 flex items-center justify-center">
+                  <h3 className="text-2xl font-bold text-foreground">FREE</h3>
                 </div>
+                
+                <div className="gap-2 pt-2 flex items-baseline justify-center">
+                  <span className="text-4xl font-bold text-foreground">€0</span>
+                  <span className="text-sm text-muted-foreground">— Forever Free</span>
+                </div>
+                
+                <p className="text-sm text-muted-foreground text-center pt-4 pb-6 leading-relaxed min-h-[80px]">
+                  Discover how Outcomeo works — with just enough access to explore the tool, but not enough to prepare for a real exam.
+                </p>
+              </div>
 
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-semibold mb-4 text-foreground">What's Included</p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.1s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">10% of each question bank</span>
-                        <p className="text-muted-foreground mt-0.5">Try real ACCA-style questions across all papers. Good for testing — not enough for exam readiness.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.15s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">10 daily flashcards</span>
-                        <p className="text-muted-foreground mt-0.5">Maintain a small practice habit and preview the micro-learning format.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.2s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">1 weekly timed mock</span>
-                        <p className="text-muted-foreground mt-0.5">One simulation per week to get a feel for exam timing.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.25s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Basic analytics</span>
-                        <p className="text-muted-foreground mt-0.5">View accuracy and time spent — limited insights.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.3s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">1-week study plan preview</span>
-                        <p className="text-muted-foreground mt-0.5">See how the structured plan works, but cannot build a full journey.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+              <div className="flex-1 pt-4 border-t">
+                <p className="text-sm font-semibold mb-4 text-foreground">What's Included</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.1s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">10% of each question bank</span>
+                      <p className="text-muted-foreground mt-0.5">Try real ACCA-style questions across all papers. Good for testing — not enough for exam readiness.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.15s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">10 daily flashcards</span>
+                      <p className="text-muted-foreground mt-0.5">Maintain a small practice habit and preview the micro-learning format.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.2s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">1 weekly timed mock</span>
+                      <p className="text-muted-foreground mt-0.5">One simulation per week to get a feel for exam timing.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.25s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Basic analytics</span>
+                      <p className="text-muted-foreground mt-0.5">View accuracy and time spent — limited insights.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.3s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">1-week study plan preview</span>
+                      <p className="text-muted-foreground mt-0.5">See how the structured plan works, but cannot build a full journey.</p>
+                    </div>
+                  </li>
+                </ul>
               </div>
 
               <div className="pt-4 border-t mt-6">
@@ -313,102 +311,100 @@ export default function Landing() {
                 Recommended
               </Badge>
               
-              <div className="flex-1 space-y-6">
-                <div className="space-y-2">
-                  <div className="gap-2 mb-2 flex items-center justify-center">
-                    <h3 className="text-2xl font-bold text-foreground">PRO</h3>
-                  </div>
-                  
-                  <div className="gap-2 pt-2 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-primary">€{isAnnual ? "99" : "12.99"}</span>
-                    <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
-                  </div>
-                  <p className="text-center text-sm font-medium text-primary">
-                    {isAnnual ? "Everything you need to pass" : "Everything you need to pass"}
-                  </p>
-                  
-                  <p className="text-sm text-muted-foreground text-center pt-4 leading-relaxed">
-                    The complete ACCA practice toolkit. Designed for candidates who want full coverage, structured guidance, and a proven exam study system.
-                  </p>
+              <div className="space-y-2">
+                <div className="gap-2 mb-2 flex items-center justify-center">
+                  <h3 className="text-2xl font-bold text-foreground">PRO</h3>
                 </div>
+                
+                <div className="gap-2 pt-2 flex items-center justify-center">
+                  <span className="text-4xl font-bold text-primary">€{isAnnual ? "99" : "12.99"}</span>
+                  <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
+                </div>
+                <p className="text-center text-sm font-medium text-primary">
+                  {isAnnual ? "Everything you need to pass" : "Everything you need to pass"}
+                </p>
+                
+                <p className="text-sm text-muted-foreground text-center pt-4 pb-6 leading-relaxed min-h-[80px]">
+                  The complete ACCA practice toolkit. Designed for candidates who want full coverage, structured guidance, and a proven exam study system.
+                </p>
+              </div>
 
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-semibold mb-4 text-foreground">What You Unlock</p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.1s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">100% of all question banks</span>
-                        <p className="text-muted-foreground mt-0.5">Full access to every ACCA-style micro-problem and mini-case.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.15s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Unlimited flashcards</span>
-                        <p className="text-muted-foreground mt-0.5">Unlimited daily practice to build retention and exam confidence.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.2s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">4 weekly timed mocks</span>
-                        <p className="text-muted-foreground mt-0.5">Enough simulations to track progress and improve exam discipline.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.25s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">AI explanations (limited)</span>
-                        <p className="text-muted-foreground mt-0.5">Get instant insights after every question — understand the logic behind right/wrong answers.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.3s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Full analytics + heatmaps</span>
-                        <p className="text-muted-foreground mt-0.5">Identify your weakest units in seconds and focus where it matters.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.35s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Unlimited study planner</span>
-                        <p className="text-muted-foreground mt-0.5">Build a personalized plan for any exam date.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.4s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Core spaced repetition engine</span>
-                        <p className="text-muted-foreground mt-0.5">Automatically reviews topics you forget — boosts long-term retention.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.45s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">AI study path generator</span>
-                        <p className="text-muted-foreground mt-0.5">Recommends the right order to study based on performance.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+              <div className="flex-1 pt-4 border-t">
+                <p className="text-sm font-semibold mb-4 text-foreground">What You Unlock</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.1s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">100% of all question banks</span>
+                      <p className="text-muted-foreground mt-0.5">Full access to every ACCA-style micro-problem and mini-case.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.15s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Unlimited flashcards</span>
+                      <p className="text-muted-foreground mt-0.5">Unlimited daily practice to build retention and exam confidence.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.2s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">4 weekly timed mocks</span>
+                      <p className="text-muted-foreground mt-0.5">Enough simulations to track progress and improve exam discipline.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.25s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">AI explanations (limited)</span>
+                      <p className="text-muted-foreground mt-0.5">Get instant insights after every question — understand the logic behind right/wrong answers.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.3s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Full analytics + heatmaps</span>
+                      <p className="text-muted-foreground mt-0.5">Identify your weakest units in seconds and focus where it matters.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.35s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Unlimited study planner</span>
+                      <p className="text-muted-foreground mt-0.5">Build a personalized plan for any exam date.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.4s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Core spaced repetition engine</span>
+                      <p className="text-muted-foreground mt-0.5">Automatically reviews topics you forget — boosts long-term retention.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.45s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">AI study path generator</span>
+                      <p className="text-muted-foreground mt-0.5">Recommends the right order to study based on performance.</p>
+                    </div>
+                  </li>
+                </ul>
               </div>
 
               <div className="pt-4 border-t mt-6">
@@ -425,120 +421,118 @@ export default function Landing() {
             <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
             animationDelay: "0.2s"
           }}>
-              <div className="flex-1 space-y-6">
-                <div className="space-y-2">
-                  <div className="gap-2 mb-2 flex items-center justify-center">
-                    <h3 className="text-2xl font-bold text-foreground">ELITE</h3>
-                  </div>
-                  
-                  <div className="gap-2 pt-2 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-foreground">€{isAnnual ? "159" : "19.99"}</span>
-                    <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
-                  </div>
-                  <p className="text-center text-sm font-medium text-accent">
-                    {isAnnual ? "AI-powered performance coaching" : "AI-powered performance coaching"}
-                  </p>
-                  
-                  <p className="text-sm text-muted-foreground text-center pt-4 leading-relaxed">
-                    Designed for serious candidates who want maximum clarity, personalized guidance, and zero guesswork. This is the closest you can get to having a personal ACCA tutor.
-                  </p>
+              <div className="space-y-2">
+                <div className="gap-2 mb-2 flex items-center justify-center">
+                  <h3 className="text-2xl font-bold text-foreground">ELITE</h3>
                 </div>
+                
+                <div className="gap-2 pt-2 flex items-center justify-center">
+                  <span className="text-4xl font-bold text-foreground">€{isAnnual ? "159" : "19.99"}</span>
+                  <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
+                </div>
+                <p className="text-center text-sm font-medium text-accent">
+                  {isAnnual ? "AI-powered performance coaching" : "AI-powered performance coaching"}
+                </p>
+                
+                <p className="text-sm text-muted-foreground text-center pt-4 pb-6 leading-relaxed min-h-[80px]">
+                  Designed for serious candidates who want maximum clarity, personalized guidance, and zero guesswork. This is the closest you can get to having a personal ACCA tutor.
+                </p>
+              </div>
 
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-semibold mb-4 text-foreground">Everything in Pro, plus:</p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.1s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Unlimited timed mocks</span>
-                        <p className="text-muted-foreground mt-0.5">Run simulations daily if needed — the fastest way to build exam stamina.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.15s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Unlimited AI Tutor Chat</span>
-                        <p className="text-muted-foreground mt-0.5">Full conversational access. Ask any question. Get any explanation. Anytime.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.2s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Advanced spaced repetition</span>
-                        <p className="text-muted-foreground mt-0.5">Concept-level memory tracking, adaptive scheduling, retention predictions.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.25s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Predictive analytics</span>
-                        <p className="text-muted-foreground mt-0.5">Forecast your expected score based on your real performance patterns.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.3s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Pass probability tracker</span>
-                        <p className="text-muted-foreground mt-0.5">Know your likelihood of passing each week — adjust early.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.35s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Performance benchmarking</span>
-                        <p className="text-muted-foreground mt-0.5">Compare yourself with top performers.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.4s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Exam-week mode</span>
-                        <p className="text-muted-foreground mt-0.5">A 7-day high-intensity preparation program designed to maximize peak performance.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.45s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Multi-paper dashboard</span>
-                        <p className="text-muted-foreground mt-0.5">Track progress across multiple papers in one unified view.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.5s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">AI Copilot (dynamic study plans)</span>
-                        <p className="text-muted-foreground mt-0.5">Your study plan updates daily based on what you actually did.</p>
-                      </div>
-                    </li>
-                    <li className="flex items-start gap-2 animate-fade-in" style={{
-                    animationDelay: "0.55s"
-                  }}>
-                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                      <div className="text-sm">
-                        <span className="font-medium text-foreground">Early access to new features</span>
-                        <p className="text-muted-foreground mt-0.5">Elite users get priority.</p>
-                      </div>
-                    </li>
-                  </ul>
-                </div>
+              <div className="flex-1 pt-4 border-t">
+                <p className="text-sm font-semibold mb-4 text-foreground">Everything in Pro, plus:</p>
+                <ul className="space-y-3">
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.1s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Unlimited timed mocks</span>
+                      <p className="text-muted-foreground mt-0.5">Run simulations daily if needed — the fastest way to build exam stamina.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.15s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Unlimited AI Tutor Chat</span>
+                      <p className="text-muted-foreground mt-0.5">Full conversational access. Ask any question. Get any explanation. Anytime.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.2s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Advanced spaced repetition</span>
+                      <p className="text-muted-foreground mt-0.5">Concept-level memory tracking, adaptive scheduling, retention predictions.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.25s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Predictive analytics</span>
+                      <p className="text-muted-foreground mt-0.5">Forecast your expected score based on your real performance patterns.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.3s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Pass probability tracker</span>
+                      <p className="text-muted-foreground mt-0.5">Know your likelihood of passing each week — adjust early.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.35s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Performance benchmarking</span>
+                      <p className="text-muted-foreground mt-0.5">Compare yourself with top performers.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.4s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Exam-week mode</span>
+                      <p className="text-muted-foreground mt-0.5">A 7-day high-intensity preparation program designed to maximize peak performance.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.45s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Multi-paper dashboard</span>
+                      <p className="text-muted-foreground mt-0.5">Track progress across multiple papers in one unified view.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.5s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">AI Copilot (dynamic study plans)</span>
+                      <p className="text-muted-foreground mt-0.5">Your study plan updates daily based on what you actually did.</p>
+                    </div>
+                  </li>
+                  <li className="flex items-start gap-2 animate-fade-in" style={{
+                  animationDelay: "0.55s"
+                }}>
+                    <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <div className="text-sm">
+                      <span className="font-medium text-foreground">Early access to new features</span>
+                      <p className="text-muted-foreground mt-0.5">Elite users get priority.</p>
+                    </div>
+                  </li>
+                </ul>
               </div>
 
               <div className="pt-4 border-t mt-6">
