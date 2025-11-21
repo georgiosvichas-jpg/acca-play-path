@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain, ArrowUp, AlertTriangle, CheckCircle2, Clock, Tag } from "lucide-react";
+import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain, ArrowUp, AlertTriangle, CheckCircle2, Clock, Tag, Building2, FileQuestion, Smartphone, Gift, Target, Shield, Users } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,8 +25,10 @@ export default function Landing() {
   const [visibleTestimonials, setVisibleTestimonials] = useState<boolean[]>([false, false, false]);
   const [showCTABanner, setShowCTABanner] = useState(false);
   const [visibleResources, setVisibleResources] = useState<boolean[]>([false, false, false]);
+  const [visibleFaqs, setVisibleFaqs] = useState<boolean[]>(Array(10).fill(false));
   const testimonialRefs = useRef<(HTMLDivElement | null)[]>([]);
   const resourceRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const faqRefs = useRef<(HTMLDivElement | null)[]>([]);
   const featuresRef = useRef<HTMLElement | null>(null);
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
@@ -134,6 +136,33 @@ export default function Landing() {
           }
         },
         { threshold: 0.2 }
+      );
+      
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+
+  // Intersection Observer for FAQs
+  useEffect(() => {
+    const observers = faqRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleFaqs(prev => {
+              const newVisible = [...prev];
+              newVisible[index] = true;
+              return newVisible;
+            });
+          }
+        },
+        { threshold: 0.1 }
       );
       
       observer.observe(ref);
@@ -775,53 +804,108 @@ export default function Landing() {
       </section>
 
       {/* FAQ */}
-      <section id="faq" className="py-20 px-4 md:px-8 bg-muted/30">
-        <div className="max-w-3xl mx-auto">
+      <section id="faq" className="py-20 px-4 md:px-8 bg-gradient-to-b from-muted/30 to-background">
+        <div className="max-w-4xl mx-auto">
           <div className="text-center mb-16 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">Frequently Asked Questions</h2>
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-4 bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-lg text-muted-foreground">Everything you need to know about Outcomeo</p>
           </div>
           <Accordion type="single" collapsible className="space-y-4">
             {[{
-            q: "Is this officially affiliated with ACCA?",
-            a: "No. Outcomeo is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA."
-          }, {
-            q: "Can I use it while working full-time?",
-            a: "Absolutely — the app was designed for busy professionals. Your personalized study plan adapts to your schedule and time until exam day. You can study 15 minutes a day on your commute or during breaks and still make measurable progress."
-          }, {
-            q: "How are the flashcards and questions created?",
-            a: "Our content is written by qualified ACCA tutors and graduates, based entirely on ACCA's public syllabus and exam-style logic. Every flashcard, mini-problem, and explanation is original, practical, and updated annually to stay relevant."
-          }, {
-            q: "Do you have a mobile app?",
-            a: "Yes — the web version works perfectly on all mobile devices. You can add it to your home screen for one-tap access, track your streaks, and study anywhere. A native app for iOS and Android is coming soon."
-          }, {
-            q: "Is it really free to start?",
-            a: "Yes. You can start completely free with one ACCA paper to test the planner, flashcards, and analytics. Upgrade only when you're ready to unlock all 13 papers and premium features like streaks, leaderboards, and progress tracking."
-          }, {
-            q: "How does the \"readiness score\" work?",
-            a: "The readiness score combines your XP, completed units, and quiz performance to estimate how prepared you are for your exam. It's a smart, data-driven way to know when you're exam-ready — no more guesswork."
-          }, {
-            q: "What makes Outcomeo different from traditional courses?",
-            a: "Unlike static video courses, Outcomeo keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting."
-          }, {
-            q: "Is my progress and data secure?",
-            a: "Yes. All your data is encrypted and stored securely in the cloud. We never share user information with third parties or use it for marketing without consent."
-          }, {
-            q: "Can my employer or tutor track my progress?",
-            a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default."
-          }, {
-            q: "How can I contact you?",
-            a: "You can reach our team anytime at hello@outcomeo.com. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners."
-          }].map((faq, i) => <AccordionItem key={i} value={`item-${i}`} className="bg-amber-100 rounded-xl px-6 shadow-sm">
-                <AccordionTrigger className="text-left font-semibold text-card-foreground">{faq.q}</AccordionTrigger>
-                <AccordionContent className="text-card-foreground/90">{faq.a}</AccordionContent>
-              </AccordionItem>)}
+              icon: Building2,
+              q: "Is this officially affiliated with ACCA?",
+              a: "No. Outcomeo is an independent learning companion built around the publicly available ACCA syllabus. We help students study smarter — not replace official tuition or exams. All content is original and fully aligned with the structure and learning outcomes of ACCA.",
+              color: "from-blue-500 to-blue-600"
+            }, {
+              icon: Clock,
+              q: "Can I use it while working full-time?",
+              a: "Absolutely — the app was designed for busy professionals. Your personalized study plan adapts to your schedule and time until exam day. You can study 15 minutes a day on your commute or during breaks and still make measurable progress.",
+              color: "from-purple-500 to-purple-600"
+            }, {
+              icon: FileQuestion,
+              q: "How are the flashcards and questions created?",
+              a: "Our content is written by qualified ACCA tutors and graduates, based entirely on ACCA's public syllabus and exam-style logic. Every flashcard, mini-problem, and explanation is original, practical, and updated annually to stay relevant.",
+              color: "from-emerald-500 to-emerald-600"
+            }, {
+              icon: Smartphone,
+              q: "Do you have a mobile app?",
+              a: "Yes — the web version works perfectly on all mobile devices. You can add it to your home screen for one-tap access, track your streaks, and study anywhere. A native app for iOS and Android is coming soon.",
+              color: "from-pink-500 to-pink-600"
+            }, {
+              icon: Gift,
+              q: "Is it really free to start?",
+              a: "Yes. You can start completely free with one ACCA paper to test the planner, flashcards, and analytics. Upgrade only when you're ready to unlock all 13 papers and premium features like streaks, leaderboards, and progress tracking.",
+              color: "from-amber-500 to-amber-600"
+            }, {
+              icon: Target,
+              q: "How does the \"readiness score\" work?",
+              a: "The readiness score combines your XP, completed units, and quiz performance to estimate how prepared you are for your exam. It's a smart, data-driven way to know when you're exam-ready — no more guesswork.",
+              color: "from-cyan-500 to-cyan-600"
+            }, {
+              icon: Sparkles,
+              q: "What makes Outcomeo different from traditional courses?",
+              a: "Unlike static video courses, Outcomeo keeps you engaged, accountable, and consistent. We combine gamification, spaced repetition, and analytics to make studying feel rewarding — not exhausting.",
+              color: "from-violet-500 to-violet-600"
+            }, {
+              icon: Shield,
+              q: "Is my progress and data secure?",
+              a: "Yes. All your data is encrypted and stored securely in the cloud. We never share user information with third parties or use it for marketing without consent.",
+              color: "from-red-500 to-red-600"
+            }, {
+              icon: Users,
+              q: "Can my employer or tutor track my progress?",
+              a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default.",
+              color: "from-indigo-500 to-indigo-600"
+            }, {
+              icon: Mail,
+              q: "How can I contact you?",
+              a: "You can reach our team anytime at hello@outcomeo.com. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners.",
+              color: "from-teal-500 to-teal-600"
+            }].map((faq, i) => {
+              const Icon = faq.icon;
+              return (
+                <div
+                  key={i}
+                  ref={el => faqRefs.current[i] = el}
+                  className={`transition-all duration-700 ${
+                    visibleFaqs[i] 
+                      ? 'opacity-100 translate-y-0' 
+                      : 'opacity-0 translate-y-4'
+                  }`}
+                  style={{ transitionDelay: `${i * 100}ms` }}
+                >
+                  <AccordionItem 
+                    value={`item-${i}`} 
+                    className="group border border-border/50 bg-card/50 backdrop-blur-sm rounded-2xl px-6 shadow-sm hover:shadow-lg hover:border-primary/30 transition-all duration-300 hover:-translate-y-1 overflow-hidden relative"
+                  >
+                    {/* Gradient accent bar */}
+                    <div className={`absolute left-0 top-0 bottom-0 w-1 bg-gradient-to-b ${faq.color} transform scale-y-0 group-hover:scale-y-100 transition-transform duration-300 origin-top`} />
+                    
+                    <AccordionTrigger className="text-left font-semibold text-card-foreground py-5 hover:no-underline">
+                      <div className="flex items-center gap-4">
+                        {/* Icon with gradient background */}
+                        <div className={`flex-shrink-0 w-10 h-10 rounded-full bg-gradient-to-br ${faq.color} flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300`}>
+                          <Icon className="w-5 h-5 text-white" />
+                        </div>
+                        <span className="flex-1">{faq.q}</span>
+                      </div>
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground leading-relaxed pl-14 pr-4 pb-5">
+                      {faq.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                </div>
+              );
+            })}
           </Accordion>
           <div className="text-center mt-12 animate-fade-in">
             <p className="text-xl font-semibold mb-4">Still have questions?</p>
             <p className="text-muted-foreground mb-6">
               Chat with us or start your free plan today — and see how Outcomeo can transform your ACCA prep.
             </p>
-            <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl">
+            <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg hover:shadow-xl transition-shadow">
               Start for free today
               <ArrowRight className="ml-2 h-5 w-5" />
             </Button>
