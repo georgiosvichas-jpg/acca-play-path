@@ -1,6 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
-import { createClient } from "npm:@supabase/supabase-js@2";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -10,6 +10,29 @@ const corsHeaders = {
 const logStep = (step: string, details?: any) => {
   const detailsStr = details ? ` - ${JSON.stringify(details)}` : '';
   console.log(`[STRIPE-WEBHOOK] ${step}${detailsStr}`);
+};
+
+// Stripe Product IDs for plan type mapping
+const STRIPE_PRODUCTS = {
+  PRO_MONTHLY: "prod_TS68zu6h4qaE7j",
+  PRO_ANNUAL: "prod_TS6AfVuTENSF9j",
+  ELITE_MONTHLY: "prod_TS6FrtFjCMj5IJ",
+  ELITE_ANNUAL: "prod_TS6HMg03CT5CuM",
+};
+
+const getProductIds = (config: typeof STRIPE_PRODUCTS) => Object.values(config);
+
+const determinePlanType = (productId: string): "free" | "pro" | "elite" => {
+  const proProducts = [STRIPE_PRODUCTS.PRO_MONTHLY, STRIPE_PRODUCTS.PRO_ANNUAL];
+  const eliteProducts = [STRIPE_PRODUCTS.ELITE_MONTHLY, STRIPE_PRODUCTS.ELITE_ANNUAL];
+  
+  if (proProducts.includes(productId)) {
+    return "pro";
+  } else if (eliteProducts.includes(productId)) {
+    return "elite";
+  }
+  
+  return "free";
 };
 
 serve(async (req) => {
@@ -100,15 +123,15 @@ serve(async (req) => {
 
         // Otherwise, update user_profiles (web app)
         let productId: string | null = null;
-        let planType: "free" | "per_paper" | "pro" = "free";
+        let planType: "free" | "pro" | "elite" = "free";
         
         if (session.mode === "subscription" && session.subscription) {
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
           productId = subscription.items.data[0]?.price.product as string;
-          planType = "pro";
+          planType = determinePlanType(productId);
           logStep("Subscription detected", { productId, planType });
         } else if (session.mode === "payment") {
-          planType = "per_paper";
+          planType = "per_paper" as any;
           logStep("One-time payment detected", { planType });
         }
 
@@ -132,8 +155,10 @@ serve(async (req) => {
           subscription_product_id: productId,
         };
 
-        if (planType === "pro") {
-          updates.subscription_end_date = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+        // Set subscription end date if it's a subscription
+        if (session.mode === "subscription" && session.subscription) {
+          const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
+          updates.subscription_end_date = new Date(subscription.current_period_end * 1000).toISOString();
         }
 
         const { error: updateError } = await supabaseClient
@@ -169,6 +194,9 @@ serve(async (req) => {
         }
 
         const profile = profiles[0];
+        const productId = subscription.items.data[0]?.price.product as string;
+        const planType = determinePlanType(productId);
+
         const updates: any = {
           subscription_status: subscription.status,
         };
@@ -176,9 +204,11 @@ serve(async (req) => {
         if (event.type === "customer.subscription.deleted" || 
             ["canceled", "unpaid", "incomplete_expired"].includes(subscription.status)) {
           updates.plan_type = "free";
+          updates.subscription_end_date = null;
         } else if (subscription.status === "active") {
-          updates.plan_type = "pro";
+          updates.plan_type = planType;
           updates.subscription_end_date = new Date(subscription.current_period_end * 1000).toISOString();
+          updates.subscription_product_id = productId;
         }
 
         const { error: updateError } = await supabaseClient
@@ -191,7 +221,7 @@ serve(async (req) => {
           throw updateError;
         }
 
-        logStep("Subscription updated successfully", { userId: profile.user_id, status: subscription.status });
+        logStep("Subscription updated successfully", { userId: profile.user_id, status: subscription.status, planType });
         break;
       }
 
