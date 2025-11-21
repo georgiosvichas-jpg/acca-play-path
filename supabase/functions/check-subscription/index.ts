@@ -14,10 +14,10 @@ const logStep = (step: string, details?: any) => {
 
 // Product ID mappings for tier detection
 const STRIPE_PRODUCTS = {
-  PRO_MONTHLY: "prod_TMTH1XO11Qbymt",
-  PRO_ANNUAL: "prod_TMTHQA1ZP9vXRz",
-  ELITE_MONTHLY: "prod_elite_monthly_placeholder", // Replace with actual product ID
-  ELITE_ANNUAL: "prod_elite_annual_placeholder", // Replace with actual product ID
+  PRO_MONTHLY: "prod_TSovoEevwjBlAJ",
+  PRO_ANNUAL: "prod_TSovAlz3AJldbA",
+  ELITE_MONTHLY: "prod_TSovxpBecu5RAg",
+  ELITE_ANNUAL: "prod_TSou39pPeUsXRY",
 };
 
 serve(async (req) => {
