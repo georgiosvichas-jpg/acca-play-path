@@ -589,7 +589,7 @@ export default function Landing() {
             a: "If you're part of a team or mentorship plan, yes. You can share your dashboard with your manager or tutor to track goals and achievements. Otherwise, your data remains private by default."
           }, {
             q: "How can I contact you?",
-            a: "You can reach our team anytime at support@outcomeo.ai. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners."
+            a: "You can reach our team anytime at hello@outcomeo.com. We typically respond within 24 hours. We love hearing feedback from students, tutors, and partners."
           }].map((faq, i) => <AccordionItem key={i} value={`item-${i}`} className="bg-background rounded-xl px-6 shadow-sm">
                 <AccordionTrigger className="text-left font-semibold">{faq.q}</AccordionTrigger>
                 <AccordionContent className="text-muted-foreground">{faq.a}</AccordionContent>
