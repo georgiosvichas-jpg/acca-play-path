@@ -123,15 +123,17 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon" className="border-r">
       <SidebarHeader className="border-b">
-        <Link to="/dashboard" className="flex items-center gap-3 px-3 py-2 group">
-          <img 
-            src={logo} 
-            alt="Outcomeo" 
-            className="w-8 h-8 rounded-lg group-hover:scale-110 transition-transform flex-shrink-0" 
-          />
+        <Link to="/dashboard" className="flex items-center gap-3 px-3 py-3 group">
+          <div className="w-9 h-9 flex items-center justify-center flex-shrink-0">
+            <img 
+              src={logo} 
+              alt="Outcomeo" 
+              className="w-full h-full object-contain group-hover:scale-110 transition-transform" 
+            />
+          </div>
           {!collapsed && (
             <div className="flex flex-col">
-              <span className="font-display font-extrabold text-lg">Outcomeo</span>
+              <span className="font-display font-extrabold text-lg leading-tight">Outcomeo</span>
               <span className="text-xs text-muted-foreground">ACCA Study Platform</span>
             </div>
           )}
