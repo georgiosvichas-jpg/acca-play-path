@@ -121,7 +121,7 @@ export default function Landing() {
             <h2 className="text-4xl md:text-5xl font-display font-bold mb-4">
               Trusted by ACCA students around the world
             </h2>
-            <Badge variant="secondary" className="rounded-full text-card bg-sidebar-ring">
+            <Badge variant="secondary" className="rounded-full bg-accent text-card-foreground">
               92% of users say they study more consistently
             </Badge>
           </div>
