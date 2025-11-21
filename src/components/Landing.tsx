@@ -391,7 +391,7 @@ export default function Landing() {
           </div>
 
           {/* Trust Layer */}
-          <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground animate-fade-in">
+          <div className="flex items-center justify-center gap-8 text-sm animate-fade-in text-card-foreground">
             <div className="flex items-center gap-2">
               <CheckCircle className="h-4 w-4 text-primary" />
               <span>Cancel anytime</span>
