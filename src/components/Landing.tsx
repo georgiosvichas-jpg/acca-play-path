@@ -634,11 +634,11 @@ export default function Landing() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Email</label>
-                <Input type="email" placeholder="your@email.com" className="rounded-xl" />
+                <Input type="email" placeholder="your@email.com" className="rounded-xl bg-muted/30" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Message</label>
-                <Textarea placeholder="How can we help?" rows={4} className="rounded-xl" />
+                <Textarea placeholder="How can we help?" rows={4} className="rounded-xl bg-muted/30" />
               </div>
               <Button type="submit" className="w-full rounded-xl">Send Message</Button>
             </form>
