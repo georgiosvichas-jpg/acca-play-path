@@ -15,26 +15,25 @@ import SwipeableCardStack from "@/components/SwipeableCardStack";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { STRIPE_PRICES } from "@/lib/stripe-config";
-
 export default function Landing() {
   const navigate = useNavigate();
   const [navBg, setNavBg] = useState(false);
   const [isAnnual, setIsAnnual] = useState(true);
   const [loading, setLoading] = useState<string | null>(null);
-
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
     try {
-      const priceId = isAnnual 
-        ? (tier === "pro" ? STRIPE_PRICES.PRO_ANNUAL : STRIPE_PRICES.ELITE_ANNUAL)
-        : (tier === "pro" ? STRIPE_PRICES.PRO_MONTHLY : STRIPE_PRICES.ELITE_MONTHLY);
-
-      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
-        body: { priceId, mode: "subscription" },
+      const priceId = isAnnual ? tier === "pro" ? STRIPE_PRICES.PRO_ANNUAL : STRIPE_PRICES.ELITE_ANNUAL : tier === "pro" ? STRIPE_PRICES.PRO_MONTHLY : STRIPE_PRICES.ELITE_MONTHLY;
+      const {
+        data,
+        error
+      } = await supabase.functions.invoke("create-checkout-session", {
+        body: {
+          priceId,
+          mode: "subscription"
+        }
       });
-
       if (error) throw error;
-
       if (data?.url) {
         window.open(data.url, "_blank");
       }
@@ -43,7 +42,7 @@ export default function Landing() {
       toast({
         title: "Error",
         description: "Failed to start checkout. Please try again.",
-        variant: "destructive",
+        variant: "destructive"
       });
     } finally {
       setLoading(null);
@@ -415,18 +414,11 @@ export default function Landing() {
                   <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
                   <p className="text-sm text-muted-foreground mb-4">Candidates who want a structured, complete, exam-ready workflow.</p>
                   
-                  <div className="bg-muted/50 rounded-lg p-3 border">
-                    <p className="text-xs italic text-muted-foreground">"Pro helped me raise my accuracy from 54% to 81% in 9 days."</p>
-                    <p className="text-xs font-medium text-foreground mt-1">— Sofia, FR</p>
-                  </div>
+                  
                 </div>
               </div>
 
-              <Button 
-                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-6" 
-                onClick={() => handleCheckout("pro")}
-                disabled={loading === "pro"}
-              >
+              <Button className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-6" onClick={() => handleCheckout("pro")} disabled={loading === "pro"}>
                 {loading === "pro" ? "Loading..." : "Unlock Full ACCA Access"}
               </Button>
             </Card>
@@ -554,18 +546,11 @@ export default function Landing() {
                   <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
                   <p className="text-sm text-muted-foreground mb-4">Candidates who want predictive clarity, coaching-level support, and the highest chance of passing.</p>
                   
-                  <div className="bg-muted/50 rounded-lg p-3 border">
-                    <p className="text-xs italic text-muted-foreground">"Elite was like having my own tutor. I knew exactly when I was exam-ready."</p>
-                    <p className="text-xs font-medium text-foreground mt-1">— Daniel, SBR</p>
-                  </div>
+                  
                 </div>
               </div>
 
-              <Button 
-                onClick={() => handleCheckout("elite")} 
-                className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground mt-6"
-                disabled={loading === "elite"}
-              >
+              <Button onClick={() => handleCheckout("elite")} className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground mt-6" disabled={loading === "elite"}>
                 {loading === "elite" ? "Loading..." : "Get Personal AI Coaching"}
               </Button>
             </Card>
