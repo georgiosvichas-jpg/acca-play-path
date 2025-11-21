@@ -141,14 +141,14 @@ export default function Landing() {
             location: "Athens",
             paper: "Paper MA",
             text: "The readiness score helped me know exactly when I was ready to book my next paper."
-          }].map((testimonial, i) => <Card key={i} className="p-6 animate-slide-up hover:shadow-lg transition-all" style={{
+          }].map((testimonial, i) => <Card key={i} className="p-6 animate-slide-up hover:shadow-lg transition-all flex flex-col" style={{
             animationDelay: `${i * 0.2}s`
           }}>
                 <div className="flex gap-1 mb-4">
                   {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent text-accent" />)}
                 </div>
-                <p className="text-muted-foreground mb-4">{testimonial.text}</p>
-                <div>
+                <p className="text-muted-foreground mb-4 flex-1">{testimonial.text}</p>
+                <div className="mt-auto">
                   <p className="font-semibold pb-px">{testimonial.name}</p>
                   <p className="text-sm text-muted-foreground">{testimonial.location} • {testimonial.paper}</p>
                 </div>
