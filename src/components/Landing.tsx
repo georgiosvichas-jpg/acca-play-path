@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain, ArrowUp, AlertTriangle, CheckCircle2, Clock, Tag } from "lucide-react";
+import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain, ArrowUp, AlertTriangle, CheckCircle2, Clock, Tag, Users, Target, TrendingUp, Award } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -25,9 +25,12 @@ export default function Landing() {
   const [visibleTestimonials, setVisibleTestimonials] = useState<boolean[]>([false, false, false]);
   const [showCTABanner, setShowCTABanner] = useState(false);
   const [visibleResources, setVisibleResources] = useState<boolean[]>([false, false, false]);
+  const [statsVisible, setStatsVisible] = useState(false);
+  const [statCounts, setStatCounts] = useState({ students: 0, passRate: 0, questions: 0, satisfaction: 0 });
   const testimonialRefs = useRef<(HTMLDivElement | null)[]>([]);
   const resourceRefs = useRef<(HTMLDivElement | null)[]>([]);
   const featuresRef = useRef<HTMLElement | null>(null);
+  const statsRef = useRef<HTMLDivElement | null>(null);
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
     try {
@@ -145,6 +148,58 @@ export default function Landing() {
     };
   }, []);
 
+  // Intersection Observer for stats counter
+  useEffect(() => {
+    if (!statsRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting && !statsVisible) {
+          setStatsVisible(true);
+        }
+      },
+      { threshold: 0.3 }
+    );
+
+    observer.observe(statsRef.current);
+
+    return () => observer.disconnect();
+  }, [statsVisible]);
+
+  // Animate counters when stats become visible
+  useEffect(() => {
+    if (!statsVisible) return;
+
+    const targets = { students: 10000, passRate: 92, questions: 50000, satisfaction: 98 };
+    const duration = 2000; // 2 seconds
+    const steps = 60;
+    const interval = duration / steps;
+
+    let currentStep = 0;
+
+    const timer = setInterval(() => {
+      currentStep++;
+      const progress = currentStep / steps;
+      
+      // Easing function for smooth animation
+      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+
+      setStatCounts({
+        students: Math.floor(targets.students * easeOutQuart),
+        passRate: Math.floor(targets.passRate * easeOutQuart),
+        questions: Math.floor(targets.questions * easeOutQuart),
+        satisfaction: Math.floor(targets.satisfaction * easeOutQuart)
+      });
+
+      if (currentStep >= steps) {
+        clearInterval(timer);
+        setStatCounts(targets); // Ensure we end at exact values
+      }
+    }, interval);
+
+    return () => clearInterval(timer);
+  }, [statsVisible]);
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -219,6 +274,121 @@ export default function Landing() {
               style={{ transform: `translateY(${scrollY * -0.15}px)` }}
             >
               <img src={heroObjects} alt="ACCA Study Tools" className="w-full animate-float" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Statistics Counter Section */}
+      <section 
+        ref={statsRef}
+        className="py-20 px-4 md:px-8 bg-gradient-to-br from-primary/5 via-secondary/5 to-background relative overflow-hidden"
+      >
+        {/* Background decorative elements */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-80 h-80 bg-secondary/5 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
+        
+        <div className="max-w-7xl mx-auto relative">
+          <div className="text-center mb-12 animate-fade-in">
+            <Badge className="mb-4 rounded-full bg-primary/10 text-primary border-primary/20">
+              Trusted Worldwide
+            </Badge>
+            <h2 className="text-3xl md:text-4xl font-display font-bold text-foreground">
+              Join thousands of successful ACCA students
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {/* Stat 1 - Students */}
+            <div 
+              className={`text-center transform transition-all duration-700 ${
+                statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: '0ms' }}
+            >
+              <Card className="p-8 border-2 border-border/50 hover:border-primary/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden bg-card/80 backdrop-blur">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-blue-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-blue-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Users className="w-8 h-8 text-blue-600" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-4xl md:text-5xl font-bold text-foreground mb-2 font-display">
+                    {statCounts.students.toLocaleString()}+
+                  </div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Active Students
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Stat 2 - Pass Rate */}
+            <div 
+              className={`text-center transform transition-all duration-700 ${
+                statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: '150ms' }}
+            >
+              <Card className="p-8 border-2 border-border/50 hover:border-primary/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden bg-card/80 backdrop-blur">
+                <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-green-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-green-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Target className="w-8 h-8 text-green-600" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-4xl md:text-5xl font-bold text-foreground mb-2 font-display">
+                    {statCounts.passRate}%
+                  </div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Pass Rate
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Stat 3 - Questions Practiced */}
+            <div 
+              className={`text-center transform transition-all duration-700 ${
+                statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: '300ms' }}
+            >
+              <Card className="p-8 border-2 border-border/50 hover:border-primary/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden bg-card/80 backdrop-blur">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-purple-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-purple-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <TrendingUp className="w-8 h-8 text-purple-600" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-4xl md:text-5xl font-bold text-foreground mb-2 font-display">
+                    {statCounts.questions.toLocaleString()}+
+                  </div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Questions Practiced
+                  </div>
+                </div>
+              </Card>
+            </div>
+
+            {/* Stat 4 - Satisfaction */}
+            <div 
+              className={`text-center transform transition-all duration-700 ${
+                statsVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
+              }`}
+              style={{ transitionDelay: '450ms' }}
+            >
+              <Card className="p-8 border-2 border-border/50 hover:border-primary/30 hover:shadow-xl transition-all duration-300 group relative overflow-hidden bg-card/80 backdrop-blur">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-amber-600/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                <div className="relative z-10">
+                  <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-amber-500/10 flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+                    <Award className="w-8 h-8 text-amber-600" strokeWidth={2.5} />
+                  </div>
+                  <div className="text-4xl md:text-5xl font-bold text-foreground mb-2 font-display">
+                    {statCounts.satisfaction}%
+                  </div>
+                  <div className="text-sm font-medium text-muted-foreground">
+                    Satisfaction Rate
+                  </div>
+                </div>
+              </Card>
             </div>
           </div>
         </div>
