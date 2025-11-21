@@ -83,7 +83,7 @@ export default function Pricing() {
             >
               Annual
               <Badge variant="default" className="ml-2 bg-primary/20 text-primary hover:bg-primary/30">
-                Save up to 31%
+                Save up to 37%
               </Badge>
             </Label>
           </div>
@@ -169,7 +169,7 @@ export default function Pricing() {
               <div className="h-[120px] flex flex-col justify-start">
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-bold text-primary">
-                    €{isAnnual ? "69" : "9.99"}
+                    €{isAnnual ? "99" : "12.99"}
                   </span>
                   <span className="text-muted-foreground">
                     /{isAnnual ? "year" : "month"}
@@ -177,7 +177,7 @@ export default function Pricing() {
                 </div>
                 {isAnnual && (
                   <p className="text-sm text-muted-foreground mt-1">
-                    Just €5.75/month, save 28%
+                    Just €8.25/month, save 37%
                   </p>
                 )}
               </div>
@@ -261,7 +261,7 @@ export default function Pricing() {
               <div className="h-[120px] flex flex-col justify-start">
                 <div className="flex items-baseline gap-1">
                   <span className="text-5xl font-bold">
-                    €{isAnnual ? "99" : "14.99"}
+                    €{isAnnual ? "159" : "19.99"}
                   </span>
                   <span className="text-muted-foreground">
                     /{isAnnual ? "year" : "month"}
@@ -269,7 +269,7 @@ export default function Pricing() {
                 </div>
                 {isAnnual && (
                   <p className="text-sm text-muted-foreground mt-1">
-                    Just €8.25/month, save 31%
+                    Just €13.25/month, save 34%
                   </p>
                 )}
               </div>
