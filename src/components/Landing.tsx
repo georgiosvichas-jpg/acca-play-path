@@ -6,8 +6,9 @@ import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Switch } from "@/components/ui/switch";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, CheckCircle, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock } from "lucide-react";
+import { Sparkles, CheckCircle, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
 import SwipeableCardStack from "@/components/SwipeableCardStack";
@@ -215,28 +216,60 @@ export default function Landing() {
 
                 <div className="pt-4 border-t">
                   <p className="text-sm font-semibold mb-4 text-foreground">What's included:</p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-muted-foreground">10% of each question bank</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-muted-foreground">10 daily flashcards</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-muted-foreground">1 timed mock exam/week</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-muted-foreground">Basic analytics</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-muted-foreground">1-week study plan preview</span>
-                    </li>
-                  </ul>
+                  <TooltipProvider>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-muted-foreground">10% of each question bank</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Access sample questions from all ACCA papers</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-muted-foreground">10 daily flashcards</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Quick review cards for daily practice</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-muted-foreground">1 timed mock exam/week</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Practice under real exam conditions weekly</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-muted-foreground">Basic analytics</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Track your score and completion rate</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-muted-foreground">1-week study plan preview</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Preview the smart study planner feature</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                    </ul>
+                  </TooltipProvider>
                 </div>
               </div>
             </Card>
@@ -273,40 +306,90 @@ export default function Landing() {
 
                 <div className="pt-4 border-t">
                   <p className="text-sm font-semibold mb-4 text-foreground">Everything in Free, plus:</p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Full question banks (100%)</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Unlimited flashcards</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">4 timed mocks/week</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">AI explanations</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Full analytics + heatmaps</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Unlimited study planner</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Spaced repetition engine</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">AI study path generator</span>
-                    </li>
-                  </ul>
+                  <TooltipProvider>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Full question banks (100%)</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Access all questions for every ACCA paper</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Unlimited flashcards</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Study as many flashcards as you want daily</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">4 timed mocks/week</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>4 full mock exams with timer each week</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">AI explanations</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Get instant AI-powered answer explanations</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Full analytics + heatmaps</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Visual performance tracking across topics</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Unlimited study planner</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Full access to personalized study schedules</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Spaced repetition engine</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Smart algorithm reviews topics at optimal times</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">AI study path generator</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Auto-generate personalized study roadmaps</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                    </ul>
+                  </TooltipProvider>
                 </div>
               </div>
             </Card>
@@ -343,48 +426,110 @@ export default function Landing() {
 
                 <div className="pt-4 border-t">
                   <p className="text-sm font-semibold mb-4 text-foreground">Everything in Pro, plus:</p>
-                  <ul className="space-y-3">
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Unlimited timed mocks</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Unlimited AI tutor chat</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Advanced spaced repetition</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Predictive analytics</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Pass probability tracker</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Performance benchmarking</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Exam-week mode</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Multi-paper dashboard</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">AI Copilot with dynamic plans</span>
-                    </li>
-                    <li className="flex items-start gap-3">
-                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
-                      <span className="text-sm text-foreground">Early access to new features</span>
-                    </li>
-                  </ul>
+                  <TooltipProvider>
+                    <ul className="space-y-3">
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Unlimited timed mocks</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Take as many practice exams as you need</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Unlimited AI tutor chat</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Ask unlimited questions to your AI study buddy</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Advanced spaced repetition</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Enhanced algorithm adapts to your learning curve</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Predictive analytics</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>AI forecasts your future performance trends</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Pass probability tracker</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Real-time calculation of your exam pass likelihood</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Performance benchmarking</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Compare your progress with other students</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Exam-week mode</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Intensive final-week prep mode with focus areas</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Multi-paper dashboard</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Track progress across multiple papers at once</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">AI Copilot with dynamic plans</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>AI assistant that adapts your plan in real-time</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                      <li className="flex items-start gap-2">
+                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <span className="text-sm text-foreground">Early access to new features</span>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
+                          </TooltipTrigger>
+                          <TooltipContent><p>Be the first to try new platform features</p></TooltipContent>
+                        </Tooltip>
+                      </li>
+                    </ul>
+                  </TooltipProvider>
                 </div>
               </div>
             </Card>
