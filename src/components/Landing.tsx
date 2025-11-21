@@ -630,7 +630,7 @@ export default function Landing() {
             <form className="space-y-6">
               <div>
                 <label className="block text-sm font-medium mb-2">Name</label>
-                <Input placeholder="Your name" className="rounded-xl" />
+                <Input placeholder="Your name" className="rounded-xl bg-muted/30" />
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Email</label>
