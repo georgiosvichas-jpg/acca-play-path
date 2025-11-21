@@ -679,7 +679,7 @@ export default function Landing() {
           </div>
           <div className="text-center">
             <Link to="/resources">
-              <Button variant="outline" className="rounded-xl">
+              <Button variant="outline" className="rounded-xl bg-amber-100">
                 View all resources
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Button>
