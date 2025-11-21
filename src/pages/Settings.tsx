@@ -597,7 +597,7 @@ export default function Settings() {
                   Help & Support
                 </CardTitle>
                 <CardDescription>
-                  Get help using ACCA Master
+                  Get help using Outcomeo
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
