@@ -337,7 +337,7 @@ export default function Landing() {
                   {isAnnual && <p className="text-sm text-muted-foreground">Just €8.25/month, save 31%</p>}
                 </div>
 
-                <Button variant="outline" onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl border-2 border-accent font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground">
+                <Button onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground">
                   Upgrade to Elite
                 </Button>
 
