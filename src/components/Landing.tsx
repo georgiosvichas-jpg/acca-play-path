@@ -242,7 +242,7 @@ export default function Landing() {
             </Card>
 
             {/* Card 2 - Pro (Most Popular) */}
-            <Card className="relative border-2 border-primary rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 animate-slide-up scale-105" style={{
+            <Card className="relative border-2 border-primary rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 animate-slide-up" style={{
             animationDelay: "0.1s"
           }}>
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground border-none px-4 py-1.5 font-semibold">
