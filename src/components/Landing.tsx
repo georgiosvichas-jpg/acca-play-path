@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain } from "lucide-react";
+import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain, ArrowUp } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
 import { supabase } from "@/integrations/supabase/client";
@@ -21,6 +21,9 @@ export default function Landing() {
   const [loading, setLoading] = useState<string | null>(null);
   const [scrollY, setScrollY] = useState(0);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const [showScrollTop, setShowScrollTop] = useState(false);
+  const [visibleTestimonials, setVisibleTestimonials] = useState<boolean[]>([false, false, false]);
+  const testimonialRefs = useRef<(HTMLDivElement | null)[]>([]);
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
     try {
@@ -53,6 +56,7 @@ export default function Landing() {
     const handleScroll = () => {
       setNavBg(window.scrollY > 50);
       setScrollY(window.scrollY);
+      setShowScrollTop(window.scrollY > 500);
       
       // Calculate scroll progress
       const windowHeight = window.innerHeight;
@@ -65,6 +69,37 @@ export default function Landing() {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Intersection Observer for testimonials
+  useEffect(() => {
+    const observers = testimonialRefs.current.map((ref, index) => {
+      if (!ref) return null;
+      
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setVisibleTestimonials(prev => {
+              const newVisible = [...prev];
+              newVisible[index] = true;
+              return newVisible;
+            });
+          }
+        },
+        { threshold: 0.2 }
+      );
+      
+      observer.observe(ref);
+      return observer;
+    });
+
+    return () => {
+      observers.forEach(observer => observer?.disconnect());
+    };
+  }, []);
+
+  const scrollToTop = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
   const scrollToSection = (id: string) => {
     document.getElementById(id)?.scrollIntoView({
       behavior: "smooth"
@@ -288,18 +323,27 @@ export default function Landing() {
             location: "Athens",
             paper: "Paper MA",
             text: "The readiness score helped me know exactly when I was ready to book my next paper."
-          }].map((testimonial, i) => <Card key={i} className="p-6 animate-slide-up hover:shadow-lg transition-all flex flex-col" style={{
-            animationDelay: `${i * 0.2}s`
-          }}>
-                <div className="flex gap-1 mb-4">
-                  {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent text-accent" />)}
-                </div>
-                <p className="text-muted-foreground mb-4 flex-1">{testimonial.text}</p>
-                <div className="mt-auto">
-                  <p className="font-semibold pb-px">{testimonial.name}</p>
-                  <p className="text-sm text-muted-foreground">{testimonial.location} • {testimonial.paper}</p>
-                </div>
-              </Card>)}
+          }].map((testimonial, i) => <div
+                key={i}
+                ref={el => testimonialRefs.current[i] = el}
+                className={`transition-all duration-700 ${
+                  visibleTestimonials[i] 
+                    ? 'opacity-100 translate-y-0' 
+                    : 'opacity-0 translate-y-8'
+                }`}
+                style={{ transitionDelay: `${i * 150}ms` }}
+              >
+                <Card className="p-6 hover:shadow-lg transition-all flex flex-col h-full">
+                  <div className="flex gap-1 mb-4">
+                    {[...Array(5)].map((_, j) => <Star key={j} className="w-4 h-4 fill-accent text-accent" />)}
+                  </div>
+                  <p className="text-muted-foreground mb-4 flex-1">{testimonial.text}</p>
+                  <div className="mt-auto">
+                    <p className="font-semibold pb-px">{testimonial.name}</p>
+                    <p className="text-sm text-muted-foreground">{testimonial.location} • {testimonial.paper}</p>
+                  </div>
+                </Card>
+              </div>)}
           </div>
           <div className="text-center">
             <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl">
@@ -844,5 +888,16 @@ export default function Landing() {
           </div>
         </div>
       </footer>
+
+      {/* Scroll to Top Button */}
+      <button
+        onClick={scrollToTop}
+        className={`fixed bottom-8 right-8 z-50 p-4 rounded-full bg-primary text-primary-foreground shadow-lg hover:shadow-xl hover:scale-110 transition-all duration-300 ${
+          showScrollTop ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16 pointer-events-none'
+        }`}
+        aria-label="Scroll to top"
+      >
+        <ArrowUp className="w-5 h-5" />
+      </button>
     </div>;
 }
