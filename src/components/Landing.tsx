@@ -23,7 +23,9 @@ export default function Landing() {
   const [scrollProgress, setScrollProgress] = useState(0);
   const [showScrollTop, setShowScrollTop] = useState(false);
   const [visibleTestimonials, setVisibleTestimonials] = useState<boolean[]>([false, false, false]);
+  const [showCTABanner, setShowCTABanner] = useState(false);
   const testimonialRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const featuresRef = useRef<HTMLElement | null>(null);
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
     try {
@@ -95,6 +97,23 @@ export default function Landing() {
     return () => {
       observers.forEach(observer => observer?.disconnect());
     };
+  }, []);
+
+  // Intersection Observer for CTA banner
+  useEffect(() => {
+    if (!featuresRef.current) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Show banner when features section is out of view (scrolled past)
+        setShowCTABanner(!entry.isIntersecting && window.scrollY > entry.boundingClientRect.bottom);
+      },
+      { threshold: 0 }
+    );
+
+    observer.observe(featuresRef.current);
+
+    return () => observer.disconnect();
   }, []);
 
   const scrollToTop = () => {
@@ -177,7 +196,7 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 px-4 md:px-8 bg-white relative overflow-hidden">
+      <section ref={featuresRef} id="features" className="py-24 px-4 md:px-8 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-16 animate-fade-in">
@@ -899,5 +918,43 @@ export default function Landing() {
       >
         <ArrowUp className="w-5 h-5" />
       </button>
+
+      {/* Sticky CTA Banner */}
+      <div
+        className={`fixed bottom-0 left-0 right-0 z-40 bg-gradient-to-r from-primary to-secondary text-primary-foreground shadow-2xl border-t border-primary-foreground/10 transition-transform duration-500 ease-out ${
+          showCTABanner ? 'translate-y-0' : 'translate-y-full'
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 py-4 md:py-5">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="text-center md:text-left">
+              <h3 className="font-bold text-lg md:text-xl mb-1">
+                Ready to pass your ACCA exams?
+              </h3>
+              <p className="text-sm md:text-base text-primary-foreground/90">
+                Join 10,000+ students who are studying smarter with Outcomeo
+              </p>
+            </div>
+            <div className="flex gap-3 flex-shrink-0">
+              <Button
+                size="lg"
+                onClick={() => navigate("/auth")}
+                className="rounded-xl bg-white text-primary hover:bg-white/90 shadow-lg font-semibold"
+              >
+                Start for free
+                <ArrowRight className="ml-2 h-5 w-5" />
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={() => setShowCTABanner(false)}
+                className="rounded-xl border-primary-foreground/20 text-primary-foreground hover:bg-primary-foreground/10"
+              >
+                Dismiss
+              </Button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>;
 }
