@@ -37,8 +37,10 @@ export default function Landing() {
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 ${navBg ? "bg-background/95 backdrop-blur-lg shadow-sm" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16">
-            <div className="flex items-center gap-2">
-              <img src={logo} alt="Outcomeo" className="w-8 h-8 rounded-lg" />
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img src={logo} alt="Outcomeo" className="w-full h-full object-contain" />
+              </div>
               <span className="font-display font-bold text-xl">Outcomeo</span>
             </div>
             <div className="hidden md:flex items-center gap-6">

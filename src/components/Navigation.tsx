@@ -68,8 +68,10 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 md:px-8">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/dashboard" className="flex items-center gap-2 group">
-            <img src={logo} alt="Outcomeo" className="w-10 h-10 rounded-xl group-hover:scale-110 transition-transform" />
+          <Link to="/dashboard" className="flex items-center gap-3 group">
+            <div className="w-9 h-9 flex items-center justify-center">
+              <img src={logo} alt="Outcomeo" className="w-full h-full object-contain group-hover:scale-110 transition-transform" />
+            </div>
             <span className="font-display font-extrabold text-xl hidden sm:block">
               Outcomeo
             </span>
