@@ -129,87 +129,105 @@ export default function Landing() {
           {/* Feature Cards Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {/* Feature 1 - Smart Question Bank */}
-            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
-                <BookOpen className="w-6 h-6 text-primary" strokeWidth={2} />
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <BookOpen className="w-6 h-6 text-primary" strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  Smart Question Bank
+                </h3>
+                <div className="w-12 h-0.5 bg-primary/30 mb-4 group-hover:w-full transition-all duration-500" />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Real exam-style practice that builds applied understanding. ACCA-aligned micro-problems for every syllabus unit, with adaptive difficulty that adjusts to your level.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                Smart Question Bank
-              </h3>
-              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Real exam-style practice that builds applied understanding. ACCA-aligned micro-problems for every syllabus unit, with adaptive difficulty that adjusts to your level.
-              </p>
             </Card>
 
             {/* Feature 2 - Interactive Flashcards */}
-            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
-                <Layers className="w-6 h-6 text-primary" strokeWidth={2} />
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Layers className="w-6 h-6 text-primary" strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  Interactive Flashcards
+                </h3>
+                <div className="w-12 h-0.5 bg-primary/30 mb-4 group-hover:w-full transition-all duration-500" />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Daily bite-sized learning that actually sticks. Master key concepts quickly with unlimited flashcards (Pro & Elite), instant checks, and integrated retention workflows.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                Interactive Flashcards
-              </h3>
-              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Daily bite-sized learning that actually sticks. Master key concepts quickly with unlimited flashcards (Pro & Elite), instant checks, and integrated retention workflows.
-              </p>
             </Card>
 
             {/* Feature 3 - Personalised Study Planner */}
-            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
-                <Calendar className="w-6 h-6 text-primary" strokeWidth={2} />
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Calendar className="w-6 h-6 text-primary" strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  Personalised Study Planner
+                </h3>
+                <div className="w-12 h-0.5 bg-primary/30 mb-4 group-hover:w-full transition-all duration-500" />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  A structured plan built around your exam date. Automatically creates day-by-day targets that match your pace and available time, keeping you on track without overwhelm.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                Personalised Study Planner
-              </h3>
-              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                A structured plan built around your exam date. Automatically creates day-by-day targets that match your pace and available time, keeping you on track without overwhelm.
-              </p>
             </Card>
 
             {/* Feature 4 - Performance Analytics */}
-            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
-                <BarChart3 className="w-6 h-6 text-primary" strokeWidth={2} />
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <BarChart3 className="w-6 h-6 text-primary" strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  Performance Analytics
+                </h3>
+                <div className="w-12 h-0.5 bg-primary/30 mb-4 group-hover:w-full transition-all duration-500" />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Clear insights that show when you're ready. Heatmaps, accuracy breakdowns, and progress trends help you identify weak areas instantly and focus where it matters most.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                Performance Analytics
-              </h3>
-              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Clear insights that show when you're ready. Heatmaps, accuracy breakdowns, and progress trends help you identify weak areas instantly and focus where it matters most.
-              </p>
             </Card>
 
             {/* Feature 5 - Spaced Repetition Engine */}
-            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
-                <RefreshCw className="w-6 h-6 text-primary" strokeWidth={2} />
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <RefreshCw className="w-6 h-6 text-primary" strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  Spaced Repetition Engine
+                </h3>
+                <div className="w-12 h-0.5 bg-primary/30 mb-4 group-hover:w-full transition-all duration-500" />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Review the right topics at the right time. Automatically resurfaces forgotten content, improving long-term retention and preventing last-minute cramming failures.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                Spaced Repetition Engine
-              </h3>
-              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Review the right topics at the right time. Automatically resurfaces forgotten content, improving long-term retention and preventing last-minute cramming failures.
-              </p>
             </Card>
 
             {/* Feature 6 - AI Guidance */}
-            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
-              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
-                <Brain className="w-6 h-6 text-primary" strokeWidth={2} />
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+              <div className="relative z-10">
+                <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                  <Brain className="w-6 h-6 text-primary" strokeWidth={2} />
+                </div>
+                <h3 className="text-xl font-bold text-foreground mb-3">
+                  AI Guidance
+                </h3>
+                <div className="w-12 h-0.5 bg-primary/30 mb-4 group-hover:w-full transition-all duration-500" />
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  Your intelligent ACCA coach that adapts to you. Get instant explanations, personalised recommendations, and a study plan that updates dynamically based on your performance.
+                </p>
               </div>
-              <h3 className="text-xl font-bold text-foreground mb-3">
-                AI Guidance
-              </h3>
-              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
-              <p className="text-sm text-muted-foreground leading-relaxed">
-                Your intelligent ACCA coach that adapts to you. Get instant explanations, personalised recommendations, and a study plan that updates dynamically based on your performance.
-              </p>
             </Card>
           </div>
         </div>
