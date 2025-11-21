@@ -225,7 +225,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Access sample questions from all ACCA papers</p></TooltipContent>
+                          <TooltipContent><p>Collections of practice questions organized by syllabus topics</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -235,7 +235,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Quick review cards for daily practice</p></TooltipContent>
+                          <TooltipContent><p>Two-sided study cards: question on front, answer on back. Perfect for memorizing definitions and formulas</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -245,7 +245,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Practice under real exam conditions weekly</p></TooltipContent>
+                          <TooltipContent><p>Full-length practice exams with countdown timer to simulate real exam pressure</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -255,7 +255,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Track your score and completion rate</p></TooltipContent>
+                          <TooltipContent><p>Charts showing your overall scores, strengths, and areas needing improvement</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -265,7 +265,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Preview the smart study planner feature</p></TooltipContent>
+                          <TooltipContent><p>Personalized schedule breaking down what to study each day based on your exam date</p></TooltipContent>
                         </Tooltip>
                       </li>
                     </ul>
@@ -315,7 +315,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Access all questions for every ACCA paper</p></TooltipContent>
+                          <TooltipContent><p>Complete library of all exam-style questions covering every syllabus topic</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -325,7 +325,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Study as many flashcards as you want daily</p></TooltipContent>
+                          <TooltipContent><p>No daily limit - study as much as you want for better retention</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -335,7 +335,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>4 full mock exams with timer each week</p></TooltipContent>
+                          <TooltipContent><p>More practice opportunities to build exam stamina and time management skills</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -345,7 +345,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Get instant AI-powered answer explanations</p></TooltipContent>
+                          <TooltipContent><p>Detailed breakdowns of why answers are correct or wrong, like having a tutor explain each question</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -355,7 +355,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Visual performance tracking across topics</p></TooltipContent>
+                          <TooltipContent><p>Color-coded grids showing which topics you master vs struggle with at a glance</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -365,7 +365,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Full access to personalized study schedules</p></TooltipContent>
+                          <TooltipContent><p>Create as many custom plans as you need for different exam dates and papers</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -375,7 +375,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Smart algorithm reviews topics at optimal times</p></TooltipContent>
+                          <TooltipContent><p>Science-backed system that re-shows material right before you forget it for maximum retention</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -385,7 +385,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Auto-generate personalized study roadmaps</p></TooltipContent>
+                          <TooltipContent><p>Creates a week-by-week learning plan tailored to your exam date and available study time</p></TooltipContent>
                         </Tooltip>
                       </li>
                     </ul>
@@ -435,7 +435,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Take as many practice exams as you need</p></TooltipContent>
+                          <TooltipContent><p>No weekly cap - practice under exam conditions as often as you need to build confidence</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -445,7 +445,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Ask unlimited questions to your AI study buddy</p></TooltipContent>
+                          <TooltipContent><p>24/7 AI assistant that answers questions, clarifies concepts, and guides your learning</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -455,7 +455,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Enhanced algorithm adapts to your learning curve</p></TooltipContent>
+                          <TooltipContent><p>Learns your memory patterns and adjusts review timing based on your individual retention rate</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -465,7 +465,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>AI forecasts your future performance trends</p></TooltipContent>
+                          <TooltipContent><p>Machine learning models forecast how you will perform on future topics and exams</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -475,7 +475,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Real-time calculation of your exam pass likelihood</p></TooltipContent>
+                          <TooltipContent><p>Statistical model that estimates your chances of passing based on current performance and study pace</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -485,7 +485,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Compare your progress with other students</p></TooltipContent>
+                          <TooltipContent><p>See how your scores rank globally and identify if you are ahead or behind the curve</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -495,7 +495,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Intensive final-week prep mode with focus areas</p></TooltipContent>
+                          <TooltipContent><p>Special interface that prioritizes high-impact revision and weak areas in your final week</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -505,7 +505,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Track progress across multiple papers at once</p></TooltipContent>
+                          <TooltipContent><p>Unified view showing progress, schedules, and analytics for all papers you are studying simultaneously</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -515,7 +515,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>AI assistant that adapts your plan in real-time</p></TooltipContent>
+                          <TooltipContent><p>Intelligent assistant that automatically adjusts your study plan when you fall behind or get ahead</p></TooltipContent>
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
@@ -525,7 +525,7 @@ export default function Landing() {
                           <TooltipTrigger asChild>
                             <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
                           </TooltipTrigger>
-                          <TooltipContent><p>Be the first to try new platform features</p></TooltipContent>
+                          <TooltipContent><p>Beta tester status - try experimental tools before general release</p></TooltipContent>
                         </Tooltip>
                       </li>
                     </ul>
