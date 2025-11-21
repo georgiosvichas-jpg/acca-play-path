@@ -6,7 +6,7 @@ import { toast } from "sonner";
 const tourSteps: Step[] = [
   {
     target: "body",
-    content: "Welcome to ACCA Master! Let's take a quick tour of all the features to help you ace your exam.",
+    content: "Welcome to Outcomeo! Let's take a quick tour of all the features to help you ace your exam.",
     placement: "center",
     disableBeacon: true,
   },

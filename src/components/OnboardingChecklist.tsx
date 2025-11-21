@@ -156,7 +156,7 @@ export default function OnboardingChecklist() {
           🎯 Getting Started
         </CardTitle>
         <CardDescription>
-          Complete these steps to get the most out of ACCA Master
+          Complete these steps to get the most out of Outcomeo
         </CardDescription>
       </CardHeader>
 
