@@ -315,7 +315,7 @@ export default function Landing() {
             <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
             animationDelay: "0.2s"
           }}>
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent border-none px-4 py-1.5 font-semibold z-20">
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 text-accent border-none px-4 py-1.5 font-semibold z-20 bg-amber-200">
                 <Star className="w-3 h-3 mr-1" />
                 Premium
               </Badge>
@@ -337,7 +337,7 @@ export default function Landing() {
                   {isAnnual && <p className="text-sm text-muted-foreground">Just €8.25/month, save 31%</p>}
                 </div>
 
-                <Button variant="outline" className="w-full h-12 rounded-xl border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground font-semibold" onClick={() => navigate("/auth")}>
+                <Button variant="outline" onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl border-2 border-accent font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground">
                   Upgrade to Elite
                 </Button>
 
