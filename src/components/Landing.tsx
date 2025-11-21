@@ -197,78 +197,68 @@ export default function Landing() {
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
                   <div className="gap-2 mb-2 flex items-center justify-center">
-                    
-                    <h3 className="text-2xl font-bold text-foreground">Free</h3>
+                    <h3 className="text-2xl font-bold text-foreground">FREE</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground text-center">Perfect to get started</p>
                   
-                  <div className="gap-2 pt-4 flex items-baseline justify-center">
-                    <span className="text-5xl font-bold text-foreground">€0</span>
-                    <span className="text-sm text-muted-foreground">Forever free</span>
+                  <div className="gap-2 pt-2 flex items-baseline justify-center">
+                    <span className="text-4xl font-bold text-foreground">€0</span>
+                    <span className="text-sm text-muted-foreground">— Forever Free</span>
                   </div>
+                  
+                  <p className="text-sm text-muted-foreground text-center pt-4 leading-relaxed">
+                    Discover how Outcomeo works — with just enough access to explore the tool, but not enough to prepare for a real exam.
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t">
+                  <p className="text-sm font-semibold mb-4 text-foreground">What's Included</p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">10% of each question bank</span>
+                        <p className="text-muted-foreground mt-0.5">Try real ACCA-style questions across all papers. Good for testing — not enough for exam readiness.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">10 daily flashcards</span>
+                        <p className="text-muted-foreground mt-0.5">Maintain a small practice habit and preview the micro-learning format.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">1 weekly timed mock</span>
+                        <p className="text-muted-foreground mt-0.5">One simulation per week to get a feel for exam timing.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Basic analytics</span>
+                        <p className="text-muted-foreground mt-0.5">View accuracy and time spent — limited insights.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">1-week study plan preview</span>
+                        <p className="text-muted-foreground mt-0.5">See how the structured plan works, but cannot build a full journey.</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t">
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
+                  <p className="text-sm text-muted-foreground">New users exploring the platform before committing.</p>
                 </div>
 
                 <Button variant="outline" className="w-full h-12 rounded-xl border-2" onClick={() => navigate("/auth")}>
-                  Current Plan
+                  Start Free
                 </Button>
-
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-semibold mb-4 text-foreground">What's included:</p>
-                  <TooltipProvider>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-muted-foreground">10% of each question bank</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Collections of practice questions organized by syllabus topics</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-muted-foreground">10 daily flashcards</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Two-sided study cards: question on front, answer on back. Perfect for memorizing definitions and formulas</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-muted-foreground">1 timed mock exam/week</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Full-length practice exams with countdown timer to simulate real exam pressure</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-muted-foreground">Basic analytics</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Charts showing your overall scores, strengths, and areas needing improvement</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-muted-foreground">1-week study plan preview</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-muted-foreground/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Personalized schedule breaking down what to study each day based on your exam date</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                    </ul>
-                  </TooltipProvider>
-                </div>
               </div>
             </Card>
 
@@ -278,115 +268,103 @@ export default function Landing() {
           }}>
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground border-none px-4 py-1.5 font-semibold">
                 <Star className="w-3 h-3 mr-1" />
-                Most Popular
+                Recommended
               </Badge>
               
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
                   <div className="gap-2 mb-2 flex items-center justify-center">
-                    
-                    <h3 className="text-2xl font-bold text-foreground">Pro</h3>
+                    <h3 className="text-2xl font-bold text-foreground">PRO</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground text-center">For serious students</p>
                   
-                  <div className="gap-2 pt-4 flex items-center justify-center">
-                    <span className="text-5xl font-bold text-primary">€{isAnnual ? "69" : "9.99"}</span>
-                    <span className="text-muted-foreground">/{isAnnual ? "year" : "month"}</span>
+                  <div className="gap-2 pt-2 flex items-center justify-center">
+                    <span className="text-4xl font-bold text-primary">€{isAnnual ? "69" : "9.99"}</span>
+                    <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
                   </div>
-                  {isAnnual && <p className="text-sm text-muted-foreground text-center">Just €5.75/month, save 28%</p>}
+                  <p className="text-center text-sm font-medium text-primary">
+                    {isAnnual ? "Everything you need to pass" : "Everything you need to pass"}
+                  </p>
+                  
+                  <p className="text-sm text-muted-foreground text-center pt-4 leading-relaxed">
+                    The complete ACCA practice toolkit. Designed for candidates who want full coverage, structured guidance, and a proven exam study system.
+                  </p>
+                </div>
+
+                <div className="pt-4 border-t">
+                  <p className="text-sm font-semibold mb-4 text-foreground">What You Unlock</p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">100% of all question banks</span>
+                        <p className="text-muted-foreground mt-0.5">Full access to every ACCA-style micro-problem and mini-case.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Unlimited flashcards</span>
+                        <p className="text-muted-foreground mt-0.5">Unlimited daily practice to build retention and exam confidence.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">4 weekly timed mocks</span>
+                        <p className="text-muted-foreground mt-0.5">Enough simulations to track progress and improve exam discipline.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">AI explanations (limited)</span>
+                        <p className="text-muted-foreground mt-0.5">Get instant insights after every question — understand the logic behind right/wrong answers.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Full analytics + heatmaps</span>
+                        <p className="text-muted-foreground mt-0.5">Identify your weakest units in seconds and focus where it matters.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.35s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Unlimited study planner</span>
+                        <p className="text-muted-foreground mt-0.5">Build a personalized plan for any exam date.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Core spaced repetition engine</span>
+                        <p className="text-muted-foreground mt-0.5">Automatically reviews topics you forget — boosts long-term retention.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.45s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">AI study path generator</span>
+                        <p className="text-muted-foreground mt-0.5">Recommends the right order to study based on performance.</p>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="pt-4 border-t">
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
+                  <p className="text-sm text-muted-foreground mb-4">Candidates who want a structured, complete, exam-ready workflow.</p>
+                  
+                  <div className="bg-muted/50 rounded-lg p-3 border">
+                    <p className="text-xs italic text-muted-foreground">"Pro helped me raise my accuracy from 54% to 81% in 9 days."</p>
+                    <p className="text-xs font-medium text-foreground mt-1">— Sofia, FR</p>
+                  </div>
                 </div>
 
                 <Button className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" onClick={() => navigate("/auth")}>
-                  Upgrade to Pro
+                  Unlock Full ACCA Access
                 </Button>
-
-                <div className="pt-4 border-t">
-                  <p className="text-sm font-semibold mb-4 text-foreground">Everything in Free, plus:</p>
-                  <TooltipProvider>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Full question banks (100%)</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Complete library of all exam-style questions covering every syllabus topic</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Unlimited flashcards</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>No daily limit - study as much as you want for better retention</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">4 timed mocks/week</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>More practice opportunities to build exam stamina and time management skills</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">AI explanations</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Detailed breakdowns of why answers are correct or wrong, like having a tutor explain each question</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Full analytics + heatmaps</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Color-coded grids showing which topics you master vs struggle with at a glance</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.35s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Unlimited study planner</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Create as many custom plans as you need for different exam dates and papers</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Spaced repetition engine</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Science-backed system that re-shows material right before you forget it for maximum retention</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.45s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">AI study path generator</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-primary/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Creates a week-by-week learning plan tailored to your exam date and available study time</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                    </ul>
-                  </TooltipProvider>
-                </div>
               </div>
             </Card>
 
@@ -394,134 +372,114 @@ export default function Landing() {
             <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
             animationDelay: "0.2s"
           }}>
-              
-              
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
                   <div className="gap-2 mb-2 flex items-center justify-center">
-                    
-                    <h3 className="text-2xl font-bold text-foreground">Elite</h3>
+                    <h3 className="text-2xl font-bold text-foreground">ELITE</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground text-center">Maximum exam preparation</p>
                   
-                  <div className="gap-2 pt-4 flex items-center justify-center">
-                    <span className="text-5xl font-bold text-foreground">€{isAnnual ? "99" : "14.99"}</span>
-                    <span className="text-muted-foreground">/{isAnnual ? "year" : "month"}</span>
+                  <div className="gap-2 pt-2 flex items-center justify-center">
+                    <span className="text-4xl font-bold text-foreground">€{isAnnual ? "99" : "14.99"}</span>
+                    <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
                   </div>
-                  {isAnnual && <p className="text-sm text-muted-foreground text-center">Just €8.25/month, save 31%</p>}
+                  <p className="text-center text-sm font-medium text-accent">
+                    {isAnnual ? "AI-powered performance coaching" : "AI-powered performance coaching"}
+                  </p>
+                  
+                  <p className="text-sm text-muted-foreground text-center pt-4 leading-relaxed">
+                    Designed for serious candidates who want maximum clarity, personalized guidance, and zero guesswork. This is the closest you can get to having a personal ACCA tutor.
+                  </p>
                 </div>
-
-                <Button onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground">
-                  Upgrade to Elite
-                </Button>
 
                 <div className="pt-4 border-t">
                   <p className="text-sm font-semibold mb-4 text-foreground">Everything in Pro, plus:</p>
-                  <TooltipProvider>
-                    <ul className="space-y-3">
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Unlimited timed mocks</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>No weekly cap - practice under exam conditions as often as you need to build confidence</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Unlimited AI tutor chat</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>24/7 AI assistant that answers questions, clarifies concepts, and guides your learning</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Advanced spaced repetition</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Learns your memory patterns and adjusts review timing based on your individual retention rate</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Predictive analytics</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Machine learning models forecast how you will perform on future topics and exams</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Pass probability tracker</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Statistical model that estimates your chances of passing based on current performance and study pace</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.35s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Performance benchmarking</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>See how your scores rank globally and identify if you are ahead or behind the curve</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Exam-week mode</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Special interface that prioritizes high-impact revision and weak areas in your final week</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.45s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Multi-paper dashboard</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Unified view showing progress, schedules, and analytics for all papers you are studying simultaneously</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.5s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">AI Copilot with dynamic plans</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Intelligent assistant that automatically adjusts your study plan when you fall behind or get ahead</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.55s" }}>
-                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
-                        <span className="text-sm text-foreground">Early access to new features</span>
-                        <Tooltip>
-                          <TooltipTrigger asChild>
-                            <HelpCircle className="w-4 h-4 text-accent/60 flex-shrink-0 mt-0.5 cursor-help" />
-                          </TooltipTrigger>
-                          <TooltipContent><p>Beta tester status - try experimental tools before general release</p></TooltipContent>
-                        </Tooltip>
-                      </li>
-                    </ul>
-                  </TooltipProvider>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Unlimited timed mocks</span>
+                        <p className="text-muted-foreground mt-0.5">Run simulations daily if needed — the fastest way to build exam stamina.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Unlimited AI Tutor Chat</span>
+                        <p className="text-muted-foreground mt-0.5">Full conversational access. Ask any question. Get any explanation. Anytime.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Advanced spaced repetition</span>
+                        <p className="text-muted-foreground mt-0.5">Concept-level memory tracking, adaptive scheduling, retention predictions.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Predictive analytics</span>
+                        <p className="text-muted-foreground mt-0.5">Forecast your expected score based on your real performance patterns.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Pass probability tracker</span>
+                        <p className="text-muted-foreground mt-0.5">Know your likelihood of passing each week — adjust early.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.35s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Performance benchmarking</span>
+                        <p className="text-muted-foreground mt-0.5">Compare yourself with top performers.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Exam-week mode</span>
+                        <p className="text-muted-foreground mt-0.5">A 7-day high-intensity preparation program designed to maximize peak performance.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.45s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Multi-paper dashboard</span>
+                        <p className="text-muted-foreground mt-0.5">Track progress across multiple papers in one unified view.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.5s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">AI Copilot (dynamic study plans)</span>
+                        <p className="text-muted-foreground mt-0.5">Your study plan updates daily based on what you actually did.</p>
+                      </div>
+                    </li>
+                    <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.55s" }}>
+                      <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
+                      <div className="text-sm">
+                        <span className="font-medium text-foreground">Early access to new features</span>
+                        <p className="text-muted-foreground mt-0.5">Elite users get priority.</p>
+                      </div>
+                    </li>
+                  </ul>
                 </div>
+
+                <div className="pt-4 border-t">
+                  <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
+                  <p className="text-sm text-muted-foreground mb-4">Candidates who want predictive clarity, coaching-level support, and the highest chance of passing.</p>
+                  
+                  <div className="bg-muted/50 rounded-lg p-3 border">
+                    <p className="text-xs italic text-muted-foreground">"Elite was like having my own tutor. I knew exactly when I was exam-ready."</p>
+                    <p className="text-xs font-medium text-foreground mt-1">— Daniel, SBR</p>
+                  </div>
+                </div>
+
+                <Button onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground">
+                  Get Personal AI Coaching
+                </Button>
               </div>
             </Card>
           </div>
