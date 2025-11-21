@@ -12,11 +12,13 @@ import {
   LogOut,
   Crown,
   ChevronDown,
+  RefreshCw,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import { useSubscription } from "@/hooks/useSubscription";
 import { NavLink } from "@/components/NavLink";
 import { Badge } from "@/components/ui/badge";
+import { toast } from "sonner";
 import {
   Sidebar,
   SidebarContent,
@@ -94,8 +96,9 @@ const mainNavItems = [
 export function AppSidebar() {
   const { state } = useSidebar();
   const { user, signOut } = useAuth();
-  const { planType, openCustomerPortal } = useSubscription();
+  const { planType, refreshSubscription, openCustomerPortal } = useSubscription();
   const collapsed = state === "collapsed";
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   // Persistent collapsible state
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
@@ -118,6 +121,18 @@ export function AppSidebar() {
   const getUserInitials = () => {
     if (!user?.email) return "U";
     return user.email[0].toUpperCase();
+  };
+
+  const handleRefreshSubscription = async () => {
+    setIsRefreshing(true);
+    try {
+      await refreshSubscription();
+      toast.success("Subscription status refreshed!");
+    } catch (error) {
+      toast.error("Failed to refresh subscription status");
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   return (
@@ -265,6 +280,13 @@ export function AppSidebar() {
                     {getPlanBadge()}
                   </div>
                 </DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                
+                <DropdownMenuItem onClick={handleRefreshSubscription} disabled={isRefreshing}>
+                  <RefreshCw className={`w-4 h-4 mr-2 ${isRefreshing ? 'animate-spin' : ''}`} />
+                  Refresh Status
+                </DropdownMenuItem>
+                
                 <DropdownMenuSeparator />
                 
                 {planType === "free" && (

@@ -97,8 +97,23 @@ serve(async (req) => {
     if (hasActiveSub) {
       // Find the highest tier subscription
       for (const subscription of subscriptions.data) {
+        if (!subscription.items.data[0]?.price?.product) {
+          logStep("Skipping subscription with missing product data", { subscriptionId: subscription.id });
+          continue;
+        }
+        
         const subProductId = subscription.items.data[0].price.product as string;
-        const subEndDate = new Date(subscription.current_period_end * 1000).toISOString();
+        
+        // Safely handle subscription end date
+        let subEndDate = null;
+        try {
+          if (subscription.current_period_end) {
+            subEndDate = new Date(subscription.current_period_end * 1000).toISOString();
+          }
+        } catch (error) {
+          const errorMsg = error instanceof Error ? error.message : String(error);
+          logStep("Error parsing subscription end date", { error: errorMsg, subscriptionId: subscription.id });
+        }
         
         // Check if it's Elite
         if (subProductId === STRIPE_PRODUCTS.ELITE_MONTHLY || 
