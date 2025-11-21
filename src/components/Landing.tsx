@@ -149,7 +149,7 @@ export default function Landing() {
                 </div>
                 <p className="text-muted-foreground mb-4">{testimonial.text}</p>
                 <div>
-                  <p className="font-semibold">{testimonial.name}</p>
+                  <p className="font-semibold pb-px">{testimonial.name}</p>
                   <p className="text-sm text-muted-foreground">{testimonial.location} • {testimonial.paper}</p>
                 </div>
               </Card>)}
