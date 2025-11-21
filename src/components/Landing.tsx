@@ -129,7 +129,7 @@ export default function Landing() {
           {/* Feature Cards Grid */}
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
             {/* Feature 1 - Smart Question Bank */}
-            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in" style={{ animationDelay: '0ms' }}>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -146,7 +146,7 @@ export default function Landing() {
             </Card>
 
             {/* Feature 2 - Interactive Flashcards */}
-            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in" style={{ animationDelay: '100ms' }}>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -163,7 +163,7 @@ export default function Landing() {
             </Card>
 
             {/* Feature 3 - Personalised Study Planner */}
-            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in" style={{ animationDelay: '200ms' }}>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -180,7 +180,7 @@ export default function Landing() {
             </Card>
 
             {/* Feature 4 - Performance Analytics */}
-            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in" style={{ animationDelay: '300ms' }}>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -197,7 +197,7 @@ export default function Landing() {
             </Card>
 
             {/* Feature 5 - Spaced Repetition Engine */}
-            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in" style={{ animationDelay: '400ms' }}>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
@@ -214,7 +214,7 @@ export default function Landing() {
             </Card>
 
             {/* Feature 6 - AI Guidance */}
-            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden">
+            <Card className="group relative p-8 border border-border rounded-2xl shadow-sm hover:shadow-lg hover:scale-105 transition-all duration-300 flex flex-col overflow-hidden animate-fade-in" style={{ animationDelay: '500ms' }}>
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               <div className="relative z-10">
                 <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
