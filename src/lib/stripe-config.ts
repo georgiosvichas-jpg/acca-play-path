@@ -1,12 +1,12 @@
 // Stripe configuration with 3-tier pricing
 export const STRIPE_PRICES = {
-  // Pro tier - €9.99/month or €69/year
-  PRO_MONTHLY: "price_1SVBw6C00m6oIeSrvbUSmQbK",
-  PRO_ANNUAL: "price_1SVByEC00m6oIeSrPKNL8gal",
+  // Pro tier - €12.99/month or €99/year
+  PRO_MONTHLY: "price_1SVsslC00m6oIeSrI8H4sE9m",
+  PRO_ANNUAL: "price_1SVssNC00m6oIeSrVO2fpzcL",
   
-  // Elite tier - €14.99/month or €99/year
-  ELITE_MONTHLY: "price_1SVC7YC00m6oIeSrdyMATzGJ",
-  ELITE_ANNUAL: "price_1SVC4XC00m6oIeSryt2whiQ2",
+  // Elite tier - €19.99/month or €159/year
+  ELITE_MONTHLY: "price_1SVsruC00m6oIeSr4BNAqFVM",
+  ELITE_ANNUAL: "price_1SVsr4C00m6oIeSrAlqF0wwy",
 } as const;
 
 export const STRIPE_PRODUCTS = {
