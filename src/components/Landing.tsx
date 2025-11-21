@@ -9,13 +9,8 @@ import { Switch } from "@/components/ui/switch";
 import { useNavigate, Link } from "react-router-dom";
 import { Sparkles, CheckCircle, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
-import featurePlanner from "@/assets/feature-planner.png";
-import featureFlashcards from "@/assets/feature-flashcards.png";
-import featureAnalytics from "@/assets/feature-analytics.png";
-import featureGamification from "@/assets/feature-gamification.png";
-import featureSyllabus from "@/assets/feature-syllabus.png";
-import featureResponsive from "@/assets/feature-responsive.png";
 import logo from "@/assets/logo-new.png";
+import StickyScrollFeatures from "@/components/StickyScrollFeatures";
 export default function Landing() {
   const navigate = useNavigate();
   const [navBg, setNavBg] = useState(false);
@@ -100,156 +95,8 @@ export default function Landing() {
             <div className="w-24 h-1 bg-primary mx-auto mt-8 rounded-full" />
           </div>
 
-          {/* Feature Block 1 - Smart Planner */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
-            <div className="order-2 lg:order-1">
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                  <img src={featurePlanner} alt="Smart Planner Interface" className="w-full h-auto" />
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2 space-y-6">
-              
-              <h3 className="text-3xl md:text-4xl font-display font-bold">
-                Smart Planner
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Plan your studies intelligently with AI-assisted schedules that adapt to your available time and exam date. 
-                No spreadsheets — just automatic balance between topics, difficulty, and deadlines.
-              </p>
-              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-primary/10 bg-blue-100 text-blue-800">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span>"Students who plan with Outcomeo complete 3× more study hours per week."</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Block 2 - Interactive Flashcards */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
-            <div className="space-y-6">
-              
-              <h3 className="text-3xl md:text-4xl font-display font-bold">
-                Interactive Flashcards
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Turn complex ACCA theory into quick 5-minute learning bursts. 
-                Reinforce memory with mini-problems and smart repetition that keeps you exam-ready anytime.
-              </p>
-              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-secondary/10 text-blue-800 bg-blue-100">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span>"Based on proven cognitive recall techniques."</span>
-              </div>
-            </div>
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                <img src={featureFlashcards} alt="Interactive Flashcards Interface" className="w-full h-auto" />
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Block 3 - Progress Analytics */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
-            <div className="order-2 lg:order-1">
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 to-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                  <img src={featureAnalytics} alt="Progress Analytics Dashboard" className="w-full h-auto" />
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2 space-y-6">
-              
-              <h3 className="text-3xl md:text-4xl font-display font-bold">
-                Progress Analytics
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Visualize your preparation like never before. 
-                Track your readiness, XP, and streaks — and know exactly when you're exam-ready. 
-                No more guessing if you're prepared enough.
-              </p>
-              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-accent/10 text-blue-800 bg-blue-100">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span>"Your personal data-driven progress coach."</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Block 4 - Gamification Engine */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
-            <div className="space-y-6">
-              
-              <h3 className="text-3xl md:text-4xl font-display font-bold">
-                Gamification Engine
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Earn XP, unlock badges, and climb leaderboards as you study. 
-                Stay consistent, motivated, and accountable — because progress feels better when it's visible.
-              </p>
-              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-primary/10 bg-blue-100 text-blue-800">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span>"Turn discipline into a daily habit."</span>
-              </div>
-            </div>
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-r from-primary/20 to-secondary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                <img src={featureGamification} alt="Gamification Engine Interface" className="w-full h-auto" />
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Block 5 - Officially Aligned */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-32 animate-fade-in">
-            <div className="order-2 lg:order-1">
-              <div className="relative group">
-                <div className="absolute -inset-4 bg-gradient-to-r from-secondary/20 to-accent/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                  <img src={featureSyllabus} alt="Officially Aligned Syllabus Tracker" className="w-full h-auto" />
-                </div>
-              </div>
-            </div>
-            <div className="order-1 lg:order-2 space-y-6">
-              
-              <h3 className="text-3xl md:text-4xl font-display font-bold">
-                Officially Aligned
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                All Outcomeo content is structured directly from the public ACCA syllabus and learning outcomes — updated annually to reflect the latest standards. 
-                You focus on learning, we handle the updates.
-              </p>
-              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-secondary/10 text-blue-800 bg-blue-100">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span>"Trusted by ACCA candidates worldwide."</span>
-              </div>
-            </div>
-          </div>
-
-          {/* Feature Block 6 - Learn Anywhere */}
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center mb-20 animate-fade-in">
-            <div className="space-y-6">
-              
-              <h3 className="text-3xl md:text-4xl font-display font-bold">
-                Learn Anywhere
-              </h3>
-              <p className="text-lg text-muted-foreground leading-relaxed">
-                Seamlessly switch between desktop, tablet, and mobile. 
-                Outcomeo is fully responsive, cloud-synced, and built for the modern learner.
-              </p>
-              <div className="flex items-center gap-3 text-sm font-medium p-4 rounded-xl border border-accent/10 bg-blue-100 text-blue-800">
-                <CheckCircle className="w-5 h-5 flex-shrink-0" />
-                <span>"Stay productive wherever you are."</span>
-              </div>
-            </div>
-            <div className="relative group">
-              <div className="absolute -inset-4 bg-gradient-to-r from-accent/20 to-primary/20 rounded-3xl blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <div className="relative bg-white rounded-2xl shadow-2xl overflow-hidden border border-border/50 transform transition-transform duration-500 hover:scale-[1.02]">
-                <img src={featureResponsive} alt="Multi-device Responsive Design" className="w-full h-auto" />
-              </div>
-            </div>
-          </div>
+          {/* Sticky Scroll Features */}
+          <StickyScrollFeatures />
 
           {/* Section Footer CTA */}
           <div className="text-center pt-16 animate-fade-in">
