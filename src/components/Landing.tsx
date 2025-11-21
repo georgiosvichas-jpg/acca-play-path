@@ -187,7 +187,7 @@ export default function Landing() {
               Annual
             </span>
             <Badge className="ml-2 bg-[#00A67E]/10 text-[#00A67E] border-[#00A67E]/20 hover:bg-[#00A67E]/10">
-              Save 20%
+              Save up to 31%
             </Badge>
           </div>
 
@@ -219,11 +219,11 @@ export default function Landing() {
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">10 flashcards per day</span>
+                    <span className="text-sm text-[#475569]">10 daily flashcards</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">1 timed mock exam</span>
+                    <span className="text-sm text-[#475569]">1 timed mock exam/week</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
@@ -257,17 +257,17 @@ export default function Landing() {
                 }}>
                     Pro
                   </h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-white" style={{
-                    fontWeight: 700
-                  }}>
-                      €{isAnnual ? "5.75" : "9.99"}
-                    </span>
-                    <span className="text-white/80">/month</span>
-                  </div>
-                  {isAnnual && <p className="text-sm text-white/90">
-                      Billed annually at €69/year
-                    </p>}
+                   <div className="flex items-baseline gap-2">
+                     <span className="text-5xl font-bold text-white" style={{
+                     fontWeight: 700
+                   }}>
+                       €{isAnnual ? "69" : "9.99"}
+                     </span>
+                     <span className="text-white/80">/{isAnnual ? "year" : "month"}</span>
+                   </div>
+                   {isAnnual && <p className="text-sm text-white/90">
+                       Just €5.75/month, save 28%
+                     </p>}
                   <p className="text-sm text-white/90 leading-relaxed pt-2">
                     Full access with AI-powered features.
                   </p>
@@ -320,15 +320,15 @@ export default function Landing() {
                 }}>
                     Elite
                   </h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-[#0F172A]" style={{
-                    fontWeight: 700
-                  }}>€{isAnnual ? "8.25" : "14.99"}</span>
-                    <span className="text-[#64748B]">/month</span>
-                  </div>
-                  {isAnnual && <p className="text-sm text-[#475569]">
-                      Billed annually at €99/year
-                    </p>}
+                   <div className="flex items-baseline gap-2">
+                     <span className="text-5xl font-bold text-[#0F172A]" style={{
+                     fontWeight: 700
+                   }}>€{isAnnual ? "99" : "14.99"}</span>
+                     <span className="text-[#64748B]">/{isAnnual ? "year" : "month"}</span>
+                   </div>
+                   {isAnnual && <p className="text-sm text-[#475569]">
+                       Just €8.25/month, save 31%
+                     </p>}
                   <p className="text-sm text-[#475569] leading-relaxed pt-2">
                     Everything in Pro, plus advanced AI tools.
                   </p>
