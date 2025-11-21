@@ -166,9 +166,7 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-12 animate-fade-in">
-            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
-              Pricing Plans
-            </Badge>
+            
             <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
               Choose Your Path to <span className="text-primary">ACCA Success</span>
             </h2>
@@ -244,7 +242,9 @@ export default function Landing() {
             </Card>
 
             {/* Card 2 - Pro (Most Popular) */}
-            <Card className="relative border-2 border-primary rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 animate-slide-up scale-105" style={{ animationDelay: "0.1s" }}>
+            <Card className="relative border-2 border-primary rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 animate-slide-up scale-105" style={{
+            animationDelay: "0.1s"
+          }}>
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground border-none px-4 py-1.5 font-semibold">
                 <Star className="w-3 h-3 mr-1" />
                 Most Popular
@@ -312,7 +312,9 @@ export default function Landing() {
             </Card>
 
             {/* Card 3 - Elite */}
-            <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+            <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
+            animationDelay: "0.2s"
+          }}>
               <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent border-none px-4 py-1.5 font-semibold">
                 <Star className="w-3 h-3 mr-1" />
                 Premium
