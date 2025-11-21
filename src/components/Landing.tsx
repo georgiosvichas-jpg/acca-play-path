@@ -19,6 +19,7 @@ export default function Landing() {
   const [navBg, setNavBg] = useState(false);
   const [isAnnual, setIsAnnual] = useState(true);
   const [loading, setLoading] = useState<string | null>(null);
+  const [scrollY, setScrollY] = useState(0);
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
     try {
@@ -50,6 +51,7 @@ export default function Landing() {
   useEffect(() => {
     const handleScroll = () => {
       setNavBg(window.scrollY > 50);
+      setScrollY(window.scrollY);
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -84,8 +86,14 @@ export default function Landing() {
 
       {/* Hero Section */}
       <section className="pt-32 pb-20 px-4 md:px-8 relative overflow-hidden">
-        <div className="absolute top-20 left-10 w-16 h-16 rounded-full bg-secondary/20 animate-float" />
-        <div className="absolute bottom-32 right-20 w-24 h-24 rounded-full bg-primary/10 animate-bounce-soft" />
+        <div 
+          className="absolute top-20 left-10 w-16 h-16 rounded-full bg-secondary/20 animate-float" 
+          style={{ transform: `translateY(${scrollY * 0.3}px)` }}
+        />
+        <div 
+          className="absolute bottom-32 right-20 w-24 h-24 rounded-full bg-primary/10 animate-bounce-soft" 
+          style={{ transform: `translateY(${scrollY * -0.2}px)` }}
+        />
         <div className="max-w-7xl mx-auto">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
@@ -94,7 +102,7 @@ export default function Landing() {
                 Pass your ACCA exams faster - with smart, personalised practice that actually sticks
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Daily micro-practice, adaptive difficulty, real-exam style questions and personalised AI coaching that shows you exactly what to s          
+                Daily micro-practice, adaptive difficulty, real-exam style questions and personalised AI coaching that shows you exactly what to s          
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg">
@@ -106,7 +114,10 @@ export default function Landing() {
                 </Button>
               </div>
             </div>
-            <div className="animate-slide-up">
+            <div 
+              className="animate-slide-up"
+              style={{ transform: `translateY(${scrollY * -0.15}px)` }}
+            >
               <img src={heroObjects} alt="ACCA Study Tools" className="w-full animate-float" />
             </div>
           </div>
