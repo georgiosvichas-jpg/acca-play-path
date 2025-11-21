@@ -231,10 +231,13 @@ export default function Landing() {
                   <h3 className="text-2xl font-bold text-foreground">FREE</h3>
                 </div>
                 
-                <div className="gap-2 pt-2 flex items-baseline justify-center">
+                <div className="gap-2 pt-2 flex items-center justify-center">
                   <span className="text-4xl font-bold text-foreground">€0</span>
-                  <span className="text-sm text-muted-foreground">— Forever Free</span>
+                  <span className="text-sm text-muted-foreground">/ forever</span>
                 </div>
+                <p className="text-center text-sm font-medium text-foreground">
+                  Forever free
+                </p>
                 
                 <p className="text-sm text-muted-foreground text-center pt-4 pb-6 leading-relaxed min-h-[80px]">
                   Discover how Outcomeo works — with just enough access to explore the tool, but not enough to prepare for a real exam.
