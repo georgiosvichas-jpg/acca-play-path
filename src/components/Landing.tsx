@@ -12,10 +12,43 @@ import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowR
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
 import SwipeableCardStack from "@/components/SwipeableCardStack";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "@/hooks/use-toast";
+import { STRIPE_PRICES } from "@/lib/stripe-config";
+
 export default function Landing() {
   const navigate = useNavigate();
   const [navBg, setNavBg] = useState(false);
   const [isAnnual, setIsAnnual] = useState(true);
+  const [loading, setLoading] = useState<string | null>(null);
+
+  const handleCheckout = async (tier: "pro" | "elite") => {
+    setLoading(tier);
+    try {
+      const priceId = isAnnual 
+        ? (tier === "pro" ? STRIPE_PRICES.PRO_ANNUAL : STRIPE_PRICES.ELITE_ANNUAL)
+        : (tier === "pro" ? STRIPE_PRICES.PRO_MONTHLY : STRIPE_PRICES.ELITE_MONTHLY);
+
+      const { data, error } = await supabase.functions.invoke("create-checkout-session", {
+        body: { priceId, mode: "subscription" },
+      });
+
+      if (error) throw error;
+
+      if (data?.url) {
+        window.open(data.url, "_blank");
+      }
+    } catch (error) {
+      console.error("Checkout error:", error);
+      toast({
+        title: "Error",
+        description: "Failed to start checkout. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setLoading(null);
+    }
+  };
   useEffect(() => {
     const handleScroll = () => {
       setNavBg(window.scrollY > 50);
@@ -288,7 +321,7 @@ export default function Landing() {
                   </div>
                   
                   <div className="gap-2 pt-2 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-primary">€{isAnnual ? "69" : "9.99"}</span>
+                    <span className="text-4xl font-bold text-primary">€{isAnnual ? "99" : "12.99"}</span>
                     <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
                   </div>
                   <p className="text-center text-sm font-medium text-primary">
@@ -388,8 +421,12 @@ export default function Landing() {
                   </div>
                 </div>
 
-                <Button className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" onClick={() => navigate("/auth")}>
-                  Unlock Full ACCA Access
+                <Button 
+                  className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" 
+                  onClick={() => handleCheckout("pro")}
+                  disabled={loading === "pro"}
+                >
+                  {loading === "pro" ? "Loading..." : "Unlock Full ACCA Access"}
                 </Button>
               </div>
             </Card>
@@ -405,7 +442,7 @@ export default function Landing() {
                   </div>
                   
                   <div className="gap-2 pt-2 flex items-center justify-center">
-                    <span className="text-4xl font-bold text-foreground">€{isAnnual ? "99" : "14.99"}</span>
+                    <span className="text-4xl font-bold text-foreground">€{isAnnual ? "159" : "19.99"}</span>
                     <span className="text-sm text-muted-foreground">/ {isAnnual ? "year" : "month"}</span>
                   </div>
                   <p className="text-center text-sm font-medium text-accent">
@@ -523,8 +560,12 @@ export default function Landing() {
                   </div>
                 </div>
 
-                <Button onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground">
-                  Get Personal AI Coaching
+                <Button 
+                  onClick={() => handleCheckout("elite")} 
+                  className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground"
+                  disabled={loading === "elite"}
+                >
+                  {loading === "elite" ? "Loading..." : "Get Personal AI Coaching"}
                 </Button>
               </div>
             </Card>
