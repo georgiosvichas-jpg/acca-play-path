@@ -196,18 +196,16 @@ export default function Landing() {
             <Card className="relative bg-card border-2 border-border rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="p-2 rounded-lg bg-muted">
-                      <Sparkles className="w-5 h-5 text-muted-foreground" />
-                    </div>
+                  <div className="gap-2 mb-2 flex items-center justify-center">
+                    
                     <h3 className="text-2xl font-bold text-foreground">Free</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">Perfect to get started</p>
+                  <p className="text-sm text-muted-foreground text-center">Perfect to get started</p>
                   
-                  <div className="flex items-baseline gap-2 pt-4">
+                  <div className="gap-2 pt-4 flex items-center justify-center">
                     <span className="text-5xl font-bold text-foreground">€0</span>
                   </div>
-                  <p className="text-sm text-muted-foreground">Forever free</p>
+                  <p className="text-sm text-muted-foreground text-center">Forever free</p>
                 </div>
 
                 <Button variant="outline" className="w-full h-12 rounded-xl border-2" onClick={() => navigate("/auth")}>
@@ -285,19 +283,17 @@ export default function Landing() {
               
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="p-2 rounded-lg bg-primary/10">
-                      <Sparkles className="w-5 h-5 text-primary" />
-                    </div>
+                  <div className="gap-2 mb-2 flex items-center justify-center">
+                    
                     <h3 className="text-2xl font-bold text-foreground">Pro</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">For serious students</p>
+                  <p className="text-sm text-muted-foreground text-center">For serious students</p>
                   
-                  <div className="flex items-baseline gap-2 pt-4">
+                  <div className="gap-2 pt-4 flex items-center justify-center">
                     <span className="text-5xl font-bold text-primary">€{isAnnual ? "69" : "9.99"}</span>
                     <span className="text-muted-foreground">/{isAnnual ? "year" : "month"}</span>
                   </div>
-                  {isAnnual && <p className="text-sm text-muted-foreground">Just €5.75/month, save 28%</p>}
+                  {isAnnual && <p className="text-sm text-muted-foreground text-center">Just €5.75/month, save 28%</p>}
                 </div>
 
                 <Button className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" onClick={() => navigate("/auth")}>
@@ -398,26 +394,21 @@ export default function Landing() {
             <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
             animationDelay: "0.2s"
           }}>
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 border-none px-4 py-1.5 font-semibold z-20 bg-amber-200 text-card-foreground">
-                <Star className="w-3 h-3 mr-1" />
-                Premium
-              </Badge>
+              
               
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="p-2 rounded-lg bg-accent/10">
-                      <Star className="w-5 h-5 text-accent" />
-                    </div>
+                  <div className="gap-2 mb-2 flex items-center justify-center">
+                    
                     <h3 className="text-2xl font-bold text-foreground">Elite</h3>
                   </div>
-                  <p className="text-sm text-muted-foreground">Maximum exam preparation</p>
+                  <p className="text-sm text-muted-foreground text-center">Maximum exam preparation</p>
                   
-                  <div className="flex items-baseline gap-2 pt-4">
+                  <div className="gap-2 pt-4 flex items-center justify-center">
                     <span className="text-5xl font-bold text-foreground">€{isAnnual ? "99" : "14.99"}</span>
                     <span className="text-muted-foreground">/{isAnnual ? "year" : "month"}</span>
                   </div>
-                  {isAnnual && <p className="text-sm text-muted-foreground">Just €8.25/month, save 31%</p>}
+                  {isAnnual && <p className="text-sm text-muted-foreground text-center">Just €8.25/month, save 31%</p>}
                 </div>
 
                 <Button onClick={() => navigate("/auth")} className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground">
