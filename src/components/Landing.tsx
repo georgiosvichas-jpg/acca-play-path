@@ -438,7 +438,7 @@ export default function Landing() {
                 </p>
                 
                 <p className="text-sm text-muted-foreground text-center pt-4 pb-6 leading-relaxed min-h-[80px]">
-                  The closest you can get to having a personal ACCA tutor. Designed for candidates who want maximum clarity, personalized guidance, and zero guesswork.
+                  The closest you can get to having a personal ACCA tutor. Designed for those who want maximum clarity, personalized guidancezero guesswork.
                 </p>
               </div>
 
