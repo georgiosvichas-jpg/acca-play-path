@@ -35,7 +35,7 @@ import {
 } from "@/components/ui/tooltip";
 import XPDisplay from "./XPDisplay";
 import PeerComparisonDrawer from "./PeerComparisonDrawer";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 
 const navItems = [
   { path: "/dashboard", label: "Dashboard", icon: Home, description: "Your study hub and progress overview" },

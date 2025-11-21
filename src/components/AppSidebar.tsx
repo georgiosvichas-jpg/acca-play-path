@@ -47,7 +47,7 @@ import {
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 import XPDisplay from "./XPDisplay";
 import PeerComparisonDrawer from "./PeerComparisonDrawer";
 
