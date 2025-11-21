@@ -8,10 +8,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle } from "lucide-react";
+import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle, BookOpen, Layers, Calendar, BarChart3, RefreshCw, Brain } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
-import SwipeableCardStack from "@/components/SwipeableCardStack";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "@/hooks/use-toast";
 import { STRIPE_PRICES } from "@/lib/stripe-config";
@@ -115,33 +114,103 @@ export default function Landing() {
       </section>
 
       {/* Features Section */}
-      <section id="features" className="py-24 px-4 md:px-8 bg-gradient-to-b from-white to-[#F8FBFA] relative overflow-hidden">
+      <section id="features" className="py-24 px-4 md:px-8 bg-white relative overflow-hidden">
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
-          <div className="text-center mb-20 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold mb-6 leading-tight">
-              Study better with tools designed for real ACCA success
+          <div className="text-center mb-16 animate-fade-in">
+            <h2 className="text-4xl md:text-5xl font-display font-bold mb-6 leading-tight text-foreground">
+              Tools designed for real ACCA success
             </h2>
-            <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Everything you need to plan, learn, and track your journey — built by ACCA graduates for ACCA students.
+            <p className="text-lg text-muted-foreground max-w-4xl mx-auto leading-relaxed">
+              Study smarter, retain more, and understand exactly what to focus on. Outcomeo combines active practice, analytics, memory science, and AI guidance to accelerate your ACCA progress.
             </p>
-            <div className="w-24 h-1 bg-primary mx-auto mt-8 rounded-full" />
           </div>
 
-          {/* 3D Swipeable Card Stack */}
-          <SwipeableCardStack />
-
-          {/* Section Footer CTA */}
-          <div className="text-center pt-16 animate-fade-in">
-            <div className="max-w-2xl mx-auto space-y-8">
-              <h3 className="text-2xl md:text-3xl font-display font-bold">
-                Join thousands of ACCA students studying smarter with Outcomeo
+          {/* Feature Cards Grid */}
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+            {/* Feature 1 - Smart Question Bank */}
+            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                <BookOpen className="w-6 h-6 text-primary" strokeWidth={2} />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3">
+                Smart Question Bank
               </h3>
-              <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90">
-                Start for free
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </div>
+              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Real exam-style practice that builds applied understanding. ACCA-aligned micro-problems for every syllabus unit, with adaptive difficulty that adjusts to your level.
+              </p>
+            </Card>
+
+            {/* Feature 2 - Interactive Flashcards */}
+            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                <Layers className="w-6 h-6 text-primary" strokeWidth={2} />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3">
+                Interactive Flashcards
+              </h3>
+              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Daily bite-sized learning that actually sticks. Master key concepts quickly with unlimited flashcards (Pro & Elite), instant checks, and integrated retention workflows.
+              </p>
+            </Card>
+
+            {/* Feature 3 - Personalised Study Planner */}
+            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                <Calendar className="w-6 h-6 text-primary" strokeWidth={2} />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3">
+                Personalised Study Planner
+              </h3>
+              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                A structured plan built around your exam date. Automatically creates day-by-day targets that match your pace and available time, keeping you on track without overwhelm.
+              </p>
+            </Card>
+
+            {/* Feature 4 - Performance Analytics */}
+            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                <BarChart3 className="w-6 h-6 text-primary" strokeWidth={2} />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3">
+                Performance Analytics
+              </h3>
+              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Clear insights that show when you're ready. Heatmaps, accuracy breakdowns, and progress trends help you identify weak areas instantly and focus where it matters most.
+              </p>
+            </Card>
+
+            {/* Feature 5 - Spaced Repetition Engine */}
+            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                <RefreshCw className="w-6 h-6 text-primary" strokeWidth={2} />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3">
+                Spaced Repetition Engine
+              </h3>
+              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Review the right topics at the right time. Automatically resurfaces forgotten content, improving long-term retention and preventing last-minute cramming failures.
+              </p>
+            </Card>
+
+            {/* Feature 6 - AI Guidance */}
+            <Card className="p-8 border border-border rounded-2xl shadow-sm hover:shadow-md transition-all duration-300 flex flex-col">
+              <div className="w-12 h-12 rounded-lg bg-primary/10 flex items-center justify-center mb-6">
+                <Brain className="w-6 h-6 text-primary" strokeWidth={2} />
+              </div>
+              <h3 className="text-xl font-bold text-foreground mb-3">
+                AI Guidance
+              </h3>
+              <div className="w-12 h-0.5 bg-primary/30 mb-4" />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Your intelligent ACCA coach that adapts to you. Get instant explanations, personalised recommendations, and a study plan that updates dynamically based on your performance.
+              </p>
+            </Card>
           </div>
         </div>
       </section>
