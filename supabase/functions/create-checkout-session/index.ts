@@ -75,7 +75,7 @@ serve(async (req) => {
       ],
       mode: mode,
       success_url: `${origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${origin}/`,
+      cancel_url: `${origin}/payment-cancelled`,
     });
 
     return new Response(JSON.stringify({ url: session.url }), {

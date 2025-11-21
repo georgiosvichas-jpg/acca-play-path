@@ -25,6 +25,7 @@ import OutcomeoOnboarding from "./components/StudyBuddyOnboarding";
 import NotFound from "./pages/NotFound";
 import Checkout from "./pages/Checkout";
 import PaymentSuccess from "./pages/PaymentSuccess";
+import PaymentCancelled from "./pages/PaymentCancelled";
 import PaymentFailure from "./pages/PaymentFailure";
 import Pricing from "./pages/Pricing";
 import XPConfettiWrapper from "./components/XPConfettiWrapper";
@@ -189,6 +190,14 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <PaymentSuccess />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/payment-cancelled"
+            element={
+              <ProtectedRoute>
+                <PaymentCancelled />
               </ProtectedRoute>
             }
           />

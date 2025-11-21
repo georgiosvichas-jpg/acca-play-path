@@ -1,14 +1,15 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
-import { Card } from "@/components/ui/card";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, Sparkles } from "lucide-react";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
 import { useSubscription } from "@/hooks/useSubscription";
-import Footer from "@/components/Footer";
 
 export default function PaymentSuccess() {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { refreshSubscription } = useSubscription();
+  const sessionId = searchParams.get("session_id");
 
   useEffect(() => {
     // Refresh subscription status after successful payment
@@ -16,60 +17,83 @@ export default function PaymentSuccess() {
   }, [refreshSubscription]);
 
   return (
-    <>
-      <div className="min-h-screen flex items-center justify-center p-4">
-        <Card className="p-8 md:p-12 max-w-2xl text-center shadow-card animate-fade-in">
-          {/* Success Icon */}
-          <div className="relative mb-6 inline-block">
-            <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-              <CheckCircle className="w-12 h-12 text-primary" />
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-primary/5 via-background to-accent/5 p-4">
+      <Card className="w-full max-w-2xl shadow-xl border-2 animate-fade-in">
+        <CardHeader className="text-center space-y-4 pb-8">
+          <div className="mx-auto w-20 h-20 bg-green-100 dark:bg-green-900/30 rounded-full flex items-center justify-center animate-scale-in">
+            <CheckCircle2 className="w-12 h-12 text-green-600 dark:text-green-400" />
+          </div>
+          <CardTitle className="text-3xl font-bold">
+            Payment Successful! 🎉
+          </CardTitle>
+          <CardDescription className="text-lg">
+            Welcome to your upgraded ACCA preparation experience
+          </CardDescription>
+        </CardHeader>
+
+        <CardContent className="space-y-6">
+          <div className="bg-muted/50 rounded-lg p-6 space-y-4">
+            <div className="flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
+              <div>
+                <h3 className="font-semibold mb-1">Your subscription is now active</h3>
+                <p className="text-sm text-muted-foreground">
+                  You now have full access to all premium features. Your account has been automatically upgraded.
+                </p>
+              </div>
             </div>
-            {/* Confetti effect */}
-            <Sparkles className="absolute top-0 left-0 w-6 h-6 text-primary animate-pulse" />
-            <Sparkles className="absolute top-2 right-2 w-5 h-5 text-primary animate-pulse delay-100" />
-            <Sparkles className="absolute bottom-4 left-4 w-4 h-4 text-primary animate-pulse delay-200" />
-            <Sparkles className="absolute bottom-2 right-8 w-6 h-6 text-primary animate-pulse delay-300" />
+
+            {sessionId && (
+              <div className="text-xs text-muted-foreground pt-2 border-t">
+                <span className="font-medium">Transaction ID:</span> {sessionId}
+              </div>
+            )}
           </div>
 
-          {/* Success Message */}
-          <h1 className="text-3xl md:text-4xl font-display font-extrabold mb-4">
-            Payment Successful!
-          </h1>
-          <p className="text-lg text-muted-foreground mb-2">
-            Welcome to your upgraded ACCA experience
-          </p>
-          <p className="text-muted-foreground mb-8">
-            Your account has been upgraded and you now have access to premium features.
-            Start exploring your unlocked content!
-          </p>
+          <div className="space-y-3">
+            <h4 className="font-semibold text-sm">What's next?</h4>
+            <ul className="space-y-2 text-sm text-muted-foreground">
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Start practicing with unlimited question banks</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Review your analytics and performance heatmaps</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Take unlimited timed mock exams</span>
+              </li>
+              <li className="flex items-start gap-2">
+                <CheckCircle2 className="w-4 h-4 text-green-600 mt-0.5 flex-shrink-0" />
+                <span>Get AI-powered explanations and coaching</span>
+              </li>
+            </ul>
+          </div>
 
-          {/* Action Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              size="lg"
+          <div className="flex flex-col sm:flex-row gap-3 pt-4">
+            <Button 
+              className="flex-1" 
               onClick={() => navigate("/dashboard")}
-              className="bg-primary hover:bg-primary/90"
             >
               Go to Dashboard
+              <ArrowRight className="w-4 h-4 ml-2" />
             </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              onClick={() => navigate("/flashcards")}
+            <Button 
+              variant="outline" 
+              className="flex-1"
+              onClick={() => navigate("/study")}
             >
-              Start Learning
+              Start Studying
             </Button>
           </div>
 
-          {/* Additional Info */}
-          <div className="mt-8 pt-8 border-t">
-            <p className="text-sm text-muted-foreground">
-              You'll receive a confirmation email shortly with your payment details.
-            </p>
-          </div>
-        </Card>
-      </div>
-      <Footer />
-    </>
+          <p className="text-xs text-center text-muted-foreground pt-4">
+            A confirmation email has been sent to your inbox with your receipt and subscription details.
+          </p>
+        </CardContent>
+      </Card>
+    </div>
   );
 }
