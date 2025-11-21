@@ -63,7 +63,7 @@ export default function Landing() {
                 Pass your ACCA exams faster - with smart, personalised practice that actually sticks
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
-                Daily micro-practice, adaptive difficulty, real-exam style questions and personalised coaching that builds mastery one step at a time
+                Daily micro-practice, adaptive difficulty, real-exam style questions and personalised AI coaching that shows you exactly what to s          
               </p>
               <div className="flex flex-wrap gap-4">
                 <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg">
