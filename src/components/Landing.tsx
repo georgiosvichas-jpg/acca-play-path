@@ -166,27 +166,27 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto">
           {/* Section Header */}
           <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-[#0F172A]" style={{
-            fontWeight: 700
-          }}>
-              Choose your plan for smarter ACCA prep
+            <Badge className="mb-4 bg-primary/10 text-primary border-primary/20">
+              Pricing Plans
+            </Badge>
+            <h2 className="text-4xl md:text-5xl font-bold mb-6 text-foreground">
+              Choose Your Path to <span className="text-primary">ACCA Success</span>
             </h2>
-            <p className="text-lg md:text-xl text-[#475569] max-w-3xl mx-auto mb-8">
-              Start free, focus on one paper, or unlock everything. Simple pricing. Cancel anytime.
+            <p className="text-lg md:text-xl text-muted-foreground max-w-3xl mx-auto mb-8">
+              Start free, upgrade anytime. Unlock powerful AI-driven features to ace your exams.
             </p>
-            <div className="w-32 h-px bg-[#E5E7EB] mx-auto" />
           </div>
 
           {/* Billing Toggle */}
           <div className="flex items-center justify-center gap-3 mb-12 animate-fade-in">
-            <span className={`text-sm font-medium transition-colors duration-200 ${!isAnnual ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
+            <span className={`text-sm font-medium transition-colors duration-200 ${!isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
               Monthly
             </span>
-            <Switch id="billing-toggle" checked={isAnnual} onCheckedChange={setIsAnnual} className="data-[state=checked]:bg-[#00A67E]" />
-            <span className={`text-sm font-medium transition-colors duration-200 ${isAnnual ? 'text-[#0F172A]' : 'text-[#64748B]'}`}>
+            <Switch id="billing-toggle" checked={isAnnual} onCheckedChange={setIsAnnual} className="data-[state=checked]:bg-primary" />
+            <span className={`text-sm font-medium transition-colors duration-200 ${isAnnual ? 'text-foreground' : 'text-muted-foreground'}`}>
               Annual
             </span>
-            <Badge className="ml-2 bg-[#00A67E]/10 text-[#00A67E] border-[#00A67E]/20 hover:bg-[#00A67E]/10">
+            <Badge className="ml-2 bg-primary/10 text-primary border-primary/20 hover:bg-primary/10">
               Save up to 31%
             </Badge>
           </div>
@@ -194,186 +194,214 @@ export default function Landing() {
           {/* Pricing Cards */}
           <div className="grid md:grid-cols-3 gap-6 mb-12 items-stretch">
             {/* Card 1 - Free */}
-            <Card className="relative bg-white border-[#E5E7EB] rounded-[24px] p-8 flex flex-col h-full transition-all duration-200 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
+            <Card className="relative bg-card border-2 border-border rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{
-                  fontWeight: 700
-                }}>
-                    Free
-                  </h3>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-5xl font-bold text-[#0F172A]" style={{
-                    fontWeight: 700
-                  }}>€0</span>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-2 rounded-lg bg-muted">
+                      <Sparkles className="w-5 h-5 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground">Free</h3>
                   </div>
-                  <p className="text-sm text-[#475569] leading-relaxed">
-                    Perfect for exploring the platform.
-                  </p>
+                  <p className="text-sm text-muted-foreground">Perfect to get started</p>
+                  
+                  <div className="flex items-baseline gap-2 pt-4">
+                    <span className="text-5xl font-bold text-foreground">€0</span>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Forever free</p>
                 </div>
 
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">10% of each question bank</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">10 daily flashcards</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">1 timed mock exam/week</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#00A67E] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Basic analytics (accuracy only)</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <Lock className="w-5 h-5 text-[#64748B] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#64748B]">1-week study plan preview</span>
-                  </li>
-                </ul>
-              </div>
+                <Button variant="outline" className="w-full h-12 rounded-xl border-2" onClick={() => navigate("/auth")}>
+                  Current Plan
+                </Button>
 
-              <Button id="cta-start-free" aria-label="Start free" variant="outline" className="w-full mt-6 h-12 rounded-xl border-2 border-[#00A67E] text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200" onClick={() => navigate("/auth")}>
-                Start free
-              </Button>
+                <div className="pt-4 border-t">
+                  <p className="text-sm font-semibold mb-4 text-foreground">What's included:</p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-muted-foreground">10% of each question bank</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-muted-foreground">10 daily flashcards</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-muted-foreground">1 timed mock exam/week</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-muted-foreground">Basic analytics</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-muted-foreground">1-week study plan preview</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </Card>
 
             {/* Card 2 - Pro (Most Popular) */}
-            <Card className="relative rounded-[24px] p-8 flex flex-col h-full transition-all duration-200 hover:shadow-2xl hover:-translate-y-1 hover:scale-[1.02] animate-slide-up overflow-hidden" style={{
-            animationDelay: "0.1s",
-            background: "linear-gradient(135deg, #00A67E 0%, #009D73 100%)"
-          }}>
-              <Badge className="absolute top-4 left-1/2 -translate-x-1/2 bg-white text-[#00A67E] border-none text-xs px-4 py-1.5 font-semibold min-w-[120px] justify-center">
+            <Card className="relative border-2 border-primary rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-2 animate-slide-up scale-105" style={{ animationDelay: "0.1s" }}>
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-primary text-primary-foreground border-none px-4 py-1.5 font-semibold">
+                <Star className="w-3 h-3 mr-1" />
                 Most Popular
               </Badge>
               
-              <div className="flex-1 space-y-6 mt-8">
+              <div className="flex-1 space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-white" style={{
-                  fontWeight: 700
-                }}>
-                    Pro
-                  </h3>
-                   <div className="flex items-baseline gap-2">
-                     <span className="text-5xl font-bold text-white" style={{
-                     fontWeight: 700
-                   }}>
-                       €{isAnnual ? "69" : "9.99"}
-                     </span>
-                     <span className="text-white/80">/{isAnnual ? "year" : "month"}</span>
-                   </div>
-                   {isAnnual && <p className="text-sm text-white/90">
-                       Just €5.75/month, save 28%
-                     </p>}
-                  <p className="text-sm text-white/90 leading-relaxed pt-2">
-                    Full access with AI-powered features.
-                  </p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-2 rounded-lg bg-primary/10">
+                      <Sparkles className="w-5 h-5 text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground">Pro</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">For serious students</p>
+                  
+                  <div className="flex items-baseline gap-2 pt-4">
+                    <span className="text-5xl font-bold text-primary">€{isAnnual ? "69" : "9.99"}</span>
+                    <span className="text-muted-foreground">/{isAnnual ? "year" : "month"}</span>
+                  </div>
+                  {isAnnual && <p className="text-sm text-muted-foreground">Just €5.75/month, save 28%</p>}
                 </div>
 
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Full question banks</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Unlimited flashcards</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">4 timed mocks per week</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">AI explanations & heatmaps</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-white">Full study planner & spaced repetition</span>
-                  </li>
-                </ul>
-              </div>
+                <Button className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" onClick={() => navigate("/auth")}>
+                  Upgrade to Pro
+                </Button>
 
-              <Button id="cta-upgrade-pro" aria-label="Upgrade to Pro" className="w-full mt-6 h-12 rounded-xl bg-white text-[#00A67E] hover:bg-[#00A67E] hover:text-white transition-all duration-200 shadow-lg hover:shadow-xl font-semibold" onClick={() => navigate("/auth")}>
-                Upgrade to Pro
-              </Button>
+                <div className="pt-4 border-t">
+                  <p className="text-sm font-semibold mb-4 text-foreground">Everything in Free, plus:</p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Full question banks (100%)</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Unlimited flashcards</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">4 timed mocks/week</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">AI explanations</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Full analytics + heatmaps</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Unlimited study planner</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Spaced repetition engine</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">AI study path generator</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </Card>
 
             {/* Card 3 - Elite */}
-            <Card style={{
-            animationDelay: "0.2s"
-          }} className="relative border-2 border-[#9333EA] rounded-[24px] p-8 flex flex-col h-full transition-all duration-200 hover:shadow-xl hover:-translate-y-1 animate-slide-up bg-primary-foreground">
-              <div className="flex items-center justify-center gap-2 mb-4">
-                
-                <Badge className="bg-[#9333EA]/10 text-[#9333EA] border-none text-xs px-4 py-1.5 font-semibold min-w-[120px] justify-center">
-                  Elite
-                </Badge>
-              </div>
+            <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{ animationDelay: "0.2s" }}>
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent/20 text-accent border-none px-4 py-1.5 font-semibold">
+                <Star className="w-3 h-3 mr-1" />
+                Premium
+              </Badge>
               
               <div className="flex-1 space-y-6">
                 <div className="space-y-2">
-                  <h3 className="text-2xl font-bold text-[#0F172A]" style={{
-                  fontWeight: 700
-                }}>
-                    Elite
-                  </h3>
-                   <div className="flex items-baseline gap-2">
-                     <span className="text-5xl font-bold text-[#0F172A]" style={{
-                     fontWeight: 700
-                   }}>€{isAnnual ? "99" : "14.99"}</span>
-                     <span className="text-[#64748B]">/{isAnnual ? "year" : "month"}</span>
-                   </div>
-                   {isAnnual && <p className="text-sm text-[#475569]">
-                       Just €8.25/month, save 31%
-                     </p>}
-                  <p className="text-sm text-[#475569] leading-relaxed pt-2">
-                    Everything in Pro, plus advanced AI tools.
-                  </p>
+                  <div className="flex items-center gap-2 mb-2">
+                    <div className="p-2 rounded-lg bg-accent/10">
+                      <Star className="w-5 h-5 text-accent" />
+                    </div>
+                    <h3 className="text-2xl font-bold text-foreground">Elite</h3>
+                  </div>
+                  <p className="text-sm text-muted-foreground">Maximum exam preparation</p>
+                  
+                  <div className="flex items-baseline gap-2 pt-4">
+                    <span className="text-5xl font-bold text-foreground">€{isAnnual ? "99" : "14.99"}</span>
+                    <span className="text-muted-foreground">/{isAnnual ? "year" : "month"}</span>
+                  </div>
+                  {isAnnual && <p className="text-sm text-muted-foreground">Just €8.25/month, save 31%</p>}
                 </div>
 
-                <ul className="space-y-3">
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Everything in Pro</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Unlimited timed mocks</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">AI Tutor chat</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">Predictive analytics & pass probability</span>
-                  </li>
-                  <li className="flex items-start gap-3">
-                    <CheckCircle className="w-5 h-5 text-[#9333EA] flex-shrink-0 mt-0.5" strokeWidth={2} />
-                    <span className="text-sm text-[#475569]">AI Copilot & early access</span>
-                  </li>
-                </ul>
-              </div>
+                <Button variant="outline" className="w-full h-12 rounded-xl border-2 border-accent text-accent hover:bg-accent hover:text-accent-foreground font-semibold" onClick={() => navigate("/auth")}>
+                  Upgrade to Elite
+                </Button>
 
-              <Button id="cta-upgrade-elite" aria-label="Upgrade to Elite" onClick={() => navigate("/auth")} className="w-full mt-6 h-12 rounded-xl text-white transition-all duration-200 shadow-md hover:shadow-lg bg-sidebar-ring">
-                Upgrade to Elite
-              </Button>
+                <div className="pt-4 border-t">
+                  <p className="text-sm font-semibold mb-4 text-foreground">Everything in Pro, plus:</p>
+                  <ul className="space-y-3">
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Unlimited timed mocks</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Unlimited AI tutor chat</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Advanced spaced repetition</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Predictive analytics</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Pass probability tracker</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Performance benchmarking</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Exam-week mode</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Multi-paper dashboard</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">AI Copilot with dynamic plans</span>
+                    </li>
+                    <li className="flex items-start gap-3">
+                      <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                      <span className="text-sm text-foreground">Early access to new features</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </Card>
           </div>
 
           {/* Trust Layer */}
-          <div className="text-center space-y-3 animate-fade-in">
-            <p className="text-sm font-semibold text-[#0F172A]" style={{
-            fontWeight: 700
-          }}>
-              14-day money-back guarantee. No hidden fees.
-            </p>
-            <p className="text-sm text-[#64748B]">
-              You keep your progress even if you downgrade. Payments are SSL-secured via Stripe.
-            </p>
+          <div className="flex items-center justify-center gap-8 text-sm text-muted-foreground animate-fade-in">
+            <div className="flex items-center gap-2">
+              <CheckCircle className="h-4 w-4 text-primary" />
+              <span>Cancel anytime</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Lock className="h-4 w-4 text-primary" />
+              <span>Secure payment</span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span>Instant access</span>
+            </div>
           </div>
         </div>
       </section>
