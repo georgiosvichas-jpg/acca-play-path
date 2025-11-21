@@ -202,10 +202,10 @@ export default function Landing() {
                   </div>
                   <p className="text-sm text-muted-foreground text-center">Perfect to get started</p>
                   
-                  <div className="gap-2 pt-4 flex items-center justify-center">
+                  <div className="gap-2 pt-4 flex items-baseline justify-center">
                     <span className="text-5xl font-bold text-foreground">€0</span>
+                    <span className="text-sm text-muted-foreground">Forever free</span>
                   </div>
-                  <p className="text-sm text-muted-foreground text-center">Forever free</p>
                 </div>
 
                 <Button variant="outline" className="w-full h-12 rounded-xl border-2" onClick={() => navigate("/auth")}>
