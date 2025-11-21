@@ -12,27 +12,23 @@ const logStep = (step: string, details?: any) => {
   console.log(`[STRIPE-WEBHOOK] ${step}${detailsStr}`);
 };
 
-// Stripe Product IDs for plan type mapping
-const STRIPE_PRODUCTS = {
-  PRO_MONTHLY: "prod_TS68zu6h4qaE7j",
-  PRO_ANNUAL: "prod_TS6AfVuTENSF9j",
-  ELITE_MONTHLY: "prod_TS6FrtFjCMj5IJ",
-  ELITE_ANNUAL: "prod_TS6HMg03CT5CuM",
-};
-
-const getProductIds = (config: typeof STRIPE_PRODUCTS) => Object.values(config);
-
-const determinePlanType = (productId: string): "free" | "pro" | "elite" => {
-  const proProducts = [STRIPE_PRODUCTS.PRO_MONTHLY, STRIPE_PRODUCTS.PRO_ANNUAL];
-  const eliteProducts = [STRIPE_PRODUCTS.ELITE_MONTHLY, STRIPE_PRODUCTS.ELITE_ANNUAL];
-  
-  if (proProducts.includes(productId)) {
-    return "pro";
-  } else if (eliteProducts.includes(productId)) {
-    return "elite";
+// Determine plan type based on product name from Stripe
+const determinePlanType = async (stripe: Stripe, productId: string): Promise<"free" | "pro" | "elite"> => {
+  try {
+    const product = await stripe.products.retrieve(productId);
+    const productName = product.name.toLowerCase();
+    
+    if (productName.includes("elite")) {
+      return "elite";
+    } else if (productName.includes("pro")) {
+      return "pro";
+    }
+    
+    return "free";
+  } catch (error) {
+    logStep("ERROR: Failed to fetch product", { productId, error });
+    return "free";
   }
-  
-  return "free";
 };
 
 serve(async (req) => {
@@ -128,7 +124,7 @@ serve(async (req) => {
         if (session.mode === "subscription" && session.subscription) {
           const subscription = await stripe.subscriptions.retrieve(session.subscription as string);
           productId = subscription.items.data[0]?.price.product as string;
-          planType = determinePlanType(productId);
+          planType = await determinePlanType(stripe, productId);
           logStep("Subscription detected", { productId, planType });
         } else if (session.mode === "payment") {
           planType = "per_paper" as any;
@@ -195,7 +191,7 @@ serve(async (req) => {
 
         const profile = profiles[0];
         const productId = subscription.items.data[0]?.price.product as string;
-        const planType = determinePlanType(productId);
+        const planType = await determinePlanType(stripe, productId);
 
         const updates: any = {
           subscription_status: subscription.status,
