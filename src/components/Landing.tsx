@@ -15,7 +15,7 @@ import featureAnalytics from "@/assets/feature-analytics.png";
 import featureGamification from "@/assets/feature-gamification.png";
 import featureSyllabus from "@/assets/feature-syllabus.png";
 import featureResponsive from "@/assets/feature-responsive.png";
-import logo from "@/assets/logo.png";
+import logo from "@/assets/logo-new.png";
 export default function Landing() {
   const navigate = useNavigate();
   const [navBg, setNavBg] = useState(false);
