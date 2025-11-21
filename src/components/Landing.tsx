@@ -216,7 +216,7 @@ export default function Landing() {
                   <p className="text-sm font-semibold mb-4 text-foreground">What's included:</p>
                   <TooltipProvider>
                     <ul className="space-y-3">
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">10% of each question bank</span>
                         <Tooltip>
@@ -226,7 +226,7 @@ export default function Landing() {
                           <TooltipContent><p>Collections of practice questions organized by syllabus topics</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">10 daily flashcards</span>
                         <Tooltip>
@@ -236,7 +236,7 @@ export default function Landing() {
                           <TooltipContent><p>Two-sided study cards: question on front, answer on back. Perfect for memorizing definitions and formulas</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">1 timed mock exam/week</span>
                         <Tooltip>
@@ -246,7 +246,7 @@ export default function Landing() {
                           <TooltipContent><p>Full-length practice exams with countdown timer to simulate real exam pressure</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">Basic analytics</span>
                         <Tooltip>
@@ -256,7 +256,7 @@ export default function Landing() {
                           <TooltipContent><p>Charts showing your overall scores, strengths, and areas needing improvement</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">1-week study plan preview</span>
                         <Tooltip>
@@ -304,7 +304,7 @@ export default function Landing() {
                   <p className="text-sm font-semibold mb-4 text-foreground">Everything in Free, plus:</p>
                   <TooltipProvider>
                     <ul className="space-y-3">
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Full question banks (100%)</span>
                         <Tooltip>
@@ -314,7 +314,7 @@ export default function Landing() {
                           <TooltipContent><p>Complete library of all exam-style questions covering every syllabus topic</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited flashcards</span>
                         <Tooltip>
@@ -324,7 +324,7 @@ export default function Landing() {
                           <TooltipContent><p>No daily limit - study as much as you want for better retention</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">4 timed mocks/week</span>
                         <Tooltip>
@@ -334,7 +334,7 @@ export default function Landing() {
                           <TooltipContent><p>More practice opportunities to build exam stamina and time management skills</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">AI explanations</span>
                         <Tooltip>
@@ -344,7 +344,7 @@ export default function Landing() {
                           <TooltipContent><p>Detailed breakdowns of why answers are correct or wrong, like having a tutor explain each question</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Full analytics + heatmaps</span>
                         <Tooltip>
@@ -354,7 +354,7 @@ export default function Landing() {
                           <TooltipContent><p>Color-coded grids showing which topics you master vs struggle with at a glance</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.35s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited study planner</span>
                         <Tooltip>
@@ -364,7 +364,7 @@ export default function Landing() {
                           <TooltipContent><p>Create as many custom plans as you need for different exam dates and papers</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Spaced repetition engine</span>
                         <Tooltip>
@@ -374,7 +374,7 @@ export default function Landing() {
                           <TooltipContent><p>Science-backed system that re-shows material right before you forget it for maximum retention</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.45s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">AI study path generator</span>
                         <Tooltip>
@@ -419,7 +419,7 @@ export default function Landing() {
                   <p className="text-sm font-semibold mb-4 text-foreground">Everything in Pro, plus:</p>
                   <TooltipProvider>
                     <ul className="space-y-3">
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.1s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited timed mocks</span>
                         <Tooltip>
@@ -429,7 +429,7 @@ export default function Landing() {
                           <TooltipContent><p>No weekly cap - practice under exam conditions as often as you need to build confidence</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.15s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited AI tutor chat</span>
                         <Tooltip>
@@ -439,7 +439,7 @@ export default function Landing() {
                           <TooltipContent><p>24/7 AI assistant that answers questions, clarifies concepts, and guides your learning</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.2s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Advanced spaced repetition</span>
                         <Tooltip>
@@ -449,7 +449,7 @@ export default function Landing() {
                           <TooltipContent><p>Learns your memory patterns and adjusts review timing based on your individual retention rate</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.25s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Predictive analytics</span>
                         <Tooltip>
@@ -459,7 +459,7 @@ export default function Landing() {
                           <TooltipContent><p>Machine learning models forecast how you will perform on future topics and exams</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.3s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Pass probability tracker</span>
                         <Tooltip>
@@ -469,7 +469,7 @@ export default function Landing() {
                           <TooltipContent><p>Statistical model that estimates your chances of passing based on current performance and study pace</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.35s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Performance benchmarking</span>
                         <Tooltip>
@@ -479,7 +479,7 @@ export default function Landing() {
                           <TooltipContent><p>See how your scores rank globally and identify if you are ahead or behind the curve</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.4s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Exam-week mode</span>
                         <Tooltip>
@@ -489,7 +489,7 @@ export default function Landing() {
                           <TooltipContent><p>Special interface that prioritizes high-impact revision and weak areas in your final week</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.45s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Multi-paper dashboard</span>
                         <Tooltip>
@@ -499,7 +499,7 @@ export default function Landing() {
                           <TooltipContent><p>Unified view showing progress, schedules, and analytics for all papers you are studying simultaneously</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.5s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">AI Copilot with dynamic plans</span>
                         <Tooltip>
@@ -509,7 +509,7 @@ export default function Landing() {
                           <TooltipContent><p>Intelligent assistant that automatically adjusts your study plan when you fall behind or get ahead</p></TooltipContent>
                         </Tooltip>
                       </li>
-                      <li className="flex items-start gap-2">
+                      <li className="flex items-start gap-2 animate-fade-in" style={{ animationDelay: "0.55s" }}>
                         <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Early access to new features</span>
                         <Tooltip>
