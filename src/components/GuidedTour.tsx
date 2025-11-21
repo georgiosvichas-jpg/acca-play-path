@@ -6,73 +6,43 @@ import { toast } from "sonner";
 const tourSteps: Step[] = [
   {
     target: "body",
-    content: "Welcome to Outcomeo! Let's take a quick tour of all the features to help you ace your exam.",
+    content: "Welcome to Outcomeo! Let's take a quick tour to help you master your ACCA exam with our gamified study platform.",
     placement: "center",
     disableBeacon: true,
   },
   {
     target: '[href="/dashboard"]',
-    content: "Your Dashboard shows an overview of your study progress, daily goals, and performance metrics.",
+    content: "Your Dashboard is command central - see your progress overview, daily XP goals, study streak, and chat with your AI Coach for personalized guidance.",
     placement: "bottom",
   },
   {
-    target: '[href="/coach"]',
-    content: "The AI Coach provides personalized guidance, answers questions, and helps you understand difficult concepts.",
+    target: '[href="/study"]',
+    content: "The Study section has everything you need to practice: Quiz Mode, Flashcards, Mock Exams, Spaced Repetition review, and Question Browser. All your learning tools in one place!",
     placement: "bottom",
   },
   {
-    target: '[href="/practice-quiz"]',
-    content: "Practice with questions and get immediate feedback to reinforce your learning.",
-    placement: "bottom",
-  },
-  {
-    target: '[href="/spaced-repetition"]',
-    content: "Review uses spaced repetition to help you master questions you got wrong at optimal intervals.",
-    placement: "bottom",
-  },
-  {
-    target: '[href="/mock-exam"]',
-    content: "Take full 2-hour timed mock exams with 50 questions to simulate real ACCA exam conditions.",
-    placement: "bottom",
-  },
-  {
-    target: '[href="/question-browser"]',
-    content: "Browse and filter the complete question bank by topic, difficulty, and more.",
-    placement: "bottom",
-  },
-  {
-    target: '[href="/question-analytics"]',
-    content: "View detailed analytics showing your accuracy trends and performance over time.",
-    placement: "bottom",
-  },
-  {
-    target: '[href="/badges"]',
-    content: "Earn achievement badges for reaching study milestones like streaks and accuracy goals.",
-    placement: "bottom",
-  },
-  {
-    target: '[href="/study-path"]',
-    content: "Follow AI-generated personalized study plans tailored to your exam date and weak areas.",
-    placement: "bottom",
-  },
-  {
-    target: '[href="/progress-tracking"]',
-    content: "Visualize your performance trends and improvements with detailed charts and graphs.",
+    target: '[href="/analytics"]',
+    content: "Analytics gives you deep insights: view question accuracy by topic, track performance trends over time, and see your improvement with detailed charts and graphs.",
     placement: "bottom",
   },
   {
     target: '[href="/planner"]',
-    content: "Schedule and track your study sessions to stay organized and on target.",
+    content: "The Planner helps you stay organized - schedule study sessions, set goals, and follow AI-generated study plans tailored to your exam date.",
     placement: "bottom",
   },
   {
-    target: '[href="/flashcards"]',
-    content: "Study with flashcards for quick review and reinforcement of key concepts.",
+    target: '[href="/badges"]',
+    content: "Earn Badges for reaching milestones like study streaks, accuracy goals, and XP achievements. Collect them all as you progress!",
     placement: "bottom",
+  },
+  {
+    target: '.sidebar-footer button',
+    content: "Track your XP, level up as you study, and compare your rank with peers. Click your profile to upgrade to Pro or Elite for unlimited features!",
+    placement: "top",
   },
   {
     target: "body",
-    content: "That's it! You're all set to start your ACCA journey. You can restart this tour anytime from your settings.",
+    content: "That's it! You're ready to ace your ACCA exam. Start earning XP and climbing the leaderboard. You can restart this tour anytime from Settings. Good luck! 🚀",
     placement: "center",
   },
 ];
