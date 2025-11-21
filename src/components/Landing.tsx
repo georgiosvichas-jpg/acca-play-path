@@ -298,11 +298,11 @@ export default function Landing() {
                   <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
                   <p className="text-sm text-muted-foreground">New users exploring the platform before committing.</p>
                 </div>
-
-                <Button variant="outline" className="w-full h-12 rounded-xl border-2" onClick={() => navigate("/auth")}>
-                  Start Free
-                </Button>
               </div>
+
+              <Button variant="outline" className="w-full h-12 rounded-xl border-2 mt-6" onClick={() => navigate("/auth")}>
+                Start Free
+              </Button>
             </Card>
 
             {/* Card 2 - Pro (Most Popular) */}
@@ -420,15 +420,15 @@ export default function Landing() {
                     <p className="text-xs font-medium text-foreground mt-1">— Sofia, FR</p>
                   </div>
                 </div>
-
-                <Button 
-                  className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold" 
-                  onClick={() => handleCheckout("pro")}
-                  disabled={loading === "pro"}
-                >
-                  {loading === "pro" ? "Loading..." : "Unlock Full ACCA Access"}
-                </Button>
               </div>
+
+              <Button 
+                className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-6" 
+                onClick={() => handleCheckout("pro")}
+                disabled={loading === "pro"}
+              >
+                {loading === "pro" ? "Loading..." : "Unlock Full ACCA Access"}
+              </Button>
             </Card>
 
             {/* Card 3 - Elite */}
@@ -559,15 +559,15 @@ export default function Landing() {
                     <p className="text-xs font-medium text-foreground mt-1">— Daniel, SBR</p>
                   </div>
                 </div>
-
-                <Button 
-                  onClick={() => handleCheckout("elite")} 
-                  className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground"
-                  disabled={loading === "elite"}
-                >
-                  {loading === "elite" ? "Loading..." : "Get Personal AI Coaching"}
-                </Button>
               </div>
+
+              <Button 
+                onClick={() => handleCheckout("elite")} 
+                className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground mt-6"
+                disabled={loading === "elite"}
+              >
+                {loading === "elite" ? "Loading..." : "Get Personal AI Coaching"}
+              </Button>
             </Card>
           </div>
 
