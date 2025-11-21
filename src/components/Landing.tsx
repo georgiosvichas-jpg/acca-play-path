@@ -20,6 +20,7 @@ export default function Landing() {
   const [isAnnual, setIsAnnual] = useState(true);
   const [loading, setLoading] = useState<string | null>(null);
   const [scrollY, setScrollY] = useState(0);
+  const [scrollProgress, setScrollProgress] = useState(0);
   const handleCheckout = async (tier: "pro" | "elite") => {
     setLoading(tier);
     try {
@@ -52,6 +53,14 @@ export default function Landing() {
     const handleScroll = () => {
       setNavBg(window.scrollY > 50);
       setScrollY(window.scrollY);
+      
+      // Calculate scroll progress
+      const windowHeight = window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const scrollTop = window.scrollY;
+      const scrollableHeight = documentHeight - windowHeight;
+      const progress = (scrollTop / scrollableHeight) * 100;
+      setScrollProgress(Math.min(progress, 100));
     };
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
@@ -62,6 +71,14 @@ export default function Landing() {
     });
   };
   return <div className="min-h-screen">
+      {/* Scroll Progress Bar */}
+      <div className="fixed top-0 left-0 w-full h-1 bg-muted/20 z-[60]">
+        <div 
+          className="h-full bg-gradient-to-r from-primary via-secondary to-primary transition-all duration-300 ease-out"
+          style={{ width: `${scrollProgress}%` }}
+        />
+      </div>
+
       {/* Navigation */}
       <nav className={`fixed top-0 w-full z-50 transition-all duration-300 bg-white ${navBg ? "shadow-sm" : ""}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-8">
