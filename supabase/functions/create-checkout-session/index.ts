@@ -1,7 +1,6 @@
 import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
 import Stripe from "https://esm.sh/stripe@18.5.0";
-import { createClient } from "npm:@supabase/supabase-js@2";
-import { z } from "https://deno.land/x/zod@v3.22.4/mod.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.57.2";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,65 +12,43 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
-  const supabaseClient = createClient(
-    Deno.env.get("SUPABASE_URL") ?? "",
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY") ?? ""
-  );
-
   try {
-    // Validate input
-    const requestSchema = z.object({
-      userId: z.string().uuid("Invalid user ID format"),
-    });
-
-    const body = await req.json();
-    const validation = requestSchema.safeParse(body);
-    
-    if (!validation.success) {
-      console.error("Validation error:", validation.error);
+    // Get auth token and create authenticated client
+    const authHeader = req.headers.get("Authorization");
+    if (!authHeader) {
       return new Response(
-        JSON.stringify({ 
-          error: "Invalid input parameters",
-          details: validation.error.errors 
-        }),
+        JSON.stringify({ error: "No authorization header" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    const supabaseClient = createClient(
+      Deno.env.get("SUPABASE_URL") ?? "",
+      Deno.env.get("SUPABASE_ANON_KEY") ?? ""
+    );
+
+    const token = authHeader.replace("Bearer ", "");
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser(token);
+    
+    if (authError || !user?.email) {
+      return new Response(
+        JSON.stringify({ error: "User not authenticated or email not available" }),
+        { status: 401, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+
+    // Parse request body for priceId and mode
+    const body = await req.json();
+    const { priceId, mode = "subscription" } = body;
+
+    if (!priceId) {
+      return new Response(
+        JSON.stringify({ error: "Price ID is required" }),
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const { userId } = validation.data;
-
-    // Get fixed Stripe configuration from environment
-    const priceId = Deno.env.get("STRIPE_PRICE_ID");
-    const mode: "subscription" | "payment" = "subscription";
-    
-    if (!priceId) {
-      return new Response(JSON.stringify({ error: "Stripe price not configured" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 500,
-      });
-    }
-
-    // Fetch user from sb_users table using service role
-    const { data: user, error: userError } = await supabaseClient
-      .from("sb_users")
-      .select("*")
-      .eq("id", userId)
-      .maybeSingle();
-
-    if (userError || !user) {
-      return new Response(JSON.stringify({ error: "User not found" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 404,
-      });
-    }
-
-    if (!user.email) {
-      return new Response(JSON.stringify({ error: "User email not available" }), {
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-        status: 400,
-      });
-    }
-
+    // Initialize Stripe
     const stripe = new Stripe(Deno.env.get("STRIPE_SECRET_KEY") || "", {
       apiVersion: "2025-08-27.basil",
     });
@@ -82,6 +59,9 @@ serve(async (req) => {
     if (customers.data.length > 0) {
       customerId = customers.data[0].id;
     }
+
+    // Get origin for redirect URLs
+    const origin = req.headers.get("origin") || "https://example.com";
 
     // Create checkout session
     const session = await stripe.checkout.sessions.create({
@@ -94,9 +74,8 @@ serve(async (req) => {
         },
       ],
       mode: mode,
-      client_reference_id: userId,
-      success_url: "https://example.com/checkout-success?session_id={CHECKOUT_SESSION_ID}",
-      cancel_url: "https://example.com/checkout-cancelled",
+      success_url: `${origin}/payment-success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${origin}/`,
     });
 
     return new Response(JSON.stringify({ url: session.url }), {
