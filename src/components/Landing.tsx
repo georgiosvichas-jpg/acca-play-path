@@ -38,8 +38,8 @@ export default function Landing() {
         <div className="max-w-7xl mx-auto px-4 md:px-8">
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-2">
-              <div className="w-[25px] h-[75px] flex items-center justify-center">
-                <img src={logo} alt="Outcomeo" className="w-full h-full object-contain" />
+              <div className="w-[25px] h-[25px] flex items-center justify-center overflow-visible">
+                <img src={logo} alt="Outcomeo" className="w-full h-full object-contain scale-[1.8]" />
               </div>
               <span className="font-display font-bold text-xl">Outcomeo</span>
             </div>
