@@ -190,7 +190,7 @@ export default function Landing() {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mb-12 items-stretch">
+          <div className="grid md:grid-cols-3 gap-6 mb-12 items-stretch justify-items-center">
             {/* Card 1 - Free */}
             <Card className="relative bg-card border-2 border-border rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-lg hover:-translate-y-1 animate-slide-up">
               <div className="flex-1 space-y-6">
