@@ -292,11 +292,11 @@ export default function Landing() {
                     </li>
                   </ul>
                 </div>
+              </div>
 
-                <div className="pt-4 border-t">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
-                  <p className="text-sm text-muted-foreground">New users exploring the platform before committing.</p>
-                </div>
+              <div className="pt-4 border-t mt-6">
+                <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
+                <p className="text-sm text-muted-foreground">New users exploring the platform before committing.</p>
               </div>
 
               <Button variant="outline" className="w-full h-12 rounded-xl border-2 mt-6" onClick={() => navigate("/auth")}>
@@ -409,13 +409,11 @@ export default function Landing() {
                     </li>
                   </ul>
                 </div>
+              </div>
 
-                <div className="pt-4 border-t">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
-                  <p className="text-sm text-muted-foreground mb-4">Candidates who want a structured, complete, exam-ready workflow.</p>
-                  
-                  
-                </div>
+              <div className="pt-4 border-t mt-6">
+                <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
+                <p className="text-sm text-muted-foreground">Candidates who want a structured, complete, exam-ready workflow.</p>
               </div>
 
               <Button className="w-full h-12 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground font-semibold mt-6" onClick={() => handleCheckout("pro")} disabled={loading === "pro"}>
@@ -541,13 +539,11 @@ export default function Landing() {
                     </li>
                   </ul>
                 </div>
+              </div>
 
-                <div className="pt-4 border-t">
-                  <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
-                  <p className="text-sm text-muted-foreground mb-4">Candidates who want predictive clarity, coaching-level support, and the highest chance of passing.</p>
-                  
-                  
-                </div>
+              <div className="pt-4 border-t mt-6">
+                <p className="text-xs font-semibold text-muted-foreground mb-2">Who this is for</p>
+                <p className="text-sm text-muted-foreground">Candidates who want predictive clarity, coaching-level support, and the highest chance of passing.</p>
               </div>
 
               <Button onClick={() => handleCheckout("elite")} className="w-full h-12 rounded-xl font-semibold bg-amber-200 hover:bg-amber-100 text-card-foreground mt-6" disabled={loading === "elite"}>
