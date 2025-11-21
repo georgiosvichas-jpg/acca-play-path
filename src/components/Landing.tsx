@@ -8,7 +8,7 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Switch } from "@/components/ui/switch";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { useNavigate, Link } from "react-router-dom";
-import { Sparkles, CheckCircle, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle } from "lucide-react";
+import { Sparkles, Check, Star, Mail, Linkedin, Instagram, MessageCircle, ArrowRight, Lock, HelpCircle } from "lucide-react";
 import heroObjects from "@/assets/hero-objects.png";
 import logo from "@/assets/logo-new.png";
 import SwipeableCardStack from "@/components/SwipeableCardStack";
@@ -217,7 +217,7 @@ export default function Landing() {
                   <TooltipProvider>
                     <ul className="space-y-3">
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">10% of each question bank</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -227,7 +227,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">10 daily flashcards</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -237,7 +237,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">1 timed mock exam/week</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -247,7 +247,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">Basic analytics</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -257,7 +257,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-muted-foreground flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-muted-foreground">1-week study plan preview</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -305,7 +305,7 @@ export default function Landing() {
                   <TooltipProvider>
                     <ul className="space-y-3">
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Full question banks (100%)</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -315,7 +315,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited flashcards</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -325,7 +325,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">4 timed mocks/week</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -335,7 +335,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">AI explanations</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -345,7 +345,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Full analytics + heatmaps</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -355,7 +355,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited study planner</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -365,7 +365,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Spaced repetition engine</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -375,7 +375,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">AI study path generator</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -420,7 +420,7 @@ export default function Landing() {
                   <TooltipProvider>
                     <ul className="space-y-3">
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited timed mocks</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -430,7 +430,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Unlimited AI tutor chat</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -440,7 +440,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Advanced spaced repetition</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -450,7 +450,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Predictive analytics</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -460,7 +460,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Pass probability tracker</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -470,7 +470,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Performance benchmarking</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -480,7 +480,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Exam-week mode</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -490,7 +490,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Multi-paper dashboard</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -500,7 +500,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">AI Copilot with dynamic plans</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -510,7 +510,7 @@ export default function Landing() {
                         </Tooltip>
                       </li>
                       <li className="flex items-start gap-2">
-                        <CheckCircle className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" strokeWidth={2} />
+                        <Check className="w-4 h-4 text-green-600 flex-shrink-0 mt-1" strokeWidth={2.5} />
                         <span className="text-sm text-foreground">Early access to new features</span>
                         <Tooltip>
                           <TooltipTrigger asChild>
@@ -529,7 +529,7 @@ export default function Landing() {
           {/* Trust Layer */}
           <div className="flex items-center justify-center gap-8 text-sm animate-fade-in text-card-foreground">
             <div className="flex items-center gap-2">
-              <CheckCircle className="h-4 w-4 text-primary" />
+              <Check className="h-4 w-4 text-green-600" strokeWidth={2.5} />
               <span>Cancel anytime</span>
             </div>
             <div className="flex items-center gap-2">
