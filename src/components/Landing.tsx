@@ -315,7 +315,7 @@ export default function Landing() {
             <Card className="relative border-2 border-accent rounded-3xl p-8 flex flex-col h-full transition-all duration-300 hover:shadow-xl hover:-translate-y-1 animate-slide-up" style={{
             animationDelay: "0.2s"
           }}>
-              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 text-accent border-none px-4 py-1.5 font-semibold z-20 bg-amber-200">
+              <Badge className="absolute -top-3 left-1/2 -translate-x-1/2 border-none px-4 py-1.5 font-semibold z-20 bg-amber-200 text-card-foreground">
                 <Star className="w-3 h-3 mr-1" />
                 Premium
               </Badge>
