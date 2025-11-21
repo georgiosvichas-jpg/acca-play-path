@@ -25,9 +25,29 @@ export function useSubscription() {
     }
 
     try {
+      // Try edge function first
       const { data, error } = await supabase.functions.invoke("check-subscription");
 
-      if (error) throw error;
+      if (error) {
+        console.error("Edge function error, falling back to database:", error);
+        
+        // Fallback: read directly from user_profiles
+        const { data: profileData, error: profileError } = await supabase
+          .from("user_profiles")
+          .select("plan_type, subscription_status, subscription_end_date")
+          .eq("user_id", user.id)
+          .single();
+
+        if (profileError) throw profileError;
+
+        setSubscriptionInfo({
+          isSubscribed: profileData.subscription_status === "active",
+          planType: (profileData.plan_type as PlanType) || "free",
+          subscriptionEnd: profileData.subscription_end_date || null,
+          isLoading: false,
+        });
+        return;
+      }
 
       setSubscriptionInfo({
         isSubscribed: data.subscribed || false,
@@ -37,6 +57,28 @@ export function useSubscription() {
       });
     } catch (error) {
       console.error("Error checking subscription:", error);
+      
+      // Final fallback: try database again
+      try {
+        const { data: profileData } = await supabase
+          .from("user_profiles")
+          .select("plan_type, subscription_status, subscription_end_date")
+          .eq("user_id", user.id)
+          .single();
+
+        if (profileData) {
+          setSubscriptionInfo({
+            isSubscribed: profileData.subscription_status === "active",
+            planType: (profileData.plan_type as PlanType) || "free",
+            subscriptionEnd: profileData.subscription_end_date || null,
+            isLoading: false,
+          });
+          return;
+        }
+      } catch (fallbackError) {
+        console.error("Fallback also failed:", fallbackError);
+      }
+      
       setSubscriptionInfo((prev) => ({ ...prev, isLoading: false }));
     }
   }, [user]);
