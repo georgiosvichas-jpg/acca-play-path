@@ -1,6 +1,6 @@
 # Motivational Messages System
 
-This directory contains the centralized motivational messaging system for ACCA Outcomeo.
+This directory contains the centralized motivational messaging system for Outcomeo.
 
 ## Overview
 
