@@ -186,7 +186,7 @@ export default function Landing() {
               Annual
             </span>
             <Badge className="ml-2 bg-primary/10 text-primary border-primary/20 hover:bg-primary/10">
-              Save up to 45%
+              Save up to 37%
             </Badge>
           </div>
 
