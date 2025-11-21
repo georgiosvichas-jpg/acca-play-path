@@ -104,7 +104,7 @@ export default function Landing() {
               <h3 className="text-2xl md:text-3xl font-display font-bold">
                 Join thousands of ACCA students studying smarter with Outcomeo
               </h3>
-              <Button size="lg" onClick={() => scrollToSection("pricing")} className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90">
+              <Button size="lg" onClick={() => navigate("/auth")} className="rounded-xl shadow-lg hover:shadow-xl transition-all text-lg px-8 py-6 bg-primary hover:bg-primary/90">
                 Start for free
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
