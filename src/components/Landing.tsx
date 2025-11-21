@@ -59,8 +59,8 @@ export default function Landing() {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div className="animate-fade-in">
               <Badge className="mb-4 rounded-full bg-amber-200 text-card-foreground">Trusted by over 10,000 professionals worldwide            </Badge>
-              <h1 className="text-5xl font-display font-extrabold mb-6 leading-tight md:text-3xl">
-                Pass your ACCA exams faster - with smart, personalised practice that actually sticks                                                                  
+              <h1 className="text-5xl font-display font-extrabold mb-6 leading-tight md:text-5xl">
+                Pass your ACCA exams faster - with smart, personalised practice that actually sticks                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
               </h1>
               <p className="text-xl text-muted-foreground mb-8">
                 Daily micro-practice, adaptive difficulty, real-exam style questions and personalised coaching that builds mastery one step at a time                  
