@@ -69,15 +69,27 @@ serve(async (req) => {
     }
 
     // Accept JSON body with file content
-    console.log("Attempting to parse request body...");
+    console.log("Attempting to read request body...");
     
+    // Read raw text first to see what we're receiving
+    let rawText: string;
+    try {
+      rawText = await req.text();
+      console.log("Raw request text length:", rawText.length);
+      console.log("Raw request text preview:", rawText.substring(0, 200));
+    } catch (e) {
+      console.error("Failed to read request text:", e);
+      throw new Error(`Cannot read request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
+    }
+
+    // Parse the JSON
     let body: any;
     try {
-      body = await req.json();
+      body = JSON.parse(rawText);
       console.log("Body parsed successfully, keys:", Object.keys(body));
     } catch (e) {
-      console.error("Failed to parse JSON body:", e);
-      throw new Error(`Invalid request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      console.error("Failed to parse JSON:", e);
+      throw new Error(`Invalid JSON in request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
     
     const fileContent = body.fileContent;
@@ -91,7 +103,7 @@ serve(async (req) => {
 
     try {
       parsedData = JSON.parse(fileContent);
-      console.log("Questions data parsed successfully");
+      console.log("Questions data parsed successfully, total questions:", Array.isArray(parsedData) ? parsedData.length : parsedData.questions?.length || 0);
     } catch (e) {
       throw new Error(`Invalid JSON in file: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
