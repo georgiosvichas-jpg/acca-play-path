@@ -69,6 +69,14 @@ serve(async (req) => {
     }
 
     // Accept file upload from UI
+    // Check content-type header
+    const contentType = req.headers.get("content-type");
+    console.log("Content-Type header:", contentType);
+    
+    if (!contentType || !contentType.includes("multipart/form-data")) {
+      throw new Error(`Missing or invalid content type. Received: ${contentType || 'none'}`);
+    }
+    
     const formData = await req.formData();
     const file = formData.get("file") as File;
 
