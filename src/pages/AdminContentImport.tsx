@@ -235,28 +235,19 @@ export default function AdminContentImport() {
         throw new Error("Not authenticated");
       }
 
-      const formData = new FormData();
-      formData.append("file", faQuestionFile);
+      // Read the file content as text
+      const fileContent = await faQuestionFile.text();
 
-      // Use direct fetch instead of supabase.functions.invoke to avoid content-type issues
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${session.access_token}`,
-            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-          },
-          body: formData, // Let browser set content-type with boundary
-        }
-      );
+      // Send as JSON body instead of FormData
+      const response = await supabase.functions.invoke("import-fa-questions", {
+        body: { fileContent },
+      });
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Import failed");
+      if (response.error) {
+        throw response.error;
       }
 
-      const result = await response.json() as FAQuestionImportResult;
+      const result = response.data as FAQuestionImportResult;
       setFaQuestionResult(result);
 
       toast({
