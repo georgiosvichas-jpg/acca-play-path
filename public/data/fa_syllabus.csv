@@ -1,0 +1,11 @@
+paper_code,unit_code,parent_unit_code,unit_name,unit_level,estimated_study_minutes,description
+FA,FA01,,Accounting concepts and regulatory framework,unit,,"Purpose of financial accounting, users of information, and key qualitative characteristics and basic accounting concepts."
+FA,FA02,,Double-entry bookkeeping,unit,,"Ledger accounts, the accounting equation, debits and credits, and recording basic sales, purchases and cash transactions."
+FA,FA03,,Inventory and receivables,unit,,"Basic inventory valuation methods, cost vs net realisable value, and treatment of trade receivables and allowances for doubtful debts."
+FA,FA04,,Tangible non-current assets,unit,,"Recognition of property, plant and equipment, capital vs revenue expenditure, depreciation methods and disposals."
+FA,FA05,,Intangables and impairment (introductory),unit,,"Recognition of intangible assets, internally generated vs purchased goodwill, and simple treatment of impairment and write-downs."
+FA,FA06,,Accruals and prepayments,unit,,"Accrual basis of accounting and adjustments for accrued and prepaid expenses and income, and their effect on profit and balances."
+FA,FA07,,Trial balance and error correction,unit,,"Purpose of the trial balance, types of errors, use of suspense accounts and correcting errors to adjust the trial balance."
+FA,FA08,,Financial statements for a sole trader,unit,,Structure of basic profit or loss and financial position statements and how year-end adjustments feed into them.
+FA,FA09,,Basic cash flow principles,unit,,"Difference between profit and cash, common cash inflows and outflows, and simple classification of cash movements."
+FA,FA10,,Interpretation of financial statements,unit,,"Simple profitability, liquidity and efficiency ratios and basic interpretation of performance, position and limitations of ratio analysis."

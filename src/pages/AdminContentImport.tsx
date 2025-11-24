@@ -30,6 +30,13 @@ interface MockConfigPreview {
   pass_mark_percentage: number;
 }
 
+interface SyllabusUnitPreview {
+  unit_code: string;
+  unit_name: string;
+  parent_unit_code: string | null;
+  unit_level: string;
+}
+
 export default function AdminContentImport() {
   const { toast } = useToast();
   const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
@@ -41,6 +48,7 @@ export default function AdminContentImport() {
   const [mockSummary, setMockSummary] = useState<ImportSummary | null>(null);
   const [mockErrors, setMockErrors] = useState<ImportError[]>([]);
   const [mockConfigs, setMockConfigs] = useState<MockConfigPreview[]>([]);
+  const [syllabusUnits, setSyllabusUnits] = useState<SyllabusUnitPreview[]>([]);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -55,6 +63,7 @@ export default function AdminContentImport() {
     setSyllabusLoading(true);
     setSyllabusSummary(null);
     setSyllabusErrors([]);
+    setSyllabusUnits([]);
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -76,6 +85,7 @@ export default function AdminContentImport() {
       const result = response.data;
       setSyllabusSummary(result.summary);
       setSyllabusErrors(result.errors || []);
+      setSyllabusUnits(result.units || []);
 
       toast({
         title: "Import completed",
@@ -237,6 +247,34 @@ export default function AdminContentImport() {
                 <Download className="mr-2 h-4 w-4" />
                 Download Error Log
               </Button>
+            </div>
+          )}
+
+          {syllabusUnits.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold">Imported Syllabus Units</h3>
+              <div className="border rounded-lg overflow-hidden">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Unit Code</TableHead>
+                      <TableHead>Unit Name</TableHead>
+                      <TableHead>Parent Unit</TableHead>
+                      <TableHead>Level</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {syllabusUnits.map((unit) => (
+                      <TableRow key={unit.unit_code}>
+                        <TableCell className="font-medium">{unit.unit_code}</TableCell>
+                        <TableCell>{unit.unit_name}</TableCell>
+                        <TableCell>{unit.parent_unit_code || '-'}</TableCell>
+                        <TableCell>{unit.unit_level}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
             </div>
           )}
         </CardContent>
