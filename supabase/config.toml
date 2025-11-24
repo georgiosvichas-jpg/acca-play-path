@@ -47,3 +47,6 @@ verify_jwt = false
 
 [functions.import-fm-questions]
 verify_jwt = true
+
+[functions.import-aa-questions]
+verify_jwt = true

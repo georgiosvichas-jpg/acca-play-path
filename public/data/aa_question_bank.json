@@ -1,0 +1,2404 @@
+[
+  {
+    "number": 1,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The audit partner has been in the role for 8 years for a listed client. Which ethical threat is created?",
+    "options": [
+      "Self-interest",
+      "Self-review",
+      "Advocacy",
+      "Familiarity"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Familiarity threat arises from a long association, potentially causing the auditor to be too sympathetic to the client's interests."
+  },
+  {
+    "number": 2,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The audit firm owns shares in the client. Which ethical threat is created?",
+    "options": [
+      "Self-interest",
+      "Self-review",
+      "Advocacy",
+      "Familiarity"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Self-interest threat arises due to financial interest (owning shares)."
+  },
+  {
+    "number": 3,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The auditor is asked to promote the client's shares to investors. Which ethical threat is created?",
+    "options": [
+      "Self-interest",
+      "Self-review",
+      "Advocacy",
+      "Familiarity"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Advocacy threat arises when the auditor promotes the client's position to the point that objectivity is compromised."
+  },
+  {
+    "number": 4,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The auditor prepares the financial statements and then audits them. Which ethical threat is created?",
+    "options": [
+      "Self-interest",
+      "Self-review",
+      "Advocacy",
+      "Familiarity"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Self-review threat arises when the auditor audits their own work."
+  },
+  {
+    "number": 5,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The client threatens to fire the firm if fees are not reduced. Which ethical threat is created?",
+    "options": [
+      "Self-interest",
+      "Self-review",
+      "Intimidation",
+      "Familiarity"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Intimidation threat arises from actual or perceived pressures, such as dismissal or litigation."
+  },
+  {
+    "number": 6,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The audit firm is dependent on the client for 20% of its total fees. Which ethical threat is created?",
+    "options": [
+      "Self-interest",
+      "Self-review",
+      "Advocacy",
+      "Intimidation"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Self-interest threat due to fear of losing a significant client (fee dependence)."
+  },
+  {
+    "number": 7,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which safeguard is most appropriate for a Self-review threat caused by preparing financial statements?",
+    "options": [
+      "Using separate teams for the audit and the preparation work",
+      "Disclosing the issue to the public",
+      "Charging a higher fee",
+      "Rotating the partner"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Separate teams ensure that the people auditing the work are not the same ones who produced it."
+  },
+  {
+    "number": 8,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Profit is $5m. An error of $0.3m is found. Using the 5% profit threshold, is this material?",
+    "options": [
+      "Yes, it is Material",
+      "No, it is Not Material",
+      "Depends on Revenue",
+      "Cannot determine"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Threshold is $0.25m (5% of 5m). Error is $0.3m. Therefore it is Material."
+  },
+  {
+    "number": 9,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Profit is $10m. An error of $0.2m is found. Using the 5% profit threshold, is this material?",
+    "options": [
+      "Yes, it is Material",
+      "No, it is Not Material",
+      "Depends on Revenue",
+      "Cannot determine"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Threshold is $0.5m (5% of 10m). Error is $0.2m. Therefore it is Not Material."
+  },
+  {
+    "number": 10,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which risk is defined as 'the susceptibility of an assertion to misstatement before consideration of controls'?",
+    "options": [
+      "Inherent Risk",
+      "Control Risk",
+      "Detection Risk",
+      "Audit Risk"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Inherent risk is the raw risk level (e.g., complex calculations, cash handling) before controls are applied."
+  },
+  {
+    "number": 11,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "If Control Risk is assessed as High, what should the auditor do to Detection Risk to maintain low Audit Risk?",
+    "options": [
+      "Set Detection Risk to High",
+      "Set Detection Risk to Low",
+      "Ignore Detection Risk",
+      "Resign"
+    ],
+    "correct_option_index": 1,
+    "explanation": "To compensate for high Control Risk, the auditor must do more work to lower Detection Risk."
+  },
+  {
+    "number": 12,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is an example of a 'Control Environment' factor?",
+    "options": [
+      "Management's philosophy and operating style",
+      "Bank reconciliations",
+      "Password protection",
+      "Inventory counts"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Control Environment sets the tone of the organization (ethics, philosophy, structure)."
+  },
+  {
+    "number": 13,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which control activity is best described as 'Authorization'?",
+    "options": [
+      "Approval of invoices by a manager",
+      "Locking the warehouse",
+      "Reviewing performance reports",
+      "Backing up data"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Authorization ensures transactions are approved by appropriate personnel."
+  },
+  {
+    "number": 14,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which control activity is best described as 'Segregation of Duties'?",
+    "options": [
+      "One person orders goods, another receives them",
+      "Checking the arithmetic accuracy of invoices",
+      "Using passwords to restrict access",
+      "Comparing budget to actuals"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Segregation of Duties prevents one person from controlling all aspects of a transaction."
+  },
+  {
+    "number": 15,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which control activity is best described as 'Physical Controls'?",
+    "options": [
+      "Keeping cash in a locked safe",
+      "Approving overtime",
+      "Reconciling the bank account",
+      "Using serial numbers on documents"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Physical controls protect assets (locks, safes, security guards)."
+  },
+  {
+    "number": 16,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In the Sales cycle, what is the primary risk of shipping goods without raising an invoice?",
+    "options": [
+      "Completeness of Income (Revenue Understated)",
+      "Occurrence of Income (Revenue Overstated)",
+      "Accuracy of Income",
+      "Cut-off error"
+    ],
+    "correct_option_index": 0,
+    "explanation": "If goods go out but no invoice is raised, revenue is missing (incomplete)."
+  },
+  {
+    "number": 17,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In the Purchases cycle, what is the primary risk of recording invoices for goods not received?",
+    "options": [
+      "Existence of Payables (Liability Overstated)",
+      "Completeness of Payables (Liability Understated)",
+      "Valuation of Inventory",
+      "Rights and Obligations"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Recording a liability for goods never received overstates payables (Occurrence/Existence issue)."
+  },
+  {
+    "number": 18,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In the Payroll cycle, what is the primary risk of 'Ghost Employees'?",
+    "options": [
+      "Occurrence of Wages Expense (Expense Overstated)",
+      "Completeness of Wages",
+      "Accuracy of Tax Deductions",
+      "Presentation of Expenses"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Ghost employees mean wages are being paid for work that did not occur (Occurrence)."
+  },
+  {
+    "number": 19,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Selecting a sample of items from the physical warehouse floor and tracing them to the inventory listing tests which assertion?",
+    "options": [
+      "Completeness",
+      "Existence",
+      "Valuation",
+      "Rights"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Floor to Sheet tests Completeness (checking if the physical item is recorded). Sheet to Floor tests Existence."
+  },
+  {
+    "number": 20,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Selecting a sample of items from the inventory listing and tracing them to the physical warehouse floor tests which assertion?",
+    "options": [
+      "Existence",
+      "Completeness",
+      "Valuation",
+      "Rights"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Sheet to Floor tests Existence (checking if the recorded item actually exists)."
+  },
+  {
+    "number": 21,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following evidence is considered most reliable?",
+    "options": [
+      "Bank confirmation letter received directly by auditor",
+      "Bank statement held by client",
+      "Cash book prepared by client",
+      "Verbal confirmation from Finance Director"
+    ],
+    "correct_option_index": 0,
+    "explanation": "External evidence obtained directly by the auditor is the most reliable."
+  },
+  {
+    "number": 22,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "What is the primary purpose of a 'Positive' receivables confirmation?",
+    "options": [
+      "To test Existence and Rights",
+      "To test Valuation",
+      "To test Completeness",
+      "To test Presentation"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Confirmation proves the customer exists and acknowledges the debt (Rights), but does not prove they can pay (Valuation)."
+  },
+  {
+    "number": 23,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When auditing Inventory, 'Cut-off' testing is performed to ensure:",
+    "options": [
+      "Goods received before year-end are included in inventory and payables",
+      "Inventory is valued at lower of cost and NRV",
+      "All inventory belongs to the client",
+      "Obsolete items are written down"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Cut-off ensures transactions near the year-end are recorded in the correct period."
+  },
+  {
+    "number": 24,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "The auditor identifies a material misstatement that is NOT pervasive. What opinion should be issued?",
+    "options": [
+      "Qualified Opinion",
+      "Adverse Opinion",
+      "Disclaimer of Opinion",
+      "Unmodified Opinion"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Material + Not Pervasive = Qualified ('Except for') Opinion."
+  },
+  {
+    "number": 25,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "The auditor identifies a material misstatement that IS pervasive. What opinion should be issued?",
+    "options": [
+      "Adverse Opinion",
+      "Qualified Opinion",
+      "Disclaimer of Opinion",
+      "Unmodified Opinion"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Material + Pervasive = Adverse Opinion (The statements do not present fairly)."
+  },
+  {
+    "number": 26,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "The auditor is unable to obtain sufficient appropriate audit evidence, and the possible effects are pervasive. What opinion should be issued?",
+    "options": [
+      "Disclaimer of Opinion",
+      "Adverse Opinion",
+      "Qualified Opinion",
+      "Unmodified Opinion"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Inability to obtain evidence + Pervasive = Disclaimer of Opinion."
+  },
+  {
+    "number": 27,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The audit firm has promised the client a discount if the audit is completed by a certain date. Which threat?",
+    "options": [
+      "Self-interest",
+      "Intimidation",
+      "Advocacy",
+      "Familiarity"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Pressure to complete work quickly to get a fee/discount can be an Intimidation or Self-interest threat impacting quality."
+  },
+  {
+    "number": 28,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Analytical procedures used at the planning stage are primarily for:",
+    "options": [
+      "Identifying areas of risk",
+      "Substantive evidence",
+      "Testing controls",
+      "Final review"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Planning analytical procedures help identify unusual trends or fluctuations that indicate risk."
+  },
+  {
+    "number": 29,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which document is a narrative description of a system's flow?",
+    "options": [
+      "Internal Control Questionnaire (ICQ)",
+      "Flowchart",
+      "Narrative Note",
+      "Walkthrough test"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Narrative notes describe the system in words."
+  },
+  {
+    "number": 30,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "What is the best control to prevent payment to fictitious suppliers?",
+    "options": [
+      "Matching Invoice to GRN and Purchase Order",
+      "Signing cheques",
+      "Bank reconciliation",
+      "Budget review"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Three-way matching (PO, GRN, Invoice) ensures goods were ordered and received before payment."
+  },
+  {
+    "number": 31,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Recalculating the depreciation expense provides evidence for which assertion?",
+    "options": [
+      "Accuracy/Valuation",
+      "Existence",
+      "Rights",
+      "Cut-off"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Recalculation confirms the mathematical accuracy of the expense."
+  },
+  {
+    "number": 32,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Reviewing board minutes for details of lawsuits provides evidence for:",
+    "options": [
+      "Provisions and Contingencies",
+      "Revenue",
+      "Inventory",
+      "Depreciation"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Lawsuits found in minutes indicate potential liabilities (provisions) or disclosures (contingencies)."
+  },
+  {
+    "number": 33,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Management refuses to provide a written representation regarding fraud. What is the impact?",
+    "options": [
+      "Auditor should disclaim an opinion",
+      "Auditor should issue unmodified opinion",
+      "Auditor should issue qualified opinion",
+      "Auditor should ignore it"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Refusal to provide written reps on essential matters (like fraud) is a scope limitation that is often pervasive, leading to Disclaimer."
+  },
+  {
+    "number": 34,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The auditor's spouse is the financial controller of the client. Which threat?",
+    "options": [
+      "Familiarity / Self-interest",
+      "Advocacy",
+      "Intimidation",
+      "Self-review"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Close family relationship creates Familiarity (sympathy) and Self-interest (family income) threats."
+  },
+  {
+    "number": 35,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which standard deals with 'The Auditor's Responsibilities Relating to Fraud'?",
+    "options": [
+      "ISA 240",
+      "ISA 315",
+      "ISA 500",
+      "ISA 700"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ISA 240 covers fraud responsibilities."
+  },
+  {
+    "number": 36,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Monitoring of controls includes:",
+    "options": [
+      "Internal Audit function",
+      "Bank recs",
+      "Invoices",
+      "Passwords"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Internal Audit is a monitoring function that checks if other controls are working."
+  },
+  {
+    "number": 37,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Checking the sequence of pre-numbered sales invoices tests for:",
+    "options": [
+      "Completeness",
+      "Accuracy",
+      "Valuation",
+      "Rights"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Sequence checks identify missing documents (Completeness)."
+  },
+  {
+    "number": 38,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which sampling method involves selecting every 'nth' item?",
+    "options": [
+      "Systematic Sampling",
+      "Random Sampling",
+      "Haphazard Sampling",
+      "Block Sampling"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Systematic sampling selects items at a fixed interval (every nth item)."
+  },
+  {
+    "number": 39,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Bank confirmation requests must be authorized by:",
+    "options": [
+      "The Client",
+      "The Auditor",
+      "The Bank",
+      "The Government"
+    ],
+    "correct_option_index": 0,
+    "explanation": "The client must give permission (authorization) for the bank to disclose confidential info to the auditor."
+  },
+  {
+    "number": 40,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "If the auditor believes the Going Concern basis is appropriate but a material uncertainty exists which IS adequately disclosed, the opinion is:",
+    "options": [
+      "Unmodified with a 'Material Uncertainty Related to Going Concern' paragraph",
+      "Qualified",
+      "Adverse",
+      "Disclaimer"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Adequate disclosure means the accounts are true and fair, but the auditor draws attention to the uncertainty."
+  },
+  {
+    "number": 41,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Scenario: The auditor accepts a luxury holiday from the client. Which threat?",
+    "options": [
+      "Self-interest / Familiarity",
+      "Self-review",
+      "Advocacy",
+      "Intimidation"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Accepting significant gifts creates Self-interest and Familiarity threats."
+  },
+  {
+    "number": 42,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which of the following increases Control Risk?",
+    "options": [
+      "Lack of segregation of duties",
+      "Complex accounting standards",
+      "New audit team",
+      "Economic recession"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Lack of segregation is a weakness in internal control. (Complex standards = Inherent Risk)."
+  },
+  {
+    "number": 43,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which control prevents unauthorized access to the IT system?",
+    "options": [
+      "Passwords and User IDs",
+      "Virus checks",
+      "Backups",
+      "Batch totals"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Access controls (passwords) prevent unauthorized entry."
+  },
+  {
+    "number": 44,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A 'Teeming and Lading' fraud scheme involves:",
+    "options": [
+      "Theft of cash receipts concealed by misapplying subsequent receipts",
+      "Creating ghost employees",
+      "Overvaluing inventory",
+      "Fake invoices"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Teeming and Lading is a cash theft scheme involving delaying the recording of receipts."
+  },
+  {
+    "number": 45,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Computer Assisted Audit Techniques (CAATs) include 'Audit Software' and:",
+    "options": [
+      "Test Data",
+      "Spreadsheets",
+      "Calculators",
+      "Flowcharts"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Test Data involves feeding dummy data into the client's system to test processing logic."
+  },
+  {
+    "number": 46,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The primary risk regarding Cash is:",
+    "options": [
+      "Theft (Existence/Completeness)",
+      "Valuation",
+      "Rights",
+      "Presentation"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Cash is high risk for theft, affecting existence."
+  },
+  {
+    "number": 47,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "If the financial statements are prepared on a Going Concern basis but the auditor believes the company will liquidate soon, the opinion should be:",
+    "options": [
+      "Adverse",
+      "Qualified",
+      "Unmodified",
+      "Disclaimer"
+    ],
+    "correct_option_index": 0,
+    "explanation": "If the basis (Going Concern) is wrong, the accounts are fundamentally misleading (Pervasive) -> Adverse."
+  },
+  {
+    "number": 48,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Confidentiality can be breached if:",
+    "options": [
+      "There is a legal duty to disclose (e.g. money laundering)",
+      "The auditor wants to gossip",
+      "A competitor asks",
+      "The fee is unpaid"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Legal or professional duty overrides confidentiality."
+  },
+  {
+    "number": 49,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Performance Materiality is set:",
+    "options": [
+      "Lower than overall materiality",
+      "Higher than overall materiality",
+      "Same as overall materiality",
+      "Randomly"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Performance materiality is lower (haircut) to leave a buffer for undetected misstatements."
+  },
+  {
+    "number": 50,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which is an 'Application Control'?",
+    "options": [
+      "Batch totals checks",
+      "Antivirus software",
+      "Disaster recovery plan",
+      "Training"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Batch totals apply to specific processing runs (Application). Others are General Controls."
+  },
+
+  {
+    "number": 51,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a 'General IT Control' rather than an 'Application Control'?",
+    "options": [
+      "Sequence check on sales invoices",
+      "One-for-one checking of goods received to purchase orders",
+      "Disaster recovery and backup procedures",
+      "Batch total calculation"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Disaster recovery applies to the whole IT environment (General), whereas sequence checks apply to specific processing tasks (Application)."
+  },
+  {
+    "number": 52,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The primary objective of the 'Walkthrough Test' is to:",
+    "options": [
+      "Test the operating effectiveness of controls",
+      "Confirm understanding of the system and trace a transaction from start to finish",
+      "Detect material misstatements",
+      "Verify the accuracy of the financial statements"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Walkthroughs confirm the auditor's understanding of the system design (Implementation), not necessarily its effectiveness over time."
+  },
+  {
+    "number": 53,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which of the following describes a 'deficiency in internal control' according to ISA 265?",
+    "options": [
+      "A control is designed, implemented, or operated in such a way that it is unable to prevent, or detect and correct, misstatements",
+      "A material fraud has occurred",
+      "The auditor assesses control risk as high",
+      "Management refuses to sign the representation letter"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ISA 265 defines a deficiency as a control's inability to prevent/detect misstatements due to design or operation failure."
+  },
+  {
+    "number": 54,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In the Payroll cycle, 'Clock Cards' (time sheets) should be approved by a supervisor to ensure:",
+    "options": [
+      "Completeness of deductions",
+      "Accuracy of tax calculations",
+      "Occurrence of hours worked",
+      "Presentation of expenses"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Supervisory approval confirms that the employee actually worked the hours claimed (Occurrence)."
+  },
+  {
+    "number": 55,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "What is the primary risk if 'Goods Received Notes' (GRNs) are not sequentially numbered?",
+    "options": [
+      "Goods may be received but not recorded (Liability understated)",
+      "Goods may be stolen",
+      "Suppliers may be paid twice",
+      "Inventory valuation is incorrect"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Without sequence checks, a missing GRN (and thus missing liability) is hard to identify, leading to Completeness issues."
+  },
+  {
+    "number": 56,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In the Sales cycle, the credit limit check is primarily designed to prevent:",
+    "options": [
+      "Bad debts",
+      "Revenue recognition errors",
+      "Stock outs",
+      "Underpricing of goods"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Credit limits ensure goods are not sold to customers who are unlikely to pay (Bad debts)."
+  },
+  {
+    "number": 57,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Sampling Risk is the risk that:",
+    "options": [
+      "The auditor selects the wrong testing method",
+      "The auditor's conclusion based on a sample is different from the conclusion if the entire population were tested",
+      "The client commits fraud",
+      "The auditor misinterprets the evidence"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Sampling risk arises because the sample may not be representative of the population."
+  },
+  {
+    "number": 58,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is 'Statistical Sampling'?",
+    "options": [
+      "Random selection using probability theory to evaluate results",
+      "Selecting items based on auditor judgment",
+      "Selecting the highest value items only",
+      "Haphazard selection"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Statistical sampling requires random selection AND use of probability theory to evaluate results."
+  },
+  {
+    "number": 59,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When using the work of an Auditor's Expert (ISA 620), the auditor must:",
+    "options": [
+      "Accept the expert's findings without question",
+      "Evaluate the competence, capabilities, and objectivity of the expert",
+      "Hire a second expert to verify the first",
+      "Disclose the expert's name in the audit report"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The auditor remains responsible for the opinion and must verify the expert is qualified and objective."
+  },
+  {
+    "number": 60,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "What is 'Tolerable Misstatement'?",
+    "options": [
+      "The maximum error in the population that the auditor is willing to accept",
+      "The actual error found in the sample",
+      "The materiality level for the financial statements as a whole",
+      "The amount of fraud the auditor ignores"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Tolerable misstatement is the application of performance materiality to a specific sampling procedure."
+  },
+  {
+    "number": 61,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "During the inventory count, the auditor observes that 'Third Party Inventory' is held in the warehouse. What should the auditor check?",
+    "options": [
+      "That it is included in the client's inventory value",
+      "That it is segregated and excluded from the count",
+      "That it is sold immediately",
+      "That it is written off"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Inventory belonging to third parties (e.g., held on consignment) is not an asset of the client and must be excluded (Rights & Obligations)."
+  },
+  {
+    "number": 62,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which assertion is tested by reviewing the 'Repairs and Maintenance' expense account for large items?",
+    "options": [
+      "Completeness of Non-Current Assets (Capital vs Revenue expenditure)",
+      "Existence of Expenses",
+      "Cut-off",
+      "Occurrence of Sales"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Large items in 'Repairs' may actually be capital assets that should be capitalized (Completeness of Assets)."
+  },
+  {
+    "number": 63,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Reviewing post-year-end cash payments is a primary test for:",
+    "options": [
+      "Completeness of Payables",
+      "Existence of Receivables",
+      "Valuation of Inventory",
+      "Completeness of Revenue"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Payments made after year-end often relate to liabilities that existed at year-end; finding them tests if they were recorded (Completeness)."
+  },
+  {
+    "number": 64,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A 'Negative' receivables confirmation asks the customer to reply ONLY if:",
+    "options": [
+      "They agree with the balance",
+      "They disagree with the balance",
+      "They have paid the balance",
+      "They are a new customer"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Negative confirmations ask for a reply only if the amount is wrong. They provide less reliable evidence than positive confirmations."
+  },
+  {
+    "number": 65,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "The auditor identifies a significant number of credit notes issued AFTER the year-end. This is an indicator of:",
+    "options": [
+      "Overstated Revenue/Receivables at year-end",
+      "Understated Liabilities",
+      "Understated Expenses",
+      "Good customer service"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Post-year-end credit notes often indicate sales made before year-end were fictitious or returned, meaning Revenue/Receivables were overstated."
+  },
+  {
+    "number": 66,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which standard governs 'Subsequent Events'?",
+    "options": [
+      "ISA 560",
+      "ISA 570",
+      "ISA 580",
+      "ISA 700"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ISA 560 deals with Subsequent Events."
+  },
+  {
+    "number": 67,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A lawsuit is settled after the year-end for an amount significantly different from the provision. Is this an Adjusting Event?",
+    "options": [
+      "Yes, it provides evidence of conditions at year-end",
+      "No, it happened next year",
+      "Only if the amount is small",
+      "Depends on the judge"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Settlement of a court case confirms the existence and amount of the obligation at the reporting date (Adjusting)."
+  },
+  {
+    "number": 68,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a 'Non-Adjusting' subsequent event?",
+    "options": [
+      "Insolvency of a customer (bad debt)",
+      "Discovery of fraud occurring before year-end",
+      "Major issuance of shares after year-end",
+      "Sale of inventory below cost (NRV issue)"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Share issuance is a new event arising after the reporting date. It does not affect year-end balances."
+  },
+  {
+    "number": 69,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "ISA 570 'Going Concern' requires the auditor to consider a period of at least:",
+    "options": [
+      "6 months from reporting date",
+      "12 months from reporting date",
+      "12 months from the date of approval of financial statements",
+      "2 years from reporting date"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Management (and auditors) must assess going concern for at least 12 months from the reporting date (often extended to date of approval in practice, but 12m from reporting is the specific standard requirement for management assessment period)."
+  },
+  {
+    "number": 70,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Written representations (ISA 580) are:",
+    "options": [
+      "Sufficient appropriate audit evidence on their own",
+      "Not audit evidence",
+      "Necessary audit evidence but not sufficient on their own",
+      "Used to replace substantive testing"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Written reps support other evidence but cannot be the sole evidence for material items."
+  },
+  {
+    "number": 71,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'lowballing' of audit fees creates a risk to quality because:",
+    "options": [
+      "The firm may cut corners to maintain a profit margin",
+      "The client will pay too much",
+      "The auditor becomes too familiar",
+      "It is illegal"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Lowballing (charging less than cost) creates pressure to reduce audit hours/testing to avoid loss, threatening quality (Self-interest)."
+  },
+  {
+    "number": 72,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which is an example of an 'Interim Audit' procedure?",
+    "options": [
+      "Testing internal controls",
+      "Verifying year-end inventory",
+      "Confirming year-end bank balances",
+      "Reviewing the final financial statements"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Interim audits focus on systems, controls, and interim transaction testing to reduce work at the Final audit."
+  },
+  {
+    "number": 73,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'Management Letter' (Report to Management) is used to:",
+    "options": [
+      "Issue the audit opinion",
+      "Communicate deficiencies in internal control and recommendations",
+      "Resign from the audit",
+      "Request payment of fees"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The Management Letter communicates control weaknesses found during the audit to those charged with governance."
+  },
+  {
+    "number": 74,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which assertions are relevant to 'Transactions' (SPL) vs 'Balances' (SOFP)?",
+    "options": [
+      "Transactions: Existence / Balances: Occurrence",
+      "Transactions: Occurrence / Balances: Existence",
+      "Transactions: Rights / Balances: Cut-off",
+      "Transactions: Valuation / Balances: Accuracy"
+    ],
+    "correct_option_index": 1,
+    "explanation": "SPL (Transactions) uses Occurrence, Completeness, Accuracy, Cut-off. SOFP (Balances) uses Existence, Rights, Completeness, Valuation."
+  },
+  {
+    "number": 75,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Using 'Analytical Procedures' as a substantive test is most appropriate when:",
+    "options": [
+      "Controls are weak",
+      "Relationships between data are plausible and predictable",
+      "The risk of fraud is high",
+      "Transactions are irregular and non-recurring"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Analytical procedures work best for predictable volumes (e.g., payroll, depreciation) where relationships hold true."
+  },
+  {
+    "number": 76,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Why does the auditor inspect the 'Bank Letter' (Standard Bank Confirmation)?",
+    "options": [
+      "To verify the bank balance and any security/liens held",
+      "To check the arithmetic of the cash book",
+      "To see who signed the cheques",
+      "To count the cash"
+    ],
+    "correct_option_index": 0,
+    "explanation": "The bank letter confirms balances, loans, and assets held as security (Rights & Obligations/Valuation)."
+  },
+  {
+    "number": 77,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "What is 'Audit Strategy'?",
+    "options": [
+      "The detailed list of audit procedures",
+      "The overall scope, timing, and direction of the audit",
+      "The final audit opinion",
+      "The engagement letter"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Strategy is the high-level plan (Scope, Timing, Direction). The 'Audit Plan' contains the detailed procedures."
+  },
+  {
+    "number": 78,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Small entities often lack segregation of duties. How does the auditor compensate?",
+    "options": [
+      "By relying more on controls",
+      "By increasing substantive testing",
+      "By issuing a disclaimer",
+      "By withdrawing"
+    ],
+    "correct_option_index": 1,
+    "explanation": "If controls are weak (common in small entities), the auditor cannot rely on them and must perform more substantive testing."
+  },
+  {
+    "number": 79,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is 'Internal Evidence'?",
+    "options": [
+      "Supplier statement",
+      "Bank letter",
+      "Sales invoice copy",
+      "Share price listing"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Sales invoices are generated by the client (Internal). The others are third-party (External)."
+  },
+  {
+    "number": 80,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "To test the 'Rights and Obligations' of a Non-Current Asset, the auditor should:",
+    "options": [
+      "Inspect the asset physically",
+      "Inspect the Title Deeds or Purchase Invoice",
+      "Recalculate depreciation",
+      "Check the asset register"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Title deeds or invoices prove ownership (Rights). Physical inspection proves Existence."
+  },
+  {
+    "number": 81,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which paragraph is added to the Audit Report if there is a 'Material Uncertainty Related to Going Concern' that is adequately disclosed?",
+    "options": [
+      "Emphasis of Matter",
+      "Material Uncertainty Related to Going Concern",
+      "Other Matter",
+      "Basis for Qualified Opinion"
+    ],
+    "correct_option_index": 1,
+    "explanation": "A specific section 'Material Uncertainty Related to Going Concern' is used (formerly Emphasis of Matter, but now distinct)."
+  },
+  {
+    "number": 82,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Who appoints the external auditor?",
+    "options": [
+      "Shareholders",
+      "Directors",
+      "CEO",
+      "Internal Audit"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Shareholders appoint the auditor at the AGM to report to them on the directors' stewardship."
+  },
+  {
+    "number": 83,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The primary responsibility for the prevention and detection of fraud rests with:",
+    "options": [
+      "The External Auditor",
+      "Management and Those Charged with Governance",
+      "The Police",
+      "The Internal Auditor"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Management is responsible for controls to prevent fraud. Auditors are responsible for detecting material misstatements caused by fraud."
+  },
+  {
+    "number": 84,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "What is the role of the Audit Committee?",
+    "options": [
+      "To manage the daily operations",
+      "To oversee the financial reporting process and audit",
+      "To prepare the accounts",
+      "To hire staff"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The Audit Committee provides independent oversight of reporting, controls, and the external audit."
+  },
+  {
+    "number": 85,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In the Payroll cycle, 'Starter and Leaver' forms are used to prevent:",
+    "options": [
+      "Ghost employees and payment after leaving",
+      "Tax errors",
+      "Overtime fraud",
+      "Cash theft"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Proper starter/leaver procedures ensure only current employees are paid."
+  },
+  {
+    "number": 86,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which assertion is unique to Presentation and Disclosure?",
+    "options": [
+      "Classification and Understandability",
+      "Existence",
+      "Cut-off",
+      "Rights"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Presentation assertions focus on whether info is classified correctly and is clear (Understandability)."
+  },
+  {
+    "number": 87,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Depreciation being calculated on the wrong useful life affects which assertion?",
+    "options": [
+      "Valuation",
+      "Existence",
+      "Rights",
+      "Completeness"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Incorrect depreciation affects the carrying amount (Valuation) of the asset."
+  },
+  {
+    "number": 88,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "The 'Key Audit Matters' (KAM) section is mandatory for:",
+    "options": [
+      "All audits",
+      "Listed entities only",
+      "Charities only",
+      "Private companies"
+    ],
+    "correct_option_index": 1,
+    "explanation": "KAMs (ISA 701) are mandatory for listed entities to highlight areas of significant judgment."
+  },
+  {
+    "number": 89,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "An auditor owes a 'Duty of Care' primarily to:",
+    "options": [
+      "The Shareholders as a body",
+      "The Directors",
+      "The Bank",
+      "Individual shareholders"
+    ],
+    "correct_option_index": 0,
+    "explanation": "The legal duty of care is to the shareholders as a collective body, per the Caparo decision."
+  },
+  {
+    "number": 90,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The engagement letter is sent:",
+    "options": [
+      "Before the audit begins",
+      "After the audit is finished",
+      "With the invoice",
+      "During the final review"
+    ],
+    "correct_option_index": 0,
+    "explanation": "The engagement letter (contract) must be agreed before work commences to define scope and responsibilities."
+  },
+  {
+    "number": 91,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which represents a weakness in the cash cycle?",
+    "options": [
+      "Cash is counted by two people",
+      "Cash is banked weekly rather than daily",
+      "Cash is kept in a safe",
+      "Bank reconciliations are reviewed by a manager"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Weekly banking increases the risk of theft and 'teeming and lading'. Daily banking is best practice."
+  },
+  {
+    "number": 92,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A 'Purchase Requisition' is raised by:",
+    "options": [
+      "The department needing the goods",
+      "The buying department",
+      "The supplier",
+      "The accounts department"
+    ],
+    "correct_option_index": 0,
+    "explanation": "The user department raises a requisition to ask the buying department to place an order."
+  },
+  {
+    "number": 93,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is NOT a substantive procedure?",
+    "options": [
+      "Observing the physical inventory count",
+      "Reviewing board minutes for authorization of dividends",
+      "Inspecting signatures on purchase orders",
+      "Confirming receivables balances"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Inspecting signatures is a Test of Control (checking if a control worked). The others verify amounts (Substantive)."
+  },
+  {
+    "number": 94,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The auditor attends the inventory count primarily to:",
+    "options": [
+      "Count all the inventory personally",
+      "Obtain assurance that management's count instructions are followed",
+      "Value the inventory",
+      "Move items to check for dust"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The auditor observes the client's count procedures (Control test/Existence check). They do test counts, but not 100%."
+  },
+  {
+    "number": 95,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "An 'Emphasis of Matter' paragraph is used to:",
+    "options": [
+      "Qualify the opinion",
+      "Draw attention to a matter properly disclosed in the notes",
+      "Report a material misstatement",
+      "Disclaim an opinion"
+    ],
+    "correct_option_index": 1,
+    "explanation": "EoM draws attention to something fundamental (e.g., major lawsuit) that is ALREADY disclosed correctly. It does not modify the opinion."
+  },
+  {
+    "number": 96,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which body sets International Standards on Auditing (ISAs)?",
+    "options": [
+      "IAASB",
+      "IASB",
+      "IFRS Foundation",
+      "ACCA"
+    ],
+    "correct_option_index": 0,
+    "explanation": "IAASB (International Auditing and Assurance Standards Board) sets ISAs."
+  },
+  {
+    "number": 97,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Professional Skepticism means:",
+    "options": [
+      "Assuming the client is dishonest",
+      "Having a questioning mind and critical assessment of evidence",
+      "Disbelieving all management representations",
+      "Only accepting external evidence"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Skepticism is an attitude of a questioning mind, being alert to conditions indicating misstatement."
+  },
+  {
+    "number": 98,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a small company, the 'Control Environment' may be weak because:",
+    "options": [
+      "There is no written code of ethics",
+      "There are fewer employees",
+      "Management override is easier",
+      "All of the above"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Small entities often lack formal codes, have segregation issues, and are dominated by an owner-manager (risk of override)."
+  },
+  {
+    "number": 99,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Sequence checks on pre-numbered documents are a test of:",
+    "options": [
+      "Completeness",
+      "Accuracy",
+      "Cut-off",
+      "Presentation"
+    ],
+    "correct_option_index": 0,
+    "explanation": "If the sequence is broken (e.g., Invoice 101, 103...), document 102 is missing -> Completeness risk."
+  },
+  {
+    "number": 100,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Haphazard sampling is:",
+    "options": [
+      "Selection without any conscious bias",
+      "Statistical selection",
+      "Selecting every 10th item",
+      "Selecting high value items"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Haphazard is non-statistical selection where the auditor tries to be random but doesn't use a structured technique."
+  }, 
+
+  {
+    "number": 101,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which procedure provides the best evidence for the 'Completeness' of Trade Payables?",
+    "options": [
+      "Reconciling supplier statements to the purchase ledger",
+      "Calculating the payables payment period",
+      "Vouching a sample of invoices to the ledger",
+      "Casting the list of balances"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Supplier statements show what the supplier thinks is owed. Reconciling them reveals invoices missing from the client's ledger (Completeness)."
+  },
+  {
+    "number": 102,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "When auditing 'Accounting Estimates' (e.g., Warranty Provision), the auditor's primary objective is to:",
+    "options": [
+      "Recalculate the estimate precisely",
+      "Obtain evidence that the estimate is reasonable and disclosures are adequate",
+      "Ensure the estimate is lower than last year",
+      "Confirm the amount with the bank"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Estimates are subjective. The auditor cannot be precise but must ensure the assumptions and methodology are reasonable (ISA 540)."
+  },
+  {
+    "number": 103,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which assertion is at risk if a company capitalizes repair costs instead of expensing them?",
+    "options": [
+      "Existence of Assets",
+      "Rights to Assets",
+      "Classification (and Accuracy of Profit)",
+      "Cut-off"
+    ],
+    "correct_option_index": 2,
+    "explanation": "This is a Classification error (Asset vs Expense), leading to overstated profit and overstated assets."
+  },
+  {
+    "number": 104,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'Overall Review' of financial statements before signing the audit report includes:",
+    "options": [
+      "Detailed testing of invoices",
+      "Reviewing the statements for consistency with auditor's knowledge and analytical procedures",
+      "Planning the audit strategy",
+      "Sending bank confirmations"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The final review ensures the accounts make sense as a whole and align with evidence gathered."
+  },
+  {
+    "number": 105,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "If the auditor finds a material inconsistency between the 'Other Information' (e.g., Chairman's Statement) and the Financial Statements, and management refuses to correct it, the auditor should:",
+    "options": [
+      "Issue an Adverse Opinion",
+      "Issue a Disclaimer",
+      "Include an 'Other Information' paragraph describing the inconsistency",
+      "Resign immediately"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Inconsistencies in 'Other Information' do not usually modify the opinion on the financial statements, but must be reported in the 'Other Information' section."
+  },
+  {
+    "number": 106,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Can an internal auditor also be the external auditor for the same client?",
+    "options": [
+      "Yes, always",
+      "No, this creates a Self-Review threat that cannot be safeguarded",
+      "Yes, if fees are low",
+      "Yes, if they are friends"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The external auditor cannot audit their own work (Self-review). Providing internal audit services to an audit client is generally prohibited or restricted."
+  },
+  {
+    "number": 107,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which of the following fraud risk factors is an 'Incentive/Pressure' (Fraud Triangle)?",
+    "options": [
+      "Weak internal controls",
+      "Bonus tied to profit targets",
+      "Management's dishonest attitude",
+      "Large amounts of cash on hand"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Bonuses create pressure to manipulate results. (Weak controls = Opportunity; Dishonest attitude = Rationalization)."
+  },
+  {
+    "number": 108,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A 'Direct Control' operates on:",
+    "options": [
+      "Specific transactions to prevent/detect errors",
+      "The control environment generally",
+      "Staff training",
+      "The audit plan"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Direct controls (e.g., checking an invoice) act on specific data. Indirect controls (e.g., training) support the environment."
+  },
+  {
+    "number": 109,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which document in the payroll cycle authorizes the removal of an employee from the payroll?",
+    "options": [
+      "P45 / Leaver Form signed by HR",
+      "Bank statement",
+      "Clock card",
+      "Payslip"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Authorization from HR (Leaver form) is required to stop payments and remove the person from the payroll master file."
+  },
+  {
+    "number": 110,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "ISA 530 defines 'Stratification' in sampling as:",
+    "options": [
+      "Dividing a population into sub-populations (e.g., high value vs low value)",
+      "Selecting items haphazardly",
+      "Testing 100% of items",
+      "Using a computer to pick samples"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Stratification involves breaking the population into groups (strata) to sample them more efficiently (e.g., testing all high-value items)."
+  },
+  {
+    "number": 111,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "The auditor reviews the 'Aged Receivables Listing' primarily to assess:",
+    "options": [
+      "Existence of receivables",
+      "Valuation (Allowances for bad debts)",
+      "Rights to receivables",
+      "Cut-off"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Old debts (e.g., >90 days) are less likely to be paid, indicating a need for a write-down (Valuation)."
+  },
+  {
+    "number": 112,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "When verifying 'Share Capital', the auditor should checks the number of shares issued to:",
+    "options": [
+      "The Sales Ledger",
+      "Board Minutes and the Statutory Register of Members",
+      "The Payroll",
+      "The Fixed Asset Register"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Share issues must be authorized in Board Minutes and recorded in the company's statutory books."
+  },
+  {
+    "number": 113,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A 'Disclaimer of Opinion' is issued when:",
+    "options": [
+      "The auditor disagrees with an accounting treatment (Material)",
+      "The auditor cannot obtain sufficient evidence (Pervasive)",
+      "The financial statements are true and fair",
+      "There is a small error"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Lack of evidence that is Pervasive means the auditor cannot form an opinion at all -> Disclaimer."
+  },
+  {
+    "number": 114,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Uncorrected misstatements should be communicated to:",
+    "options": [
+      "The shareholders",
+      "The police",
+      "Those Charged With Governance (TCWG)",
+      "The press"
+    ],
+    "correct_option_index": 2,
+    "explanation": "ISA 450 requires the auditor to ask TCWG to correct all misstatements. If they refuse, the auditor considers the impact on the opinion."
+  },
+  {
+    "number": 115,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'advocacy threat' is best described as:",
+    "options": [
+      "Reviewing your own work",
+      "Promoting a client's position to the point where objectivity is compromised",
+      "Being too sympathetic due to long association",
+      "Having a financial stake in the client"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Advocacy involves acting as a cheerleader for the client (e.g., in a court case or share issue)."
+  },
+  {
+    "number": 116,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a 'Business Risk' rather than an 'Audit Risk'?",
+    "options": [
+      "Detection risk being too high",
+      "Loss of market share to a competitor",
+      "Inappropriate depreciation policy",
+      "Failure to disclose a liability"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Loss of market share is a commercial risk. Audit risk is the risk of giving the wrong opinion on the accounts."
+  },
+  {
+    "number": 117,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'limitation of scope' of an Internal Audit function is determined by:",
+    "options": [
+      "The law",
+      "Management / Audit Committee",
+      "The external auditor",
+      "Shareholders"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Internal Audit is a voluntary function; its scope is defined by management, unlike External Audit which is defined by statute."
+  },
+  {
+    "number": 118,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In the Cash cycle, the 'Bank Reconciliation' tests which assertions?",
+    "options": [
+      "Completeness, Existence, and Valuation of Cash",
+      "Rights to Inventory",
+      "Occurrence of Sales",
+      "Presentation of Debt"
+    ],
+    "correct_option_index": 0,
+    "explanation": "The reconciliation proves the ledger balance exists in the bank (Existence), captures all items (Completeness), and is correct (Valuation)."
+  },
+  {
+    "number": 119,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which quality of audit evidence refers to its source and nature?",
+    "options": [
+      "Sufficiency",
+      "Appropriateness (Reliability)",
+      "Quantity",
+      "Timeliness"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Reliability depends on the source (External/Internal) and nature (Written/Oral)."
+  },
+  {
+    "number": 120,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "When auditing 'Provisions' (ISA 370), the auditor checks if:",
+    "options": [
+      "There is a possible obligation",
+      "There is a present obligation, probable outflow, and reliable estimate",
+      "Management wants to pay it",
+      "It is a future operating loss"
+    ],
+    "correct_option_index": 1,
+    "explanation": "A provision is only recognized if all three criteria are met: Present Obligation, Probable Outflow, Reliable Estimate."
+  },
+  {
+    "number": 121,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Events occurring between the reporting date and the date of the audit report are:",
+    "options": [
+      "Ignored",
+      "Actively looked for by the auditor (Active Duty)",
+      "Only considered if management mentions them (Passive Duty)",
+      "Disclosed in the next year"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Up to the date of the audit report, the auditor has an ACTIVE duty to perform procedures to identify subsequent events."
+  },
+  {
+    "number": 122,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a 'Fundamental Principle' of ethics?",
+    "options": [
+      "Skepticism",
+      "Professional Competence and Due Care",
+      "Materiality",
+      "Profitability"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The 5 principles are: Integrity, Objectivity, Competence, Confidentiality, Professional Behaviour. (Skepticism is an attitude, not a principle in the Code)."
+  },
+  {
+    "number": 123,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The risk that the auditor expresses an inappropriate audit opinion when the financial statements are materially misstated is:",
+    "options": [
+      "Audit Risk",
+      "Business Risk",
+      "Financial Risk",
+      "Operational Risk"
+    ],
+    "correct_option_index": 0,
+    "explanation": "This is the definition of Audit Risk."
+  },
+  {
+    "number": 124,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "What is 'Application Control' regarding input data?",
+    "options": [
+      "Range check (e.g., age must be 18-65)",
+      "Locking the server room",
+      "UPS (Battery backup)",
+      "Antivirus"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Range checks ensure data entered into a specific field is valid (Application control)."
+  },
+  {
+    "number": 125,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Paying suppliers only on original invoices (not copies) prevents:",
+    "options": [
+      "Duplicate payments",
+      "Late payments",
+      "Discounts",
+      "Currency errors"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Paying on copies creates a risk that the same bill is paid twice."
+  },
+  {
+    "number": 126,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which assertion does a 'Non-Current Asset Register' reconciliation test?",
+    "options": [
+      "Completeness and Accuracy",
+      "Rights",
+      "Cut-off",
+      "Occurrence"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Reconciling the register to the GL ensures all assets are recorded (Completeness) and totals match (Accuracy)."
+  },
+  {
+    "number": 127,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "If a company has high levels of cash sales, the auditor's primary concern is:",
+    "options": [
+      "Completeness of Revenue",
+      "Existence of Revenue",
+      "Rights to Revenue",
+      "Valuation of Revenue"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Cash is easy to pocket without recording. The risk is understatement (Completeness)."
+  },
+  {
+    "number": 128,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'Basis for Opinion' paragraph in the audit report:",
+    "options": [
+      "States the opinion (e.g., True and Fair)",
+      "States that the audit was conducted in accordance with ISAs and refers to ethical requirements",
+      "Lists the directors' responsibilities",
+      "Describes the company"
+    ],
+    "correct_option_index": 1,
+    "explanation": "It explains the basis: compliance with ISAs and Ethics."
+  },
+  {
+    "number": 129,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Auditors are protected from legal action for 'Breach of Contract' by:",
+    "options": [
+      "The Engagement Letter",
+      "The Management Letter",
+      "The Representation Letter",
+      "The Audit Report"
+    ],
+    "correct_option_index": 0,
+    "explanation": "The engagement letter defines the contract. If the auditor follows it, they have not breached contract."
+  },
+  {
+    "number": 130,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a source of 'Inherent Risk'?",
+    "options": [
+      "Complex financial instruments",
+      "Password protected computers",
+      "Internal audit department",
+      "Bank reconciliations"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Complexity increases the natural susceptibility to error (Inherent)."
+  },
+  {
+    "number": 131,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'risk assessment' component of internal control refers to:",
+    "options": [
+      "The entity's process for identifying and responding to business risks",
+      "The auditor's risk assessment",
+      "The bank's risk assessment",
+      "Insurance policies"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Management must have a process to identify their own risks (e.g., new competitors, IT failure)."
+  },
+  {
+    "number": 132,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Overtime payments should be checked against:",
+    "options": [
+      "Production schedules or authorized requests",
+      "The previous year's budget",
+      "Sales invoices",
+      "Bank statements"
+    ],
+    "correct_option_index": 0,
+    "explanation": "To ensure Occurrence, overtime should match production needs or be pre-authorized."
+  },
+  {
+    "number": 133,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which type of sampling gives every sampling unit an equal chance of selection?",
+    "options": [
+      "Random Selection",
+      "Systematic Selection",
+      "Haphazard Selection",
+      "Block Selection"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Random selection (often using a number generator) ensures equal probability."
+  },
+  {
+    "number": 134,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Verifying the exchange rate used for foreign currency bank balances tests:",
+    "options": [
+      "Valuation",
+      "Existence",
+      "Rights",
+      "Cut-off"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Using the closing spot rate ensures the asset is valued correctly in the home currency."
+  },
+  {
+    "number": 135,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Events after the date of the audit report but before accounts are issued (Passive Duty): The auditor must:",
+    "options": [
+      "Do nothing",
+      "Act only if they become aware of a fact that would have changed the report",
+      "Continue active testing",
+      "Issue a new report immediately"
+    ],
+    "correct_option_index": 1,
+    "explanation": "After the report is signed, the duty is passive. The auditor only acts if they learn of something significant."
+  },
+  {
+    "number": 136,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Contingent fees (fees based on the outcome of the audit) are:",
+    "options": [
+      "Allowed for all clients",
+      "Prohibited as they create a Self-Interest threat",
+      "Allowed for private companies",
+      "Mandatory"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Contingent fees remove objectivity because the auditor has a stake in the result."
+  },
+  {
+    "number": 137,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "If the auditor relies on the work of Internal Audit, the external auditor must:",
+    "options": [
+      "Reduce the audit fee",
+      "Re-perform some of the work to check its quality",
+      "Blame Internal Audit for errors",
+      "Accept the work without checking"
+    ],
+    "correct_option_index": 1,
+    "explanation": "ISA 610 requires the external auditor to evaluate and re-perform parts of the work to ensure it is reliable."
+  },
+  {
+    "number": 138,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A 'Narrative Note' is disadvantageous because:",
+    "options": [
+      "It is difficult to update and can be hard to read for complex systems",
+      "It is too simple",
+      "It takes no time to prepare",
+      "It requires a computer"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Narratives are good for simple systems but become dense and hard to follow for complex ones (Flowcharts are better)."
+  },
+  {
+    "number": 139,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Reviewing the 'Exception Report' of changes to master files (e.g., pay rates, prices) tests:",
+    "options": [
+      "Only authorized changes were made",
+      "The computer is on",
+      "Sales are high",
+      "Inventory is low"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Master file changes are high risk; reviewing logs ensures no unauthorized changes occurred."
+  },
+  {
+    "number": 140,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "hard",
+    "question": "Which assertion is most difficult to test for 'Service Revenue'?",
+    "options": [
+      "Cut-off (determining percentage of completion)",
+      "Existence",
+      "Presentation",
+      "Rights"
+    ],
+    "correct_option_index": 0,
+    "explanation": "For services, deciding how much revenue belongs in this year vs next year (Cut-off) involves judgment."
+  },
+  {
+    "number": 141,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Teeming and lading is best detected by:",
+    "options": [
+      "Comparing dates on remittance advices to dates on the bank deposit slip",
+      "Counting inventory",
+      "Reviewing depreciation",
+      "Checking supplier statements"
+    ],
+    "correct_option_index": 0,
+    "explanation": "A lag between the customer payment date and the banking date indicates cash is being rolled over (Teeming)."
+  },
+  {
+    "number": 142,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'Opinion' paragraph is presented:",
+    "options": [
+      "First in the audit report",
+      "Last in the audit report",
+      "In the middle",
+      "In the appendix"
+    ],
+    "correct_option_index": 0,
+    "explanation": "ISA 700 requires the Opinion to be the very first section."
+  },
+  {
+    "number": 143,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which represents a 'Self-Interest' threat?",
+    "options": [
+      "Audit partner's loan from a client bank (on normal commercial terms)",
+      "Audit partner's loan from a client (not a bank)",
+      "Auditor eating lunch",
+      "Auditor driving a car"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Loans from non-bank clients are prohibited. Loans from banks on normal terms are generally acceptable."
+  },
+  {
+    "number": 144,
+    "paper": "AA",
+    "unit_code": "AA02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Materiality is a matter of:",
+    "options": [
+      "Professional Judgment",
+      "Exact calculation only",
+      "Guesswork",
+      "Client preference"
+    ],
+    "correct_option_index": 0,
+    "explanation": "While benchmarks (e.g., 5% profit) help, the final determination includes qualitative factors (Judgment)."
+  },
+  {
+    "number": 145,
+    "paper": "AA",
+    "unit_code": "AA03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A 'Test of Control' answers the question:",
+    "options": [
+      "Is the control operating effectively?",
+      "Is the balance correct?",
+      "Is the invoice arithmetic right?",
+      "Is the bank balance positive?"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Tests of control check the SYSTEM. Substantive tests check the AMOUNT."
+  },
+  {
+    "number": 146,
+    "paper": "AA",
+    "unit_code": "AA04",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Pre-numbered Goods Despatch Notes (GDNs) help ensure:",
+    "options": [
+      "Completeness of Invoicing",
+      "Quality of goods",
+      "Supplier payments",
+      "Staff attendance"
+    ],
+    "correct_option_index": 0,
+    "explanation": "If a GDN exists, goods went out. The auditor checks if it was matched to an invoice."
+  },
+  {
+    "number": 147,
+    "paper": "AA",
+    "unit_code": "AA05",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Inspection of tangible assets provides high reliability for:",
+    "options": [
+      "Existence",
+      "Rights and Obligations",
+      "Valuation",
+      "Completeness"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Seeing the asset proves it Exists. It doesn't prove the company owns it (Rights) or what it's worth (Valuation)."
+  },
+  {
+    "number": 148,
+    "paper": "AA",
+    "unit_code": "AA06",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "In a Bank Confirmation, the auditor asks for details of:",
+    "options": [
+      "Only the main account",
+      "All accounts, loans, and guarantees",
+      "Only overdrawn accounts",
+      "Only savings accounts"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The confirmation must cover the full banking relationship (assets and liabilities/guarantees)."
+  },
+  {
+    "number": 149,
+    "paper": "AA",
+    "unit_code": "AA07",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "The 'Going Concern' assumption means the entity will continue for:",
+    "options": [
+      "The foreseeable future",
+      "3 months",
+      "5 years",
+      "Forever"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Foreseeable future is defined as at least 12 months from the reporting date."
+  },
+  {
+    "number": 150,
+    "paper": "AA",
+    "unit_code": "AA01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Objectivity means:",
+    "options": [
+      "Not allowing bias, conflict of interest or undue influence to override professional judgment",
+      "Being honest",
+      "Keeping secrets",
+      "Following rules"
+    ],
+    "correct_option_index": 0,
+    "explanation": "Objectivity is about independence of mind and lack of bias."
+  }
+]
