@@ -244,8 +244,8 @@ export default function AdminContentImport() {
       
       console.log(`Processing ${allQuestions.length} questions in batches...`);
       
-      // Process in chunks of 50 questions to avoid payload limits
-      const CHUNK_SIZE = 50;
+      // Process in chunks of 10 questions to avoid payload limits
+      const CHUNK_SIZE = 10;
       let totalInserted = 0;
       let totalUpdated = 0;
       let totalSkipped = 0;
@@ -263,8 +263,9 @@ export default function AdminContentImport() {
           description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / allQuestions.length) * 100)}% complete)`,
         });
         
+        // Send as questions array, not stringified
         const { data, error } = await supabase.functions.invoke("import-fa-questions", {
-          body: { fileContent: JSON.stringify(chunk) },
+          body: { questions: chunk },
         });
         
         if (error) {
