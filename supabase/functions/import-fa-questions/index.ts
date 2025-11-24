@@ -68,28 +68,16 @@ serve(async (req) => {
       throw new Error("User is not an admin");
     }
 
-    // Accept JSON body with file content
-    console.log("Attempting to read request body...");
+    // Use req.json() to properly handle JSON body from supabase.functions.invoke
+    console.log("Reading request body...");
     
-    // Read raw text first to see what we're receiving
-    let rawText: string;
-    try {
-      rawText = await req.text();
-      console.log("Raw request text length:", rawText.length);
-      console.log("Raw request text preview:", rawText.substring(0, 200));
-    } catch (e) {
-      console.error("Failed to read request text:", e);
-      throw new Error(`Cannot read request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
-    }
-
-    // Parse the JSON
     let body: any;
     try {
-      body = JSON.parse(rawText);
-      console.log("Body parsed successfully, keys:", Object.keys(body));
+      body = await req.json();
+      console.log("Body received successfully, has fileContent:", !!body.fileContent);
     } catch (e) {
-      console.error("Failed to parse JSON:", e);
-      throw new Error(`Invalid JSON in request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      console.error("Failed to parse request JSON:", e);
+      throw new Error(`Invalid request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
     
     const fileContent = body.fileContent;
