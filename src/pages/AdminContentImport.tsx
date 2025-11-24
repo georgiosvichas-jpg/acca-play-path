@@ -237,30 +237,28 @@ export default function AdminContentImport() {
 
       // Read file content as text
       const fileContent = await faQuestionFile.text();
+      console.log("File content length:", fileContent.length);
 
       // Validate it's valid JSON
-      JSON.parse(fileContent);
+      const testParse = JSON.parse(fileContent);
+      console.log("File is valid JSON, questions:", Array.isArray(testParse) ? testParse.length : testParse.questions?.length);
 
-      // Use direct fetch with proper headers
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${session.access_token}`,
-            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ fileContent }),
-        }
-      );
+      const requestBody = JSON.stringify({ fileContent });
+      console.log("Request body length:", requestBody.length);
+      console.log("Request body preview:", requestBody.substring(0, 100));
 
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Import failed");
+      // Use Supabase invoke - it should work now
+      const { data, error } = await supabase.functions.invoke("import-fa-questions", {
+        body: { fileContent }, // Send as object, not stringified
+      });
+
+      console.log("Response:", { data, error });
+
+      if (error) {
+        throw error;
       }
 
-      const result = await response.json() as FAQuestionImportResult;
+      const result = data as FAQuestionImportResult;
       setFaQuestionResult(result);
 
       toast({
