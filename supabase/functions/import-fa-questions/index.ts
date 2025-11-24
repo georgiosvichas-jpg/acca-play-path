@@ -69,19 +69,31 @@ serve(async (req) => {
     }
 
     // Accept JSON body with file content
-    const body = await req.json();
+    console.log("Attempting to parse request body...");
+    
+    let body: any;
+    try {
+      body = await req.json();
+      console.log("Body parsed successfully, keys:", Object.keys(body));
+    } catch (e) {
+      console.error("Failed to parse JSON body:", e);
+      throw new Error(`Invalid request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
+    }
+    
     const fileContent = body.fileContent;
+    console.log("File content length:", fileContent?.length || 0);
 
     if (!fileContent) {
-      throw new Error("No file content provided");
+      throw new Error("No file content provided in request body");
     }
 
     let parsedData: any;
 
     try {
       parsedData = JSON.parse(fileContent);
+      console.log("Questions data parsed successfully");
     } catch (e) {
-      throw new Error("Invalid JSON format");
+      throw new Error(`Invalid JSON in file: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
 
     // Handle both Format A and Format B
