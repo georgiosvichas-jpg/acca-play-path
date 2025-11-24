@@ -102,6 +102,8 @@ serve(async (req) => {
           unit_code: row.unit_code,
           parent_unit_code: row.parent_unit_code || null,
           unit_name: row.unit_name,
+          unit_title: row.unit_title || row.unit_name,
+          chapter: row.chapter || row.unit_code,
           unit_level: row.unit_level,
           description: row.description || null,
           estimated_study_minutes: row.estimated_study_minutes ? parseInt(row.estimated_study_minutes) : null,
