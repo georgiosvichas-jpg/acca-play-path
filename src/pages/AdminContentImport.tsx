@@ -263,15 +263,27 @@ export default function AdminContentImport() {
           description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / allQuestions.length) * 100)}% complete)`,
         });
         
-        // Send as questions array, not stringified
-        const { data, error } = await supabase.functions.invoke("import-fa-questions", {
-          body: { questions: chunk },
-        });
+        // Use fetch directly with proper headers
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
+              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            },
+            body: JSON.stringify({ questions: chunk }),
+          }
+        );
         
-        if (error) {
-          console.error(`Chunk ${chunkNum} error:`, error);
-          throw error;
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`Chunk ${chunkNum} error:`, errorText);
+          throw new Error(`Failed at batch ${chunkNum}: ${errorText}`);
         }
+        
+        const data = await response.json();
         
         if (data?.success) {
           totalInserted += data.summary.inserted_count || 0;
