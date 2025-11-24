@@ -68,25 +68,21 @@ serve(async (req) => {
       throw new Error("User is not an admin");
     }
 
-    // Fetch the FA question bank from public storage
-    const publicUrl = `${supabaseUrl}/storage/v1/object/public/data/fa_question_bank.json`;
-    
+    // Accept file upload from UI
+    const formData = await req.formData();
+    const file = formData.get("file") as File;
+
+    if (!file) {
+      throw new Error("No file uploaded");
+    }
+
+    const jsonContent = await file.text();
     let parsedData: any;
+
     try {
-      const response = await fetch(publicUrl);
-      if (!response.ok) {
-        // Fallback: try to read from local public folder
-        const localUrl = new URL("../../../public/data/fa_question_bank.json", import.meta.url);
-        const localResponse = await fetch(localUrl);
-        if (!localResponse.ok) {
-          throw new Error("FA question bank file not found");
-        }
-        parsedData = await localResponse.json();
-      } else {
-        parsedData = await response.json();
-      }
+      parsedData = JSON.parse(jsonContent);
     } catch (e) {
-      throw new Error(`Failed to load FA question bank: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      throw new Error("Invalid JSON format");
     }
 
     // Handle both Format A and Format B
