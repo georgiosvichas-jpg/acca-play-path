@@ -68,20 +68,32 @@ serve(async (req) => {
       throw new Error("User is not an admin");
     }
 
-    // Use req.json() to properly handle JSON body from supabase.functions.invoke
-    console.log("Reading request body...");
+    // Use req.json() to properly handle JSON body from fetch
+    console.log("=== EDGE FUNCTION DEBUG ===");
+    console.log("Request method:", req.method);
+    console.log("Content-Type:", req.headers.get("content-type"));
+    console.log("Content-Length:", req.headers.get("content-length"));
+    console.log("Authorization present:", !!req.headers.get("authorization"));
     
     let body: any;
     try {
       body = await req.json();
-      console.log("Body received successfully, has fileContent:", !!body.fileContent);
+      console.log("Body parsed successfully");
+      console.log("Body keys:", Object.keys(body));
+      console.log("Has fileContent:", !!body.fileContent);
+      console.log("fileContent type:", typeof body.fileContent);
+      console.log("fileContent length:", body.fileContent?.length || 0);
+      if (body.fileContent) {
+        console.log("fileContent preview (first 200 chars):", body.fileContent.substring(0, 200));
+      }
     } catch (e) {
       console.error("Failed to parse request JSON:", e);
+      console.error("Error details:", e instanceof Error ? e.message : String(e));
       throw new Error(`Invalid request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
     
     const fileContent = body.fileContent;
-    console.log("File content length:", fileContent?.length || 0);
+    console.log("Extracted fileContent length:", fileContent?.length || 0);
 
     if (!fileContent) {
       throw new Error("No file content provided in request body");

@@ -237,13 +237,22 @@ export default function AdminContentImport() {
 
       // Read file content as text
       const fileContent = await faQuestionFile.text();
+      console.log("=== CLIENT SIDE DEBUG ===");
+      console.log("File name:", faQuestionFile.name);
+      console.log("File size:", faQuestionFile.size, "bytes");
       console.log("File content length:", fileContent.length);
+      console.log("File content preview (first 200 chars):", fileContent.substring(0, 200));
 
       // Validate it's valid JSON
       const testParse = JSON.parse(fileContent);
       console.log("File is valid JSON, questions:", Array.isArray(testParse) ? testParse.length : testParse.questions?.length);
 
+      const requestBody = JSON.stringify({ fileContent });
+      console.log("Request body length:", requestBody.length);
+      console.log("Request body preview (first 200 chars):", requestBody.substring(0, 200));
+
       console.log("Calling edge function with auth...");
+      console.log("URL:", `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`);
 
       // Use fetch directly for better control
       const response = await fetch(
@@ -253,12 +262,14 @@ export default function AdminContentImport() {
           headers: {
             "Authorization": `Bearer ${session.access_token}`,
             "Content-Type": "application/json",
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
           },
-          body: JSON.stringify({ fileContent }),
+          body: requestBody,
         }
       );
 
       console.log("Response status:", response.status);
+      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
 
       if (!response.ok) {
         const errorText = await response.text();
