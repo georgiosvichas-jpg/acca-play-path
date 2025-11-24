@@ -59,3 +59,6 @@ verify_jwt = true
 
 [functions.import-fa-questions]
 verify_jwt = true
+
+[functions.generate-fa-flashcards]
+verify_jwt = true

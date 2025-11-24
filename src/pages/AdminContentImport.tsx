@@ -48,6 +48,22 @@ interface FAQuestionImportResult {
   skipped: Array<{ external_id: string; error_reason: string }>;
 }
 
+interface FlashcardGenerationResult {
+  success: boolean;
+  summary: {
+    total_generated: number;
+    inserted: number;
+    skipped_duplicates: number;
+  };
+  preview: Array<{
+    unit_code: string;
+    unit_name: string;
+    front: string;
+    back: string;
+    tag: string;
+  }>;
+}
+
 export default function AdminContentImport() {
   const { toast } = useToast();
   const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
@@ -63,6 +79,8 @@ export default function AdminContentImport() {
   const [faQuestionFile, setFaQuestionFile] = useState<File | null>(null);
   const [faQuestionLoading, setFaQuestionLoading] = useState(false);
   const [faQuestionResult, setFaQuestionResult] = useState<FAQuestionImportResult | null>(null);
+  const [flashcardGenerating, setFlashcardGenerating] = useState(false);
+  const [flashcardResult, setFlashcardResult] = useState<FlashcardGenerationResult | null>(null);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -216,6 +234,48 @@ export default function AdminContentImport() {
       });
     } finally {
       setFaQuestionLoading(false);
+    }
+  };
+
+  const handleGenerateFlashcards = async () => {
+    setFlashcardGenerating(true);
+    setFlashcardResult(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Not authenticated");
+      }
+
+      toast({
+        title: "Generating flashcards",
+        description: "This may take a few minutes. AI is analyzing FA content...",
+      });
+
+      const response = await supabase.functions.invoke("generate-fa-flashcards", {
+        body: {},
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      const result = response.data as FlashcardGenerationResult;
+      setFlashcardResult(result);
+
+      toast({
+        title: "Generation completed",
+        description: `${result.summary.inserted} flashcards created, ${result.summary.skipped_duplicates} duplicates skipped`,
+      });
+    } catch (error) {
+      console.error("Error generating flashcards:", error);
+      toast({
+        title: "Generation failed",
+        description: error instanceof Error ? error.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setFlashcardGenerating(false);
     }
   };
 
@@ -537,6 +597,90 @@ export default function AdminContentImport() {
                       <TableRow key={idx}>
                         <TableCell className="font-medium">{item.external_id}</TableCell>
                         <TableCell className="text-sm">{item.error_reason}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Auto-Generate FA Flashcards */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Auto-Generate FA Flashcards</CardTitle>
+          <CardDescription>
+            Use AI to automatically generate flashcards from FA questions and syllabus units. Creates 5-15 flashcards per unit covering definitions, formulas, concepts, and principles.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">
+              This tool will analyze all FA syllabus units and questions to generate comprehensive flashcards. The process may take several minutes.
+            </p>
+          </div>
+
+          <Button
+            onClick={handleGenerateFlashcards}
+            disabled={flashcardGenerating}
+            className="w-full sm:w-auto"
+          >
+            {flashcardGenerating ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Generating Flashcards...
+              </>
+            ) : (
+              <>
+                <Upload className="mr-2 h-4 w-4" />
+                Generate FA Flashcards
+              </>
+            )}
+          </Button>
+
+          {flashcardResult && (
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="font-semibold mb-2">Generation Summary</div>
+                <div className="space-y-1 text-sm">
+                  <div>Total generated: {flashcardResult.summary.total_generated}</div>
+                  <div>Inserted: {flashcardResult.summary.inserted}</div>
+                  <div>Skipped (duplicates): {flashcardResult.summary.skipped_duplicates}</div>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {flashcardResult && flashcardResult.preview.length > 0 && (
+            <div className="space-y-2">
+              <h3 className="text-sm font-semibold">Preview (First 10 Flashcards)</h3>
+              <div className="border rounded-lg overflow-hidden max-h-96 overflow-y-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Unit</TableHead>
+                      <TableHead>Front</TableHead>
+                      <TableHead>Back</TableHead>
+                      <TableHead>Tag</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {flashcardResult.preview.map((card, idx) => (
+                      <TableRow key={idx}>
+                        <TableCell className="font-medium text-xs">
+                          {card.unit_code}
+                          <div className="text-muted-foreground">{card.unit_name}</div>
+                        </TableCell>
+                        <TableCell className="text-sm max-w-xs truncate">{card.front}</TableCell>
+                        <TableCell className="text-sm max-w-xs truncate">{card.back}</TableCell>
+                        <TableCell>
+                          <span className="text-xs px-2 py-1 rounded-full bg-primary/10">
+                            {card.tag}
+                          </span>
+                        </TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
