@@ -92,20 +92,30 @@ serve(async (req) => {
       throw new Error(`Invalid request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
     
-    const fileContent = body.fileContent;
-    console.log("Extracted fileContent length:", fileContent?.length || 0);
-
-    if (!fileContent) {
-      throw new Error("No file content provided in request body");
-    }
-
+    // Accept either questions array (chunked) or fileContent string (legacy)
     let parsedData: any;
+    
+    if (body.questions) {
+      // New format: direct questions array from chunked import
+      console.log("Received questions array directly, count:", body.questions.length);
+      parsedData = body.questions;
+    } else if (body.fileContent) {
+      // Legacy format: fileContent string containing JSON
+      const fileContent = body.fileContent;
+      console.log("Received fileContent string, length:", fileContent?.length || 0);
+      
+      if (!fileContent) {
+        throw new Error("No file content provided in request body");
+      }
 
-    try {
-      parsedData = JSON.parse(fileContent);
-      console.log("Questions data parsed successfully, total questions:", Array.isArray(parsedData) ? parsedData.length : parsedData.questions?.length || 0);
-    } catch (e) {
-      throw new Error(`Invalid JSON in file: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      try {
+        parsedData = JSON.parse(fileContent);
+        console.log("Questions data parsed successfully, total questions:", Array.isArray(parsedData) ? parsedData.length : parsedData.questions?.length || 0);
+      } catch (e) {
+        throw new Error(`Invalid JSON in file: ${e instanceof Error ? e.message : 'Unknown error'}`);
+      }
+    } else {
+      throw new Error("No questions or fileContent provided in request body");
     }
 
     // Handle both Format A and Format B
