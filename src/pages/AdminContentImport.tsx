@@ -238,22 +238,29 @@ export default function AdminContentImport() {
       // Read file content as text
       const fileContent = await faQuestionFile.text();
 
-      // Parse to validate it's valid JSON
+      // Validate it's valid JSON
       JSON.parse(fileContent);
 
-      // Send file content directly in JSON body
-      const { data, error } = await supabase.functions.invoke("import-fa-questions", {
-        body: JSON.stringify({ fileContent }),
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+      // Use direct fetch with proper headers
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${session.access_token}`,
+            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fileContent }),
+        }
+      );
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Import failed");
       }
 
-      const result = data as FAQuestionImportResult;
+      const result = await response.json() as FAQuestionImportResult;
       setFaQuestionResult(result);
 
       toast({
