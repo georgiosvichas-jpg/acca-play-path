@@ -9,43 +9,87 @@ export function FAQuestionImporter() {
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [importedCount, setImportedCount] = useState(0);
 
-  const handleImport = async () => {
+  const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
     setImporting(true);
     setStatus("idle");
     setImportedCount(0);
 
     try {
-      // Call edge function - it will fetch the JSON from public storage
-      const { data, error } = await supabase.functions.invoke("import-fa-questions");
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("No active session");
+      }
 
-      if (error) throw error;
+      const fileContent = await file.text();
+      const parsed = JSON.parse(fileContent);
+      
+      const allQuestions = Array.isArray(parsed) ? parsed : parsed.questions || [];
+      if (allQuestions.length === 0) {
+        throw new Error("No questions found in file");
+      }
 
-      if (data.success) {
-        const { summary } = data;
-        const total = summary.inserted_count + summary.updated_count;
+      const CHUNK_SIZE = 10;
+      const totalChunks = Math.ceil(allQuestions.length / CHUNK_SIZE);
+      
+      let totalInserted = 0;
+      let totalUpdated = 0;
+      let totalSkipped = 0;
+      const allErrors: any[] = [];
+
+      for (let i = 0; i < allQuestions.length; i += CHUNK_SIZE) {
+        const chunk = allQuestions.slice(i, i + CHUNK_SIZE);
+        const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
         
-        if (total === 0 && summary.skipped_count > 0) {
-          toast.warning(`All ${summary.total_questions} questions were skipped. Check console for errors.`);
-          setStatus("error");
-        } else if (summary.skipped_count > 0) {
-          toast.success(`Imported ${total} FA questions (${summary.inserted_count} new, ${summary.updated_count} updated). ${summary.skipped_count} skipped.`);
-          setStatus("success");
-          setImportedCount(total);
-        } else {
-          toast.success(`Successfully imported ${total} FA questions (${summary.inserted_count} new, ${summary.updated_count} updated)!`);
-          setStatus("success");
-          setImportedCount(total);
+        toast.info(`Processing batch ${chunkNum} of ${totalChunks}...`);
+        
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
+              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            },
+            body: JSON.stringify({ questions: chunk }),
+          }
+        );
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Failed at batch ${chunkNum}: ${errorText}`);
         }
         
-        if (data.skipped?.length > 0) {
-          console.log("Skipped questions:", data.skipped);
+        const data = await response.json();
+        
+        if (data?.success) {
+          totalInserted += data.summary.inserted_count || 0;
+          totalUpdated += data.summary.updated_count || 0;
+          totalSkipped += data.summary.skipped_count || 0;
+          if (data.skipped?.length > 0) {
+            allErrors.push(...data.skipped);
+          }
         }
+      }
+
+      const total = totalInserted + totalUpdated;
+      setImportedCount(total);
+      setStatus("success");
+      
+      if (total === 0 && totalSkipped > 0) {
+        toast.warning(`All ${allQuestions.length} questions were skipped.`);
+      } else if (totalSkipped > 0) {
+        toast.success(`Imported ${total} FA questions (${totalInserted} new, ${totalUpdated} updated). ${totalSkipped} skipped.`);
+        console.log("Skipped questions:", allErrors);
       } else {
-        throw new Error(data.error || "Import failed");
+        toast.success(`Successfully imported ${total} FA questions (${totalInserted} new, ${totalUpdated} updated)!`);
       }
     } catch (error) {
       console.error("Import error:", error);
-      toast.error("Failed to import FA questions. Please try again.");
+      toast.error(error instanceof Error ? error.message : "Failed to import FA questions");
       setStatus("error");
     } finally {
       setImporting(false);
@@ -69,29 +113,39 @@ export function FAQuestionImporter() {
       )}
 
       <div className="space-y-2 text-sm text-muted-foreground">
-        <p>Upload the FA question bank JSON file to import:</p>
+        <p>Select the FA question bank JSON file to import:</p>
         <ul className="list-disc list-inside space-y-1">
-          <li>All FA MCQ questions with auto-generated IDs</li>
-          <li>Organized by unit codes (FA01-FA10)</li>
-          <li>Automatic field mapping and normalization</li>
-          <li>Difficulty levels converted to uppercase</li>
+          <li>Processes questions in batches of 10 for reliability</li>
+          <li>Auto-generates missing external IDs</li>
+          <li>Validates against FA syllabus units</li>
+          <li>Normalizes field formats automatically</li>
         </ul>
       </div>
 
-      <Button
-        onClick={handleImport}
-        disabled={importing || status === "success"}
-        className="w-full"
-      >
-        {importing ? (
-          <>
-            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            Importing...
-          </>
-        ) : (
-          "Import FA Questions"
-        )}
-      </Button>
+      <div className="space-y-2">
+        <input
+          type="file"
+          accept=".json"
+          onChange={handleImport}
+          disabled={importing || status === "success"}
+          className="hidden"
+          id="fa-question-upload"
+        />
+        <Button
+          onClick={() => document.getElementById("fa-question-upload")?.click()}
+          disabled={importing || status === "success"}
+          className="w-full"
+        >
+          {importing ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Importing...
+            </>
+          ) : (
+            "Upload FA Question Bank JSON"
+          )}
+        </Button>
+      </div>
     </div>
   );
 }
