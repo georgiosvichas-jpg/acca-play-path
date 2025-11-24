@@ -149,6 +149,12 @@ serve(async (req) => {
       }
     }
 
+    // Fetch imported units for preview
+    const { data: importedUnits } = await supabase
+      .from("syllabus_units")
+      .select("unit_code, unit_name, parent_unit_code, unit_level")
+      .order("unit_code");
+
     return new Response(
       JSON.stringify({
         success: true,
@@ -159,7 +165,8 @@ serve(async (req) => {
           skipped,
           errors: errors.length
         },
-        errors
+        errors,
+        units: importedUnits || []
       }),
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
