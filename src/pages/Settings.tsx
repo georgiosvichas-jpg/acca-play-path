@@ -25,6 +25,7 @@ import { FRQuestionImporter } from "@/components/FRQuestionImporter";
 import { LWQuestionImporter } from "@/components/LWQuestionImporter";
 import { MAQuestionImporter } from "@/components/MAQuestionImporter";
 import PMQuestionImporter from "@/components/PMQuestionImporter";
+import { FMQuestionImporter } from "@/components/FMQuestionImporter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Invoice {
@@ -559,13 +560,14 @@ export default function Settings() {
               </CardHeader>
               <CardContent>
                 <Tabs defaultValue="BT">
-                  <TabsList className="grid w-full grid-cols-6">
+                  <TabsList className="grid w-full grid-cols-7">
                     <TabsTrigger value="BT">BT</TabsTrigger>
                     <TabsTrigger value="MA">MA</TabsTrigger>
                     <TabsTrigger value="FA">FA</TabsTrigger>
                     <TabsTrigger value="LW">LW</TabsTrigger>
                     <TabsTrigger value="FR">FR</TabsTrigger>
                     <TabsTrigger value="PM">PM</TabsTrigger>
+                    <TabsTrigger value="FM">FM</TabsTrigger>
                   </TabsList>
                   <TabsContent value="BT" className="mt-4">
                     <BTQuestionImporter />
@@ -584,6 +586,9 @@ export default function Settings() {
                   </TabsContent>
                   <TabsContent value="PM" className="mt-4">
                     <PMQuestionImporter />
+                  </TabsContent>
+                  <TabsContent value="FM" className="mt-4">
+                    <FMQuestionImporter />
                   </TabsContent>
                 </Tabs>
               </CardContent>

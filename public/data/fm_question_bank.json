@@ -1,0 +1,279 @@
+[
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "What is the primary financial objective of a profit-seeking company?",
+    "options": [
+      "Maximising sales revenue",
+      "Maximising shareholder wealth",
+      "Maximising market share",
+      "Minimising total costs"
+    ],
+    "correct_option_index": 1,
+    "explanation": "In FM, the main financial objective is usually stated as maximising shareholder wealth, not just sales or profit."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which measure BEST reflects shareholder wealth?",
+    "options": [
+      "Total profit in the current year",
+      "Total historic dividends paid",
+      "Present value of expected future cash flows to shareholders",
+      "Total assets on the statement of financial position"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Shareholder wealth is the present value of expected future dividends and capital gains discounted at an appropriate rate."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which problem arises due to the separation of ownership and control in large companies?",
+    "options": [
+      "Liquidity risk",
+      "Agency problem",
+      "Translation risk",
+      "Credit risk"
+    ],
+    "correct_option_index": 1,
+    "explanation": "The agency problem occurs when managers (agents) make decisions that are not fully aligned with shareholders (principals)."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which mechanism is MOST likely to align managers' interests with those of shareholders?",
+    "options": [
+      "Paying managers only fixed salaries",
+      "Prohibiting managers from owning shares",
+      "Introducing performance-based share option schemes",
+      "Reducing all bonus payments to zero"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Performance-based share options link managerial rewards to share price performance, reducing the agency gap."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A company has profit after tax of $3.0m and 10m ordinary shares in issue. What is its earnings per share (EPS)?",
+    "options": [
+      "$0.10",
+      "$0.20",
+      "$0.30",
+      "$0.50"
+    ],
+    "correct_option_index": 2,
+    "explanation": "EPS = profit attributable to ordinary shareholders / number of shares = 3.0m / 10m = $0.30."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A share price increases from $4.00 to $4.80 over the year and a dividend of $0.20 per share is paid. What is the total shareholder return?",
+    "options": [
+      "5%",
+      "15%",
+      "20%",
+      "25%"
+    ],
+    "correct_option_index": 3,
+    "explanation": "Return = (0.80 capital gain + 0.20 dividend) / 4.00 = 1.00 / 4.00 = 25%."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which performance measure relates operating profit to the capital invested in the business?",
+    "options": [
+      "Gross profit margin",
+      "Net profit margin",
+      "Return on capital employed (ROCE)",
+      "Interest cover"
+    ],
+    "correct_option_index": 2,
+    "explanation": "ROCE compares operating profit to capital employed and measures efficiency in using long-term finance."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Why is cash flow often more important than profit in financial management?",
+    "options": [
+      "Cash flow is always greater than profit",
+      "Cash flow determines the ability to meet obligations when due",
+      "Profit ignores tax completely",
+      "Profit can only be calculated at year-end"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Companies fail due to lack of liquidity rather than lack of accounting profit, so cash flow is critical."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following changes is MOST likely to increase financial risk for shareholders?",
+    "options": [
+      "Issuing more ordinary shares",
+      "Repaying all bank loans",
+      "Issuing a large amount of new debt",
+      "Increasing cash balances"
+    ],
+    "correct_option_index": 2,
+    "explanation": "More debt increases fixed interest obligations and therefore financial risk."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM01",
+    "type": "constructed",
+    "difficulty": "medium",
+    "question": "Explain the difference between maximising profit and maximising shareholder wealth, and why FM focuses on shareholder wealth.",
+    "model_answer": "Profit maximisation focuses on short-term accounting profit, which can be manipulated and ignores risk and timing of returns. Shareholder wealth maximisation focuses on the present value of expected future cash flows to shareholders, considering risk and timing. Financial management focuses on shareholder wealth because it better captures long-term value creation and market-based performance.",
+    "marking_points": [
+      "Profit maximisation is based on accounting profit, short-term focus, ignores risk and timing",
+      "Shareholder wealth is based on present value of future cash flows to shareholders",
+      "Wealth maximisation accounts for risk and timing through discounting",
+      "Market value of shares is used as a proxy for shareholder wealth",
+      "Financial management decisions should be evaluated on their impact on shareholder wealth"
+    ],
+    "explanation": "Shareholder wealth maximisation is considered a more comprehensive and long-term objective than profit maximisation."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM02",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which is a PRIMARY role of financial markets?",
+    "options": [
+      "Setting corporate tax rates",
+      "Preparing company financial statements",
+      "Channelling funds from investors to borrowers",
+      "Determining audit standards"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Financial markets facilitate the transfer of funds from surplus units (investors) to deficit units (borrowers)."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which form of market efficiency states that ALL information, including inside (private) information, is reflected in share prices?",
+    "options": [
+      "Weak form",
+      "Semi-strong form",
+      "Strong form",
+      "No form of EMH"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Strong-form EMH assumes share prices reflect all public and private information."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which is an example of systematic risk?",
+    "options": [
+      "Loss of a major customer by one company",
+      "A warehouse fire in a single firm",
+      "A recession affecting the whole economy",
+      "Fraud in a small subsidiary"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Systematic risk arises from market-wide factors such as recessions and cannot be diversified away."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which is an example of unsystematic risk?",
+    "options": [
+      "An unexpected increase in interest rates",
+      "A new tax on company profits",
+      "A factory explosion at one company",
+      "A global financial crisis"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Unsystematic risk is firm-specific and can be diversified away; a factory explosion affects mainly that firm."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM02",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "Which of the following is a typical instrument traded in the money markets?",
+    "options": [
+      "Ordinary shares",
+      "Long-term corporate bonds",
+      "Treasury bills",
+      "Land and buildings"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Money markets deal mainly with short-term instruments such as Treasury bills."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM02",
+    "type": "constructed",
+    "difficulty": "medium",
+    "question": "Briefly explain the concept of the time value of money and why it is important in financial management.",
+    "model_answer": "The time value of money means that a sum of money received today is worth more than the same sum received in the future because it can be invested to earn a return. It reflects opportunity cost, inflation and risk. In FM, it is crucial for comparing cash flows occurring at different times using discounting, and underpins techniques such as NPV and IRR.",
+    "marking_points": [
+      "Money now is worth more than the same amount later",
+      "Reason: ability to invest and earn a return",
+      "Also reflects inflation and risk effects over time",
+      "Used to discount future cash flows to present value",
+      "Essential for investment appraisal techniques like NPV and IRR"
+    ],
+    "explanation": "Time value of money underpins discounting and present value calculations used throughout FM."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which formula defines working capital?",
+    "options": [
+      "Non-current assets minus non-current liabilities",
+      "Total assets minus total liabilities",
+      "Current assets minus current liabilities",
+      "Equity plus long-term debt"
+    ],
+    "correct_option_index": 2,
+    "explanation": "Working capital = current assets minus current liabilities."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM03",
+    "type": "mcq",
+    "difficulty": "easy",
+    "question": "Which is a current asset in working capital management?",
+    "options": [
+      "Goodwill",
+      "Inventory",
+      "Land",
+      "Long-term investments"
+    ],
+    "correct_option_index": 1,
+    "explanation": "Inventory is part of current assets along with receivables and cash."
+  },
+  {
+    "paper": "FM",
+    "unit_code": "FM03",
+    "type": "mcq",
+    "difficulty": "medium",
+    "question": "A company has annual credit sales of $4.32m and trade receivables of $360,000. What are receivable days
