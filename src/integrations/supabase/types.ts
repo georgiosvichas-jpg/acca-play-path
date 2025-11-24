@@ -403,12 +403,16 @@ export type Database = {
           correct_option_index: number | null
           created_at: string | null
           difficulty: string | null
+          estimated_time_seconds: number | null
           explanation: string | null
+          external_id: string | null
           id: string
+          is_active: boolean | null
           learning_outcome_code: string | null
           options: Json | null
           paper: string
           question: string
+          tags: Json | null
           type: string
           unit_code: string | null
         }
@@ -417,12 +421,16 @@ export type Database = {
           correct_option_index?: number | null
           created_at?: string | null
           difficulty?: string | null
+          estimated_time_seconds?: number | null
           explanation?: string | null
+          external_id?: string | null
           id?: string
+          is_active?: boolean | null
           learning_outcome_code?: string | null
           options?: Json | null
           paper: string
           question: string
+          tags?: Json | null
           type: string
           unit_code?: string | null
         }
@@ -431,12 +439,16 @@ export type Database = {
           correct_option_index?: number | null
           created_at?: string | null
           difficulty?: string | null
+          estimated_time_seconds?: number | null
           explanation?: string | null
+          external_id?: string | null
           id?: string
+          is_active?: boolean | null
           learning_outcome_code?: string | null
           options?: Json | null
           paper?: string
           question?: string
+          tags?: Json | null
           type?: string
           unit_code?: string | null
         }

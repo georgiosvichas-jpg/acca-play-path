@@ -56,3 +56,6 @@ verify_jwt = true
 
 [functions.import-aa-questions]
 verify_jwt = true
+
+[functions.import-fa-questions]
+verify_jwt = true

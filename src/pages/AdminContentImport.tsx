@@ -37,6 +37,17 @@ interface SyllabusUnitPreview {
   unit_level: string;
 }
 
+interface FAQuestionImportResult {
+  success: boolean;
+  summary: {
+    total_questions: number;
+    inserted_count: number;
+    updated_count: number;
+    skipped_count: number;
+  };
+  skipped: Array<{ external_id: string; error_reason: string }>;
+}
+
 export default function AdminContentImport() {
   const { toast } = useToast();
   const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
@@ -49,6 +60,9 @@ export default function AdminContentImport() {
   const [mockErrors, setMockErrors] = useState<ImportError[]>([]);
   const [mockConfigs, setMockConfigs] = useState<MockConfigPreview[]>([]);
   const [syllabusUnits, setSyllabusUnits] = useState<SyllabusUnitPreview[]>([]);
+  const [faQuestionFile, setFaQuestionFile] = useState<File | null>(null);
+  const [faQuestionLoading, setFaQuestionLoading] = useState(false);
+  const [faQuestionResult, setFaQuestionResult] = useState<FAQuestionImportResult | null>(null);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -156,6 +170,55 @@ export default function AdminContentImport() {
     }
   };
 
+  const handleFaQuestionImport = async () => {
+    if (!faQuestionFile) {
+      toast({
+        title: "No file selected",
+        description: "Please select a JSON file to import",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setFaQuestionLoading(true);
+    setFaQuestionResult(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Not authenticated");
+      }
+
+      const formData = new FormData();
+      formData.append("file", faQuestionFile);
+
+      const response = await supabase.functions.invoke("import-fa-questions", {
+        body: formData,
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      const result = response.data as FAQuestionImportResult;
+      setFaQuestionResult(result);
+
+      toast({
+        title: "Import completed",
+        description: `${result.summary.inserted_count} inserted, ${result.summary.updated_count} updated, ${result.summary.skipped_count} skipped`,
+      });
+    } catch (error) {
+      console.error("Error importing FA questions:", error);
+      toast({
+        title: "Import failed",
+        description: error instanceof Error ? error.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setFaQuestionLoading(false);
+    }
+  };
+
   const downloadErrorLog = (errors: ImportError[], filename: string) => {
     const csv = [
       "Row,Error,Data",
@@ -163,6 +226,17 @@ export default function AdminContentImport() {
     ].join("\n");
 
     const blob = new Blob([csv], { type: "text/csv" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const downloadSkippedQuestions = (skipped: Array<{ external_id: string; error_reason: string }>, filename: string) => {
+    const json = JSON.stringify(skipped, null, 2);
+    const blob = new Blob([json], { type: "application/json" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -372,6 +446,97 @@ export default function AdminContentImport() {
                         <TableCell>{config.duration_minutes}</TableCell>
                         <TableCell>{config.total_questions}</TableCell>
                         <TableCell>{config.pass_mark_percentage}%</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* FA Question Bank Import */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Import FA Question Bank (JSON)</CardTitle>
+          <CardDescription>
+            Upload a JSON file containing FA questions. The file should contain external_id, unit_code, question_type, stem, options, correct_answer, difficulty, and optional fields.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="fa-question-file">JSON File</Label>
+            <Input
+              id="fa-question-file"
+              type="file"
+              accept=".json"
+              onChange={(e) => setFaQuestionFile(e.target.files?.[0] || null)}
+            />
+          </div>
+
+          <Button
+            onClick={handleFaQuestionImport}
+            disabled={!faQuestionFile || faQuestionLoading}
+            className="w-full sm:w-auto"
+          >
+            {faQuestionLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Importing...
+              </>
+            ) : (
+              <>
+                <Upload className="mr-2 h-4 w-4" />
+                Import FA Questions
+              </>
+            )}
+          </Button>
+
+          {faQuestionResult && (
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="font-semibold mb-2">Import Summary</div>
+                <div className="space-y-1 text-sm">
+                  <div>Total questions: {faQuestionResult.summary.total_questions}</div>
+                  <div>Inserted: {faQuestionResult.summary.inserted_count}</div>
+                  <div>Updated: {faQuestionResult.summary.updated_count}</div>
+                  <div>Skipped: {faQuestionResult.summary.skipped_count}</div>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {faQuestionResult && faQuestionResult.skipped.length > 0 && (
+            <div className="space-y-2">
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  {faQuestionResult.skipped.length} questions had errors during import
+                </AlertDescription>
+              </Alert>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadSkippedQuestions(faQuestionResult.skipped, "fa-questions-skipped.json")}
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download Skipped Questions
+              </Button>
+              <div className="border rounded-lg overflow-hidden max-h-60 overflow-y-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>External ID</TableHead>
+                      <TableHead>Error Reason</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {faQuestionResult.skipped.map((item, idx) => (
+                      <TableRow key={idx}>
+                        <TableCell className="font-medium">{item.external_id}</TableCell>
+                        <TableCell className="text-sm">{item.error_reason}</TableCell>
                       </TableRow>
                     ))}
                   </TableBody>
