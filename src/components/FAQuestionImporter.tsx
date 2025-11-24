@@ -12,6 +12,7 @@ export function FAQuestionImporter() {
   const handleImport = async () => {
     setImporting(true);
     setStatus("idle");
+    setImportedCount(0);
 
     try {
       // Call edge function - it will fetch the JSON from public storage
@@ -19,14 +20,28 @@ export function FAQuestionImporter() {
 
       if (error) throw error;
 
-      if (data.alreadyExists) {
-        toast.info("FA questions already imported");
-        setStatus("success");
-        setImportedCount(0);
+      if (data.success) {
+        const { summary } = data;
+        const total = summary.inserted_count + summary.updated_count;
+        
+        if (total === 0 && summary.skipped_count > 0) {
+          toast.warning(`All ${summary.total_questions} questions were skipped. Check console for errors.`);
+          setStatus("error");
+        } else if (summary.skipped_count > 0) {
+          toast.success(`Imported ${total} FA questions (${summary.inserted_count} new, ${summary.updated_count} updated). ${summary.skipped_count} skipped.`);
+          setStatus("success");
+          setImportedCount(total);
+        } else {
+          toast.success(`Successfully imported ${total} FA questions (${summary.inserted_count} new, ${summary.updated_count} updated)!`);
+          setStatus("success");
+          setImportedCount(total);
+        }
+        
+        if (data.skipped?.length > 0) {
+          console.log("Skipped questions:", data.skipped);
+        }
       } else {
-        toast.success(`Successfully imported ${data.count} FA questions!`);
-        setStatus("success");
-        setImportedCount(data.count);
+        throw new Error(data.error || "Import failed");
       }
     } catch (error) {
       console.error("Import error:", error);
@@ -39,14 +54,10 @@ export function FAQuestionImporter() {
 
   return (
     <div className="space-y-4">
-      {status === "success" && (
+      {status === "success" && importedCount > 0 && (
         <div className="flex items-center gap-2 text-green-600">
           <CheckCircle2 className="h-5 w-5" />
-          <span>
-            {importedCount > 0
-              ? `Successfully imported ${importedCount} questions`
-              : "Questions already imported"}
-          </span>
+          <span>Successfully imported {importedCount} questions</span>
         </div>
       )}
 
@@ -58,12 +69,12 @@ export function FAQuestionImporter() {
       )}
 
       <div className="space-y-2 text-sm text-muted-foreground">
-        <p>This will import:</p>
+        <p>This will import from <code className="text-xs bg-muted px-1 py-0.5 rounded">public/data/fa_question_bank.json</code>:</p>
         <ul className="list-disc list-inside space-y-1">
-          <li>MCQ questions for FA paper</li>
-          <li>Questions organized by unit code (FA01-FA18)</li>
-          <li>Difficulty levels: easy, medium, hard</li>
-          <li>Full explanations for each answer</li>
+          <li>All FA MCQ questions with auto-generated IDs</li>
+          <li>Organized by unit codes (FA01-FA10)</li>
+          <li>Automatic field mapping and normalization</li>
+          <li>Difficulty levels converted to uppercase</li>
         </ul>
       </div>
 
@@ -77,8 +88,6 @@ export function FAQuestionImporter() {
             <Loader2 className="mr-2 h-4 w-4 animate-spin" />
             Importing...
           </>
-        ) : status === "success" ? (
-          "Already Imported"
         ) : (
           "Import FA Questions"
         )}
