@@ -222,6 +222,47 @@ export type Database = {
         }
         Relationships: []
       }
+      mock_config: {
+        Row: {
+          created_at: string | null
+          duration_minutes: number
+          id: string
+          paper_code: string
+          pass_mark_percentage: number
+          sections_json: Json | null
+          total_questions: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration_minutes: number
+          id?: string
+          paper_code: string
+          pass_mark_percentage?: number
+          sections_json?: Json | null
+          total_questions: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          duration_minutes?: number
+          id?: string
+          paper_code?: string
+          pass_mark_percentage?: number
+          sections_json?: Json | null
+          total_questions?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_mock_config_paper"
+            columns: ["paper_code"]
+            isOneToOne: true
+            referencedRelation: "papers"
+            referencedColumns: ["paper_code"]
+          },
+        ]
+      }
       papers: {
         Row: {
           created_at: string | null
@@ -589,32 +630,53 @@ export type Database = {
         Row: {
           chapter: string
           created_at: string | null
+          description: string | null
           estimated_minutes: number | null
+          estimated_study_minutes: number | null
           id: string
           learning_outcome: string | null
           paper_code: string
+          parent_unit_code: string | null
           priority: string | null
+          unit_code: string | null
+          unit_level: string | null
+          unit_name: string | null
           unit_title: string
+          updated_at: string | null
         }
         Insert: {
           chapter: string
           created_at?: string | null
+          description?: string | null
           estimated_minutes?: number | null
+          estimated_study_minutes?: number | null
           id?: string
           learning_outcome?: string | null
           paper_code: string
+          parent_unit_code?: string | null
           priority?: string | null
+          unit_code?: string | null
+          unit_level?: string | null
+          unit_name?: string | null
           unit_title: string
+          updated_at?: string | null
         }
         Update: {
           chapter?: string
           created_at?: string | null
+          description?: string | null
           estimated_minutes?: number | null
+          estimated_study_minutes?: number | null
           id?: string
           learning_outcome?: string | null
           paper_code?: string
+          parent_unit_code?: string | null
           priority?: string | null
+          unit_code?: string | null
+          unit_level?: string | null
+          unit_name?: string | null
           unit_title?: string
+          updated_at?: string | null
         }
         Relationships: [
           {
