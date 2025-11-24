@@ -45,6 +45,7 @@ import TimeManagement from "./pages/blog/TimeManagement";
 import PaperStrategies from "./pages/blog/PaperStrategies";
 import MultiPaperDashboard from "./pages/MultiPaperDashboard";
 import ExamWeekMode from "./pages/ExamWeekMode";
+import AdminContentImport from "./pages/AdminContentImport";
 
 const queryClient = new QueryClient();
 
@@ -219,6 +220,14 @@ const App = () => (
           <Route path="/blog/exam-techniques" element={<ExamTechniques />} />
           <Route path="/blog/time-management" element={<TimeManagement />} />
           <Route path="/blog/paper-strategies" element={<PaperStrategies />} />
+          <Route 
+            path="/admin/content-import" 
+            element={
+              <ProtectedRoute>
+                <AdminContentImport />
+              </ProtectedRoute>
+            }
+          />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
           </Routes>

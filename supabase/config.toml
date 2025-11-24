@@ -3,6 +3,12 @@ project_id = "irlxegoatcgskhdvbvuo"
 [functions.users-get-or-create]
 verify_jwt = true
 
+[functions.import-syllabus-units]
+verify_jwt = true
+
+[functions.import-mock-config]
+verify_jwt = true
+
 [functions.plans-today-tasks]
 verify_jwt = true
 
