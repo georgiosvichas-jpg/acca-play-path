@@ -243,22 +243,30 @@ export default function AdminContentImport() {
       const testParse = JSON.parse(fileContent);
       console.log("File is valid JSON, questions:", Array.isArray(testParse) ? testParse.length : testParse.questions?.length);
 
-      const requestBody = JSON.stringify({ fileContent });
-      console.log("Request body length:", requestBody.length);
-      console.log("Request body preview:", requestBody.substring(0, 100));
+      console.log("Calling edge function with auth...");
 
-      // Use Supabase invoke - it should work now
-      const { data, error } = await supabase.functions.invoke("import-fa-questions", {
-        body: { fileContent }, // Send as object, not stringified
-      });
+      // Use fetch directly for better control
+      const response = await fetch(
+        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
+        {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${session.access_token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ fileContent }),
+        }
+      );
 
-      console.log("Response:", { data, error });
+      console.log("Response status:", response.status);
 
-      if (error) {
-        throw error;
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error("Error response:", errorText);
+        throw new Error(`Import failed: ${errorText}`);
       }
 
-      const result = data as FAQuestionImportResult;
+      const result = await response.json() as FAQuestionImportResult;
       setFaQuestionResult(result);
 
       toast({
