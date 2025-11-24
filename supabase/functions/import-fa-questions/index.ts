@@ -68,27 +68,34 @@ serve(async (req) => {
       throw new Error("User is not an admin");
     }
 
-    // Use req.json() to properly handle JSON body from fetch
+    // Read body as text first for debugging
     console.log("=== EDGE FUNCTION DEBUG ===");
     console.log("Request method:", req.method);
     console.log("Content-Type:", req.headers.get("content-type"));
     console.log("Content-Length:", req.headers.get("content-length"));
     console.log("Authorization present:", !!req.headers.get("authorization"));
     
+    const bodyText = await req.text();
+    console.log("Raw body length:", bodyText.length);
+    console.log("Raw body preview (first 500 chars):", bodyText.substring(0, 500));
+    
     let body: any;
     try {
-      body = await req.json();
+      body = JSON.parse(bodyText);
       console.log("Body parsed successfully");
       console.log("Body keys:", Object.keys(body));
+      console.log("Has questions:", !!body.questions);
       console.log("Has fileContent:", !!body.fileContent);
-      console.log("fileContent type:", typeof body.fileContent);
-      console.log("fileContent length:", body.fileContent?.length || 0);
+      if (body.questions) {
+        console.log("Questions count:", body.questions.length);
+      }
       if (body.fileContent) {
-        console.log("fileContent preview (first 200 chars):", body.fileContent.substring(0, 200));
+        console.log("FileContent length:", body.fileContent.length);
       }
     } catch (e) {
       console.error("Failed to parse request JSON:", e);
       console.error("Error details:", e instanceof Error ? e.message : String(e));
+      console.error("Body text was:", bodyText.substring(0, 1000));
       throw new Error(`Invalid request body: ${e instanceof Error ? e.message : 'Unknown error'}`);
     }
     
