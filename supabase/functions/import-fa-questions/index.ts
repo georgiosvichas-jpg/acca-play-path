@@ -110,52 +110,90 @@ serve(async (req) => {
     let skippedCount = 0;
     const skipped: Array<{ external_id: string; error_reason: string }> = [];
 
-    for (const q of questions) {
+    for (let i = 0; i < questions.length; i++) {
+      const rawQ: any = questions[i]; // Use any to handle both formats
+      let normalized: any = null;
+      
       try {
-        // Validate required fields
-        if (!q.external_id || !q.unit_code || !q.question_type || !q.stem || !q.difficulty) {
+        // Normalize the question object to handle both formats
+        normalized = {
+          // Auto-generate external_id if missing
+          external_id: rawQ.external_id || `FA_Q${String(i + 1).padStart(4, '0')}`,
+          
+          // Map field names
+          unit_code: rawQ.unit_code,
+          
+          // Map question_type: "mcq" → "MCQ_SINGLE", or use existing
+          question_type: rawQ.question_type 
+            ? rawQ.question_type 
+            : (rawQ.type === "mcq" ? "MCQ_SINGLE" : rawQ.type?.toUpperCase()),
+          
+          // Map stem: use "question" field or "stem" field
+          stem: rawQ.stem || rawQ.question,
+          
+          // Uppercase difficulty
+          difficulty: (rawQ.difficulty || "").toUpperCase(),
+          
+          // Keep options as-is
+          options: rawQ.options || [],
+          
+          // Convert correct_option_index to letter (0→A, 1→B, 2→C, 3→D)
+          correct_answer: rawQ.correct_answer || (
+            typeof rawQ.correct_option_index === "number" 
+              ? String.fromCharCode(65 + rawQ.correct_option_index)
+              : null
+          ),
+          
+          // Keep other fields
+          official_explanation: rawQ.official_explanation || rawQ.explanation,
+          estimated_time_seconds: rawQ.estimated_time_seconds || 60,
+          tags: rawQ.tags || null,
+        };
+
+        // Validate required fields after normalization
+        if (!normalized.unit_code || !normalized.question_type || !normalized.stem || !normalized.difficulty) {
           skipped.push({
-            external_id: q.external_id || "UNKNOWN",
-            error_reason: "Missing required fields (external_id, unit_code, question_type, stem, or difficulty)",
+            external_id: normalized.external_id,
+            error_reason: "Missing required fields (unit_code, question_type, stem, or difficulty)",
           });
           skippedCount++;
           continue;
         }
 
         // Validate question type
-        if (!VALID_QUESTION_TYPES.includes(q.question_type)) {
+        if (!VALID_QUESTION_TYPES.includes(normalized.question_type)) {
           skipped.push({
-            external_id: q.external_id,
-            error_reason: `Invalid question_type: ${q.question_type}`,
+            external_id: normalized.external_id,
+            error_reason: `Invalid question_type: ${normalized.question_type}`,
           });
           skippedCount++;
           continue;
         }
 
         // Validate difficulty
-        if (!VALID_DIFFICULTIES.includes(q.difficulty)) {
+        if (!VALID_DIFFICULTIES.includes(normalized.difficulty)) {
           skipped.push({
-            external_id: q.external_id,
-            error_reason: `Invalid difficulty: ${q.difficulty}`,
+            external_id: normalized.external_id,
+            error_reason: `Invalid difficulty: ${normalized.difficulty}`,
           });
           skippedCount++;
           continue;
         }
 
         // Validate unit_code exists in FA syllabus
-        if (!validUnitCodes.has(q.unit_code)) {
+        if (!validUnitCodes.has(normalized.unit_code)) {
           skipped.push({
-            external_id: q.external_id,
-            error_reason: `unit_code ${q.unit_code} not found in FA syllabus_units`,
+            external_id: normalized.external_id,
+            error_reason: `unit_code ${normalized.unit_code} not found in FA syllabus_units`,
           });
           skippedCount++;
           continue;
         }
 
         // Validate MCQ questions have options
-        if ((q.question_type === "MCQ_SINGLE" || q.question_type === "MCQ_MULTI") && (!q.options || q.options.length === 0)) {
+        if ((normalized.question_type === "MCQ_SINGLE" || normalized.question_type === "MCQ_MULTI") && (!normalized.options || normalized.options.length === 0)) {
           skipped.push({
-            external_id: q.external_id,
+            external_id: normalized.external_id,
             error_reason: "MCQ question missing options array",
           });
           skippedCount++;
@@ -163,14 +201,23 @@ serve(async (req) => {
         }
 
         // Validate correct_answer for MCQ
-        if (q.question_type === "MCQ_SINGLE" || q.question_type === "MCQ_MULTI") {
-          const letters = q.correct_answer.split("|");
+        if (normalized.question_type === "MCQ_SINGLE" || normalized.question_type === "MCQ_MULTI") {
+          if (!normalized.correct_answer) {
+            skipped.push({
+              external_id: normalized.external_id,
+              error_reason: "MCQ question missing correct_answer",
+            });
+            skippedCount++;
+            continue;
+          }
+          
+          const letters = normalized.correct_answer.split("|");
           let invalidAnswer = false;
           for (const letter of letters) {
             const index = letter.charCodeAt(0) - 65; // A=0, B=1, etc.
-            if (index < 0 || index >= (q.options?.length || 0)) {
+            if (index < 0 || index >= (normalized.options?.length || 0)) {
               skipped.push({
-                external_id: q.external_id,
+                external_id: normalized.external_id,
                 error_reason: `correct_answer ${letter} out of range for options`,
               });
               skippedCount++;
@@ -184,31 +231,31 @@ serve(async (req) => {
         // Map to sb_questions schema
         const questionData: any = {
           paper: "FA",
-          external_id: q.external_id,
-          unit_code: q.unit_code,
-          type: q.question_type,
-          question: q.stem,
-          options: q.options || [],
-          difficulty: q.difficulty,
-          explanation: q.official_explanation || null,
-          estimated_time_seconds: q.estimated_time_seconds || 60,
-          tags: q.tags || null,
+          external_id: normalized.external_id,
+          unit_code: normalized.unit_code,
+          type: normalized.question_type,
+          question: normalized.stem,
+          options: normalized.options || [],
+          difficulty: normalized.difficulty,
+          explanation: normalized.official_explanation || null,
+          estimated_time_seconds: normalized.estimated_time_seconds || 60,
+          tags: normalized.tags || null,
           is_active: true,
         };
 
         // Handle correct_answer mapping
-        if (q.question_type === "MCQ_SINGLE") {
+        if (normalized.question_type === "MCQ_SINGLE") {
           // Store as correct_option_index (A=0, B=1, etc.)
-          questionData.correct_option_index = q.correct_answer.charCodeAt(0) - 65;
+          questionData.correct_option_index = normalized.correct_answer.charCodeAt(0) - 65;
           questionData.answer = null;
-        } else if (q.question_type === "MCQ_MULTI") {
+        } else if (normalized.question_type === "MCQ_MULTI") {
           // Store multi-select as answer string
           questionData.correct_option_index = null;
-          questionData.answer = q.correct_answer;
+          questionData.answer = normalized.correct_answer;
         } else {
           // NUMERIC or SHORT - store as answer
           questionData.correct_option_index = null;
-          questionData.answer = q.correct_answer;
+          questionData.answer = normalized.correct_answer;
         }
 
         // Check if question exists
@@ -216,7 +263,7 @@ serve(async (req) => {
           .from("sb_questions")
           .select("id")
           .eq("paper", "FA")
-          .eq("external_id", q.external_id)
+          .eq("external_id", normalized.external_id)
           .maybeSingle();
 
         if (existing) {
@@ -243,9 +290,9 @@ serve(async (req) => {
         }
 
       } catch (error) {
-        console.error(`Error processing question ${q.external_id}:`, error);
+        console.error(`Error processing question ${normalized?.external_id || 'UNKNOWN'}:`, error);
         skipped.push({
-          external_id: q.external_id || "UNKNOWN",
+          external_id: normalized?.external_id || "UNKNOWN",
           error_reason: error instanceof Error ? error.message : "Unknown error",
         });
         skippedCount++;
