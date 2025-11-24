@@ -68,27 +68,18 @@ serve(async (req) => {
       throw new Error("User is not an admin");
     }
 
-    // Accept file upload from UI
-    // Check content-type header
-    const contentType = req.headers.get("content-type");
-    console.log("Content-Type header:", contentType);
-    
-    if (!contentType || !contentType.includes("multipart/form-data")) {
-      throw new Error(`Missing or invalid content type. Received: ${contentType || 'none'}`);
-    }
-    
-    const formData = await req.formData();
-    const file = formData.get("file") as File;
+    // Accept JSON body with file content
+    const body = await req.json();
+    const fileContent = body.fileContent;
 
-    if (!file) {
-      throw new Error("No file uploaded");
+    if (!fileContent) {
+      throw new Error("No file content provided");
     }
 
-    const jsonContent = await file.text();
     let parsedData: any;
 
     try {
-      parsedData = JSON.parse(jsonContent);
+      parsedData = JSON.parse(fileContent);
     } catch (e) {
       throw new Error("Invalid JSON format");
     }
