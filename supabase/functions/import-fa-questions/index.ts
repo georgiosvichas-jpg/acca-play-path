@@ -30,7 +30,7 @@ interface ImportResult {
   skipped: Array<{ external_id: string; error_reason: string }>;
 }
 
-const VALID_QUESTION_TYPES = ["MCQ_SINGLE", "MCQ_MULTI", "NUMERIC", "SHORT"];
+const VALID_QUESTION_TYPES = ["mcq", "flashcard"];
 const VALID_DIFFICULTIES = ["easy", "medium", "hard"];
 
 serve(async (req) => {
@@ -164,10 +164,8 @@ serve(async (req) => {
           // Map field names
           unit_code: rawQ.unit_code,
           
-          // Map question_type: "mcq" → "MCQ_SINGLE", or use existing
-          question_type: rawQ.question_type 
-            ? rawQ.question_type 
-            : (rawQ.type === "mcq" ? "MCQ_SINGLE" : rawQ.type?.toUpperCase()),
+          // Map question_type: use as-is (mcq, flashcard)
+          question_type: rawQ.type || rawQ.question_type,
           
           // Map stem: use "question" field or "stem" field
           stem: rawQ.stem || rawQ.question,
@@ -232,7 +230,7 @@ serve(async (req) => {
         }
 
         // Validate MCQ questions have options
-        if ((normalized.question_type === "MCQ_SINGLE" || normalized.question_type === "MCQ_MULTI") && (!normalized.options || normalized.options.length === 0)) {
+        if (normalized.question_type === "mcq" && (!normalized.options || normalized.options.length === 0)) {
           skipped.push({
             external_id: normalized.external_id,
             error_reason: "MCQ question missing options array",
@@ -242,7 +240,7 @@ serve(async (req) => {
         }
 
         // Validate correct_answer for MCQ
-        if (normalized.question_type === "MCQ_SINGLE" || normalized.question_type === "MCQ_MULTI") {
+        if (normalized.question_type === "mcq") {
           if (!normalized.correct_answer) {
             skipped.push({
               external_id: normalized.external_id,
@@ -284,17 +282,13 @@ serve(async (req) => {
           is_active: true,
         };
 
-        // Handle correct_answer mapping
-        if (normalized.question_type === "MCQ_SINGLE") {
+        // Handle correct_answer mapping for MCQ
+        if (normalized.question_type === "mcq") {
           // Store as correct_option_index (A=0, B=1, etc.)
           questionData.correct_option_index = normalized.correct_answer.charCodeAt(0) - 65;
           questionData.answer = null;
-        } else if (normalized.question_type === "MCQ_MULTI") {
-          // Store multi-select as answer string
-          questionData.correct_option_index = null;
-          questionData.answer = normalized.correct_answer;
         } else {
-          // NUMERIC or SHORT - store as answer
+          // Other types - store as answer
           questionData.correct_option_index = null;
           questionData.answer = normalized.correct_answer;
         }
