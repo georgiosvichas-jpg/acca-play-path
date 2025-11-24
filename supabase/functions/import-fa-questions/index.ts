@@ -31,7 +31,7 @@ interface ImportResult {
 }
 
 const VALID_QUESTION_TYPES = ["MCQ_SINGLE", "MCQ_MULTI", "NUMERIC", "SHORT"];
-const VALID_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"];
+const VALID_DIFFICULTIES = ["easy", "medium", "hard"];
 
 serve(async (req) => {
   if (req.method === "OPTIONS") {
@@ -172,8 +172,8 @@ serve(async (req) => {
           // Map stem: use "question" field or "stem" field
           stem: rawQ.stem || rawQ.question,
           
-          // Uppercase difficulty
-          difficulty: (rawQ.difficulty || "").toUpperCase(),
+          // Lowercase difficulty
+          difficulty: (rawQ.difficulty || "").toLowerCase(),
           
           // Keep options as-is
           options: rawQ.options || [],
