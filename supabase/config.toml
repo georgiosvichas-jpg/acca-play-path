@@ -62,3 +62,6 @@ verify_jwt = true
 
 [functions.generate-fa-flashcards]
 verify_jwt = true
+
+[functions.build-fa-minitests]
+verify_jwt = true

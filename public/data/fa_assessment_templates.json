@@ -1,0 +1,120 @@
+{
+  "paper": "FA",
+  "description": "Mini-test and mock exam templates for ACCA FA used by Outcomeo’s AI tutor. Structural blueprints, not specific question IDs.",
+  "mini_tests": [
+    {
+      "id": "FA_MINI_1",
+      "title": "FA Mini Test 1 – Concepts & Double Entry",
+      "target_units": [
+        "FA01",
+        "FA02"
+      ],
+      "question_count": 10,
+      "format": "MCQ-only, mixed conceptual and simple numeric",
+      "notes_for_agent": [
+        "Focus on accounting concepts, the accounting equation and simple double-entry.",
+        "Include straightforward ledger postings (e.g. cash sale, credit purchase, capital introduced).",
+        "Use simple numbers; the priority is understanding debits and credits."
+      ]
+    },
+    {
+      "id": "FA_MINI_2",
+      "title": "FA Mini Test 2 – Adjustments & Trial Balance",
+      "target_units": [
+        "FA06",
+        "FA07"
+      ],
+      "question_count": 10,
+      "format": "MCQ with small adjustments",
+      "notes_for_agent": [
+        "Test understanding of accruals, prepayments and simple error correction.",
+        "Include questions where candidates adjust profit or closing balances.",
+        "Make sure at least a couple of questions ask which errors DO or DO NOT affect the trial balance."
+      ]
+    },
+    {
+      "id": "FA_MINI_3",
+      "title": "FA Mini Test 3 – Financial Statements & Ratios",
+      "target_units": [
+        "FA08",
+        "FA10"
+      ],
+      "question_count": 10,
+      "format": "MCQ-only, short scenarios",
+      "notes_for_agent": [
+        "Use small SPL/SFP extracts and ask for missing figures or simple interpretation.",
+        "Include simple ratio questions on current ratio, gross margin or net margin.",
+        "Emphasise interpretation at an introductory FA level rather than advanced commentary."
+      ]
+    }
+  ],
+  "mock_exams": [
+    {
+      "id": "FA_MOCK_1",
+      "title": "FA Mock Exam 1 – Balanced Coverage",
+      "duration_minutes": 120,
+      "question_count": 50,
+      "format": "MCQ-only, all units FA01–FA10",
+      "structure": {
+        "sections": [
+          {
+            "name": "Section A – Core Techniques",
+            "approx_questions": 25,
+            "focus_units": [
+              "FA02",
+              "FA06",
+              "FA07"
+            ]
+          },
+          {
+            "name": "Section B – Financial Statements & Interpretation",
+            "approx_questions": 25,
+            "focus_units": [
+              "FA08",
+              "FA09",
+              "FA10"
+            ]
+          }
+        ]
+      },
+      "notes_for_agent": [
+        "Mix short, focused questions with a few mini-scenarios.",
+        "Ensure that the majority of marks come from double-entry, adjustments and basic financial statements.",
+        "Provide detailed explanations in review mode, linking back to FA01–FA10 units."
+      ]
+    },
+    {
+      "id": "FA_MOCK_2",
+      "title": "FA Mock Exam 2 – Adjustments & Errors Focus",
+      "duration_minutes": 120,
+      "question_count": 50,
+      "format": "MCQ-only with heavier emphasis on year-end adjustments",
+      "structure": {
+        "sections": [
+          {
+            "name": "Section A – Adjustments and Trial Balance",
+            "approx_questions": 30,
+            "focus_units": [
+              "FA06",
+              "FA07"
+            ]
+          },
+          {
+            "name": "Section B – Financial Statements & Concepts",
+            "approx_questions": 20,
+            "focus_units": [
+              "FA01",
+              "FA08",
+              "FA10"
+            ]
+          }
+        ]
+      },
+      "notes_for_agent": [
+        "Increase the proportion of questions where students must adjust for accruals, prepayments and basic errors.",
+        "Include several questions where the trial balance does not balance and ask for suspense account or corrected profit.",
+        "In the debrief, emphasise how adjustments flow into SPL and SFP."
+      ]
+    }
+  ]
+}

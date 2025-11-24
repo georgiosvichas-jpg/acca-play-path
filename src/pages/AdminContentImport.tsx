@@ -64,6 +64,15 @@ interface FlashcardGenerationResult {
   }>;
 }
 
+interface MiniTestBuildResult {
+  success: boolean;
+  summary: {
+    tests_created: number;
+    questions_per_test: Record<string, number>;
+    errors: string[];
+  };
+}
+
 export default function AdminContentImport() {
   const { toast } = useToast();
   const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
@@ -81,6 +90,8 @@ export default function AdminContentImport() {
   const [faQuestionResult, setFaQuestionResult] = useState<FAQuestionImportResult | null>(null);
   const [flashcardGenerating, setFlashcardGenerating] = useState(false);
   const [flashcardResult, setFlashcardResult] = useState<FlashcardGenerationResult | null>(null);
+  const [minitestBuilding, setMinitestBuilding] = useState(false);
+  const [minitestResult, setMinitestResult] = useState<MiniTestBuildResult | null>(null);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -276,6 +287,48 @@ export default function AdminContentImport() {
       });
     } finally {
       setFlashcardGenerating(false);
+    }
+  };
+
+  const handleBuildMinitests = async () => {
+    setMinitestBuilding(true);
+    setMinitestResult(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Not authenticated");
+      }
+
+      toast({
+        title: "Building mini tests",
+        description: "Processing templates and selecting questions...",
+      });
+
+      const response = await supabase.functions.invoke("build-fa-minitests", {
+        body: {},
+      });
+
+      if (response.error) {
+        throw response.error;
+      }
+
+      const result = response.data as MiniTestBuildResult;
+      setMinitestResult(result);
+
+      toast({
+        title: "Mini tests created",
+        description: `${result.summary.tests_created} tests built successfully`,
+      });
+    } catch (error) {
+      console.error("Error building mini tests:", error);
+      toast({
+        title: "Build failed",
+        description: error instanceof Error ? error.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setMinitestBuilding(false);
     }
   };
 
@@ -686,6 +739,74 @@ export default function AdminContentImport() {
                   </TableBody>
                 </Table>
               </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Auto-Build FA Mini Tests */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Auto-Build FA Mini Tests</CardTitle>
+          <CardDescription>
+            Automatically create mini tests from templates by randomly sampling questions from target syllabus units. Creates 3 tests covering different FA topics.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <p className="text-sm text-muted-foreground">
+              This tool uses fa_assessment_templates.json to create curated mini tests. Each test targets specific units and includes 10 questions with recommended timing.
+            </p>
+          </div>
+
+          <Button
+            onClick={handleBuildMinitests}
+            disabled={minitestBuilding}
+            className="w-full sm:w-auto"
+          >
+            {minitestBuilding ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Building Tests...
+              </>
+            ) : (
+              <>
+                <Upload className="mr-2 h-4 w-4" />
+                Build FA Mini Tests
+              </>
+            )}
+          </Button>
+
+          {minitestResult && (
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="font-semibold mb-2">Build Summary</div>
+                <div className="space-y-1 text-sm">
+                  <div>Tests created: {minitestResult.summary.tests_created}</div>
+                  {Object.entries(minitestResult.summary.questions_per_test).map(([title, count]) => (
+                    <div key={title} className="ml-4">
+                      • {title}: {count} questions
+                    </div>
+                  ))}
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {minitestResult && minitestResult.summary.errors.length > 0 && (
+            <div className="space-y-2">
+              <Alert variant="destructive">
+                <AlertCircle className="h-4 w-4" />
+                <AlertDescription>
+                  <div className="font-semibold mb-2">Warnings/Errors</div>
+                  <ul className="text-sm space-y-1">
+                    {minitestResult.summary.errors.map((error, idx) => (
+                      <li key={idx}>• {error}</li>
+                    ))}
+                  </ul>
+                </AlertDescription>
+              </Alert>
             </div>
           )}
         </CardContent>
