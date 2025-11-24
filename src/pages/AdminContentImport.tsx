@@ -235,19 +235,25 @@ export default function AdminContentImport() {
         throw new Error("Not authenticated");
       }
 
-      // Read the file content as text
+      // Read file content as text
       const fileContent = await faQuestionFile.text();
 
-      // Send as JSON body instead of FormData
-      const response = await supabase.functions.invoke("import-fa-questions", {
-        body: { fileContent },
+      // Parse to validate it's valid JSON
+      JSON.parse(fileContent);
+
+      // Send file content directly in JSON body
+      const { data, error } = await supabase.functions.invoke("import-fa-questions", {
+        body: JSON.stringify({ fileContent }),
+        headers: {
+          "Content-Type": "application/json",
+        },
       });
 
-      if (response.error) {
-        throw response.error;
+      if (error) {
+        throw error;
       }
 
-      const result = response.data as FAQuestionImportResult;
+      const result = data as FAQuestionImportResult;
       setFaQuestionResult(result);
 
       toast({
