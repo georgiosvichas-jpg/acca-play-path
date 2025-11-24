@@ -235,54 +235,71 @@ export default function AdminContentImport() {
         throw new Error("Not authenticated");
       }
 
-      // Read file content as text
+      // Read file content
       const fileContent = await faQuestionFile.text();
-      console.log("=== CLIENT SIDE DEBUG ===");
-      console.log("File name:", faQuestionFile.name);
-      console.log("File size:", faQuestionFile.size, "bytes");
-      console.log("File content length:", fileContent.length);
-      console.log("File content preview (first 200 chars):", fileContent.substring(0, 200));
-
-      // Validate it's valid JSON
-      const testParse = JSON.parse(fileContent);
-      console.log("File is valid JSON, questions:", Array.isArray(testParse) ? testParse.length : testParse.questions?.length);
-
-      const requestBody = JSON.stringify({ fileContent });
-      console.log("Request body length:", requestBody.length);
-      console.log("Request body preview (first 200 chars):", requestBody.substring(0, 200));
-
-      console.log("Calling edge function with auth...");
-      console.log("URL:", `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`);
-
-      // Use fetch directly for better control
-      const response = await fetch(
-        `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
-        {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${session.access_token}`,
-            "Content-Type": "application/json",
-            "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-          },
-          body: requestBody,
+      const parsed = JSON.parse(fileContent);
+      
+      // Extract questions array
+      let allQuestions = Array.isArray(parsed) ? parsed : parsed.questions || [];
+      
+      console.log(`Processing ${allQuestions.length} questions in batches...`);
+      
+      // Process in chunks of 50 questions to avoid payload limits
+      const CHUNK_SIZE = 50;
+      let totalInserted = 0;
+      let totalUpdated = 0;
+      let totalSkipped = 0;
+      const allErrors: any[] = [];
+      
+      for (let i = 0; i < allQuestions.length; i += CHUNK_SIZE) {
+        const chunk = allQuestions.slice(i, i + CHUNK_SIZE);
+        const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
+        const totalChunks = Math.ceil(allQuestions.length / CHUNK_SIZE);
+        
+        console.log(`Processing chunk ${chunkNum}/${totalChunks} (${chunk.length} questions)...`);
+        
+        toast({
+          title: "Importing...",
+          description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / allQuestions.length) * 100)}% complete)`,
+        });
+        
+        const { data, error } = await supabase.functions.invoke("import-fa-questions", {
+          body: { fileContent: JSON.stringify(chunk) },
+        });
+        
+        if (error) {
+          console.error(`Chunk ${chunkNum} error:`, error);
+          throw error;
         }
-      );
-
-      console.log("Response status:", response.status);
-      console.log("Response headers:", Object.fromEntries(response.headers.entries()));
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Error response:", errorText);
-        throw new Error(`Import failed: ${errorText}`);
+        
+        if (data?.success) {
+          totalInserted += data.summary.inserted_count || 0;
+          totalUpdated += data.summary.updated_count || 0;
+          totalSkipped += data.summary.skipped_count || 0;
+          if (data.skipped) {
+            allErrors.push(...data.skipped);
+          }
+        } else {
+          throw new Error(data?.error || "Import failed");
+        }
       }
-
-      const result = await response.json() as FAQuestionImportResult;
-      setFaQuestionResult(result);
+      
+      const finalResult = {
+        success: true,
+        summary: {
+          total_questions: allQuestions.length,
+          inserted_count: totalInserted,
+          updated_count: totalUpdated,
+          skipped_count: totalSkipped,
+        },
+        skipped: allErrors,
+      };
+      
+      setFaQuestionResult(finalResult);
 
       toast({
         title: "Import completed",
-        description: `${result.summary.inserted_count} inserted, ${result.summary.updated_count} updated, ${result.summary.skipped_count} skipped`,
+        description: `${totalInserted} inserted, ${totalUpdated} updated, ${totalSkipped} skipped`,
       });
     } catch (error) {
       console.error("Error importing FA questions:", error);
