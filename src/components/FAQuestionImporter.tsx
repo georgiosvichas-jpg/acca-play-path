@@ -69,7 +69,7 @@ export function FAQuestionImporter() {
       )}
 
       <div className="space-y-2 text-sm text-muted-foreground">
-        <p>This will import from <code className="text-xs bg-muted px-1 py-0.5 rounded">public/data/fa_question_bank.json</code>:</p>
+        <p>Upload the FA question bank JSON file to import:</p>
         <ul className="list-disc list-inside space-y-1">
           <li>All FA MCQ questions with auto-generated IDs</li>
           <li>Organized by unit codes (FA01-FA10)</li>
