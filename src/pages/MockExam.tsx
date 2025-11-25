@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { usePapers } from "@/hooks/usePapers";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
@@ -12,6 +14,7 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock } from "lucide-react";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
@@ -31,6 +34,8 @@ interface Question {
 
 export default function MockExam() {
   const { user } = useAuth();
+  const { profile } = useUserProfile();
+  const { papers } = usePapers();
   const navigate = useNavigate();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { recordBatchReviews } = useSpacedRepetition();
@@ -38,6 +43,9 @@ export default function MockExam() {
   const { planType, getUpgradeMessage } = useFeatureAccess();
   const [showPaywall, setShowPaywall] = useState(false);
   const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("pro");
+  
+  // Paper selection
+  const [selectedPaper, setSelectedPaper] = useState<string>("");
 
   // Exam state
   const [examStarted, setExamStarted] = useState(false);
@@ -47,6 +55,15 @@ export default function MockExam() {
   const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [results, setResults] = useState<any>(null);
+  
+  // Initialize selected paper from profile
+  useEffect(() => {
+    if (profile?.selected_paper && !selectedPaper) {
+      setSelectedPaper(profile.selected_paper);
+    } else if (!selectedPaper && papers.length > 0) {
+      setSelectedPaper(papers[0].paper_code);
+    }
+  }, [profile, papers]);
 
   // Timer effect
   useEffect(() => {
@@ -90,7 +107,7 @@ export default function MockExam() {
       // Use content-batch to fetch 50 MCQ questions
       const { data, error } = await supabase.functions.invoke("content-batch", {
         body: { 
-          paper: "BT", 
+          paper: selectedPaper, 
           type: "mcq",
           size: 50 
         },
@@ -193,13 +210,30 @@ export default function MockExam() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Clock className="w-6 h-6" />
-                  ACCA BT Mock Exam
+                  ACCA {selectedPaper} Mock Exam
                 </CardTitle>
                 <CardDescription>
                   Simulated exam under real ACCA conditions
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-6">
+                {/* Paper Selection */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Select Paper</label>
+                  <Select value={selectedPaper} onValueChange={setSelectedPaper}>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Choose paper..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {papers.map((paper) => (
+                        <SelectItem key={paper.id} value={paper.paper_code}>
+                          {paper.paper_code} - {paper.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+
                 <Alert>
                   <AlertCircle className="h-4 w-4" />
                   <AlertDescription>
@@ -219,7 +253,7 @@ export default function MockExam() {
                 <div className="bg-muted p-4 rounded-lg space-y-2">
                   <h3 className="font-semibold">What to expect:</h3>
                   <ul className="list-disc ml-6 space-y-1 text-sm">
-                    <li>Questions cover all BT units</li>
+                    <li>Questions cover all {selectedPaper} units</li>
                     <li>Mixed difficulty levels</li>
                     <li>Realistic exam format</li>
                     <li>Detailed results after submission</li>
@@ -275,7 +309,7 @@ export default function MockExam() {
 
                 <Button
                   onClick={startExam}
-                  disabled={!agreedToRules || !canUseMockExam}
+                  disabled={!agreedToRules || !canUseMockExam || !selectedPaper}
                   size="lg"
                   className="w-full"
                 >

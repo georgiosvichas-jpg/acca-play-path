@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
+import { usePapers } from "@/hooks/usePapers";
 import { useXP } from "@/hooks/useXP";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
@@ -32,6 +33,7 @@ interface Flashcard {
 export default function FlashcardsContentNew() {
   const { user } = useAuth();
   const { profile } = useUserProfile();
+  const { papers: allPapers } = usePapers();
   const { awardXP } = useXP();
   const { 
     canUseFlashcard, 
@@ -56,9 +58,16 @@ export default function FlashcardsContentNew() {
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
 
   // Get unique values for filters
-  const papers = Array.from(new Set(flashcards.map((f) => f.paper_code))).sort();
+  const availablePaperCodes = Array.from(new Set(flashcards.map((f) => f.paper_code))).sort();
   const units = Array.from(new Set(flashcards.map((f) => f.unit_title))).sort();
   const difficulties = ["Easy", "Medium", "Hard"];
+  
+  // Initialize selected paper from profile
+  useEffect(() => {
+    if (profile?.selected_paper && selectedPaper === "all") {
+      setSelectedPaper(profile.selected_paper);
+    }
+  }, [profile]);
 
   useEffect(() => {
     fetchFlashcards();
@@ -329,9 +338,9 @@ export default function FlashcardsContentNew() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Papers</SelectItem>
-                      {papers.map((paper) => (
-                        <SelectItem key={paper} value={paper}>
-                          {paper}
+                      {allPapers.map((paper) => (
+                        <SelectItem key={paper.id} value={paper.paper_code}>
+                          {paper.paper_code} - {paper.title}
                         </SelectItem>
                       ))}
                     </SelectContent>
