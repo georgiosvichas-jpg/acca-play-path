@@ -383,8 +383,15 @@ export default function AdminContentImport() {
         description: "Processing templates and selecting questions...",
       });
 
+      // Load template file
+      const templateResponse = await fetch('/data/fa_assessment_templates.json');
+      if (!templateResponse.ok) {
+        throw new Error("Could not load FA assessment templates");
+      }
+      const templateData = await templateResponse.json();
+
       const response = await supabase.functions.invoke("build-fa-minitests", {
-        body: {},
+        body: { mini_tests: templateData.mini_tests },
       });
 
       if (response.error) {

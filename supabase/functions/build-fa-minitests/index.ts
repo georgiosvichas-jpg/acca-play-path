@@ -51,17 +51,11 @@ serve(async (req) => {
 
     if (!roleData) throw new Error("User is not an admin");
 
-    // Fetch the template file
-    console.log("Fetching FA assessment templates...");
-    const templateUrl = `${supabaseUrl}/storage/v1/object/public/data/fa_assessment_templates.json`;
+    // Get template data from request body
+    const body = await req.json();
+    const miniTests: MiniTestTemplate[] = body.mini_tests || [];
     
-    const templateResponse = await fetch(templateUrl);
-    if (!templateResponse.ok) {
-      throw new Error("Could not fetch assessment templates file");
-    }
-
-    const templateData = await templateResponse.json();
-    const miniTests: MiniTestTemplate[] = templateData.mini_tests || [];
+    console.log(`Received ${miniTests.length} mini test templates from request`);
 
     if (miniTests.length === 0) {
       throw new Error("No mini tests found in template file");
