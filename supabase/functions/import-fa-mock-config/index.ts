@@ -62,20 +62,12 @@ serve(async (req) => {
 
     if (!roleData) throw new Error("User is not an admin");
 
-    // Fetch the template file
-    console.log("Fetching FA assessment templates...");
-    const templateUrl = `${supabaseUrl}/storage/v1/object/public/data/fa_assessment_templates.json`;
-    
-    const templateResponse = await fetch(templateUrl);
-    if (!templateResponse.ok) {
-      throw new Error("Could not fetch assessment templates file");
-    }
-
-    const templateData = await templateResponse.json();
-    const mockExams: MockExamTemplate[] = templateData.mock_exams || [];
+    // Get mock_exams from request body
+    const body = await req.json();
+    const mockExams: MockExamTemplate[] = body.mock_exams || [];
 
     if (mockExams.length === 0) {
-      throw new Error("No mock exams found in template file");
+      throw new Error("No mock exams provided in request");
     }
 
     console.log(`Found ${mockExams.length} mock exam templates`);
