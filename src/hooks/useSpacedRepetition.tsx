@@ -181,6 +181,99 @@ export function useSpacedRepetition() {
     }
   }, [user]);
 
+  const getTopicMastery = useCallback(async (paper: string) => {
+    if (!user) return [];
+
+    try {
+      // Get all reviews with question details
+      const { data: reviews, error } = await supabase
+        .from("question_reviews")
+        .select("*, question:sb_questions!inner(unit_code, paper)")
+        .eq("user_id", user.id)
+        .eq("question.paper", paper);
+
+      if (error) throw error;
+
+      // Group by unit_code and calculate mastery
+      const unitMap = new Map();
+      reviews?.forEach((review: any) => {
+        const unitCode = review.question.unit_code || "Other";
+        if (!unitMap.has(unitCode)) {
+          unitMap.set(unitCode, {
+            unitCode,
+            totalSeen: 0,
+            totalCorrect: 0,
+            avgEaseFactor: 0,
+            dueCount: 0,
+            count: 0,
+          });
+        }
+
+        const unit = unitMap.get(unitCode);
+        unit.totalSeen += review.times_seen;
+        unit.totalCorrect += review.times_correct;
+        unit.avgEaseFactor += review.ease_factor;
+        unit.count += 1;
+
+        const now = new Date();
+        if (new Date(review.next_review_at) <= now) {
+          unit.dueCount += 1;
+        }
+      });
+
+      // Calculate mastery percentage for each unit
+      return Array.from(unitMap.values()).map(unit => {
+        const accuracy = unit.totalSeen > 0 ? (unit.totalCorrect / unit.totalSeen) * 100 : 0;
+        const avgEase = unit.count > 0 ? unit.avgEaseFactor / unit.count : 2.5;
+        
+        // Mastery formula: combination of accuracy and ease factor
+        const mastery = Math.min(100, (accuracy * 0.7) + ((avgEase - 1.3) / (3.0 - 1.3) * 100 * 0.3));
+        
+        return {
+          ...unit,
+          accuracy: accuracy.toFixed(1),
+          avgEaseFactor: avgEase.toFixed(2),
+          mastery: mastery.toFixed(0),
+          status: mastery < 40 ? 'struggling' : mastery < 70 ? 'learning' : 'mastered',
+        };
+      }).sort((a, b) => parseFloat(a.mastery) - parseFloat(b.mastery));
+    } catch (error) {
+      console.error("Error fetching topic mastery:", error);
+      return [];
+    }
+  }, [user]);
+
+  const getStreakData = useCallback(async () => {
+    if (!user) return { currentStreak: 0, dailyTarget: 10, reviewedToday: 0 };
+
+    try {
+      // Get today's reviews
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      
+      const { data, error } = await supabase
+        .from("question_reviews")
+        .select("last_reviewed_at")
+        .eq("user_id", user.id)
+        .gte("last_reviewed_at", today.toISOString());
+
+      if (error) throw error;
+
+      const reviewedToday = data?.length || 0;
+
+      // Calculate streak (simplified - would need dedicated table in production)
+      // For now, just return today's count
+      return {
+        currentStreak: reviewedToday > 0 ? 1 : 0,
+        dailyTarget: 10,
+        reviewedToday,
+      };
+    } catch (error) {
+      console.error("Error fetching streak data:", error);
+      return { currentStreak: 0, dailyTarget: 10, reviewedToday: 0 };
+    }
+  }, [user]);
+
   const recordBatchReviews = useCallback(async (
     questions: Array<{ questionId: string; isCorrect: boolean }>
   ) => {
@@ -194,6 +287,8 @@ export function useSpacedRepetition() {
     recordBatchReviews,
     getDueReviews,
     getReviewStats,
+    getTopicMastery,
+    getStreakData,
     loading,
   };
 }
