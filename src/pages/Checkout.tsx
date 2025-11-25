@@ -71,65 +71,7 @@ export default function Checkout() {
           </div>
 
           {/* Pricing Cards */}
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            {/* Per Paper Plan */}
-            <Card
-              className={`p-8 shadow-card card-float animate-slide-up ${
-                selectedPlan === "paper" ? "ring-2 ring-primary" : ""
-              }`}
-            >
-              <div className="mb-6">
-                <div className="flex items-center justify-between mb-2">
-                  <h3 className="text-2xl font-bold">Per Paper</h3>
-                  <Badge variant="secondary">One-time</Badge>
-                </div>
-                <div className="flex items-baseline gap-2 mb-4">
-                  <span className="text-4xl font-bold">€9</span>
-                  <span className="text-muted-foreground">per paper</span>
-                </div>
-                <p className="text-muted-foreground">
-                  Perfect if you're focusing on specific papers
-                </p>
-              </div>
-
-              <ul className="space-y-3 mb-8">
-                <li className="flex items-start gap-2">
-                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm">Full access to one paper's content</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm">Unlimited flashcards & mini-problems</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm">Progress tracking for that paper</span>
-                </li>
-                <li className="flex items-start gap-2">
-                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                  <span className="text-sm">Lifetime access (no expiry)</span>
-                </li>
-              </ul>
-
-              <Button
-                className="w-full h-12 bg-primary hover:bg-primary/90"
-                onClick={() => handleCheckout(STRIPE_PRICES.PRO_MONTHLY, "subscription")}
-                disabled={loading === STRIPE_PRICES.PRO_MONTHLY}
-              >
-                {loading === STRIPE_PRICES.PRO_MONTHLY ? (
-                  <div className="flex items-center gap-2">
-                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
-                    <span>Processing...</span>
-                  </div>
-                ) : (
-                  <>
-                    <TrendingUp className="mr-2 h-5 w-5" />
-                    Unlock One Paper
-                  </>
-                )}
-              </Button>
-            </Card>
-
+          <div className="grid md:grid-cols-2 gap-8 mb-8 max-w-4xl mx-auto">
             {/* Pro Plan */}
             <Card
               className={`p-8 shadow-card card-float animate-slide-up relative overflow-hidden ${
@@ -213,6 +155,86 @@ export default function Checkout() {
                   <>
                     <Sparkles className="mr-2 h-5 w-5" />
                     Go Pro Now
+                  </>
+                )}
+              </Button>
+            </Card>
+
+            {/* Elite Plan */}
+            <Card
+              className={`p-8 shadow-card card-float animate-slide-up relative overflow-hidden ${
+                selectedPlan === "elite" ? "ring-2 ring-primary" : ""
+              }`}
+              style={{ animationDelay: "0.2s" }}
+            >
+              <div className="mb-6">
+                <h3 className="text-2xl font-bold mb-2">Elite</h3>
+                <div className="flex items-baseline gap-2 mb-4">
+                  <span className="text-4xl font-bold">
+                    €{isAnnual ? "159" : "20"}
+                  </span>
+                  <span className="text-muted-foreground">
+                    /{isAnnual ? "year" : "month"}
+                  </span>
+                </div>
+                {isAnnual && (
+                  <p className="text-sm text-primary font-medium mb-2">
+                    Save €81/year compared to monthly
+                  </p>
+                )}
+                <p className="text-muted-foreground">
+                  Everything in Pro plus AI-powered features
+                </p>
+              </div>
+
+              <ul className="space-y-3 mb-8">
+                <li className="flex items-start gap-2">
+                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-sm font-semibold">
+                    Everything in Pro
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-sm">AI Study Coach & personalized guidance</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-sm">Predictive analytics & pass probability</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-sm">Advanced spaced repetition</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
+                  <span className="text-sm">Peer benchmarking & exam week mode</span>
+                </li>
+              </ul>
+
+              <Button
+                className="w-full h-12 bg-primary hover:bg-primary/90"
+                onClick={() =>
+                  handleCheckout(
+                    isAnnual ? STRIPE_PRICES.ELITE_ANNUAL : STRIPE_PRICES.ELITE_MONTHLY,
+                    "subscription"
+                  )
+                }
+                disabled={
+                  loading === STRIPE_PRICES.ELITE_ANNUAL ||
+                  loading === STRIPE_PRICES.ELITE_MONTHLY
+                }
+              >
+                {(loading === STRIPE_PRICES.ELITE_ANNUAL ||
+                  loading === STRIPE_PRICES.ELITE_MONTHLY) ? (
+                  <div className="flex items-center gap-2">
+                    <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white" />
+                    <span>Processing...</span>
+                  </div>
+                ) : (
+                  <>
+                    <Sparkles className="mr-2 h-5 w-5" />
+                    Go Elite Now
                   </>
                 )}
               </Button>
