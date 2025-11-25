@@ -8,6 +8,8 @@ import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
+import { useTopicPerformance } from "@/hooks/useTopicPerformance";
+import { QuestionActions } from "@/components/QuestionActions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -49,6 +51,7 @@ export default function MockExam() {
   const { recordBatchReviews } = useSpacedRepetition();
   const { canUseMockExam, remainingMocks, incrementMockUsage, isLoading: usageLoading } = useUsageLimits();
   const { planType, getUpgradeMessage } = useFeatureAccess();
+  const { trackBatchPerformance } = useTopicPerformance();
   const [showPaywall, setShowPaywall] = useState(false);
   const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("pro");
   
@@ -342,6 +345,15 @@ export default function MockExam() {
 
       // Log session via edge function
       if (user) {
+        // Track topic performance
+        const performanceData = questions.map((q, idx) => ({
+          paperCode: q.paper,
+          unitCode: q.unit_code,
+          topicName: q.unit_code || "General",
+          isCorrect: answers[idx] === q.correct_option_index
+        }));
+        await trackBatchPerformance(performanceData);
+
         const { error: sessionError } = await supabase.functions.invoke("sessions-log", {
           body: {
             session_type: "mock_exam",
@@ -965,6 +977,17 @@ export default function MockExam() {
                   </p>
                 </div>
               )}
+
+              {/* Question Actions */}
+              <QuestionActions
+                questionId={currentQ.id}
+                sourceType="mock"
+                question={currentQ.question}
+                options={currentQ.options}
+                correctAnswer={correctAnswer}
+                userAnswer={userAnswer}
+                explanation={currentQ.explanation}
+              />
 
               {/* Metadata */}
               <div className="flex items-center gap-4 text-sm text-muted-foreground pt-4 border-t">

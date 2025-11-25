@@ -6,6 +6,8 @@ import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { usePapers } from "@/hooks/usePapers";
 import { useXP } from "@/hooks/useXP";
+import { useTopicPerformance } from "@/hooks/useTopicPerformance";
+import { QuestionActions } from "@/components/QuestionActions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -62,6 +64,7 @@ export default function PracticeQuiz() {
   const { recordBatchReviews } = useSpacedRepetition();
   const { papers, loading: papersLoading } = usePapers();
   const { awardXP, currentXP, ConfettiComponent } = useXP();
+  const { trackPerformance } = useTopicPerformance();
   
   // Setup state
   const [paper, setPaper] = useState<string>("");
@@ -293,6 +296,16 @@ export default function PracticeQuiz() {
     } else {
       setCurrentStreak(0);
       toast.error("Incorrect. Streak reset!");
+    }
+
+    // Track topic performance
+    if (user) {
+      trackPerformance(
+        currentQuestion.paper,
+        currentQuestion.unit_code,
+        currentQuestion.unit_code || "General",
+        isCorrect
+      );
     }
 
     setAnswers([...answers, {
@@ -873,6 +886,18 @@ export default function PracticeQuiz() {
                   <strong>Explanation:</strong> {currentQuestion.explanation}
                 </AlertDescription>
               </Alert>
+            )}
+
+            {showFeedback && (
+              <QuestionActions
+                questionId={currentQuestion.id}
+                sourceType="practice"
+                question={currentQuestion.question}
+                options={currentQuestion.options}
+                correctAnswer={currentQuestion.correct_option_index}
+                userAnswer={selectedAnswer}
+                explanation={currentQuestion.explanation}
+              />
             )}
 
             <div className="flex gap-3">
