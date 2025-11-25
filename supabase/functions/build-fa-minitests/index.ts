@@ -51,17 +51,15 @@ serve(async (req) => {
 
     if (!roleData) throw new Error("User is not an admin");
 
-    // Get template data from request body
-    const body = await req.json();
-    const miniTests: MiniTestTemplate[] = body.mini_tests || [];
-    
-    console.log(`Received ${miniTests.length} mini test templates from request`);
+    // Expect mini test templates in request body
+    const body = await req.json().catch(() => ({}));
+    const miniTests: MiniTestTemplate[] = Array.isArray(body.mini_tests) ? body.mini_tests : [];
 
     if (miniTests.length === 0) {
-      throw new Error("No mini tests found in template file");
+      throw new Error("No mini tests provided in request body");
     }
 
-    console.log(`Found ${miniTests.length} mini test templates`);
+    console.log(`Received ${miniTests.length} mini test templates`);
 
     let testsCreated = 0;
     const questionsPerTest: Record<string, number> = {};
@@ -107,14 +105,14 @@ serve(async (req) => {
         // Check if we have enough questions
         if (questions.length < template.question_count) {
           errors.push(
-            `Only ${questions.length} questions available for "${template.title}", need ${template.question_count}`
+            `Only ${questions.length} questions available for "${template.title}", need ${template.question_count}`,
           );
         }
 
         // Randomly sample questions
         const shuffled = [...questions].sort(() => Math.random() - 0.5);
         const selectedQuestions = shuffled.slice(0, Math.min(template.question_count, questions.length));
-        const questionIds = selectedQuestions.map(q => q.id);
+        const questionIds = selectedQuestions.map((q) => q.id);
 
         // Calculate recommended time (2 minutes per question)
         const recommendedTime = selectedQuestions.length * 2;
@@ -136,10 +134,11 @@ serve(async (req) => {
         testsCreated++;
         questionsPerTest[template.title] = selectedQuestions.length;
         console.log(`Created test "${template.title}" with ${selectedQuestions.length} questions`);
-
       } catch (error) {
         console.error(`Error processing template ${template.title}:`, error);
-        errors.push(`Failed to create "${template.title}": ${error instanceof Error ? error.message : "Unknown error"}`);
+        errors.push(
+          `Failed to create "${template.title}": ${error instanceof Error ? error.message : "Unknown error"}`,
+        );
       }
     }
 
@@ -155,7 +154,6 @@ serve(async (req) => {
     return new Response(JSON.stringify(result), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
-
   } catch (error) {
     console.error("Error building mini tests:", error);
     return new Response(
@@ -163,7 +161,7 @@ serve(async (req) => {
         error: error instanceof Error ? error.message : "Unknown error",
         success: false,
       }),
-      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } },
     );
   }
 });
