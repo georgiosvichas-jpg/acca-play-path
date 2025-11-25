@@ -442,15 +442,19 @@ export default function PracticeQuiz() {
             onValueChange={(val) => setSelectedAnswer(parseInt(val))}
           >
             {currentQuestion.options.map((option, idx) => (
-              <div key={idx} className={`flex items-center space-x-2 p-4 rounded-lg border ${
-                showFeedback
-                  ? idx === currentQuestion.correct_option_index
-                    ? "border-green-500 bg-green-50 dark:bg-green-950"
-                    : idx === selectedAnswer
-                    ? "border-red-500 bg-red-50 dark:bg-red-950"
-                    : "border-border"
-                  : "border-border hover:border-primary"
-              }`}>
+              <div 
+                key={idx} 
+                className={`flex items-center space-x-2 p-4 rounded-lg border cursor-pointer ${
+                  showFeedback
+                    ? idx === currentQuestion.correct_option_index
+                      ? "border-green-500 bg-green-50 dark:bg-green-950"
+                      : idx === selectedAnswer
+                      ? "border-red-500 bg-red-50 dark:bg-red-950"
+                      : "border-border"
+                    : "border-border hover:border-primary"
+                }`}
+                onClick={() => !showFeedback && setSelectedAnswer(idx)}
+              >
                 <RadioGroupItem value={idx.toString()} id={`option-${idx}`} disabled={showFeedback} />
                 <Label htmlFor={`option-${idx}`} className="flex-1 cursor-pointer">
                   {option}
