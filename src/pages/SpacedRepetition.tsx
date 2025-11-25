@@ -85,6 +85,7 @@ export default function SpacedRepetition() {
   const [answers, setAnswers] = useState<Array<{ questionId: string; correct: boolean }>>([]);
   const [sessionComplete, setSessionComplete] = useState(false);
   const [reviewMode, setReviewMode] = useState<"mcq" | "retrieval">("mcq");
+  const [focusMode, setFocusMode] = useState(false);
   
   // Initialize selected paper from profile
   useEffect(() => {
@@ -533,7 +534,7 @@ export default function SpacedRepetition() {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+      <div className={`min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20 ${focusMode ? "bg-black" : ""}`}>
         <div className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="space-y-6">
             {/* Header */}

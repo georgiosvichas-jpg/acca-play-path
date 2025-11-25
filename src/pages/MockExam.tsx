@@ -19,7 +19,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock, Flag, Grid3x3, BarChart3, Timer } from "lucide-react";
+import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock, Flag, Grid3x3, BarChart3, Timer, History, TrendingUp } from "lucide-react";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
 
@@ -54,6 +54,9 @@ export default function MockExam() {
   
   // Paper selection
   const [selectedPaper, setSelectedPaper] = useState<string>("");
+  const [examLength, setExamLength] = useState<"quick" | "half" | "full">("full");
+  const [showHistory, setShowHistory] = useState(false);
+  const [examHistory, setExamHistory] = useState<any[]>([]);
 
   // Exam state
   const [examStarted, setExamStarted] = useState(false);
@@ -63,6 +66,8 @@ export default function MockExam() {
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(new Set());
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
+  const [initialTime, setInitialTime] = useState(7200);
+  const [totalQuestions, setTotalQuestions] = useState(50);
   const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
   const [timePerQuestion, setTimePerQuestion] = useState<number[]>([]);
   const [examSubmitted, setExamSubmitted] = useState(false);
@@ -74,12 +79,25 @@ export default function MockExam() {
   
   const questionRefs = useRef<(HTMLDivElement | null)[]>([]);
   
-  // Define sections (like real ACCA papers)
-  const sections: Section[] = [
-    { name: "Section A", questionRange: [0, 14] }, // 15 questions
-    { name: "Section B", questionRange: [15, 34] }, // 20 questions
-    { name: "Section C", questionRange: [35, 49] }, // 15 questions
-  ];
+  // Define sections (like real ACCA papers) - dynamically calculated based on total questions
+  const getSections = (): Section[] => {
+    if (totalQuestions === 15) {
+      return [{ name: "Section A", questionRange: [0, 14] }];
+    } else if (totalQuestions === 25) {
+      return [
+        { name: "Section A", questionRange: [0, 11] },
+        { name: "Section B", questionRange: [12, 24] }
+      ];
+    } else {
+      return [
+        { name: "Section A", questionRange: [0, 14] },
+        { name: "Section B", questionRange: [15, 34] },
+        { name: "Section C", questionRange: [35, 49] }
+      ];
+    }
+  };
+  
+  const sections = getSections();
   
   // Initialize selected paper from profile
   useEffect(() => {
@@ -89,6 +107,30 @@ export default function MockExam() {
       setSelectedPaper(papers[0].paper_code);
     }
   }, [profile, papers]);
+
+  // Fetch exam history
+  useEffect(() => {
+    if (user && selectedPaper) {
+      fetchExamHistory();
+    }
+  }, [user, selectedPaper]);
+
+  const fetchExamHistory = async () => {
+    try {
+      const { data, error } = await supabase
+        .from("sb_study_sessions")
+        .select("*")
+        .eq("user_id", user?.id)
+        .eq("session_type", "mock_exam")
+        .order("created_at", { ascending: false })
+        .limit(10);
+
+      if (error) throw error;
+      setExamHistory(data || []);
+    } catch (error) {
+      console.error("Error fetching exam history:", error);
+    }
+  };
 
   // Keyboard navigation for review mode
   useEffect(() => {
@@ -157,13 +199,23 @@ export default function MockExam() {
       return;
     }
 
+    // Determine exam parameters based on length
+    const examConfig = {
+      quick: { questions: 15, minutes: 36 },
+      half: { questions: 25, minutes: 60 },
+      full: { questions: 50, minutes: 120 }
+    };
+    
+    const { questions: numQuestions, minutes } = examConfig[examLength];
+    const timeInSeconds = minutes * 60;
+
     try {
-      // Use content-batch to fetch 50 MCQ questions
+      // Use content-batch to fetch questions
       const { data, error } = await supabase.functions.invoke("content-batch", {
         body: { 
           paper: selectedPaper, 
           type: "mcq",
-          size: 50 
+          size: numQuestions
         },
       });
 
@@ -174,15 +226,18 @@ export default function MockExam() {
         ...q,
         options: Array.isArray(q.options) ? q.options as string[] : []
       })));
-      setAnswers(new Array(50).fill(null));
-      setTimePerQuestion(new Array(50).fill(0));
+      setAnswers(new Array(numQuestions).fill(null));
+      setTimePerQuestion(new Array(numQuestions).fill(0));
+      setTotalQuestions(numQuestions);
+      setTimeRemaining(timeInSeconds);
+      setInitialTime(timeInSeconds);
       setExamStarted(true);
       setQuestionStartTime(Date.now());
       
       // Increment usage counter
       await incrementMockUsage();
       
-      toast.success("Mock exam started! Good luck!");
+      toast.success(`Mock exam started! ${numQuestions} questions, ${minutes} minutes. Good luck!`);
     } catch (error) {
       console.error("Error starting exam:", error);
       toast.error("Failed to start exam");
@@ -282,8 +337,8 @@ export default function MockExam() {
         });
       });
 
-      const accuracy = (correctCount / 50) * 100;
-      const totalTime = 7200 - timeRemaining;
+      const accuracy = (correctCount / totalQuestions) * 100;
+      const totalTime = initialTime - timeRemaining;
 
       // Log session via edge function
       if (user) {
@@ -313,7 +368,7 @@ export default function MockExam() {
 
       setResults({
         correct: correctCount,
-        total: 50,
+        total: totalQuestions,
         accuracy: accuracy.toFixed(1),
         passed: accuracy >= 50,
         sectionResults,
@@ -321,10 +376,14 @@ export default function MockExam() {
         timePerQuestion: finalTimes,
         flaggedCount: flaggedQuestions.size,
         unansweredCount: answers.filter(a => a === null).length,
+        examLength: totalQuestions === 15 ? "Quick" : totalQuestions === 25 ? "Half" : "Full",
       });
       setExamSubmitted(true);
       
-      toast.success(`Exam completed! Score: ${correctCount}/50 (${accuracy.toFixed(1)}%)`);
+      toast.success(`Exam completed! Score: ${correctCount}/${totalQuestions} (${accuracy.toFixed(1)}%)`);
+      
+      // Refresh history
+      fetchExamHistory();
     } catch (error) {
       console.error("Error submitting exam:", error);
       toast.error("Failed to submit exam");
@@ -338,59 +397,170 @@ export default function MockExam() {
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Clock className="w-6 h-6" />
-                  ACCA {selectedPaper} Mock Exam
-                </CardTitle>
-                <CardDescription>
-                  Simulated exam under real ACCA conditions
-                </CardDescription>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Clock className="w-6 h-6" />
+                      ACCA {selectedPaper} Mock Exam
+                    </CardTitle>
+                    <CardDescription>
+                      Simulated exam under real ACCA conditions
+                    </CardDescription>
+                  </div>
+                  <Button
+                    variant="outline"
+                    size="sm"
+                    onClick={() => setShowHistory(!showHistory)}
+                  >
+                    <History className="w-4 h-4 mr-2" />
+                    {showHistory ? "New Exam" : "View History"}
+                  </Button>
+                </div>
               </CardHeader>
               <CardContent className="space-y-6">
-                {/* Paper Selection */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Select Paper</label>
-                  <Select value={selectedPaper} onValueChange={setSelectedPaper}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Choose paper..." />
-                    </SelectTrigger>
-                    <SelectContent>
-                      {papers.map((paper) => (
-                        <SelectItem key={paper.id} value={paper.paper_code}>
-                          {paper.paper_code} - {paper.title}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                </div>
+                {showHistory ? (
+                  /* Exam History View */
+                  <div className="space-y-4">
+                    <div className="flex items-center gap-2 text-lg font-semibold">
+                      <History className="w-5 h-5" />
+                      Exam History
+                    </div>
+                    
+                    {examHistory.length === 0 ? (
+                      <div className="text-center py-12 text-muted-foreground">
+                        <History className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>No exam attempts yet</p>
+                        <p className="text-sm mt-2">Complete your first mock exam to see your history</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-3">
+                        {examHistory.map((exam: any, idx: number) => {
+                          const accuracy = exam.total_questions > 0 
+                            ? ((exam.correct_answers / exam.total_questions) * 100).toFixed(1)
+                            : 0;
+                          const passed = parseFloat(accuracy as string) >= 50;
+                          
+                          return (
+                            <Card key={exam.id} className="p-4">
+                              <div className="flex items-center justify-between">
+                                <div className="flex-1">
+                                  <div className="flex items-center gap-3">
+                                    <Badge variant={passed ? "default" : "destructive"}>
+                                      {passed ? "✓ PASSED" : "✗ FAILED"}
+                                    </Badge>
+                                    <span className="font-semibold text-lg">
+                                      {exam.correct_answers}/{exam.total_questions} ({accuracy}%)
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-4 text-sm text-muted-foreground mt-2">
+                                    <span>{new Date(exam.created_at).toLocaleDateString()}</span>
+                                    <span>{new Date(exam.created_at).toLocaleTimeString()}</span>
+                                    <span className="capitalize">
+                                      {exam.total_questions === 15 ? "Quick" : exam.total_questions === 25 ? "Half" : "Full"}
+                                    </span>
+                                  </div>
+                                </div>
+                                {idx === 0 && (
+                                  <TrendingUp className="w-5 h-5 text-green-600" />
+                                )}
+                              </div>
+                            </Card>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  /* New Exam Setup */
+                  <>
+                    {/* Paper Selection */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Select Paper</label>
+                      <Select value={selectedPaper} onValueChange={setSelectedPaper}>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Choose paper..." />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {papers.map((paper) => (
+                            <SelectItem key={paper.id} value={paper.paper_code}>
+                              {paper.paper_code} - {paper.title}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
 
-                <Alert>
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    <strong>Exam Rules:</strong>
-                    <ul className="list-disc ml-6 mt-2 space-y-1">
-                      <li>50 multiple choice questions</li>
-                      <li>2 hours time limit (120 minutes)</li>
-                      <li>Once started, the timer cannot be paused</li>
-                      <li>You can navigate between questions freely</li>
-                      <li>Exam will auto-submit when time expires</li>
-                      <li>Pass mark: 50% (25/50 questions)</li>
-                      <li>All questions carry equal marks</li>
-                    </ul>
-                  </AlertDescription>
-                </Alert>
+                    {/* Exam Length Selection */}
+                    <div className="space-y-2">
+                      <label className="text-sm font-medium">Exam Length</label>
+                      <div className="grid grid-cols-3 gap-3">
+                        <button
+                          onClick={() => setExamLength("quick")}
+                          className={`p-4 rounded-lg border-2 transition-all ${
+                            examLength === "quick"
+                              ? "border-primary bg-primary/10"
+                              : "border-muted hover:border-muted-foreground/50"
+                          }`}
+                        >
+                          <div className="font-semibold">Quick</div>
+                          <div className="text-sm text-muted-foreground">15 Questions</div>
+                          <div className="text-xs text-muted-foreground">36 minutes</div>
+                        </button>
+                        <button
+                          onClick={() => setExamLength("half")}
+                          className={`p-4 rounded-lg border-2 transition-all ${
+                            examLength === "half"
+                              ? "border-primary bg-primary/10"
+                              : "border-muted hover:border-muted-foreground/50"
+                          }`}
+                        >
+                          <div className="font-semibold">Half</div>
+                          <div className="text-sm text-muted-foreground">25 Questions</div>
+                          <div className="text-xs text-muted-foreground">60 minutes</div>
+                        </button>
+                        <button
+                          onClick={() => setExamLength("full")}
+                          className={`p-4 rounded-lg border-2 transition-all ${
+                            examLength === "full"
+                              ? "border-primary bg-primary/10"
+                              : "border-muted hover:border-muted-foreground/50"
+                          }`}
+                        >
+                          <div className="font-semibold">Full</div>
+                          <div className="text-sm text-muted-foreground">50 Questions</div>
+                          <div className="text-xs text-muted-foreground">120 minutes</div>
+                        </button>
+                      </div>
+                    </div>
 
-                <div className="bg-muted p-4 rounded-lg space-y-2">
-                  <h3 className="font-semibold">What to expect:</h3>
-                  <ul className="list-disc ml-6 space-y-1 text-sm">
-                    <li>Questions cover all {selectedPaper} units</li>
-                    <li>Mixed difficulty levels</li>
-                    <li>Realistic exam format</li>
-                    <li>Detailed results after submission</li>
-                  </ul>
-                </div>
+                    <Alert>
+                      <AlertCircle className="h-4 w-4" />
+                      <AlertDescription>
+                        <strong>Exam Rules:</strong>
+                        <ul className="list-disc ml-6 mt-2 space-y-1">
+                          <li>Multiple choice questions</li>
+                          <li>Once started, the timer cannot be paused</li>
+                          <li>You can navigate between questions freely</li>
+                          <li>Exam will auto-submit when time expires</li>
+                          <li>Pass mark: 50%</li>
+                          <li>All questions carry equal marks</li>
+                        </ul>
+                      </AlertDescription>
+                    </Alert>
 
-                {!usageLoading && (
+                    <div className="bg-muted p-4 rounded-lg space-y-2">
+                      <h3 className="font-semibold">What to expect:</h3>
+                      <ul className="list-disc ml-6 space-y-1 text-sm">
+                        <li>Questions cover all {selectedPaper} units</li>
+                        <li>Mixed difficulty levels</li>
+                        <li>Realistic exam format</li>
+                        <li>Detailed results after submission</li>
+                      </ul>
+                    </div>
+                  </>
+                )}
+
+                {!showHistory && !usageLoading && (
                   <>
                     {remainingMocks === 0 && planType === "pro" && (
                       <UpgradeNudge
@@ -424,32 +594,36 @@ export default function MockExam() {
                   </>
                 )}
 
-                <div className="flex items-center space-x-2">
-                  <input
-                    type="checkbox"
-                    id="rules"
-                    checked={agreedToRules}
-                    onChange={(e) => setAgreedToRules(e.target.checked)}
-                    className="w-4 h-4"
-                  />
-                  <Label htmlFor="rules">
-                    I understand the exam rules and am ready to begin
-                  </Label>
-                </div>
+                {!showHistory && (
+                  <>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        id="rules"
+                        checked={agreedToRules}
+                        onChange={(e) => setAgreedToRules(e.target.checked)}
+                        className="w-4 h-4"
+                      />
+                      <Label htmlFor="rules">
+                        I understand the exam rules and am ready to begin
+                      </Label>
+                    </div>
 
-                <Button
-                  onClick={startExam}
-                  disabled={!agreedToRules || !canUseMockExam || !selectedPaper}
-                  size="lg"
-                  className="w-full"
-                >
-                  {canUseMockExam ? "Start Mock Exam" : (
-                    <span className="flex items-center gap-2">
-                      <Lock className="w-4 h-4" />
-                      Limit Reached - Upgrade Required
-                    </span>
-                  )}
-                </Button>
+                    <Button
+                      onClick={startExam}
+                      disabled={!agreedToRules || !canUseMockExam || !selectedPaper}
+                      size="lg"
+                      className="w-full"
+                    >
+                      {canUseMockExam ? "Start Mock Exam" : (
+                        <span className="flex items-center gap-2">
+                          <Lock className="w-4 h-4" />
+                          Limit Reached - Upgrade Required
+                        </span>
+                      )}
+                    </Button>
+                  </>
+                )}
               </CardContent>
             </Card>
           </div>
@@ -478,7 +652,7 @@ export default function MockExam() {
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="w-6 h-6" />
-                  Exam Results - {selectedPaper} Mock
+                  Exam Results - {selectedPaper} Mock ({results.examLength})
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-8">
@@ -565,10 +739,12 @@ export default function MockExam() {
                         <CardDescription>Average per Question</CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-2xl font-bold">
-                          {formatTime(Math.round(results.totalTime / 50))}
-                        </div>
-                        <p className="text-xs text-muted-foreground">recommended: 2m 24s</p>
+                          <div className="text-2xl font-bold">
+                            {formatTime(Math.round(results.totalTime / totalQuestions))}
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            recommended: {totalQuestions === 15 ? "2m 24s" : totalQuestions === 25 ? "2m 24s" : "2m 24s"}
+                          </p>
                       </CardContent>
                     </Card>
                     <Card>
@@ -576,7 +752,7 @@ export default function MockExam() {
                         <CardDescription>Time Remaining</CardDescription>
                       </CardHeader>
                       <CardContent>
-                        <div className="text-2xl font-bold">{formatTime(7200 - results.totalTime)}</div>
+                        <div className="text-2xl font-bold">{formatTime(initialTime - results.totalTime)}</div>
                         <p className="text-xs text-muted-foreground">unused time</p>
                       </CardContent>
                     </Card>
@@ -828,7 +1004,7 @@ export default function MockExam() {
   }
 
   const answeredCount = answers.filter((a) => a !== null).length;
-  const progressPercent = (answeredCount / 50) * 100;
+  const progressPercent = (answeredCount / totalQuestions) * 100;
 
   return (
     <>
@@ -857,7 +1033,7 @@ export default function MockExam() {
                 {showNavigator ? 'Hide' : 'Show'} Navigator
               </Button>
               <span className="text-sm text-muted-foreground">
-                {answeredCount}/50 Answered
+                {answeredCount}/{totalQuestions} Answered
               </span>
               <Button onClick={handleSubmitExam} variant="default">
                 Submit Exam
@@ -952,7 +1128,7 @@ export default function MockExam() {
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <CardTitle className="text-lg flex items-center gap-2">
-                          Question {idx + 1} of 50
+                          Question {idx + 1} of {totalQuestions}
                           {sections.find(s => idx >= s.questionRange[0] && idx <= s.questionRange[1]) && (
                             <Badge variant="outline" className="text-xs">
                               {sections.find(s => idx >= s.questionRange[0] && idx <= s.questionRange[1])?.name}
@@ -1002,9 +1178,9 @@ export default function MockExam() {
               <Button onClick={handleSubmitExam} size="lg" className="w-full max-w-md">
                 Submit Exam
               </Button>
-              <p className="text-sm text-muted-foreground mt-4">
-                Make sure you've answered all questions. Flagged: {flaggedQuestions.size}
-              </p>
+                <p className="text-sm text-muted-foreground mt-4">
+                  Make sure you've answered all questions. Flagged: {flaggedQuestions.size}
+                </p>
             </Card>
           </div>
         </div>
