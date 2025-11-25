@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserProfile } from "@/hooks/useUserProfile";
+import { usePapers } from "@/hooks/usePapers";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -9,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
 import { Brain, CheckCircle2, XCircle, ArrowRight, Calendar, TrendingUp, Settings } from "lucide-react";
@@ -28,10 +31,15 @@ interface Question {
 
 export default function SpacedRepetition() {
   const { user } = useAuth();
+  const { profile } = useUserProfile();
+  const { papers } = usePapers();
   const navigate = useNavigate();
   const { recordReview, getDueReviews, getReviewStats } = useSpacedRepetition();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { hasFeature } = useFeatureAccess();
+
+  // Paper selection
+  const [selectedPaper, setSelectedPaper] = useState<string>("all");
 
   // Stats state
   const [stats, setStats] = useState<any>(null);
@@ -46,6 +54,13 @@ export default function SpacedRepetition() {
   const [showFeedback, setShowFeedback] = useState(false);
   const [answers, setAnswers] = useState<Array<{ questionId: string; correct: boolean }>>([]);
   const [sessionComplete, setSessionComplete] = useState(false);
+  
+  // Initialize selected paper from profile
+  useEffect(() => {
+    if (profile?.selected_paper && selectedPaper === "all") {
+      setSelectedPaper(profile.selected_paper);
+    }
+  }, [profile]);
 
   useEffect(() => {
     loadStats();
@@ -66,11 +81,17 @@ export default function SpacedRepetition() {
 
     try {
       // Fetch questions by IDs
-      const { data, error } = await supabase
+      let query = supabase
         .from("sb_questions")
         .select("*")
-        .in("id", dueQuestionIds)
-        .limit(20); // Review max 20 at a time
+        .in("id", dueQuestionIds);
+      
+      // Filter by paper if not "all"
+      if (selectedPaper !== "all") {
+        query = query.eq("paper", selectedPaper);
+      }
+      
+      const { data, error } = await query.limit(20); // Review max 20 at a time
 
       if (error) throw error;
 
@@ -300,11 +321,29 @@ export default function SpacedRepetition() {
                   Master questions using scientifically-proven spaced repetition
                 </CardDescription>
               </CardHeader>
-              <CardContent>
-                <p className="text-sm text-muted-foreground mb-4">
+              <CardContent className="space-y-4">
+                <p className="text-sm text-muted-foreground">
                   Questions you've answered incorrectly are scheduled for review at optimal intervals
                   to maximize long-term retention. The system adapts to your performance.
                 </p>
+                
+                {/* Paper Selection */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">Filter by Paper</label>
+                  <Select value={selectedPaper} onValueChange={setSelectedPaper}>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">All Papers</SelectItem>
+                      {papers.map((paper) => (
+                        <SelectItem key={paper.id} value={paper.paper_code}>
+                          {paper.paper_code} - {paper.title}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
               </CardContent>
             </Card>
 
