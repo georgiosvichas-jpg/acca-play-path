@@ -231,7 +231,7 @@ export default function PracticeQuiz() {
         await supabase.functions.invoke("sessions-log", {
           body: {
             userId: user.id,
-            session_type: "practice_quiz",
+            session_type: "quick_drill",
             total_questions: totalQuestions,
             correct_answers: correctAnswers,
             raw_log: rawLog
