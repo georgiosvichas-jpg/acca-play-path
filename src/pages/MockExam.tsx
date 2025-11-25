@@ -68,6 +68,9 @@ export default function MockExam() {
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [results, setResults] = useState<any>(null);
   const [showNavigator, setShowNavigator] = useState(true);
+  const [reviewMode, setReviewMode] = useState(false);
+  const [reviewQuestionIndex, setReviewQuestionIndex] = useState(0);
+  const [showIncorrectOnly, setShowIncorrectOnly] = useState(false);
   
   const questionRefs = useRef<(HTMLDivElement | null)[]>([]);
   
@@ -86,6 +89,35 @@ export default function MockExam() {
       setSelectedPaper(papers[0].paper_code);
     }
   }, [profile, papers]);
+
+  // Keyboard navigation for review mode
+  useEffect(() => {
+    if (!reviewMode) return;
+
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === "ArrowLeft") {
+        if (reviewQuestionIndex > 0) {
+          setReviewQuestionIndex(reviewQuestionIndex - 1);
+        }
+      } else if (e.key === "ArrowRight") {
+        const incorrectQuestions = questions
+          .map((q, idx) => ({ question: q, index: idx }))
+          .filter(({ index }) => answers[index] !== questions[index].correct_option_index);
+        const questionsToReview = showIncorrectOnly ? incorrectQuestions : questions.map((q, idx) => ({ question: q, index: idx }));
+        
+        if (reviewQuestionIndex < questionsToReview.length - 1) {
+          setReviewQuestionIndex(reviewQuestionIndex + 1);
+        }
+      } else if (e.key === "Escape") {
+        setReviewMode(false);
+        setReviewQuestionIndex(0);
+        setShowIncorrectOnly(false);
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [reviewMode, reviewQuestionIndex, showIncorrectOnly, questions, answers]);
 
   // Timer effect
   useEffect(() => {
@@ -554,7 +586,11 @@ export default function MockExam() {
                 {/* Action Buttons */}
                 <Separator />
                 <div className="space-y-2">
-                  <Button onClick={() => navigate("/question-analytics")} className="w-full">
+                  <Button onClick={() => setReviewMode(true)} className="w-full" size="lg">
+                    <Flag className="w-4 h-4 mr-2" />
+                    Review Answers with Explanations
+                  </Button>
+                  <Button onClick={() => navigate("/question-analytics")} variant="outline" className="w-full">
                     View Detailed Question Analytics
                   </Button>
                   <Button onClick={() => navigate("/practice-quiz")} variant="outline" className="w-full">
@@ -577,6 +613,217 @@ export default function MockExam() {
           </div>
         </div>
       </>
+    );
+  }
+
+  // Review Mode
+  if (examSubmitted && results && reviewMode) {
+    const incorrectQuestions = questions
+      .map((q, idx) => ({ question: q, index: idx }))
+      .filter(({ index }) => answers[index] !== questions[index].correct_option_index);
+    
+    const questionsToReview = showIncorrectOnly ? incorrectQuestions : questions.map((q, idx) => ({ question: q, index: idx }));
+    
+    if (questionsToReview.length === 0) {
+      return (
+        <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
+            <Card>
+              <CardHeader>
+                <CardTitle>Review Mode</CardTitle>
+              </CardHeader>
+              <CardContent className="text-center space-y-4">
+                <CheckCircle2 className="w-16 h-16 mx-auto text-green-600" />
+                <p className="text-lg">Perfect! You answered all questions correctly!</p>
+                <Button onClick={() => setReviewMode(false)}>Back to Results</Button>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      );
+    }
+    
+    const currentReviewItem = questionsToReview[reviewQuestionIndex];
+    const currentQ = currentReviewItem.question;
+    const currentIdx = currentReviewItem.index;
+    const userAnswer = answers[currentIdx];
+    const correctAnswer = currentQ.correct_option_index;
+    const isCorrect = userAnswer === correctAnswer;
+    
+    const goToPrevious = () => {
+      if (reviewQuestionIndex > 0) {
+        setReviewQuestionIndex(reviewQuestionIndex - 1);
+      }
+    };
+    
+    const goToNext = () => {
+      if (reviewQuestionIndex < questionsToReview.length - 1) {
+        setReviewQuestionIndex(reviewQuestionIndex + 1);
+      }
+    };
+    
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+        {/* Header */}
+        <div className="fixed top-16 left-0 right-0 bg-background border-b z-40">
+          <div className="container mx-auto px-4 py-3 flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  setReviewMode(false);
+                  setReviewQuestionIndex(0);
+                  setShowIncorrectOnly(false);
+                }}
+              >
+                ← Back to Results
+              </Button>
+              <span className="font-semibold">Review Mode</span>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="incorrectOnly"
+                  checked={showIncorrectOnly}
+                  onChange={(e) => {
+                    setShowIncorrectOnly(e.target.checked);
+                    setReviewQuestionIndex(0);
+                  }}
+                  className="w-4 h-4"
+                />
+                <Label htmlFor="incorrectOnly" className="text-sm cursor-pointer">
+                  Show incorrect only ({incorrectQuestions.length})
+                </Label>
+              </div>
+              <span className="text-sm text-muted-foreground">
+                {reviewQuestionIndex + 1} / {questionsToReview.length}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <div className="container mx-auto px-4 py-8 mt-16 max-w-4xl">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between">
+                <div>
+                  <CardTitle className="flex items-center gap-2">
+                    Question {currentIdx + 1} of 50
+                    {isCorrect ? (
+                      <CheckCircle2 className="w-5 h-5 text-green-600" />
+                    ) : (
+                      <XCircle className="w-5 h-5 text-red-600" />
+                    )}
+                  </CardTitle>
+                  <CardDescription className="text-base mt-2">{currentQ.question}</CardDescription>
+                </div>
+                <Badge variant={isCorrect ? "default" : "destructive"} className="ml-4">
+                  {isCorrect ? "Correct" : "Incorrect"}
+                </Badge>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {/* Answer Options */}
+              <div className="space-y-3">
+                {currentQ.options.map((option, optIdx) => {
+                  const isUserAnswer = userAnswer === optIdx;
+                  const isCorrectOption = correctAnswer === optIdx;
+                  
+                  let optionClass = "p-4 rounded-lg border-2 transition-all";
+                  
+                  if (isCorrectOption) {
+                    optionClass += " bg-green-50 border-green-500 text-green-900";
+                  } else if (isUserAnswer && !isCorrect) {
+                    optionClass += " bg-red-50 border-red-500 text-red-900";
+                  } else {
+                    optionClass += " bg-muted/30 border-muted";
+                  }
+                  
+                  return (
+                    <div key={optIdx} className={optionClass}>
+                      <div className="flex items-start gap-3">
+                        <div className="flex items-center gap-2 min-w-fit">
+                          {isCorrectOption && (
+                            <CheckCircle2 className="w-5 h-5 text-green-600" />
+                          )}
+                          {isUserAnswer && !isCorrect && (
+                            <XCircle className="w-5 h-5 text-red-600" />
+                          )}
+                          <span className="font-semibold">
+                            {String.fromCharCode(65 + optIdx)}.
+                          </span>
+                        </div>
+                        <div className="flex-1">
+                          <p>{option}</p>
+                          {isCorrectOption && (
+                            <p className="text-sm font-medium text-green-700 mt-1">
+                              ✓ Correct Answer
+                            </p>
+                          )}
+                          {isUserAnswer && !isCorrect && (
+                            <p className="text-sm font-medium text-red-700 mt-1">
+                              Your Answer
+                            </p>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+
+              {/* Explanation */}
+              {currentQ.explanation && (
+                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+                  <h4 className="font-semibold text-blue-900 mb-2">Explanation</h4>
+                  <p className="text-blue-800">{currentQ.explanation}</p>
+                </div>
+              )}
+
+              {!currentQ.explanation && (
+                <div className="bg-muted/50 p-4 rounded">
+                  <p className="text-muted-foreground text-sm">
+                    No explanation available for this question.
+                  </p>
+                </div>
+              )}
+
+              {/* Metadata */}
+              <div className="flex items-center gap-4 text-sm text-muted-foreground pt-4 border-t">
+                {currentQ.unit_code && (
+                  <span>Unit: {currentQ.unit_code}</span>
+                )}
+                {currentQ.difficulty && (
+                  <Badge variant="outline">{currentQ.difficulty}</Badge>
+                )}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Navigation */}
+          <div className="flex items-center justify-between mt-6">
+            <Button
+              onClick={goToPrevious}
+              disabled={reviewQuestionIndex === 0}
+              variant="outline"
+            >
+              ← Previous Question
+            </Button>
+            <span className="text-sm text-muted-foreground">
+              Question {reviewQuestionIndex + 1} of {questionsToReview.length}
+            </span>
+            <Button
+              onClick={goToNext}
+              disabled={reviewQuestionIndex === questionsToReview.length - 1}
+              variant="outline"
+            >
+              Next Question →
+            </Button>
+          </div>
+        </div>
+      </div>
     );
   }
 
