@@ -8,6 +8,7 @@ import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import FlashcardFlipCard from "./FlashcardFlipCard";
+import FormulaFlashcard from "./FormulaFlashcard";
 import Footer from "./Footer";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
@@ -120,7 +121,7 @@ export default function FlashcardsContentNew() {
     if (user) {
       fetchTopicMastery();
     }
-  }, [flashcards, selectedPaper, selectedUnit, selectedDifficulty, user]);
+  }, [flashcards, selectedPaper, selectedUnit, selectedDifficulty, shuffleMode, user]);
 
   const fetchFlashcards = async () => {
     setLoading(true);
@@ -159,6 +160,11 @@ export default function FlashcardsContentNew() {
 
     if (selectedDifficulty !== "all") {
       filtered = filtered.filter((f) => f.difficulty === selectedDifficulty);
+    }
+
+    // Apply shuffle if enabled
+    if (shuffleMode) {
+      filtered = [...filtered].sort(() => Math.random() - 0.5);
     }
 
     setFilteredCards(filtered);
@@ -565,17 +571,28 @@ export default function FlashcardsContentNew() {
             </CardContent>
           </Card>
 
-          {/* Flashcard */}
-          <FlashcardFlipCard
-            flashcard={filteredCards[currentIndex]}
-            onNext={handleNext}
-            onPrevious={handlePrevious}
-            onRate={handleRate}
-            hasNext={currentIndex < filteredCards.length - 1}
-            hasPrevious={currentIndex > 0}
-            currentIndex={currentIndex}
-            totalCards={filteredCards.length}
-          />
+          {/* Flashcard - check if formula type */}
+          {filteredCards[currentIndex].source_type === "formula" ? (
+            <FormulaFlashcard
+              flashcard={filteredCards[currentIndex]}
+              onNext={handleNext}
+              onPrevious={handlePrevious}
+              onRate={handleRate}
+              currentIndex={currentIndex}
+              totalCards={filteredCards.length}
+            />
+          ) : (
+            <FlashcardFlipCard
+              flashcard={filteredCards[currentIndex]}
+              onNext={handleNext}
+              onPrevious={handlePrevious}
+              onRate={handleRate}
+              hasNext={currentIndex < filteredCards.length - 1}
+              hasPrevious={currentIndex > 0}
+              currentIndex={currentIndex}
+              totalCards={filteredCards.length}
+            />
+          )}
         </div>
       </div>
       <Footer />

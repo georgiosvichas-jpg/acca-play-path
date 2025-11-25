@@ -8,6 +8,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2, Upload, CheckCircle, AlertCircle, Download } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import FormulaCardImporter from "@/components/FormulaCardImporter";
 
 interface ImportSummary {
   total: number;
@@ -1056,6 +1057,9 @@ export default function AdminContentImport() {
           )}
         </CardContent>
       </Card>
+
+      {/* Formula Card Importer */}
+      <FormulaCardImporter />
     </div>
   );
 }
