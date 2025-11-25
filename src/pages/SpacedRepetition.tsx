@@ -14,10 +14,10 @@ import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { toast } from "sonner";
-import { Brain, CheckCircle2, XCircle, ArrowRight, Calendar, TrendingUp, Settings } from "lucide-react";
-import { UpgradeNudge } from "@/components/UpgradeNudge";
+import { Brain, CheckCircle2, XCircle, ArrowRight, Calendar, TrendingUp, Settings, Lock } from "lucide-react";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { AdvancedSpacedRepetition } from "@/components/AdvancedSpacedRepetition";
+import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 
 interface Question {
   id: string;
@@ -36,7 +36,11 @@ export default function SpacedRepetition() {
   const navigate = useNavigate();
   const { recordReview, getDueReviews, getReviewStats } = useSpacedRepetition();
   const { checkAndAwardBadges } = useBadgeChecker();
-  const { hasFeature } = useFeatureAccess();
+  const { hasFeature, isLoading: featureLoading } = useFeatureAccess();
+
+  // Feature access state
+  const canAccessSRS = hasFeature("spacedRepetition");
+  const [showPaywall, setShowPaywall] = useState(false);
 
   // Paper selection
   const [selectedPaper, setSelectedPaper] = useState<string>("all");
@@ -218,6 +222,75 @@ export default function SpacedRepetition() {
     );
   }
 
+  // Show locked preview for free users
+  if (!featureLoading && !canAccessSRS) {
+    return (
+      <>
+        <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+          <div className="container mx-auto px-4 py-8 max-w-4xl">
+            <div className="space-y-6">
+              <Card className="relative overflow-hidden">
+                <div className="absolute inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-10">
+                  <div className="text-center space-y-4 p-8 max-w-md">
+                    <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
+                      <Lock className="w-8 h-8 text-primary" />
+                    </div>
+                    <h3 className="text-2xl font-bold">Spaced Repetition</h3>
+                    <p className="text-muted-foreground">
+                      Boost retention with scientifically-proven review scheduling. Master questions at optimal intervals for long-term memory.
+                    </p>
+                    <Button 
+                      onClick={() => setShowPaywall(true)}
+                      size="lg"
+                      className="w-full"
+                    >
+                      Unlock with Pro
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Blurred preview content */}
+                <CardHeader>
+                  <CardTitle className="flex items-center gap-2">
+                    <Brain className="w-6 h-6" />
+                    Spaced Repetition Review
+                  </CardTitle>
+                  <CardDescription>
+                    Master questions using scientifically-proven spaced repetition
+                  </CardDescription>
+                </CardHeader>
+                <CardContent>
+                  <div className="space-y-4 opacity-40">
+                    <div className="grid md:grid-cols-3 gap-4">
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-3xl font-bold">12</div>
+                        <p className="text-sm text-muted-foreground">Due for Review</p>
+                      </div>
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-3xl font-bold">48</div>
+                        <p className="text-sm text-muted-foreground">Total Reviewed</p>
+                      </div>
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-3xl font-bold">87%</div>
+                        <p className="text-sm text-muted-foreground">Avg Accuracy</p>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
+
+        <FeaturePaywallModal 
+          open={showPaywall} 
+          onOpenChange={setShowPaywall}
+          paywallType="spaced-repetition"
+        />
+      </>
+    );
+  }
+
   if (reviewStarted && questions.length > 0) {
     const currentQuestion = questions[currentIndex];
     const progressPercent = ((currentIndex + 1) / questions.length) * 100;
@@ -346,13 +419,6 @@ export default function SpacedRepetition() {
                 </div>
               </CardContent>
             </Card>
-
-            <UpgradeNudge
-              type="srs-section"
-              message="Spaced repetition improves memory retention – activate with Pro."
-              tier="pro"
-              variant="inline"
-            />
 
             {/* Stats */}
             {stats && (
