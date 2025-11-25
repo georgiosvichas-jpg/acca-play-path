@@ -10,9 +10,9 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar, Target, Loader2, CheckCircle2, Clock, BookOpen, AlertCircle, Sparkles, Lock } from "lucide-react";
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { Calendar, Target, Loader2, CheckCircle2, Clock, AlertCircle, Sparkles, Lock, ChevronDown, ChevronRight } from "lucide-react";
 import { toast } from "sonner";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 
@@ -265,6 +265,29 @@ export default function StudyPath() {
   }
 
   const progressPercentage = calculateProgress();
+  const [openWeeks, setOpenWeeks] = useState<Set<number>>(new Set([1]));
+
+  const toggleWeek = (weekNumber: number) => {
+    setOpenWeeks(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(weekNumber)) {
+        newSet.delete(weekNumber);
+      } else {
+        newSet.add(weekNumber);
+      }
+      return newSet;
+    });
+  };
+
+  const getWeekProgress = (week: Week) => {
+    const weekTasks = week.dailyTasks.reduce((sum, day) => sum + day.tasks.length, 0);
+    const completedTasks = week.dailyTasks.reduce((sum, day, dayIdx) => 
+      sum + day.tasks.filter((_, taskIdx) => 
+        progress[`w${week.weekNumber}-d${dayIdx}-t${taskIdx}`]
+      ).length, 0
+    );
+    return weekTasks > 0 ? (completedTasks / weekTasks) * 100 : 0;
+  };
 
   return (
     <div className="container mx-auto p-6 space-y-6">
@@ -294,118 +317,185 @@ export default function StudyPath() {
               </div>
               <span className="text-2xl font-bold">{progressPercentage.toFixed(0)}%</span>
             </div>
-            <Progress value={progressPercentage} />
+            <Progress value={progressPercentage} className="mb-2" />
+            <p className="text-xs text-muted-foreground text-center">Overall Progress</p>
           </CardContent>
         </Card>
       )}
 
-      <Tabs defaultValue="week-1" className="space-y-6">
-        <TabsList className="flex-wrap h-auto">
-          {studyPath.weeks.map((week) => (
-            <TabsTrigger key={week.weekNumber} value={`week-${week.weekNumber}`}>
-              Week {week.weekNumber}
-            </TabsTrigger>
-          ))}
-          <TabsTrigger value="tips">
-            <Target className="h-4 w-4 mr-2" />
-            Tips
-          </TabsTrigger>
-        </TabsList>
+      {/* Study Tips Section */}
+      <Card className="border-primary/20 bg-primary/5">
+        <CardHeader>
+          <div className="flex items-center gap-2">
+            <Target className="h-5 w-5 text-primary" />
+            <CardTitle>Study Tips & Success Strategies</CardTitle>
+          </div>
+          <CardDescription>Expert recommendations for exam success</CardDescription>
+        </CardHeader>
+        <CardContent>
+          <ul className="grid gap-3 md:grid-cols-2">
+            {studyPath.tips.map((tip, idx) => (
+              <li key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-background">
+                <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
+                <span className="text-sm">{tip}</span>
+              </li>
+            ))}
+          </ul>
+        </CardContent>
+      </Card>
 
-        {studyPath.weeks.map((week) => (
-          <TabsContent key={week.weekNumber} value={`week-${week.weekNumber}`} className="space-y-4">
-            <Card>
-              <CardHeader>
-                <div className="flex items-start justify-between">
-                  <div>
-                    <CardTitle>{week.title}</CardTitle>
-                    <CardDescription>Focus: {week.focus}</CardDescription>
-                  </div>
-                  <Badge>Week {week.weekNumber}</Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div>
-                  <h3 className="font-semibold mb-3">Weekly Goals</h3>
-                  <ul className="space-y-2">
-                    {week.goals.map((goal, idx) => (
-                      <li key={idx} className="flex items-start gap-2">
-                        <Target className="h-4 w-4 text-primary mt-1 flex-shrink-0" />
-                        <span className="text-sm">{goal}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-
-                <div className="space-y-4">
-                  <h3 className="font-semibold">Daily Schedule</h3>
-                  {week.dailyTasks.map((day, dayIdx) => {
-                    const dayTasksCompleted = day.tasks.filter((_, taskIdx) => 
-                      progress[`w${week.weekNumber}-d${dayIdx}-t${taskIdx}`]
-                    ).length;
-                    const dayProgress = (dayTasksCompleted / day.tasks.length) * 100;
-
-                    return (
-                      <Card key={dayIdx}>
-                        <CardHeader className="pb-3">
-                          <div className="flex items-center justify-between">
-                            <CardTitle className="text-base">{day.day}</CardTitle>
-                            <div className="flex items-center gap-2">
-                              <Clock className="h-4 w-4 text-muted-foreground" />
-                              <span className="text-sm text-muted-foreground">
-                                {day.estimatedHours}h
-                              </span>
+      {/* Timeline View */}
+      <div className="space-y-4">
+        <h2 className="text-2xl font-semibold flex items-center gap-2">
+          <Calendar className="h-6 w-6" />
+          Study Timeline
+        </h2>
+        
+        <div className="relative space-y-4">
+          {/* Vertical Timeline Line */}
+          <div className="absolute left-6 top-8 bottom-8 w-0.5 bg-border" />
+          
+          {studyPath.weeks.map((week, weekIdx) => {
+            const weekProgress = getWeekProgress(week);
+            const isOpen = openWeeks.has(week.weekNumber);
+            const totalWeekHours = week.dailyTasks.reduce((sum, day) => sum + day.estimatedHours, 0);
+            
+            return (
+              <Collapsible
+                key={week.weekNumber}
+                open={isOpen}
+                onOpenChange={() => toggleWeek(week.weekNumber)}
+              >
+                <Card className={`relative ml-14 ${weekProgress === 100 ? 'border-primary' : ''}`}>
+                  {/* Timeline Dot */}
+                  <div className={`absolute -left-[52px] top-6 w-4 h-4 rounded-full border-4 ${
+                    weekProgress === 100 ? 'bg-primary border-primary' : 'bg-background border-border'
+                  }`} />
+                  
+                  <CollapsibleTrigger asChild>
+                    <CardHeader className="cursor-pointer hover:bg-muted/50 transition-colors">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-2 mb-2">
+                            <Badge variant={weekProgress === 100 ? "default" : "secondary"}>
+                              Week {week.weekNumber}
+                            </Badge>
+                            <span className="text-sm text-muted-foreground">
+                              {totalWeekHours}h total
+                            </span>
+                            {isOpen ? (
+                              <ChevronDown className="h-4 w-4 text-muted-foreground" />
+                            ) : (
+                              <ChevronRight className="h-4 w-4 text-muted-foreground" />
+                            )}
+                          </div>
+                          <CardTitle className="text-xl">{week.title}</CardTitle>
+                          <CardDescription className="mt-1">Focus: {week.focus}</CardDescription>
+                          
+                          <div className="mt-3 space-y-1">
+                            <div className="flex items-center justify-between text-sm">
+                              <span className="text-muted-foreground">Progress</span>
+                              <span className="font-medium">{weekProgress.toFixed(0)}%</span>
                             </div>
+                            <Progress value={weekProgress} className="h-2" />
                           </div>
-                          <Progress value={dayProgress} className="h-1" />
-                        </CardHeader>
-                        <CardContent>
-                          <div className="space-y-3">
-                            {day.tasks.map((task, taskIdx) => {
-                              const taskId = `w${week.weekNumber}-d${dayIdx}-t${taskIdx}`;
-                              return (
-                                <div key={taskIdx} className="flex items-start gap-3">
-                                  <Checkbox 
-                                    checked={progress[taskId] || false}
-                                    onCheckedChange={() => toggleTask(taskId)}
-                                    className="mt-1"
-                                  />
-                                  <span className={`text-sm ${progress[taskId] ? 'line-through text-muted-foreground' : ''}`}>
-                                    {task}
-                                  </span>
-                                </div>
-                              );
-                            })}
-                          </div>
-                        </CardContent>
-                      </Card>
-                    );
-                  })}
-                </div>
-              </CardContent>
-            </Card>
-          </TabsContent>
-        ))}
+                        </div>
+                      </div>
+                    </CardHeader>
+                  </CollapsibleTrigger>
 
-        <TabsContent value="tips">
-          <Card>
-            <CardHeader>
-              <CardTitle>Study Tips & Advice</CardTitle>
-              <CardDescription>Expert recommendations for exam success</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ul className="space-y-3">
-                {studyPath.tips.map((tip, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <CheckCircle2 className="h-5 w-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-sm">{tip}</span>
-                  </li>
-                ))}
-              </ul>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                  <CollapsibleContent>
+                    <CardContent className="pt-0 space-y-6">
+                      {/* Weekly Goals */}
+                      <div className="bg-muted/30 rounded-lg p-4">
+                        <h3 className="font-semibold mb-3 flex items-center gap-2">
+                          <Target className="h-4 w-4 text-primary" />
+                          Weekly Goals
+                        </h3>
+                        <ul className="space-y-2">
+                          {week.goals.map((goal, idx) => (
+                            <li key={idx} className="flex items-start gap-2 text-sm">
+                              <span className="text-primary font-medium">{idx + 1}.</span>
+                              <span>{goal}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Daily Tasks */}
+                      <div className="space-y-3">
+                        <h3 className="font-semibold flex items-center gap-2">
+                          <Clock className="h-4 w-4" />
+                          Daily Schedule
+                        </h3>
+                        {week.dailyTasks.map((day, dayIdx) => {
+                          const dayTasksCompleted = day.tasks.filter((_, taskIdx) => 
+                            progress[`w${week.weekNumber}-d${dayIdx}-t${taskIdx}`]
+                          ).length;
+                          const dayProgress = (dayTasksCompleted / day.tasks.length) * 100;
+
+                          return (
+                            <Card key={dayIdx} className="bg-background">
+                              <CardHeader className="pb-3">
+                                <div className="flex items-center justify-between">
+                                  <CardTitle className="text-base flex items-center gap-2">
+                                    {day.day}
+                                    <Badge variant="outline" className="font-normal">
+                                      {dayTasksCompleted}/{day.tasks.length}
+                                    </Badge>
+                                  </CardTitle>
+                                  <div className="flex items-center gap-2">
+                                    <Clock className="h-4 w-4 text-muted-foreground" />
+                                    <span className="text-sm text-muted-foreground">
+                                      {day.estimatedHours}h
+                                    </span>
+                                  </div>
+                                </div>
+                                {dayProgress > 0 && <Progress value={dayProgress} className="h-1 mt-2" />}
+                              </CardHeader>
+                              <CardContent>
+                                <div className="space-y-3">
+                                  {day.tasks.map((task, taskIdx) => {
+                                    const taskId = `w${week.weekNumber}-d${dayIdx}-t${taskIdx}`;
+                                    const isCompleted = progress[taskId] || false;
+                                    
+                                    return (
+                                      <div 
+                                        key={taskIdx} 
+                                        className={`flex items-start gap-3 p-2 rounded-md hover:bg-muted/50 transition-colors ${
+                                          isCompleted ? 'bg-muted/30' : ''
+                                        }`}
+                                      >
+                                        <Checkbox 
+                                          checked={isCompleted}
+                                          onCheckedChange={() => toggleTask(taskId)}
+                                          className="mt-1"
+                                        />
+                                        <span className={`text-sm flex-1 ${
+                                          isCompleted ? 'line-through text-muted-foreground' : ''
+                                        }`}>
+                                          {task}
+                                        </span>
+                                        {isCompleted && (
+                                          <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-1" />
+                                        )}
+                                      </div>
+                                    );
+                                  })}
+                                </div>
+                              </CardContent>
+                            </Card>
+                          );
+                        })}
+                      </div>
+                    </CardContent>
+                  </CollapsibleContent>
+                </Card>
+              </Collapsible>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
