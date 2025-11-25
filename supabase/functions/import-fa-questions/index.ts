@@ -101,10 +101,13 @@ serve(async (req) => {
     
     // Accept either questions array (chunked) or fileContent string (legacy)
     let parsedData: any;
+    let chunkOffset = 0; // Global offset for external_id generation
     
     if (body.questions) {
       // New format: direct questions array from chunked import
       console.log("Received questions array directly, count:", body.questions.length);
+      chunkOffset = body.chunk_offset || 0; // Accept offset for chunk-based imports
+      console.log("Chunk offset:", chunkOffset);
       parsedData = body.questions;
     } else if (body.fileContent) {
       // Legacy format: fileContent string containing JSON
@@ -158,8 +161,8 @@ serve(async (req) => {
       try {
         // Normalize the question object to handle both formats
         normalized = {
-          // Auto-generate external_id if missing
-          external_id: rawQ.external_id || `FA_Q${String(i + 1).padStart(4, '0')}`,
+          // Auto-generate external_id if missing (use chunk_offset + local index)
+          external_id: rawQ.external_id || `FA_Q${String(chunkOffset + i + 1).padStart(4, '0')}`,
           
           // Map field names
           unit_code: rawQ.unit_code,

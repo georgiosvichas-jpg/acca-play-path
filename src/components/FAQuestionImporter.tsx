@@ -54,7 +54,7 @@ export function FAQuestionImporter() {
               "Content-Type": "application/json",
               "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             },
-            body: JSON.stringify({ questions: chunk }),
+            body: JSON.stringify({ questions: chunk, chunk_offset: i }),
           }
         );
         
