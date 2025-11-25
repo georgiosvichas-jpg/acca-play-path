@@ -61,6 +61,7 @@ export default function StudyPath() {
   const [showPaywall, setShowPaywall] = useState(false);
   const [notificationsEnabled, setNotificationsEnabled] = useState(false);
   const [emailReminders, setEmailReminders] = useState(false);
+  const [openWeeks, setOpenWeeks] = useState<Set<number>>(new Set([1]));
   
   // Form state
   const [examDate, setExamDate] = useState("");
@@ -389,8 +390,7 @@ export default function StudyPath() {
     );
   }
 
-  const progressPercentage = calculateProgress();
-  const [openWeeks, setOpenWeeks] = useState<Set<number>>(new Set([1]));
+    const progressPercentage = calculateProgress();
 
   // Get sessions that match the study path dates
   const getSessionsForWeek = (week: Week) => {
