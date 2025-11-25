@@ -9,14 +9,29 @@ import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "sonner";
-import { Brain, CheckCircle2, XCircle, ArrowRight, Calendar, TrendingUp, Settings, Lock } from "lucide-react";
+import { 
+  Brain, 
+  CheckCircle2, 
+  XCircle, 
+  ArrowRight, 
+  Target, 
+  TrendingUp, 
+  Lock,
+  Flame,
+  Grid3x3,
+  LineChart,
+  Lightbulb
+} from "lucide-react";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
-import { AdvancedSpacedRepetition } from "@/components/AdvancedSpacedRepetition";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 
 interface Question {
@@ -27,6 +42,8 @@ interface Question {
   options: string[];
   correct_option_index: number;
   explanation: string | null;
+  answer?: string | null;
+  type: string;
 }
 
 export default function SpacedRepetition() {
@@ -34,7 +51,13 @@ export default function SpacedRepetition() {
   const { profile } = useUserProfile();
   const { papers } = usePapers();
   const navigate = useNavigate();
-  const { recordReview, getDueReviews, getReviewStats } = useSpacedRepetition();
+  const { 
+    recordReview, 
+    getDueReviews, 
+    getReviewStats, 
+    getTopicMastery,
+    getStreakData 
+  } = useSpacedRepetition();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { hasFeature, isLoading: featureLoading } = useFeatureAccess();
 
@@ -43,57 +66,68 @@ export default function SpacedRepetition() {
   const [showPaywall, setShowPaywall] = useState(false);
 
   // Paper selection
-  const [selectedPaper, setSelectedPaper] = useState<string>("all");
+  const [selectedPaper, setSelectedPaper] = useState<string>("");
 
-  // Stats state
+  // Dashboard state
   const [stats, setStats] = useState<any>(null);
+  const [topicMastery, setTopicMastery] = useState<any[]>([]);
+  const [streakData, setStreakData] = useState<any>(null);
   const [dueQuestionIds, setDueQuestionIds] = useState<string[]>([]);
-  const [showAdvancedSettings, setShowAdvancedSettings] = useState(false);
+  const [selectedView, setSelectedView] = useState<"dashboard" | "review">("dashboard");
 
   // Review session state
   const [reviewStarted, setReviewStarted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const [retrievalAnswer, setRetrievalAnswer] = useState("");
   const [showFeedback, setShowFeedback] = useState(false);
   const [answers, setAnswers] = useState<Array<{ questionId: string; correct: boolean }>>([]);
   const [sessionComplete, setSessionComplete] = useState(false);
+  const [reviewMode, setReviewMode] = useState<"mcq" | "retrieval">("mcq");
   
   // Initialize selected paper from profile
   useEffect(() => {
-    if (profile?.selected_paper && selectedPaper === "all") {
+    if (profile?.selected_paper && !selectedPaper) {
       setSelectedPaper(profile.selected_paper);
+    } else if (!selectedPaper && papers.length > 0) {
+      setSelectedPaper(papers[0].paper_code);
     }
-  }, [profile]);
+  }, [profile, papers]);
 
   useEffect(() => {
-    loadStats();
-  }, []);
+    if (selectedPaper) {
+      loadDashboardData();
+    }
+  }, [selectedPaper]);
 
-  const loadStats = async () => {
+  const loadDashboardData = async () => {
     const reviewStats = await getReviewStats();
     const dueIds = await getDueReviews();
+    const mastery = await getTopicMastery(selectedPaper);
+    const streak = await getStreakData();
+    
     setStats(reviewStats);
     setDueQuestionIds(dueIds);
+    setTopicMastery(mastery);
+    setStreakData(streak);
   };
 
-  const startReviewSession = async () => {
+  const startReviewSession = async (mode: "mcq" | "retrieval" = "mcq") => {
     if (dueQuestionIds.length === 0) {
       toast.error("No questions due for review");
       return;
     }
+
+    setReviewMode(mode);
 
     try {
       // Fetch questions by IDs
       let query = supabase
         .from("sb_questions")
         .select("*")
-        .in("id", dueQuestionIds);
-      
-      // Filter by paper if not "all"
-      if (selectedPaper !== "all") {
-        query = query.eq("paper", selectedPaper);
-      }
+        .in("id", dueQuestionIds)
+        .eq("paper", selectedPaper);
       
       const { data, error } = await query.limit(20); // Review max 20 at a time
 
@@ -106,7 +140,8 @@ export default function SpacedRepetition() {
 
       setQuestions(formattedQuestions);
       setReviewStarted(true);
-      toast.success("Review session started!");
+      setSelectedView("review");
+      toast.success(`${mode === "retrieval" ? "Retrieval" : "MCQ"} review started!`);
     } catch (error) {
       console.error("Error starting review:", error);
       toast.error("Failed to start review session");
@@ -114,30 +149,59 @@ export default function SpacedRepetition() {
   };
 
   const handleAnswerSubmit = async () => {
-    if (selectedAnswer === null) {
+    if (reviewMode === "mcq" && selectedAnswer === null) {
       toast.error("Please select an answer");
       return;
     }
 
-    const isCorrect = selectedAnswer === questions[currentIndex].correct_option_index;
+    if (reviewMode === "retrieval" && !retrievalAnswer.trim()) {
+      toast.error("Please enter your answer");
+      return;
+    }
+
+    const currentQuestion = questions[currentIndex];
+    let isCorrect = false;
+
+    if (reviewMode === "mcq") {
+      isCorrect = selectedAnswer === currentQuestion.correct_option_index;
+    } else {
+      // For retrieval mode, we just show the answer and let user self-assess
+      setShowFeedback(true);
+      return;
+    }
     
     // Record this answer
     const newAnswers = [...answers, {
-      questionId: questions[currentIndex].id,
+      questionId: currentQuestion.id,
       correct: isCorrect
     }];
     setAnswers(newAnswers);
 
     // Record in spaced repetition system
-    await recordReview(questions[currentIndex].id, isCorrect);
+    await recordReview(currentQuestion.id, isCorrect);
 
     setShowFeedback(true);
+  };
+
+  const handleRetrievalSelfAssess = async (isCorrect: boolean) => {
+    const currentQuestion = questions[currentIndex];
+    
+    const newAnswers = [...answers, {
+      questionId: currentQuestion.id,
+      correct: isCorrect
+    }];
+    setAnswers(newAnswers);
+
+    await recordReview(currentQuestion.id, isCorrect);
+    
+    handleNext();
   };
 
   const handleNext = () => {
     if (currentIndex < questions.length - 1) {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
+      setRetrievalAnswer("");
       setShowFeedback(false);
     } else {
       completeSession();
@@ -172,7 +236,25 @@ export default function SpacedRepetition() {
     toast.success(`Review complete! Score: ${correctCount}/${answers.length} (${accuracy.toFixed(1)}%)`);
     
     // Reload stats
-    await loadStats();
+    await loadDashboardData();
+  };
+
+  const getMasteryColor = (status: string) => {
+    switch (status) {
+      case 'mastered': return 'bg-green-500 hover:bg-green-600';
+      case 'learning': return 'bg-yellow-500 hover:bg-yellow-600';
+      case 'struggling': return 'bg-red-500 hover:bg-red-600';
+      default: return 'bg-muted hover:bg-muted/80';
+    }
+  };
+
+  const getMasteryBadgeVariant = (status: string): "default" | "secondary" | "destructive" => {
+    switch (status) {
+      case 'mastered': return 'default';
+      case 'learning': return 'secondary';
+      case 'struggling': return 'destructive';
+      default: return 'secondary';
+    }
   };
 
   if (sessionComplete) {
@@ -180,45 +262,46 @@ export default function SpacedRepetition() {
     const accuracy = (correctCount / answers.length) * 100;
 
     return (
-      <>
-        <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="w-6 h-6" />
-                  Review Complete!
-                </CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="text-center space-y-4">
-                  <div className="text-6xl font-bold text-primary">
-                    {accuracy.toFixed(1)}%
-                  </div>
-                  <div className="text-2xl font-semibold">
-                    {correctCount} / {answers.length} Correct
-                  </div>
-                  <p className="text-muted-foreground">
-                    Questions will be rescheduled based on your performance
-                  </p>
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <Brain className="w-6 h-6" />
+                Review Complete!
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="text-center space-y-4">
+                <div className="text-6xl font-bold text-primary">
+                  {accuracy.toFixed(1)}%
                 </div>
+                <div className="text-2xl font-semibold">
+                  {correctCount} / {answers.length} Correct
+                </div>
+                <p className="text-muted-foreground">
+                  Questions rescheduled based on performance. Keep your streak going!
+                </p>
+              </div>
 
-                <div className="space-y-2">
-                  <Button onClick={() => window.location.reload()} className="w-full">
-                    Review More Questions
-                  </Button>
-                  <Button onClick={() => navigate("/question-analytics")} variant="outline" className="w-full">
-                    View Analytics
-                  </Button>
-                  <Button onClick={() => navigate("/dashboard")} variant="outline" className="w-full">
-                    Back to Dashboard
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
+              <div className="space-y-2">
+                <Button onClick={() => {
+                  setSessionComplete(false);
+                  setReviewStarted(false);
+                  setSelectedView("dashboard");
+                  setAnswers([]);
+                  setCurrentIndex(0);
+                }} className="w-full">
+                  Back to Dashboard
+                </Button>
+                <Button onClick={() => navigate("/question-analytics")} variant="outline" className="w-full">
+                  View Analytics
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
         </div>
-      </>
+      </div>
     );
   }
 
@@ -227,7 +310,7 @@ export default function SpacedRepetition() {
     return (
       <>
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="container mx-auto px-4 py-8 max-w-6xl">
             <div className="space-y-6">
               <Card className="relative overflow-hidden">
                 <div className="absolute inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-10">
@@ -235,9 +318,9 @@ export default function SpacedRepetition() {
                     <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
                       <Lock className="w-8 h-8 text-primary" />
                     </div>
-                    <h3 className="text-2xl font-bold">Spaced Repetition</h3>
+                    <h3 className="text-2xl font-bold">Adaptive Mastery System</h3>
                     <p className="text-muted-foreground">
-                      Boost retention with scientifically-proven review scheduling. Master questions at optimal intervals for long-term memory.
+                      Master every topic with color-coded mastery tracking, retrieval practice, forgetting curve visualization, and daily streak targets.
                     </p>
                     <Button 
                       onClick={() => setShowPaywall(true)}
@@ -253,26 +336,32 @@ export default function SpacedRepetition() {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <Brain className="w-6 h-6" />
-                    Spaced Repetition Review
+                    Adaptive Mastery System
                   </CardTitle>
                   <CardDescription>
-                    Master questions using scientifically-proven spaced repetition
+                    Track mastery, build streaks, and master every topic
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4 opacity-40">
-                    <div className="grid md:grid-cols-3 gap-4">
+                    <div className="grid md:grid-cols-4 gap-4">
                       <div className="p-4 border rounded-lg">
                         <div className="text-3xl font-bold">12</div>
-                        <p className="text-sm text-muted-foreground">Due for Review</p>
-                      </div>
-                      <div className="p-4 border rounded-lg">
-                        <div className="text-3xl font-bold">48</div>
-                        <p className="text-sm text-muted-foreground">Total Reviewed</p>
+                        <p className="text-sm text-muted-foreground">Due Today</p>
                       </div>
                       <div className="p-4 border rounded-lg">
                         <div className="text-3xl font-bold">87%</div>
-                        <p className="text-sm text-muted-foreground">Avg Accuracy</p>
+                        <p className="text-sm text-muted-foreground">Avg Mastery</p>
+                      </div>
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-3xl font-bold flex items-center gap-1">
+                          <Flame className="w-6 h-6 text-orange-500" />7
+                        </div>
+                        <p className="text-sm text-muted-foreground">Day Streak</p>
+                      </div>
+                      <div className="p-4 border rounded-lg">
+                        <div className="text-3xl font-bold">8/10</div>
+                        <p className="text-sm text-muted-foreground">Daily Target</p>
                       </div>
                     </div>
                   </div>
@@ -296,27 +385,28 @@ export default function SpacedRepetition() {
     const progressPercent = ((currentIndex + 1) / questions.length) * 100;
 
     return (
-      <>
-        <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
-            <Card>
-              <CardHeader>
-                <div className="flex items-center justify-between mb-2">
-                  <CardTitle>
-                    Question {currentIndex + 1} of {questions.length}
-                  </CardTitle>
-                  {currentQuestion.unit_code && (
-                    <span className="text-sm text-muted-foreground">
-                      {currentQuestion.unit_code}
-                    </span>
-                  )}
-                </div>
-                <Progress value={progressPercent} className="mb-4" />
-                <CardDescription className="text-base">
-                  {currentQuestion.question}
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-6">
+      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+        <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center justify-between mb-2">
+                <CardTitle>
+                  Question {currentIndex + 1} of {questions.length}
+                </CardTitle>
+                <Badge variant="outline">
+                  {reviewMode === "retrieval" ? "Retrieval Practice" : "MCQ Mode"}
+                </Badge>
+              </div>
+              <Progress value={progressPercent} className="mb-4" />
+              {currentQuestion.unit_code && (
+                <Badge className="mb-2">{currentQuestion.unit_code}</Badge>
+              )}
+              <CardDescription className="text-base">
+                {currentQuestion.question}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {reviewMode === "mcq" ? (
                 <RadioGroup
                   value={selectedAnswer?.toString() || ""}
                   onValueChange={(value) => setSelectedAnswer(parseInt(value))}
@@ -348,15 +438,72 @@ export default function SpacedRepetition() {
                     );
                   })}
                 </RadioGroup>
+              ) : (
+                <div className="space-y-4">
+                  {!showFeedback ? (
+                    <>
+                      <div className="space-y-2">
+                        <Label>Your Answer</Label>
+                        <Textarea
+                          placeholder="Type your answer here..."
+                          value={retrievalAnswer}
+                          onChange={(e) => setRetrievalAnswer(e.target.value)}
+                          rows={4}
+                          className="resize-none"
+                        />
+                      </div>
+                      <Alert>
+                        <Lightbulb className="h-4 w-4" />
+                        <AlertDescription>
+                          Try to recall from memory without looking at options.
+                        </AlertDescription>
+                      </Alert>
+                    </>
+                  ) : (
+                    <>
+                      <div className="space-y-2">
+                        <Label>Your Answer:</Label>
+                        <div className="p-4 bg-muted rounded-lg">
+                          {retrievalAnswer || "(No answer provided)"}
+                        </div>
+                      </div>
+                      <div className="space-y-2">
+                        <Label>Correct Answer:</Label>
+                        <div className="p-4 bg-green-50 dark:bg-green-950 border border-green-500 rounded-lg">
+                          {currentQuestion.options[currentQuestion.correct_option_index]}
+                        </div>
+                      </div>
+                      <div className="flex gap-2">
+                        <Button 
+                          onClick={() => handleRetrievalSelfAssess(false)} 
+                          variant="destructive"
+                          className="flex-1"
+                        >
+                          <XCircle className="w-4 h-4 mr-2" />
+                          Incorrect
+                        </Button>
+                        <Button 
+                          onClick={() => handleRetrievalSelfAssess(true)}
+                          className="flex-1"
+                        >
+                          <CheckCircle2 className="w-4 h-4 mr-2" />
+                          Correct
+                        </Button>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
 
-                {showFeedback && currentQuestion.explanation && (
-                  <Alert>
-                    <AlertDescription>
-                      <strong>Explanation:</strong> {currentQuestion.explanation}
-                    </AlertDescription>
-                  </Alert>
-                )}
+              {showFeedback && currentQuestion.explanation && reviewMode === "mcq" && (
+                <Alert>
+                  <AlertDescription>
+                    <strong>Explanation:</strong> {currentQuestion.explanation}
+                  </AlertDescription>
+                </Alert>
+              )}
 
+              {reviewMode === "mcq" && (
                 <div className="flex justify-end">
                   {!showFeedback ? (
                     <Button onClick={handleAnswerSubmit}>Submit Answer</Button>
@@ -370,141 +517,288 @@ export default function SpacedRepetition() {
                     </Button>
                   )}
                 </div>
-              </CardContent>
-            </Card>
-          </div>
+              )}
+
+              {reviewMode === "retrieval" && !showFeedback && (
+                <div className="flex justify-end">
+                  <Button onClick={handleAnswerSubmit}>Show Answer</Button>
+                </div>
+              )}
+            </CardContent>
+          </Card>
         </div>
-      </>
+      </div>
     );
   }
 
   return (
     <>
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
+        <div className="container mx-auto px-4 py-8 max-w-6xl">
           <div className="space-y-6">
-            {/* Hero Section */}
+            {/* Header */}
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Brain className="w-6 h-6" />
-                  Spaced Repetition Review
-                </CardTitle>
-                <CardDescription>
-                  Master questions using scientifically-proven spaced repetition
-                </CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <p className="text-sm text-muted-foreground">
-                  Questions you've answered incorrectly are scheduled for review at optimal intervals
-                  to maximize long-term retention. The system adapts to your performance.
-                </p>
-                
-                {/* Paper Selection */}
-                <div className="space-y-2">
-                  <label className="text-sm font-medium">Filter by Paper</label>
+                <div className="flex items-center justify-between">
+                  <div>
+                    <CardTitle className="flex items-center gap-2">
+                      <Brain className="w-6 h-6" />
+                      Adaptive Mastery System
+                    </CardTitle>
+                    <CardDescription>
+                      Track mastery, build streaks, and master every topic
+                    </CardDescription>
+                  </div>
                   <Select value={selectedPaper} onValueChange={setSelectedPaper}>
-                    <SelectTrigger>
+                    <SelectTrigger className="w-48">
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Papers</SelectItem>
                       {papers.map((paper) => (
                         <SelectItem key={paper.id} value={paper.paper_code}>
-                          {paper.paper_code} - {paper.title}
+                          {paper.paper_code}
                         </SelectItem>
                       ))}
                     </SelectContent>
                   </Select>
                 </div>
-              </CardContent>
-            </Card>
-
-            {/* Stats */}
-            {stats && (
-              <div className="grid md:grid-cols-3 gap-4">
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Due for Review</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-primary">{stats.dueCount}</div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Questions ready now
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Total Reviewed</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold">{stats.totalReviewed}</div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Questions in system
-                    </p>
-                  </CardContent>
-                </Card>
-
-                <Card>
-                  <CardHeader className="pb-3">
-                    <CardTitle className="text-sm font-medium">Avg Accuracy</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-3xl font-bold text-green-600">{stats.avgAccuracy}%</div>
-                    <p className="text-xs text-muted-foreground mt-1">
-                      Across all reviews
-                    </p>
-                  </CardContent>
-                </Card>
-              </div>
-            )}
-
-            {/* Action Card */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Start Review Session</CardTitle>
-                <CardDescription>
-                  {dueQuestionIds.length > 0
-                    ? `You have ${dueQuestionIds.length} question${dueQuestionIds.length !== 1 ? 's' : ''} ready for review`
-                    : "No questions due for review yet"}
-                </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-4">
-                {dueQuestionIds.length > 0 ? (
-                  <>
-                    <Alert>
-                      <Calendar className="h-4 w-4" />
-                      <AlertDescription>
-                        Review up to 20 questions at a time. Questions will be rescheduled based on your performance.
-                      </AlertDescription>
-                    </Alert>
-                    <Button onClick={startReviewSession} size="lg" className="w-full">
-                      Start Review ({Math.min(dueQuestionIds.length, 20)} Questions)
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Alert>
-                      <TrendingUp className="h-4 w-4" />
-                      <AlertDescription>
-                        Complete practice quizzes or mock exams to add questions to your review queue. 
-                        Incorrect answers will be automatically scheduled for review.
-                      </AlertDescription>
-                    </Alert>
-                    <div className="space-y-2">
-                      <Button onClick={() => navigate("/practice-quiz")} variant="outline" className="w-full">
-                        Take Practice Quiz
-                      </Button>
-                      <Button onClick={() => navigate("/mock-exam")} variant="outline" className="w-full">
-                        Take Mock Exam
-                      </Button>
-                    </div>
-                  </>
-                )}
-              </CardContent>
             </Card>
+
+            <Tabs value={selectedView} onValueChange={(v: any) => setSelectedView(v)}>
+              <TabsList className="grid w-full grid-cols-2">
+                <TabsTrigger value="dashboard">
+                  <Grid3x3 className="w-4 h-4 mr-2" />
+                  Mastery Dashboard
+                </TabsTrigger>
+                <TabsTrigger value="review">
+                  <Target className="w-4 h-4 mr-2" />
+                  Start Review
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="dashboard" className="space-y-6">
+                {/* Quick Stats */}
+                {stats && streakData && (
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium flex items-center gap-2">
+                          <Target className="w-4 h-4" />
+                          Due Today
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-3xl font-bold text-primary">{stats.dueCount}</div>
+                        <p className="text-xs text-muted-foreground mt-1">Ready to review</p>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium flex items-center gap-2">
+                          <TrendingUp className="w-4 h-4" />
+                          Avg Mastery
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-3xl font-bold">{stats.avgAccuracy}%</div>
+                        <p className="text-xs text-muted-foreground mt-1">Across all topics</p>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium flex items-center gap-2">
+                          <Flame className="w-4 h-4 text-orange-500" />
+                          Streak
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-3xl font-bold flex items-center gap-1">
+                          {streakData.currentStreak}
+                          <span className="text-lg text-muted-foreground">days</span>
+                        </div>
+                        <p className="text-xs text-muted-foreground mt-1">Keep it going!</p>
+                      </CardContent>
+                    </Card>
+
+                    <Card>
+                      <CardHeader className="pb-3">
+                        <CardTitle className="text-sm font-medium">Daily Target</CardTitle>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-3xl font-bold">
+                          {streakData.reviewedToday}/{streakData.dailyTarget}
+                        </div>
+                        <Progress 
+                          value={(streakData.reviewedToday / streakData.dailyTarget) * 100} 
+                          className="mt-2 h-2"
+                        />
+                      </CardContent>
+                    </Card>
+                  </div>
+                )}
+
+                {/* Topic Mastery Grid */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Grid3x3 className="w-5 h-5" />
+                      Topic Mastery Grid
+                    </CardTitle>
+                    <CardDescription>
+                      Color-coded by mastery level
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex items-center gap-4 text-xs">
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded bg-red-500" />
+                          <span>Struggling (&lt;40%)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded bg-yellow-500" />
+                          <span>Learning (40-70%)</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="w-4 h-4 rounded bg-green-500" />
+                          <span>Mastered (&gt;70%)</span>
+                        </div>
+                      </div>
+
+                      {topicMastery.length > 0 ? (
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+                          {topicMastery.map((topic) => (
+                            <button
+                              key={topic.unitCode}
+                              className={`p-4 rounded-lg text-white transition-all hover:scale-105 ${getMasteryColor(topic.status)}`}
+                            >
+                              <div className="text-sm font-medium mb-1 truncate">
+                                {topic.unitCode}
+                              </div>
+                              <div className="text-2xl font-bold">{topic.mastery}%</div>
+                              <div className="text-xs opacity-90 mt-1">
+                                {topic.dueCount > 0 ? `${topic.dueCount} due` : 'Up to date'}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      ) : (
+                        <div className="text-center py-12 text-muted-foreground">
+                          <Brain className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                          <p>Start reviewing questions to see mastery data</p>
+                        </div>
+                      )}
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Forgetting Curve Info */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <LineChart className="w-5 h-5" />
+                      Your Learning Curve
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <p className="text-sm text-muted-foreground">
+                        Questions are scheduled using the SM-2 algorithm. Review intervals increase with mastery:
+                      </p>
+                      <div className="grid md:grid-cols-4 gap-4 text-center">
+                        <div className="p-3 border rounded-lg">
+                          <div className="font-bold text-lg">1 day</div>
+                          <div className="text-xs text-muted-foreground">First review</div>
+                        </div>
+                        <div className="p-3 border rounded-lg">
+                          <div className="font-bold text-lg">6 days</div>
+                          <div className="text-xs text-muted-foreground">Second review</div>
+                        </div>
+                        <div className="p-3 border rounded-lg">
+                          <div className="font-bold text-lg">2-4 weeks</div>
+                          <div className="text-xs text-muted-foreground">Well-known</div>
+                        </div>
+                        <div className="p-3 border rounded-lg">
+                          <div className="font-bold text-lg">1-3 months</div>
+                          <div className="text-xs text-muted-foreground">Mastered</div>
+                        </div>
+                      </div>
+                      <Alert>
+                        <Lightbulb className="h-4 w-4" />
+                        <AlertDescription>
+                          Incorrect answers reset intervals. Consistent reviews build long-term memory.
+                        </AlertDescription>
+                      </Alert>
+                    </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="review" className="space-y-6">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Choose Review Mode</CardTitle>
+                    <CardDescription>
+                      Select how you want to review your due questions
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {stats && (
+                      <Alert>
+                        <Target className="h-4 w-4" />
+                        <AlertDescription>
+                          You have <strong>{stats.dueCount}</strong> questions due for review
+                        </AlertDescription>
+                      </Alert>
+                    )}
+
+                    <div className="grid md:grid-cols-2 gap-4">
+                      <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => startReviewSession("mcq")}>
+                        <CardHeader>
+                          <CardTitle className="text-lg">MCQ Mode</CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            Answer multiple choice questions with instant feedback
+                          </p>
+                          <Button className="w-full" disabled={!stats || stats.dueCount === 0}>
+                            Start MCQ Review
+                          </Button>
+                        </CardContent>
+                      </Card>
+
+                      <Card className="cursor-pointer hover:border-primary transition-colors" onClick={() => startReviewSession("retrieval")}>
+                        <CardHeader>
+                          <CardTitle className="text-lg flex items-center gap-2">
+                            Retrieval Practice
+                            <Badge variant="secondary">Advanced</Badge>
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-muted-foreground mb-4">
+                            Recall answers from memory for deeper learning
+                          </p>
+                          <Button className="w-full" disabled={!stats || stats.dueCount === 0}>
+                            Start Retrieval Practice
+                          </Button>
+                        </CardContent>
+                      </Card>
+                    </div>
+
+                    {(!stats || stats.dueCount === 0) && (
+                      <div className="text-center py-8 text-muted-foreground">
+                        <CheckCircle2 className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                        <p>No questions due for review right now!</p>
+                        <p className="text-sm mt-2">Complete practice quizzes to add more questions to your review queue.</p>
+                      </div>
+                    )}
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
           </div>
         </div>
       </div>
