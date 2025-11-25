@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
@@ -15,8 +15,11 @@ import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock } from "lucide-react";
+import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock, Flag, Grid3x3, BarChart3, Timer } from "lucide-react";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
 
@@ -30,6 +33,11 @@ interface Question {
   options: string[];
   correct_option_index: number;
   explanation: string | null;
+}
+
+interface Section {
+  name: string;
+  questionRange: [number, number];
 }
 
 export default function MockExam() {
@@ -52,9 +60,23 @@ export default function MockExam() {
   const [agreedToRules, setAgreedToRules] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<(number | null)[]>([]);
+  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(new Set());
+  const [currentQuestion, setCurrentQuestion] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
+  const [questionStartTime, setQuestionStartTime] = useState<number>(Date.now());
+  const [timePerQuestion, setTimePerQuestion] = useState<number[]>([]);
   const [examSubmitted, setExamSubmitted] = useState(false);
   const [results, setResults] = useState<any>(null);
+  const [showNavigator, setShowNavigator] = useState(true);
+  
+  const questionRefs = useRef<(HTMLDivElement | null)[]>([]);
+  
+  // Define sections (like real ACCA papers)
+  const sections: Section[] = [
+    { name: "Section A", questionRange: [0, 14] }, // 15 questions
+    { name: "Section B", questionRange: [15, 34] }, // 20 questions
+    { name: "Section C", questionRange: [35, 49] }, // 15 questions
+  ];
   
   // Initialize selected paper from profile
   useEffect(() => {
@@ -121,7 +143,9 @@ export default function MockExam() {
         options: Array.isArray(q.options) ? q.options as string[] : []
       })));
       setAnswers(new Array(50).fill(null));
+      setTimePerQuestion(new Array(50).fill(0));
       setExamStarted(true);
+      setQuestionStartTime(Date.now());
       
       // Increment usage counter
       await incrementMockUsage();
@@ -138,12 +162,59 @@ export default function MockExam() {
     newAnswers[questionIndex] = answerIndex;
     setAnswers(newAnswers);
   };
+  
+  const toggleFlag = (questionIndex: number) => {
+    setFlaggedQuestions(prev => {
+      const newSet = new Set(prev);
+      if (newSet.has(questionIndex)) {
+        newSet.delete(questionIndex);
+      } else {
+        newSet.add(questionIndex);
+      }
+      return newSet;
+    });
+  };
+  
+  const navigateToQuestion = (index: number) => {
+    // Save time spent on current question
+    const timeSpent = Date.now() - questionStartTime;
+    const newTimes = [...timePerQuestion];
+    newTimes[currentQuestion] = (newTimes[currentQuestion] || 0) + timeSpent;
+    setTimePerQuestion(newTimes);
+    
+    setCurrentQuestion(index);
+    setQuestionStartTime(Date.now());
+    
+    // Scroll to question
+    questionRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  };
+  
+  const getQuestionStatus = (index: number) => {
+    if (answers[index] !== null) return 'answered';
+    if (flaggedQuestions.has(index)) return 'flagged';
+    return 'unanswered';
+  };
+  
+  const getSectionStats = (section: Section) => {
+    const [start, end] = section.questionRange;
+    const sectionAnswers = answers.slice(start, end + 1);
+    const answered = sectionAnswers.filter(a => a !== null).length;
+    const flagged = Array.from(flaggedQuestions).filter(idx => idx >= start && idx <= end).length;
+    return { answered, total: end - start + 1, flagged };
+  };
 
   const handleSubmitExam = async () => {
+    // Save time for current question
+    const timeSpent = Date.now() - questionStartTime;
+    const finalTimes = [...timePerQuestion];
+    finalTimes[currentQuestion] = (finalTimes[currentQuestion] || 0) + timeSpent;
+    setTimePerQuestion(finalTimes);
+    
     try {
       // Calculate results
       let correctCount = 0;
       const rawLog: any[] = [];
+      const sectionResults: any[] = [];
 
       questions.forEach((q, idx) => {
         const isCorrect = answers[idx] === q.correct_option_index;
@@ -154,11 +225,33 @@ export default function MockExam() {
           unit_code: q.unit_code,
           difficulty: q.difficulty,
           correct: isCorrect,
-          time_spent: 0, // Could track per-question time if needed
+          time_spent: Math.round(finalTimes[idx] / 1000), // Convert to seconds
+        });
+      });
+
+      // Calculate section-wise results
+      sections.forEach(section => {
+        const [start, end] = section.questionRange;
+        let sectionCorrect = 0;
+        let sectionTotal = end - start + 1;
+        let sectionTime = 0;
+        
+        for (let i = start; i <= end; i++) {
+          if (answers[i] === questions[i].correct_option_index) sectionCorrect++;
+          sectionTime += finalTimes[i] || 0;
+        }
+        
+        sectionResults.push({
+          name: section.name,
+          correct: sectionCorrect,
+          total: sectionTotal,
+          accuracy: ((sectionCorrect / sectionTotal) * 100).toFixed(1),
+          timeSpent: Math.round(sectionTime / 1000),
         });
       });
 
       const accuracy = (correctCount / 50) * 100;
+      const totalTime = 7200 - timeRemaining;
 
       // Log session via edge function
       if (user) {
@@ -191,6 +284,11 @@ export default function MockExam() {
         total: 50,
         accuracy: accuracy.toFixed(1),
         passed: accuracy >= 50,
+        sectionResults,
+        totalTime,
+        timePerQuestion: finalTimes,
+        flaggedCount: flaggedQuestions.size,
+        unansweredCount: answers.filter(a => a === null).length,
       });
       setExamSubmitted(true);
       
@@ -334,19 +432,26 @@ export default function MockExam() {
   }
 
   if (examSubmitted && results) {
+    const formatTime = (seconds: number) => {
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}m ${secs}s`;
+    };
+
     return (
       <>
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
+          <div className="container mx-auto px-4 py-8 max-w-6xl">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                   <Trophy className="w-6 h-6" />
-                  Exam Results
+                  Exam Results - {selectedPaper} Mock
                 </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-6">
-                <div className="text-center space-y-4">
+              <CardContent className="space-y-8">
+                {/* Overall Results */}
+                <div className="text-center space-y-4 p-6 bg-muted/50 rounded-lg">
                   <div className={`text-6xl font-bold ${results.passed ? "text-green-600" : "text-red-600"}`}>
                     {results.accuracy}%
                   </div>
@@ -356,21 +461,101 @@ export default function MockExam() {
                   <div className={`text-lg font-medium ${results.passed ? "text-green-600" : "text-red-600"}`}>
                     {results.passed ? "✓ PASSED" : "✗ FAILED"}
                   </div>
-                  {results.passed && (
-                    <p className="text-muted-foreground">
-                      Congratulations! You've met the pass standard of 50%.
-                    </p>
-                  )}
-                  {!results.passed && (
-                    <p className="text-muted-foreground">
-                      Keep practicing! You need 50% to pass the exam.
-                    </p>
-                  )}
+                  <div className="flex items-center justify-center gap-6 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Timer className="w-4 h-4" />
+                      Total Time: {formatTime(results.totalTime)}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Flag className="w-4 h-4" />
+                      Flagged: {results.flaggedCount}
+                    </div>
+                    {results.unansweredCount > 0 && (
+                      <div className="flex items-center gap-2 text-orange-600">
+                        <AlertCircle className="w-4 h-4" />
+                        Unanswered: {results.unansweredCount}
+                      </div>
+                    )}
+                  </div>
                 </div>
 
+                {/* Section Breakdown */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-lg font-semibold">
+                    <BarChart3 className="w-5 h-5" />
+                    Performance by Section
+                  </div>
+                  <div className="grid gap-4">
+                    {results.sectionResults.map((section: any, idx: number) => (
+                      <Card key={idx}>
+                        <CardHeader className="pb-3">
+                          <div className="flex items-center justify-between">
+                            <CardTitle className="text-base">{section.name}</CardTitle>
+                            <Badge variant={parseFloat(section.accuracy) >= 50 ? "default" : "destructive"}>
+                              {section.accuracy}%
+                            </Badge>
+                          </div>
+                        </CardHeader>
+                        <CardContent className="space-y-2">
+                          <div className="flex items-center justify-between text-sm">
+                            <span className="text-muted-foreground">
+                              {section.correct}/{section.total} correct
+                            </span>
+                            <span className="text-muted-foreground">
+                              Time: {formatTime(section.timeSpent)}
+                            </span>
+                          </div>
+                          <Progress value={parseFloat(section.accuracy)} className="h-2" />
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Time Analysis */}
+                <div className="space-y-4">
+                  <div className="flex items-center gap-2 text-lg font-semibold">
+                    <Clock className="w-5 h-5" />
+                    Time Management
+                  </div>
+                  <div className="grid grid-cols-3 gap-4">
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardDescription>Total Time</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">{formatTime(results.totalTime)}</div>
+                        <p className="text-xs text-muted-foreground">of 120 minutes</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardDescription>Average per Question</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">
+                          {formatTime(Math.round(results.totalTime / 50))}
+                        </div>
+                        <p className="text-xs text-muted-foreground">recommended: 2m 24s</p>
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardDescription>Time Remaining</CardDescription>
+                      </CardHeader>
+                      <CardContent>
+                        <div className="text-2xl font-bold">{formatTime(7200 - results.totalTime)}</div>
+                        <p className="text-xs text-muted-foreground">unused time</p>
+                      </CardContent>
+                    </Card>
+                  </div>
+                </div>
+
+                {/* Action Buttons */}
+                <Separator />
                 <div className="space-y-2">
                   <Button onClick={() => navigate("/question-analytics")} className="w-full">
-                    View Detailed Analytics
+                    View Detailed Question Analytics
                   </Button>
                   <Button onClick={() => navigate("/practice-quiz")} variant="outline" className="w-full">
                     Practice More Questions
@@ -384,7 +569,7 @@ export default function MockExam() {
             
             <UpgradeNudge
               type="mock-complete"
-              message="See full performance breakdown and heatmaps – unlock with Pro."
+              message="See question-by-question review with explanations – unlock with Pro."
               tier="pro"
               variant="inline"
               className="mt-6"
@@ -416,8 +601,16 @@ export default function MockExam() {
               )}
             </div>
             <div className="flex items-center gap-4">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => setShowNavigator(!showNavigator)}
+              >
+                <Grid3x3 className="w-4 h-4 mr-2" />
+                {showNavigator ? 'Hide' : 'Show'} Navigator
+              </Button>
               <span className="text-sm text-muted-foreground">
-                Answered: {answeredCount}/50
+                {answeredCount}/50 Answered
               </span>
               <Button onClick={handleSubmitExam} variant="default">
                 Submit Exam
@@ -427,48 +620,145 @@ export default function MockExam() {
           <Progress value={progressPercent} className="h-1" />
         </div>
 
-        {/* Questions */}
-        <div className="container mx-auto px-4 py-8 mt-16 max-w-4xl">
-          <div className="space-y-6">
-            {questions.map((q, idx) => (
-              <Card key={q.id} id={`question-${idx}`}>
-                <CardHeader>
-                  <CardTitle className="text-lg">
-                    Question {idx + 1} of 50
-                    {q.unit_code && (
-                      <span className="ml-2 text-sm font-normal text-muted-foreground">
-                        ({q.unit_code})
-                      </span>
-                    )}
-                  </CardTitle>
-                  <CardDescription className="text-base">{q.question}</CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <RadioGroup
-                    value={answers[idx]?.toString() || ""}
-                    onValueChange={(value) => handleAnswerSelect(idx, parseInt(value))}
-                  >
-                    {q.options.map((option, optIdx) => (
-                      <div key={optIdx} className="flex items-center space-x-2 py-2">
-                        <RadioGroupItem value={optIdx.toString()} id={`q${idx}-opt${optIdx}`} />
-                        <Label
-                          htmlFor={`q${idx}-opt${optIdx}`}
-                          className="flex-1 cursor-pointer"
-                        >
-                          {option}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <div className="container mx-auto px-4 py-8 mt-16 flex gap-6">
+          {/* Question Navigator Panel */}
+          {showNavigator && (
+            <Card className="w-80 h-fit sticky top-24">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm flex items-center gap-2">
+                  <Grid3x3 className="w-4 h-4" />
+                  Question Navigator
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center gap-4 text-xs">
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                    <span>Answered</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-orange-500" />
+                    <span>Flagged</span>
+                  </div>
+                  <div className="flex items-center gap-1">
+                    <div className="w-3 h-3 rounded-full bg-muted" />
+                    <span>Not answered</span>
+                  </div>
+                </div>
+                
+                <ScrollArea className="h-[calc(100vh-280px)]">
+                  <div className="space-y-4">
+                    {sections.map((section, sectionIdx) => {
+                      const stats = getSectionStats(section);
+                      return (
+                        <div key={sectionIdx} className="space-y-2">
+                          <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
+                            <span>{section.name}</span>
+                            <span>{stats.answered}/{stats.total}</span>
+                          </div>
+                          <div className="grid grid-cols-5 gap-2">
+                            {Array.from({ length: section.questionRange[1] - section.questionRange[0] + 1 }, (_, i) => {
+                              const qIndex = section.questionRange[0] + i;
+                              const status = getQuestionStatus(qIndex);
+                              return (
+                                <button
+                                  key={qIndex}
+                                  onClick={() => navigateToQuestion(qIndex)}
+                                  className={`
+                                    relative w-10 h-10 rounded-md text-xs font-medium
+                                    transition-all hover:scale-105
+                                    ${currentQuestion === qIndex ? 'ring-2 ring-primary' : ''}
+                                    ${status === 'answered' ? 'bg-green-500 text-white' : ''}
+                                    ${status === 'flagged' ? 'bg-orange-500 text-white' : ''}
+                                    ${status === 'unanswered' ? 'bg-muted hover:bg-muted/80' : ''}
+                                  `}
+                                >
+                                  {qIndex + 1}
+                                  {flaggedQuestions.has(qIndex) && (
+                                    <Flag className="absolute -top-1 -right-1 w-3 h-3 fill-orange-500 text-orange-500" />
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                          {sectionIdx < sections.length - 1 && <Separator className="mt-4" />}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              </CardContent>
+            </Card>
+          )}
 
-          <div className="mt-8 flex justify-center">
-            <Button onClick={handleSubmitExam} size="lg" className="w-full max-w-md">
-              Submit Exam ({answeredCount}/50 answered)
-            </Button>
+          {/* Questions */}
+          <div className="flex-1 max-w-4xl">
+            <div className="space-y-6">
+              {questions.map((q, idx) => (
+                <Card 
+                  key={q.id} 
+                  id={`question-${idx}`}
+                  ref={el => questionRefs.current[idx] = el}
+                  className={currentQuestion === idx ? 'ring-2 ring-primary' : ''}
+                >
+                  <CardHeader>
+                    <div className="flex items-start justify-between">
+                      <div className="flex-1">
+                        <CardTitle className="text-lg flex items-center gap-2">
+                          Question {idx + 1} of 50
+                          {sections.find(s => idx >= s.questionRange[0] && idx <= s.questionRange[1]) && (
+                            <Badge variant="outline" className="text-xs">
+                              {sections.find(s => idx >= s.questionRange[0] && idx <= s.questionRange[1])?.name}
+                            </Badge>
+                          )}
+                          {q.unit_code && (
+                            <span className="text-sm font-normal text-muted-foreground">
+                              ({q.unit_code})
+                            </span>
+                          )}
+                        </CardTitle>
+                        <CardDescription className="text-base mt-2">{q.question}</CardDescription>
+                      </div>
+                      <Button
+                        variant={flaggedQuestions.has(idx) ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => toggleFlag(idx)}
+                        className="ml-4"
+                      >
+                        <Flag className={`w-4 h-4 ${flaggedQuestions.has(idx) ? 'fill-current' : ''}`} />
+                      </Button>
+                    </div>
+                  </CardHeader>
+                  <CardContent>
+                    <RadioGroup
+                      value={answers[idx]?.toString() || ""}
+                      onValueChange={(value) => handleAnswerSelect(idx, parseInt(value))}
+                    >
+                      {q.options.map((option, optIdx) => (
+                        <div key={optIdx} className="flex items-center space-x-2 py-2">
+                          <RadioGroupItem value={optIdx.toString()} id={`q${idx}-opt${optIdx}`} />
+                          <Label
+                            htmlFor={`q${idx}-opt${optIdx}`}
+                            className="flex-1 cursor-pointer"
+                          >
+                            {option}
+                          </Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+            
+            <Card className="mt-6 p-6 text-center">
+              <Button onClick={handleSubmitExam} size="lg" className="w-full max-w-md">
+                Submit Exam
+              </Button>
+              <p className="text-sm text-muted-foreground mt-4">
+                Make sure you've answered all questions. Flagged: {flaggedQuestions.size}
+              </p>
+            </Card>
           </div>
         </div>
       </div>
