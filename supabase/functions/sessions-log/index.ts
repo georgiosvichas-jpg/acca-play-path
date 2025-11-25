@@ -69,6 +69,22 @@ serve(async (req) => {
 
     const { session_type, total_questions, correct_answers, raw_log } = validation.data;
 
+    // Ensure user exists in sb_users (auto-create if not)
+    const { error: upsertError } = await supabaseAdmin
+      .from("sb_users")
+      .upsert({
+        id: userId,
+        email: user.email || "",
+        name: user.user_metadata?.full_name || null,
+      }, {
+        onConflict: "id",
+        ignoreDuplicates: false
+      });
+
+    if (upsertError) {
+      console.error("Error upserting user to sb_users:", upsertError);
+    }
+
     // Create session log
     const { data: session, error } = await supabaseAdmin
       .from("sb_study_sessions")
