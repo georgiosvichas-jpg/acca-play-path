@@ -322,6 +322,33 @@ export type Database = {
           },
         ]
       }
+      question_bookmarks: {
+        Row: {
+          created_at: string | null
+          id: string
+          notes: string | null
+          question_id: string
+          source_type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          question_id: string
+          source_type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          question_id?: string
+          source_type?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       question_reviews: {
         Row: {
           created_at: string
@@ -699,6 +726,45 @@ export type Database = {
             referencedColumns: ["paper_code"]
           },
         ]
+      }
+      topic_performance: {
+        Row: {
+          accuracy_percentage: number | null
+          id: string
+          last_practiced_at: string | null
+          paper_code: string
+          questions_attempted: number | null
+          questions_correct: number | null
+          topic_name: string
+          unit_code: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          accuracy_percentage?: number | null
+          id?: string
+          last_practiced_at?: string | null
+          paper_code: string
+          questions_attempted?: number | null
+          questions_correct?: number | null
+          topic_name: string
+          unit_code?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          accuracy_percentage?: number | null
+          id?: string
+          last_practiced_at?: string | null
+          paper_code?: string
+          questions_attempted?: number | null
+          questions_correct?: number | null
+          topic_name?: string
+          unit_code?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       user_badges: {
         Row: {
