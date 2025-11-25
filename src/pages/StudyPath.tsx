@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -11,8 +12,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Calendar, Target, Loader2, CheckCircle2, Clock, BookOpen, AlertCircle, Sparkles } from "lucide-react";
+import { Calendar, Target, Loader2, CheckCircle2, Clock, BookOpen, AlertCircle, Sparkles, Lock } from "lucide-react";
 import { toast } from "sonner";
+import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 
 interface DailyTask {
   day: string;
@@ -46,16 +48,20 @@ interface SavedPath {
 export default function StudyPath() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { hasFeature, planType, isLoading: featureLoading } = useFeatureAccess();
   
   const [loading, setLoading] = useState(false);
   const [savedPath, setSavedPath] = useState<SavedPath | null>(null);
   const [studyPath, setStudyPath] = useState<StudyPath | null>(null);
   const [progress, setProgress] = useState<Record<string, boolean>>({});
+  const [showPaywall, setShowPaywall] = useState(false);
   
   // Form state
   const [examDate, setExamDate] = useState("");
   const [weeksAvailable, setWeeksAvailable] = useState(8);
   const [error, setError] = useState<string | null>(null);
+
+  const canAccessFullStudyPlan = hasFeature("studyPlanDays") && planType !== "free";
 
   useEffect(() => {
     if (user) {
@@ -91,6 +97,12 @@ export default function StudyPath() {
   const generatePath = async () => {
     if (!examDate || weeksAvailable < 1) {
       toast.error("Please enter exam date and weeks available");
+      return;
+    }
+
+    // Check if free user trying to generate plan beyond 1 week
+    if (planType === "free" && weeksAvailable > 1) {
+      setShowPaywall(true);
       return;
     }
 
@@ -159,67 +171,96 @@ export default function StudyPath() {
 
   if (!studyPath) {
     return (
-      <div className="container max-w-2xl mx-auto p-6">
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-6 w-6 text-primary" />
-              <CardTitle>AI Study Path Generator</CardTitle>
-            </div>
-            <CardDescription>
-              Get a personalized multi-week study plan tailored to your exam date and performance
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            {error && (
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>{error}</AlertDescription>
-              </Alert>
-            )}
-
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <Label>Exam Date</Label>
-                <Input 
-                  type="date" 
-                  value={examDate}
-                  onChange={(e) => setExamDate(e.target.value)}
-                  min={new Date().toISOString().split('T')[0]}
-                />
+      <>
+        <div className="container max-w-2xl mx-auto p-6">
+          <Card>
+            <CardHeader>
+              <div className="flex items-center gap-2">
+                <Sparkles className="h-6 w-6 text-primary" />
+                <CardTitle>AI Study Path Generator</CardTitle>
               </div>
-
-              <div className="space-y-2">
-                <Label>Weeks Available for Study</Label>
-                <Input 
-                  type="number" 
-                  value={weeksAvailable}
-                  onChange={(e) => setWeeksAvailable(parseInt(e.target.value))}
-                  min={1}
-                  max={24}
-                />
-                <p className="text-xs text-muted-foreground">
-                  Recommended: 8-12 weeks for comprehensive preparation
-                </p>
-              </div>
-            </div>
-
-            <Button onClick={generatePath} disabled={loading} className="w-full" size="lg">
-              {loading ? (
-                <>
-                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Generating Your Personalized Plan...
-                </>
-              ) : (
-                <>
-                  <Sparkles className="mr-2 h-4 w-4" />
-                  Generate Study Path
-                </>
+              <CardDescription>
+                Get a personalized multi-week study plan tailored to your exam date and performance
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              {error && (
+                <Alert variant="destructive">
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>{error}</AlertDescription>
+                </Alert>
               )}
-            </Button>
-          </CardContent>
-        </Card>
-      </div>
+
+              {planType === "free" && (
+                <Alert>
+                  <AlertCircle className="h-4 w-4" />
+                  <AlertDescription>
+                    <strong>Free Plan:</strong> Generate a 1-week preview study plan. Upgrade to Pro for unlimited weeks.
+                  </AlertDescription>
+                </Alert>
+              )}
+
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Exam Date</Label>
+                  <Input 
+                    type="date" 
+                    value={examDate}
+                    onChange={(e) => setExamDate(e.target.value)}
+                    min={new Date().toISOString().split('T')[0]}
+                  />
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Weeks Available for Study</Label>
+                  <Input 
+                    type="number" 
+                    value={weeksAvailable}
+                    onChange={(e) => setWeeksAvailable(parseInt(e.target.value))}
+                    min={1}
+                    max={planType === "free" ? 1 : 24}
+                  />
+                  {planType === "free" ? (
+                    <p className="text-xs text-muted-foreground">
+                      Free plan limited to 1-week preview. Upgrade to Pro for full plans.
+                    </p>
+                  ) : (
+                    <p className="text-xs text-muted-foreground">
+                      Recommended: 8-12 weeks for comprehensive preparation
+                    </p>
+                  )}
+                </div>
+              </div>
+
+              <Button onClick={generatePath} disabled={loading} className="w-full" size="lg">
+                {loading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Generating Your Personalized Plan...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    {planType === "free" && weeksAvailable > 1 ? (
+                      <>
+                        <Lock className="mr-2 h-4 w-4" />
+                        Upgrade to Generate
+                      </>
+                    ) : (
+                      "Generate Study Path"
+                    )}
+                  </>
+                )}
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+        <FeaturePaywallModal 
+          open={showPaywall} 
+          onOpenChange={setShowPaywall}
+          paywallType="study-path"
+        />
+      </>
     );
   }
 
