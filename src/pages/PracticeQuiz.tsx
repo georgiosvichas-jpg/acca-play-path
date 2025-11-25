@@ -436,7 +436,11 @@ export default function PracticeQuiz() {
           </div>
         </CardHeader>
         <CardContent className="space-y-6">
-          <RadioGroup value={selectedAnswer?.toString()} onValueChange={(val) => setSelectedAnswer(parseInt(val))}>
+          <RadioGroup 
+            key={currentQuestion.id} 
+            value={selectedAnswer?.toString()} 
+            onValueChange={(val) => setSelectedAnswer(parseInt(val))}
+          >
             {currentQuestion.options.map((option, idx) => (
               <div key={idx} className={`flex items-center space-x-2 p-4 rounded-lg border ${
                 showFeedback
