@@ -731,11 +731,13 @@ export type Database = {
       }
       user_profiles: {
         Row: {
+          browser_notifications_enabled: boolean | null
           country: string | null
           created_at: string | null
           daily_coach_messages_used: number | null
           daily_flashcards_used: number | null
           display_name: string | null
+          email_reminders_enabled: boolean | null
           exam_session: string | null
           id: string
           is_opted_out_of_leaderboard: boolean | null
@@ -762,11 +764,13 @@ export type Database = {
           weekly_mocks_used: number | null
         }
         Insert: {
+          browser_notifications_enabled?: boolean | null
           country?: string | null
           created_at?: string | null
           daily_coach_messages_used?: number | null
           daily_flashcards_used?: number | null
           display_name?: string | null
+          email_reminders_enabled?: boolean | null
           exam_session?: string | null
           id?: string
           is_opted_out_of_leaderboard?: boolean | null
@@ -793,11 +797,13 @@ export type Database = {
           weekly_mocks_used?: number | null
         }
         Update: {
+          browser_notifications_enabled?: boolean | null
           country?: string | null
           created_at?: string | null
           daily_coach_messages_used?: number | null
           daily_flashcards_used?: number | null
           display_name?: string | null
+          email_reminders_enabled?: boolean | null
           exam_session?: string | null
           id?: string
           is_opted_out_of_leaderboard?: boolean | null
