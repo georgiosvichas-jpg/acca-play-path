@@ -432,8 +432,16 @@ export default function AdminContentImport() {
         description: "Processing mock exam templates...",
       });
 
+      // Fetch templates from public folder
+      const templateResponse = await fetch('/data/fa_assessment_templates.json');
+      if (!templateResponse.ok) {
+        throw new Error("Could not load assessment templates file");
+      }
+      const templateData = await templateResponse.json();
+
+      // Pass templates to edge function
       const response = await supabase.functions.invoke("import-fa-mock-config", {
-        body: {},
+        body: { mock_exams: templateData.mock_exams },
       });
 
       if (response.error) {
