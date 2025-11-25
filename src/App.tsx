@@ -46,6 +46,8 @@ import PaperStrategies from "./pages/blog/PaperStrategies";
 import MultiPaperDashboard from "./pages/MultiPaperDashboard";
 import ExamWeekMode from "./pages/ExamWeekMode";
 import AdminContentImport from "./pages/AdminContentImport";
+import Bookmarks from "./pages/Bookmarks";
+import WeakAreas from "./pages/WeakAreas";
 
 const queryClient = new QueryClient();
 
@@ -225,6 +227,22 @@ const App = () => (
             element={
               <ProtectedRoute>
                 <AdminContentImport />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/bookmarks"
+            element={
+              <ProtectedRoute>
+                <Bookmarks />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/weak-areas"
+            element={
+              <ProtectedRoute>
+                <WeakAreas />
               </ProtectedRoute>
             }
           />

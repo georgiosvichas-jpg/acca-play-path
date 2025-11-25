@@ -69,6 +69,8 @@ const mainNavItems = [
       { path: "/study?tab=mock", label: "Mock Exam" },
       { path: "/study?tab=review", label: "Spaced Repetition" },
       { path: "/study?tab=browse", label: "Question Browser" },
+      { path: "/bookmarks", label: "Bookmarks" },
+      { path: "/weak-areas", label: "Weak Areas" },
     ]
   },
   { 
