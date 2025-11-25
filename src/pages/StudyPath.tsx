@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
+import { useStudySessions } from "@/hooks/useStudySessions";
+import { format, isSameDay, parseISO } from "date-fns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,7 +14,8 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
-import { Calendar, Target, Loader2, CheckCircle2, Clock, AlertCircle, Sparkles, Lock, ChevronDown, ChevronRight } from "lucide-react";
+import { Switch } from "@/components/ui/switch";
+import { Calendar, Target, Loader2, CheckCircle2, Clock, AlertCircle, Sparkles, Lock, ChevronDown, ChevronRight, Bell, BellOff, CalendarDays } from "lucide-react";
 import { toast } from "sonner";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 
@@ -49,12 +52,15 @@ export default function StudyPath() {
   const { user } = useAuth();
   const navigate = useNavigate();
   const { hasFeature, planType, isLoading: featureLoading } = useFeatureAccess();
+  const { sessions } = useStudySessions();
   
   const [loading, setLoading] = useState(false);
   const [savedPath, setSavedPath] = useState<SavedPath | null>(null);
   const [studyPath, setStudyPath] = useState<StudyPath | null>(null);
   const [progress, setProgress] = useState<Record<string, boolean>>({});
   const [showPaywall, setShowPaywall] = useState(false);
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const [emailReminders, setEmailReminders] = useState(false);
   
   // Form state
   const [examDate, setExamDate] = useState("");
@@ -62,6 +68,125 @@ export default function StudyPath() {
   const [error, setError] = useState<string | null>(null);
 
   const canAccessFullStudyPlan = hasFeature("studyPlanDays") && planType !== "free";
+
+  // Request notification permission
+  useEffect(() => {
+    if ('Notification' in window && Notification.permission === 'granted') {
+      setNotificationsEnabled(true);
+    }
+    
+    // Load reminder preferences
+    if (user) {
+      loadReminderPreferences();
+    }
+  }, [user]);
+
+  const loadReminderPreferences = async () => {
+    if (!user) return;
+    
+    const { data, error } = await supabase
+      .from('user_profiles')
+      .select('email_reminders_enabled, browser_notifications_enabled')
+      .eq('user_id', user.id)
+      .single();
+    
+    if (data && !error) {
+      setEmailReminders(data.email_reminders_enabled || false);
+      setNotificationsEnabled(data.browser_notifications_enabled || false);
+    }
+  };
+
+  const requestNotificationPermission = async () => {
+    if ('Notification' in window) {
+      const permission = await Notification.requestPermission();
+      const enabled = permission === 'granted';
+      setNotificationsEnabled(enabled);
+      
+      // Save to database
+      await supabase
+        .from('user_profiles')
+        .update({ browser_notifications_enabled: enabled })
+        .eq('user_id', user?.id);
+      
+      if (enabled) {
+        toast.success('Notifications enabled');
+      } else {
+        toast.error('Notification permission denied');
+      }
+    }
+  };
+
+  const toggleEmailReminders = async () => {
+    const newValue = !emailReminders;
+    setEmailReminders(newValue);
+    
+    // Save to database
+    const { error: updateError } = await supabase
+      .from('user_profiles')
+      .update({ email_reminders_enabled: newValue })
+      .eq('user_id', user?.id);
+    
+    if (updateError) {
+      console.error('Error updating preferences:', updateError);
+      toast.error('Failed to update preferences');
+      setEmailReminders(!newValue);
+      return;
+    }
+    
+    if (newValue && savedPath) {
+      try {
+        await supabase.functions.invoke('schedule-study-reminders', {
+          body: { 
+            userId: user?.id,
+            pathId: savedPath.id,
+            enable: true 
+          }
+        });
+        toast.success('Email reminders enabled');
+      } catch (error) {
+        console.error('Error enabling reminders:', error);
+        toast.error('Failed to enable email reminders');
+        setEmailReminders(false);
+      }
+    } else if (!newValue) {
+      try {
+        await supabase.functions.invoke('schedule-study-reminders', {
+          body: { 
+            userId: user?.id,
+            enable: false 
+          }
+        });
+        toast.success('Email reminders disabled');
+      } catch (error) {
+        console.error('Error disabling reminders:', error);
+      }
+    }
+  };
+
+  const showDailyNotification = () => {
+    if ('Notification' in window && Notification.permission === 'granted' && studyPath) {
+      const today = new Date();
+      const todaysTasks: string[] = [];
+      
+      studyPath.weeks.forEach(week => {
+        week.dailyTasks.forEach((day, dayIdx) => {
+          const dayDate = new Date(savedPath?.exam_date || '');
+          dayDate.setDate(dayDate.getDate() - (studyPath.weeks.length - week.weekNumber) * 7 + dayIdx);
+          
+          if (isSameDay(dayDate, today)) {
+            todaysTasks.push(...day.tasks);
+          }
+        });
+      });
+
+      if (todaysTasks.length > 0) {
+        new Notification('Study Reminder', {
+          body: `You have ${todaysTasks.length} tasks scheduled today`,
+          icon: '/favicon.png'
+        });
+      }
+    }
+  };
 
   useEffect(() => {
     if (user) {
@@ -267,6 +392,24 @@ export default function StudyPath() {
   const progressPercentage = calculateProgress();
   const [openWeeks, setOpenWeeks] = useState<Set<number>>(new Set([1]));
 
+  // Get sessions that match the study path dates
+  const getSessionsForWeek = (week: Week) => {
+    if (!savedPath) return [];
+    const examDate = parseISO(savedPath.exam_date);
+    
+    return sessions.filter(session => {
+      const sessionDate = parseISO(session.session_date);
+      week.dailyTasks.forEach((day, dayIdx) => {
+        const dayDate = new Date(examDate);
+        dayDate.setDate(dayDate.getDate() - (studyPath!.weeks.length - week.weekNumber) * 7 + dayIdx);
+        if (isSameDay(sessionDate, dayDate)) {
+          return true;
+        }
+      });
+      return false;
+    });
+  };
+
   const toggleWeek = (weekNumber: number) => {
     setOpenWeeks(prev => {
       const newSet = new Set(prev);
@@ -302,25 +445,69 @@ export default function StudyPath() {
       </div>
 
       {savedPath && (
-        <Card>
-          <CardContent className="pt-6">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-2">
-                  <Calendar className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">Exam: {new Date(savedPath.exam_date).toLocaleDateString()}</span>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <Card>
+            <CardContent className="pt-6">
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2">
+                    <Calendar className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">Exam: {new Date(savedPath.exam_date).toLocaleDateString()}</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Clock className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-sm">{savedPath.weeks_duration} weeks</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-sm">{savedPath.weeks_duration} weeks</span>
-                </div>
+                <span className="text-2xl font-bold">{progressPercentage.toFixed(0)}%</span>
               </div>
-              <span className="text-2xl font-bold">{progressPercentage.toFixed(0)}%</span>
-            </div>
-            <Progress value={progressPercentage} className="mb-2" />
-            <p className="text-xs text-muted-foreground text-center">Overall Progress</p>
-          </CardContent>
-        </Card>
+              <Progress value={progressPercentage} className="mb-2" />
+              <p className="text-xs text-muted-foreground text-center">Overall Progress</p>
+            </CardContent>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="text-base flex items-center gap-2">
+                <Bell className="h-4 w-4" />
+                Daily Reminders
+              </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {notificationsEnabled ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4 text-muted-foreground" />}
+                  <span className="text-sm">Browser Notifications</span>
+                </div>
+                <Switch
+                  checked={notificationsEnabled}
+                  onCheckedChange={(checked) => {
+                    if (checked) {
+                      requestNotificationPermission();
+                    } else {
+                      setNotificationsEnabled(false);
+                    }
+                  }}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Bell className="h-4 w-4" />
+                  <span className="text-sm">Email Reminders</span>
+                </div>
+                <Switch
+                  checked={emailReminders}
+                  onCheckedChange={toggleEmailReminders}
+                />
+              </div>
+              {(notificationsEnabled || emailReminders) && (
+                <p className="text-xs text-muted-foreground">
+                  You'll receive reminders for upcoming tasks each morning
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       )}
 
       {/* Study Tips Section */}
@@ -433,17 +620,32 @@ export default function StudyPath() {
                             progress[`w${week.weekNumber}-d${dayIdx}-t${taskIdx}`]
                           ).length;
                           const dayProgress = (dayTasksCompleted / day.tasks.length) * 100;
+                          
+                          // Calculate the date for this day
+                          const examDate = savedPath ? parseISO(savedPath.exam_date) : new Date();
+                          const dayDate = new Date(examDate);
+                          dayDate.setDate(dayDate.getDate() - (studyPath.weeks.length - week.weekNumber) * 7 + dayIdx);
+                          
+                          // Get sessions for this day
+                          const daySessions = sessions.filter(s => 
+                            isSameDay(parseISO(s.session_date), dayDate)
+                          );
 
                           return (
                             <Card key={dayIdx} className="bg-background">
                               <CardHeader className="pb-3">
                                 <div className="flex items-center justify-between">
-                                  <CardTitle className="text-base flex items-center gap-2">
-                                    {day.day}
-                                    <Badge variant="outline" className="font-normal">
-                                      {dayTasksCompleted}/{day.tasks.length}
-                                    </Badge>
-                                  </CardTitle>
+                                  <div className="flex items-center gap-2">
+                                    <CardTitle className="text-base flex items-center gap-2">
+                                      {day.day}
+                                      <Badge variant="outline" className="font-normal">
+                                        {dayTasksCompleted}/{day.tasks.length}
+                                      </Badge>
+                                    </CardTitle>
+                                    <span className="text-xs text-muted-foreground">
+                                      {format(dayDate, 'MMM d')}
+                                    </span>
+                                  </div>
                                   <div className="flex items-center gap-2">
                                     <Clock className="h-4 w-4 text-muted-foreground" />
                                     <span className="text-sm text-muted-foreground">
@@ -454,6 +656,30 @@ export default function StudyPath() {
                                 {dayProgress > 0 && <Progress value={dayProgress} className="h-1 mt-2" />}
                               </CardHeader>
                               <CardContent>
+                                {/* Show calendar sessions if any */}
+                                {daySessions.length > 0 && (
+                                  <div className="mb-4 p-3 rounded-lg bg-primary/5 border border-primary/20">
+                                    <div className="flex items-center gap-2 mb-2">
+                                      <CalendarDays className="h-4 w-4 text-primary" />
+                                      <span className="text-sm font-semibold">Scheduled Sessions</span>
+                                    </div>
+                                    <div className="space-y-2">
+                                      {daySessions.map(session => (
+                                        <div key={session.id} className="flex items-center gap-2 text-sm">
+                                          <Badge variant={session.completed ? "default" : "secondary"} className="text-xs">
+                                            {session.paper_code}
+                                          </Badge>
+                                          <span className="text-muted-foreground">
+                                            {session.start_time || 'Time not set'} • {session.duration_minutes}min
+                                          </span>
+                                          {session.completed && (
+                                            <CheckCircle2 className="h-3 w-3 text-primary" />
+                                          )}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
                                 <div className="space-y-3">
                                   {day.tasks.map((task, taskIdx) => {
                                     const taskId = `w${week.weekNumber}-d${dayIdx}-t${taskIdx}`;
