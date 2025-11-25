@@ -100,7 +100,8 @@ export default function AdminContentImport() {
   const [mockErrors, setMockErrors] = useState<ImportError[]>([]);
   const [mockConfigs, setMockConfigs] = useState<MockConfigPreview[]>([]);
   const [syllabusUnits, setSyllabusUnits] = useState<SyllabusUnitPreview[]>([]);
-  const [faQuestionFile, setFaQuestionFile] = useState<File | null>(null);
+  const [faQuestionContent, setFaQuestionContent] = useState<string | null>(null);
+  const [faQuestionFileName, setFaQuestionFileName] = useState<string | null>(null);
   const [faQuestionLoading, setFaQuestionLoading] = useState(false);
   const [faQuestionResult, setFaQuestionResult] = useState<FAQuestionImportResult | null>(null);
   const [flashcardGenerating, setFlashcardGenerating] = useState(false);
@@ -217,7 +218,7 @@ export default function AdminContentImport() {
   };
 
   const handleFaQuestionImport = async () => {
-    if (!faQuestionFile) {
+    if (!faQuestionContent) {
       toast({
         title: "No file selected",
         description: "Please select a JSON file to import",
@@ -235,9 +236,8 @@ export default function AdminContentImport() {
         throw new Error("Not authenticated");
       }
 
-      // Read file content
-      const fileContent = await faQuestionFile.text();
-      const parsed = JSON.parse(fileContent);
+      // Parse already-loaded file content
+      const parsed = JSON.parse(faQuestionContent);
       
       // Extract questions array
       let allQuestions = Array.isArray(parsed) ? parsed : parsed.questions || [];
@@ -273,7 +273,7 @@ export default function AdminContentImport() {
               "Content-Type": "application/json",
               "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
             },
-            body: JSON.stringify({ questions: chunk }),
+            body: JSON.stringify({ questions: chunk, chunk_offset: i }),
           }
         );
         
@@ -712,13 +712,32 @@ export default function AdminContentImport() {
               id="fa-question-file"
               type="file"
               accept=".json"
-              onChange={(e) => setFaQuestionFile(e.target.files?.[0] || null)}
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  try {
+                    const content = await file.text();
+                    setFaQuestionContent(content);
+                    setFaQuestionFileName(file.name);
+                    toast({
+                      title: "File loaded",
+                      description: `${file.name} is ready to import`,
+                    });
+                  } catch (error) {
+                    toast({
+                      title: "Error reading file",
+                      description: error instanceof Error ? error.message : "Unknown error",
+                      variant: "destructive",
+                    });
+                  }
+                }
+              }}
             />
           </div>
 
           <Button
             onClick={handleFaQuestionImport}
-            disabled={!faQuestionFile || faQuestionLoading}
+            disabled={!faQuestionContent || faQuestionLoading}
             className="w-full sm:w-auto"
           >
             {faQuestionLoading ? (
