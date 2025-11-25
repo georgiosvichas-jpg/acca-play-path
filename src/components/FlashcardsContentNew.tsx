@@ -13,7 +13,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "./ui/select";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Filter, BookOpen, Lock, AlertCircle } from "lucide-react";
+import { Progress } from "./ui/progress";
+import { Filter, BookOpen, Lock, AlertCircle, TrendingUp } from "lucide-react";
 import { PaywallModal } from "./PaywallModal";
 import { UpgradeNudge } from "./UpgradeNudge";
 import { Alert, AlertDescription } from "./ui/alert";
@@ -51,6 +52,7 @@ export default function FlashcardsContentNew() {
   const [importAttempted, setImportAttempted] = useState(false);
   const [showPaywall, setShowPaywall] = useState(false);
   const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("pro");
+  const [topicMastery, setTopicMastery] = useState<Record<string, { mastery: number; total: number; goodCount: number }>>({});
 
   // Filters
   const [selectedPaper, setSelectedPaper] = useState<string>("all");
@@ -71,7 +73,10 @@ export default function FlashcardsContentNew() {
 
   useEffect(() => {
     fetchFlashcards();
-  }, []);
+    if (user) {
+      fetchTopicMastery();
+    }
+  }, [user]);
 
   useEffect(() => {
     // Auto-import flashcards if none exist
@@ -111,7 +116,10 @@ export default function FlashcardsContentNew() {
 
   useEffect(() => {
     applyFilters();
-  }, [flashcards, selectedPaper, selectedUnit, selectedDifficulty]);
+    if (user) {
+      fetchTopicMastery();
+    }
+  }, [flashcards, selectedPaper, selectedUnit, selectedDifficulty, user]);
 
   const fetchFlashcards = async () => {
     setLoading(true);
@@ -156,7 +164,7 @@ export default function FlashcardsContentNew() {
     setCurrentIndex(0);
   };
 
-  const handleMarkLearned = async () => {
+  const handleRate = async (rating: "again" | "hard" | "good" | "easy") => {
     if (!user) return;
 
     // Check if user can use more flashcards
@@ -169,28 +177,109 @@ export default function FlashcardsContentNew() {
 
     const card = filteredCards[currentIndex];
 
+    // Map ratings to XP and correctness
+    const xpMap = { again: 0, hard: 1, good: 2, easy: 3 };
+    const correctMap = { again: 0, hard: 0, good: 1, easy: 1 };
+    const xpGain = xpMap[rating];
+    const isCorrect = correctMap[rating];
+
     try {
       // Increment usage counter
       await incrementFlashcardUsage();
       
-      // Award XP for completing flashcard
-      await awardXP("flashcard_session_10", 1); // +1 XP per card
+      // Award XP
+      if (xpGain > 0) {
+        await awardXP("flashcard_session_10", xpGain);
+      }
 
-      // Record flashcard review
-      await supabase.from("flashcard_reviews").upsert({
-        user_id: user.id,
-        flashcard_id: card.id,
-        last_reviewed_at: new Date().toISOString(),
-        total_reviews: 1,
-        correct_count: 1,
+      // Get existing review to increment counts
+      const { data: existingReview } = await supabase
+        .from("flashcard_reviews")
+        .select("*")
+        .eq("user_id", user.id)
+        .eq("flashcard_id", card.id)
+        .single();
+
+      // Update or create flashcard review with cumulative counts
+      await supabase.from("flashcard_reviews").upsert(
+        {
+          user_id: user.id,
+          flashcard_id: card.id,
+          total_reviews: (existingReview?.total_reviews || 0) + 1,
+          correct_count: (existingReview?.correct_count || 0) + isCorrect,
+          last_reviewed_at: new Date().toISOString(),
+        },
+        {
+          onConflict: "user_id,flashcard_id",
+        }
+      );
+
+      // Update topic mastery
+      const unit = card.unit_title || "Other";
+      setTopicMastery((prev) => {
+        const current = prev[unit] || { mastery: 0, total: 0, goodCount: 0 };
+        const newGoodCount = current.goodCount + isCorrect;
+        const newTotal = current.total + 1;
+        const newMastery = newTotal > 0 ? (newGoodCount / newTotal) * 100 : 0;
+        return {
+          ...prev,
+          [unit]: { mastery: newMastery, total: newTotal, goodCount: newGoodCount },
+        };
       });
 
-      toast.success("+1 XP earned!");
+      if (xpGain > 0) {
+        toast.success(`${rating === "easy" ? "Excellent!" : "Good!"} +${xpGain} XP`);
+      }
       
       // Auto-advance to next card
       handleNext();
     } catch (error) {
       console.error("Error marking flashcard as learned:", error);
+    }
+  };
+
+  const fetchTopicMastery = async () => {
+    if (!user?.id) return;
+
+    try {
+      const { data: reviews } = await supabase
+        .from("flashcard_reviews")
+        .select("flashcard_id, total_reviews, correct_count")
+        .eq("user_id", user.id);
+
+      if (!reviews) return;
+
+      const { data: cards } = await supabase
+        .from("flashcards")
+        .select("id, unit_title")
+        .eq("paper_code", selectedPaper !== "all" ? selectedPaper : undefined);
+
+      if (!cards) return;
+
+      const masteryByTopic: Record<string, { mastery: number; total: number; goodCount: number }> = {};
+      
+      cards.forEach((card) => {
+        const review = reviews.find((r) => r.flashcard_id === card.id);
+        const unit = card.unit_title || "Other";
+        
+        if (!masteryByTopic[unit]) {
+          masteryByTopic[unit] = { mastery: 0, total: 0, goodCount: 0 };
+        }
+        
+        if (review) {
+          masteryByTopic[unit].total += review.total_reviews || 0;
+          masteryByTopic[unit].goodCount += review.correct_count || 0;
+        }
+      });
+
+      Object.keys(masteryByTopic).forEach((unit) => {
+        const { total, goodCount } = masteryByTopic[unit];
+        masteryByTopic[unit].mastery = total > 0 ? (goodCount / total) * 100 : 0;
+      });
+
+      setTopicMastery(masteryByTopic);
+    } catch (error) {
+      console.error("Error fetching topic mastery:", error);
     }
   };
 
@@ -320,6 +409,57 @@ export default function FlashcardsContentNew() {
             </p>
           </div>
 
+          {/* Topic Mastery Grid */}
+          {Object.keys(topicMastery).length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  <TrendingUp className="w-5 h-5" />
+                  Topic Mastery Progress
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-3">
+                  {Object.entries(topicMastery)
+                    .sort(([, a], [, b]) => a.mastery - b.mastery)
+                    .map(([topic, data]) => {
+                      const color =
+                        data.mastery >= 70
+                          ? "bg-emerald-500"
+                          : data.mastery >= 40
+                          ? "bg-yellow-500"
+                          : "bg-destructive";
+                      const textColor =
+                        data.mastery >= 70
+                          ? "text-emerald-700"
+                          : data.mastery >= 40
+                          ? "text-yellow-700"
+                          : "text-destructive";
+                      return (
+                        <div key={topic} className="space-y-1">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm font-medium">{topic}</span>
+                            <span className={`text-xs font-semibold ${textColor}`}>
+                              {data.mastery.toFixed(0)}%
+                            </span>
+                          </div>
+                          <div className="relative h-2 bg-secondary rounded-full overflow-hidden">
+                            <div
+                              className={`h-full ${color} transition-all duration-500`}
+                              style={{ width: `${data.mastery}%` }}
+                            />
+                          </div>
+                          <p className="text-xs text-muted-foreground">
+                            {data.goodCount} correct / {data.total} reviews
+                          </p>
+                        </div>
+                      );
+                    })}
+                </div>
+              </CardContent>
+            </Card>
+          )}
+
           {/* Filters */}
           <Card>
             <CardHeader>
@@ -420,7 +560,7 @@ export default function FlashcardsContentNew() {
             flashcard={filteredCards[currentIndex]}
             onNext={handleNext}
             onPrevious={handlePrevious}
-            onMarkLearned={handleMarkLearned}
+            onRate={handleRate}
             hasNext={currentIndex < filteredCards.length - 1}
             hasPrevious={currentIndex > 0}
             currentIndex={currentIndex}

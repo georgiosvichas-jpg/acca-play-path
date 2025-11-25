@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { ChevronLeft, ChevronRight, CheckCircle2 } from "lucide-react";
+import { ChevronLeft, ChevronRight, RotateCcw, Frown, ThumbsUp, Zap } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 interface Flashcard {
   id: string;
@@ -21,7 +22,7 @@ interface FlashcardFlipCardProps {
   flashcard: Flashcard;
   onNext: () => void;
   onPrevious: () => void;
-  onMarkLearned: () => void;
+  onRate: (rating: "again" | "hard" | "good" | "easy") => void;
   hasNext: boolean;
   hasPrevious: boolean;
   currentIndex: number;
@@ -32,13 +33,18 @@ export default function FlashcardFlipCard({
   flashcard,
   onNext,
   onPrevious,
-  onMarkLearned,
+  onRate,
   hasNext,
   hasPrevious,
   currentIndex,
   totalCards,
 }: FlashcardFlipCardProps) {
   const [isFlipped, setIsFlipped] = useState(false);
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const isMobile = useIsMobile();
+
+  const minSwipeDistance = 50;
 
   const handleFlip = () => {
     setIsFlipped(!isFlipped);
@@ -54,13 +60,57 @@ export default function FlashcardFlipCard({
     onPrevious();
   };
 
-  const handleMarkLearned = () => {
-    onMarkLearned();
+  const handleRate = (rating: "again" | "hard" | "good" | "easy") => {
+    onRate(rating);
     setIsFlipped(false);
     if (hasNext) {
       onNext();
     }
   };
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+    
+    if (isLeftSwipe && hasNext) {
+      handleNext();
+    }
+    if (isRightSwipe && hasPrevious) {
+      handlePrevious();
+    }
+  };
+
+  // Keyboard shortcuts
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent) => {
+      if (e.key === " " && !e.repeat) {
+        e.preventDefault();
+        handleFlip();
+      }
+      if (isFlipped) {
+        if (e.key === "1") handleRate("again");
+        if (e.key === "2") handleRate("hard");
+        if (e.key === "3") handleRate("good");
+        if (e.key === "4") handleRate("easy");
+      }
+      if (e.key === "ArrowLeft" && hasPrevious) handlePrevious();
+      if (e.key === "ArrowRight" && hasNext) handleNext();
+    };
+
+    window.addEventListener("keydown", handleKeyPress);
+    return () => window.removeEventListener("keydown", handleKeyPress);
+  }, [isFlipped, hasNext, hasPrevious]);
 
   const getDifficultyColor = (difficulty: string) => {
     switch (difficulty.toLowerCase()) {
@@ -94,6 +144,9 @@ export default function FlashcardFlipCard({
       <div
         className="relative h-[400px] cursor-pointer perspective-1000"
         onClick={handleFlip}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
       >
         <div
           className={cn(
@@ -144,18 +197,60 @@ export default function FlashcardFlipCard({
               </div>
             </CardContent>
 
-            <div className="p-6 border-t bg-background/50">
-              <Button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleMarkLearned();
-                }}
-                className="w-full bg-primary hover:bg-primary/90"
-                size="lg"
-              >
-                <CheckCircle2 className="w-4 h-4 mr-2" />
-                Mark as Learned (+1 XP)
-              </Button>
+            <div className="p-4 border-t bg-background/50 space-y-2">
+              <p className="text-xs text-muted-foreground text-center mb-2">
+                Rate your recall (or press 1-4)
+              </p>
+              <div className="grid grid-cols-2 gap-2">
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRate("again");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="border-destructive/50 hover:bg-destructive/10"
+                >
+                  <RotateCcw className="w-3 h-3 mr-1" />
+                  Again
+                </Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRate("hard");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="border-orange-500/50 hover:bg-orange-500/10"
+                >
+                  <Frown className="w-3 h-3 mr-1" />
+                  Hard
+                </Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRate("good");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="border-primary/50 hover:bg-primary/10"
+                >
+                  <ThumbsUp className="w-3 h-3 mr-1" />
+                  Good
+                </Button>
+                <Button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleRate("easy");
+                  }}
+                  variant="outline"
+                  size="sm"
+                  className="border-emerald-500/50 hover:bg-emerald-500/10"
+                >
+                  <Zap className="w-3 h-3 mr-1" />
+                  Easy
+                </Button>
+              </div>
             </div>
           </Card>
         </div>
@@ -173,8 +268,9 @@ export default function FlashcardFlipCard({
           Previous
         </Button>
 
-        <Button onClick={handleFlip} variant="ghost">
+        <Button onClick={handleFlip} variant="ghost" size="sm">
           {isFlipped ? "Show Question" : "Show Answer"}
+          <Badge variant="outline" className="ml-2 text-xs">Space</Badge>
         </Button>
 
         <Button
