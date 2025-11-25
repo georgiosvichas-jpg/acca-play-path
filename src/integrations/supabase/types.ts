@@ -436,6 +436,7 @@ export type Database = {
           id: string
           is_active: boolean | null
           learning_outcome_code: string | null
+          metadata: Json | null
           options: Json | null
           paper: string
           question: string
@@ -454,6 +455,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           learning_outcome_code?: string | null
+          metadata?: Json | null
           options?: Json | null
           paper: string
           question: string
@@ -472,6 +474,7 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           learning_outcome_code?: string | null
+          metadata?: Json | null
           options?: Json | null
           paper?: string
           question?: string

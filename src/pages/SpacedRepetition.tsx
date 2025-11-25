@@ -6,6 +6,8 @@ import { useUserProfile } from "@/hooks/useUserProfile";
 import { usePapers } from "@/hooks/usePapers";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
+import { useTopicPerformance } from "@/hooks/useTopicPerformance";
+import { QuestionActions } from "@/components/QuestionActions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
@@ -60,6 +62,7 @@ export default function SpacedRepetition() {
   } = useSpacedRepetition();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { hasFeature, isLoading: featureLoading } = useFeatureAccess();
+  const { trackPerformance } = useTopicPerformance();
 
   // Feature access state
   const canAccessSRS = hasFeature("spacedRepetition");
@@ -177,6 +180,16 @@ export default function SpacedRepetition() {
       correct: isCorrect
     }];
     setAnswers(newAnswers);
+
+    // Track topic performance
+    if (user) {
+      trackPerformance(
+        currentQuestion.paper,
+        currentQuestion.unit_code,
+        currentQuestion.unit_code || "General",
+        isCorrect
+      );
+    }
 
     // Record in spaced repetition system
     await recordReview(currentQuestion.id, isCorrect);
@@ -502,6 +515,18 @@ export default function SpacedRepetition() {
                     <strong>Explanation:</strong> {currentQuestion.explanation}
                   </AlertDescription>
                 </Alert>
+              )}
+
+              {showFeedback && reviewMode === "mcq" && (
+                <QuestionActions
+                  questionId={currentQuestion.id}
+                  sourceType="spaced_repetition"
+                  question={currentQuestion.question}
+                  options={currentQuestion.options}
+                  correctAnswer={currentQuestion.correct_option_index}
+                  userAnswer={selectedAnswer}
+                  explanation={currentQuestion.explanation}
+                />
               )}
 
               {reviewMode === "mcq" && (
