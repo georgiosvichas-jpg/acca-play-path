@@ -58,6 +58,7 @@ export default function FlashcardsContentNew() {
   const [selectedPaper, setSelectedPaper] = useState<string>("all");
   const [selectedUnit, setSelectedUnit] = useState<string>("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
+  const [shuffleMode, setShuffleMode] = useState(false);
 
   // Get unique values for filters
   const availablePaperCodes = Array.from(new Set(flashcards.map((f) => f.paper_code))).sort();
@@ -463,10 +464,19 @@ export default function FlashcardsContentNew() {
           {/* Filters */}
           <Card>
             <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Filter className="w-5 h-5 text-primary" />
-                Filter Flashcards
-              </CardTitle>
+              <div className="flex items-center justify-between">
+                <CardTitle className="flex items-center gap-2">
+                  <Filter className="w-5 h-5 text-primary" />
+                  Filter Flashcards
+                </CardTitle>
+                <Button
+                  variant={shuffleMode ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => setShuffleMode(!shuffleMode)}
+                >
+                  {shuffleMode ? "Shuffle ON" : "Shuffle OFF"}
+                </Button>
+              </div>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">

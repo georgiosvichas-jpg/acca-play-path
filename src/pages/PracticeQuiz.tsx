@@ -70,6 +70,7 @@ export default function PracticeQuiz() {
   const [numQuestions, setNumQuestions] = useState<number>(10);
   const [availableUnits, setAvailableUnits] = useState<Array<{ code: string; title: string }>>([]);
   const [mode, setMode] = useState<"standard" | "sprint" | "challenge">("standard");
+  const [challengeType, setChallengeType] = useState<"speed" | "accuracy" | "endurance">("speed");
   
   // Quiz state
   const [quizStarted, setQuizStarted] = useState(false);
@@ -114,9 +115,9 @@ export default function PracticeQuiz() {
     }
   }, [paper]);
 
-  // Sprint mode timer
   useEffect(() => {
-    if (!quizStarted || showFeedback || mode !== "sprint") return;
+    if (!quizStarted || showFeedback) return;
+    if (mode !== "sprint" && !(mode === "challenge" && challengeType === "speed")) return;
 
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
@@ -129,7 +130,7 @@ export default function PracticeQuiz() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [quizStarted, showFeedback, mode]);
+  }, [quizStarted, showFeedback, mode, challengeType]);
 
   const fetchAvailableUnits = async () => {
     const { data: questionData, error: questionsError } = await supabase
@@ -173,11 +174,19 @@ export default function PracticeQuiz() {
       if (unitCode !== "all") {
         query = query.eq("unit_code", unitCode);
       }
-      if (difficulty !== "all") {
+      
+      // Challenge mode overrides difficulty setting
+      if (mode === "challenge") {
+        if (challengeType === "accuracy") {
+          query = query.eq("difficulty", "hard");
+        }
+      } else if (difficulty !== "all") {
         query = query.eq("difficulty", difficulty);
       }
 
-      const { data, error } = await query.limit(numQuestions * 3);
+      // Challenge endurance mode needs 50 questions
+      const questionCount = mode === "challenge" && challengeType === "endurance" ? 50 : numQuestions;
+      const { data, error } = await query.limit(questionCount * 3);
 
       if (error) throw error;
 
@@ -188,7 +197,7 @@ export default function PracticeQuiz() {
       }
 
       // Shuffle and take requested number
-      const shuffled = data.sort(() => Math.random() - 0.5).slice(0, Math.min(numQuestions, data.length));
+      const shuffled = data.sort(() => Math.random() - 0.5).slice(0, Math.min(questionCount, data.length));
       setQuestions(shuffled as Question[]);
       setQuizStarted(true);
       setCurrentIndex(0);
@@ -471,9 +480,48 @@ export default function PracticeQuiz() {
                 <Alert>
                   <TrendingUp className="h-4 w-4" />
                   <AlertDescription>
-                    Questions get progressively harder as you answer correctly. Maximum streak rewards!
+                    <strong>Challenge Mode:</strong> Progressive difficulty! Questions get harder as you answer correctly. No hints allowed. Maximum streak rewards and bonus XP!
                   </AlertDescription>
                 </Alert>
+                
+                <div className="space-y-2">
+                  <Label>Challenge Type</Label>
+                  <div className="grid grid-cols-3 gap-2">
+                    <button
+                      onClick={() => setChallengeType("speed")}
+                      className={`p-3 rounded-lg border-2 text-sm transition-all ${
+                        challengeType === "speed"
+                          ? "border-primary bg-primary/10"
+                          : "border-muted hover:border-muted-foreground/50"
+                      }`}
+                    >
+                      <div className="font-semibold">Speed</div>
+                      <div className="text-xs text-muted-foreground">20s each</div>
+                    </button>
+                    <button
+                      onClick={() => setChallengeType("accuracy")}
+                      className={`p-3 rounded-lg border-2 text-sm transition-all ${
+                        challengeType === "accuracy"
+                          ? "border-primary bg-primary/10"
+                          : "border-muted hover:border-muted-foreground/50"
+                      }`}
+                    >
+                      <div className="font-semibold">Accuracy</div>
+                      <div className="text-xs text-muted-foreground">Hard only</div>
+                    </button>
+                    <button
+                      onClick={() => setChallengeType("endurance")}
+                      className={`p-3 rounded-lg border-2 text-sm transition-all ${
+                        challengeType === "endurance"
+                          ? "border-primary bg-primary/10"
+                          : "border-muted hover:border-muted-foreground/50"
+                      }`}
+                    >
+                      <div className="font-semibold">Endurance</div>
+                      <div className="text-xs text-muted-foreground">50 questions</div>
+                    </button>
+                  </div>
+                </div>
               </TabsContent>
             </Tabs>
 
