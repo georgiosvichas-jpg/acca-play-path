@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
+import { usePapers } from "@/hooks/usePapers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -40,9 +41,10 @@ export default function PracticeQuiz() {
   const navigate = useNavigate();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { recordBatchReviews } = useSpacedRepetition();
+  const { papers, loading: papersLoading } = usePapers();
   
   // Setup state
-  const [paper, setPaper] = useState<string>("BT");
+  const [paper, setPaper] = useState<string>("");
   const [unitCode, setUnitCode] = useState<string>("all");
   const [difficulty, setDifficulty] = useState<string>("all");
   const [numQuestions, setNumQuestions] = useState<number>(10);
@@ -59,9 +61,18 @@ export default function PracticeQuiz() {
   const [result, setResult] = useState<QuizResult | null>(null);
   const [loading, setLoading] = useState(false);
 
+  // Set first paper when papers load
+  useEffect(() => {
+    if (papers.length > 0 && !paper) {
+      setPaper(papers[0].paper_code);
+    }
+  }, [papers, paper]);
+
   // Fetch available units on mount
   useEffect(() => {
-    fetchAvailableUnits();
+    if (paper) {
+      fetchAvailableUnits();
+    }
   }, [paper]);
 
   const fetchAvailableUnits = async () => {
@@ -246,12 +257,16 @@ export default function PracticeQuiz() {
           <CardContent className="space-y-6">
             <div className="space-y-2">
               <Label>Paper</Label>
-              <Select value={paper} onValueChange={setPaper}>
+              <Select value={paper} onValueChange={setPaper} disabled={papersLoading}>
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder={papersLoading ? "Loading papers..." : "Select a paper"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="BT">Business and Technology (BT)</SelectItem>
+                  {papers.map((p) => (
+                    <SelectItem key={p.id} value={p.paper_code}>
+                      {p.title} ({p.paper_code})
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
