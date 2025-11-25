@@ -8,6 +8,8 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Search, CheckCircle2 } from "lucide-react";
+import { usePapers } from "@/hooks/usePapers";
+import { useUserProfile } from "@/hooks/useUserProfile";
 
 interface Question {
   id: string;
@@ -22,17 +24,28 @@ interface Question {
 }
 
 export default function QuestionBrowser() {
+  const { papers, loading: papersLoading } = usePapers();
+  const { profile } = useUserProfile();
+  
   const [questions, setQuestions] = useState<Question[]>([]);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
   
   // Filters
-  const [paper, setPaper] = useState<string>("BT");
+  const [paper, setPaper] = useState<string>("");
   const [unitCode, setUnitCode] = useState<string>("all");
   const [difficulty, setDifficulty] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [availableUnits, setAvailableUnits] = useState<string[]>([]);
+
+  // Set initial paper from user profile or first available paper
+  useEffect(() => {
+    if (!papersLoading && papers.length > 0 && !paper) {
+      const defaultPaper = profile?.selected_paper || papers[0].paper_code;
+      setPaper(defaultPaper);
+    }
+  }, [papersLoading, papers, paper, profile]);
 
   useEffect(() => {
     fetchQuestions();
@@ -116,12 +129,16 @@ export default function QuestionBrowser() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label>Paper</Label>
-              <Select value={paper} onValueChange={setPaper}>
+              <Select value={paper} onValueChange={setPaper} disabled={papersLoading}>
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder={papersLoading ? "Loading papers..." : "Select a paper"} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="BT">Business and Technology (BT)</SelectItem>
+                  {papers.map((p) => (
+                    <SelectItem key={p.id} value={p.paper_code}>
+                      {p.title} ({p.paper_code})
+                    </SelectItem>
+                  ))}
                 </SelectContent>
               </Select>
             </div>
