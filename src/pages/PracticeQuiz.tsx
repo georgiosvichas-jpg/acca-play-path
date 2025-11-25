@@ -48,7 +48,7 @@ export default function PracticeQuiz() {
   const [unitCode, setUnitCode] = useState<string>("all");
   const [difficulty, setDifficulty] = useState<string>("all");
   const [numQuestions, setNumQuestions] = useState<number>(10);
-  const [availableUnits, setAvailableUnits] = useState<string[]>([]);
+  const [availableUnits, setAvailableUnits] = useState<Array<{ code: string; title: string }>>([]);
   
   // Quiz state
   const [quizStarted, setQuizStarted] = useState(false);
@@ -76,16 +76,34 @@ export default function PracticeQuiz() {
   }, [paper]);
 
   const fetchAvailableUnits = async () => {
-    const { data, error } = await supabase
+    // Get unique unit codes from questions
+    const { data: questionData, error: questionsError } = await supabase
       .from("sb_questions")
       .select("unit_code")
       .eq("paper", paper)
-      .not("unit_code", "is", null)
-      .order("unit_code");
+      .not("unit_code", "is", null);
 
-    if (!error && data) {
-      const units = [...new Set(data.map(d => d.unit_code).filter(Boolean))] as string[];
-      setAvailableUnits(units);
+    if (questionsError || !questionData) return;
+
+    const uniqueCodes = [...new Set(questionData.map(d => d.unit_code).filter(Boolean))] as string[];
+
+    // Fetch unit titles from syllabus_units
+    const { data: syllabusData, error: syllabusError } = await supabase
+      .from("syllabus_units")
+      .select("unit_code, unit_title")
+      .eq("paper_code", paper)
+      .in("unit_code", uniqueCodes);
+
+    if (!syllabusError && syllabusData) {
+      const unitsWithTitles = uniqueCodes.map(code => {
+        const syllabusUnit = syllabusData.find(s => s.unit_code === code);
+        return {
+          code,
+          title: syllabusUnit?.unit_title || code
+        };
+      }).sort((a, b) => a.code.localeCompare(b.code));
+      
+      setAvailableUnits(unitsWithTitles);
     }
   };
 
@@ -275,12 +293,14 @@ export default function PracticeQuiz() {
               <Label>Unit (Optional)</Label>
               <Select value={unitCode} onValueChange={setUnitCode}>
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select a unit" />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Units</SelectItem>
                   {availableUnits.map(unit => (
-                    <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                    <SelectItem key={unit.code} value={unit.code}>
+                      {unit.code} - {unit.title}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
