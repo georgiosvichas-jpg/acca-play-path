@@ -148,29 +148,31 @@ export default function ProgressDashboard() {
       </div>
 
       {/* Performance by Unit */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Performance by Unit</CardTitle>
-          <CardDescription>Your accuracy across different syllabus units</CardDescription>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            {Object.entries(analytics.accuracy_by_unit)
-              .slice(0, 6)
-              .map(([unit, stats]) => (
-                <div key={unit} className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="font-medium">{unit}</span>
-                    <span className="text-muted-foreground">
-                      {stats.accuracy.toFixed(1)}% ({stats.correct}/{stats.total})
-                    </span>
+      {analytics.accuracy_by_unit && Object.keys(analytics.accuracy_by_unit).length > 0 && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Performance by Unit</CardTitle>
+            <CardDescription>Your accuracy across different syllabus units</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {Object.entries(analytics.accuracy_by_unit)
+                .slice(0, 6)
+                .map(([unit, stats]) => (
+                  <div key={unit} className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span className="font-medium">{unit}</span>
+                      <span className="text-muted-foreground">
+                        {stats.accuracy.toFixed(1)}% ({stats.correct}/{stats.total})
+                      </span>
+                    </div>
+                    <Progress value={stats.accuracy} className="h-2" />
                   </div>
-                  <Progress value={stats.accuracy} className="h-2" />
-                </div>
-              ))}
-          </div>
-        </CardContent>
-      </Card>
+                ))}
+            </div>
+          </CardContent>
+        </Card>
+      )}
 
       {/* Premium Features */}
       {hasFeature("predictiveAnalytics") && (
