@@ -2,11 +2,14 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { usePapers } from "@/hooks/usePapers";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Clock, CheckCircle2, XCircle, TrendingUp } from "lucide-react";
 
@@ -33,7 +36,10 @@ interface QuestionLog {
 export default function MiniTest() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { papers } = usePapers();
+  const { profile } = useUserProfile();
 
+  const [selectedPaper, setSelectedPaper] = useState<string>("");
   const [testStarted, setTestStarted] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -41,6 +47,14 @@ export default function MiniTest() {
   const [startTimes, setStartTimes] = useState<number[]>([]);
   const [testSubmitted, setTestSubmitted] = useState(false);
   const [results, setResults] = useState<any>(null);
+
+  useEffect(() => {
+    if (profile?.selected_paper && !selectedPaper) {
+      setSelectedPaper(profile.selected_paper);
+    } else if (!selectedPaper && papers.length > 0) {
+      setSelectedPaper(papers[0].paper_code);
+    }
+  }, [profile, papers, selectedPaper]);
 
   useEffect(() => {
     if (testStarted && currentIndex < questions.length) {
@@ -51,10 +65,15 @@ export default function MiniTest() {
   }, [currentIndex, testStarted]);
 
   const startTest = async () => {
+    if (!selectedPaper) {
+      toast.error("Please select a paper");
+      return;
+    }
+    
     try {
       const { data, error } = await supabase.functions.invoke("content-batch", {
         body: { 
-          paper: "BT", 
+          paper: selectedPaper, 
           type: "mcq",
           size: 10 
         },
@@ -256,10 +275,26 @@ export default function MiniTest() {
         <div className="min-h-screen bg-background pt-20 px-4">
           <Card className="max-w-2xl mx-auto">
             <CardHeader>
-              <CardTitle>Mini Test - BT</CardTitle>
+              <CardTitle>Mini Test {selectedPaper ? `- ${selectedPaper}` : ""}</CardTitle>
               <CardDescription>Quick 10-question practice test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
+              <div className="space-y-2">
+                <Label htmlFor="paper-select">Select Paper</Label>
+                <Select value={selectedPaper} onValueChange={setSelectedPaper}>
+                  <SelectTrigger id="paper-select">
+                    <SelectValue placeholder="Select a paper" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {papers.map((paper) => (
+                      <SelectItem key={paper.id} value={paper.paper_code}>
+                        {paper.paper_code} - {paper.title}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
               <div className="space-y-2 text-sm">
                 <p className="font-semibold">Test Format:</p>
                 <ul className="list-disc list-inside space-y-1 text-muted-foreground">
@@ -270,7 +305,7 @@ export default function MiniTest() {
                 </ul>
               </div>
 
-              <Button onClick={startTest} className="w-full" size="lg">
+              <Button onClick={startTest} className="w-full" size="lg" disabled={!selectedPaper}>
                 Start Mini Test
               </Button>
             </CardContent>
