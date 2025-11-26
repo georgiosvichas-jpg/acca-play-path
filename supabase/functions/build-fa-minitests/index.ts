@@ -79,9 +79,17 @@ serve(async (req) => {
           .maybeSingle();
 
         if (existingTest) {
-          console.log(`Test "${template.title}" already exists, skipping`);
-          errors.push(`Test "${template.title}" already exists`);
-          continue;
+          console.log(`Test "${template.title}" already exists, deleting and recreating`);
+          
+          // Delete existing test
+          const { error: deleteError } = await supabase
+            .from("sb_minitests")
+            .delete()
+            .eq("id", existingTest.id);
+            
+          if (deleteError) {
+            throw deleteError;
+          }
         }
 
         // Fetch questions from target units
