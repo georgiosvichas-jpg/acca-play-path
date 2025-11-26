@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
@@ -49,6 +49,7 @@ export default function MockExam() {
   const { profile } = useUserProfile();
   const { papers } = usePapers();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { recordBatchReviews } = useSpacedRepetition();
   const { canUseMockExam, remainingMocks, incrementMockUsage, isLoading: usageLoading } = useUsageLimits();
@@ -104,14 +105,18 @@ export default function MockExam() {
   
   const sections = getSections();
   
-  // Initialize selected paper from profile
+  // Initialize selected paper from URL params (AI Path) or profile
   useEffect(() => {
-    if (profile?.selected_paper && !selectedPaper) {
+    const paperParam = searchParams.get("paper");
+    
+    if (paperParam && papers.some(p => p.paper_code === paperParam)) {
+      setSelectedPaper(paperParam);
+    } else if (profile?.selected_paper && !selectedPaper) {
       setSelectedPaper(profile.selected_paper);
     } else if (!selectedPaper && papers.length > 0) {
       setSelectedPaper(papers[0].paper_code);
     }
-  }, [profile, papers]);
+  }, [profile, papers, searchParams]);
 
   // Fetch exam history
   useEffect(() => {
