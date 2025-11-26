@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useUserProfile } from "./useUserProfile";
@@ -19,7 +19,7 @@ interface Unit {
 export function useStudyPreferences(options: UseStudyPreferencesOptions = {}) {
   const { allowAll = false, defaultToFirst = true } = options;
   const [searchParams] = useSearchParams();
-  const { profile } = useUserProfile();
+  const { profile, updateProfile } = useUserProfile();
   const { papers, loading: papersLoading } = usePapers();
 
   const [selectedPaper, setSelectedPaper] = useState<string>("");
@@ -107,6 +107,25 @@ export function useStudyPreferences(options: UseStudyPreferencesOptions = {}) {
 
   const loading = papersLoading || unitsLoading;
 
+  // Auto-save setters that persist to profile
+  const handleSetSelectedPaper = useCallback(async (paper: string) => {
+    setSelectedPaper(paper);
+    setIsFromUrl(false); // Clear URL flag when user manually changes
+    
+    // Auto-save to profile
+    if (paper && paper !== "all") {
+      await updateProfile({ selected_paper: paper });
+    }
+  }, [updateProfile]);
+
+  const handleSetSelectedUnit = useCallback((unit: string) => {
+    setSelectedUnit(unit);
+  }, []);
+
+  const handleSetSelectedDifficulty = useCallback((difficulty: string) => {
+    setSelectedDifficulty(difficulty);
+  }, []);
+
   return {
     // Current selections
     selectedPaper,
@@ -114,10 +133,10 @@ export function useStudyPreferences(options: UseStudyPreferencesOptions = {}) {
     selectedUnit,
     selectedDifficulty,
     
-    // Setters
-    setSelectedPaper,
-    setSelectedUnit,
-    setSelectedDifficulty,
+    // Setters (auto-save to profile)
+    setSelectedPaper: handleSetSelectedPaper,
+    setSelectedUnit: handleSetSelectedUnit,
+    setSelectedDifficulty: handleSetSelectedDifficulty,
     
     // Data
     papers,
