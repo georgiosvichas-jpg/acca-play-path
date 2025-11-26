@@ -5,6 +5,7 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Badge } from "./ui/badge";
 import { CheckCircle2, XCircle } from "lucide-react";
+import { MatchingQuestionDragDrop } from "./MatchingQuestionDragDrop";
 
 interface QuestionRendererProps {
   question: {
@@ -207,49 +208,18 @@ export function QuestionRenderer({
   if (question.type === "MATCHING") {
     const metadata = question.metadata || { leftItems: [], rightItems: [], correctPairs: [] };
     return (
-      <div className="space-y-4">
-        <p className="text-sm text-muted-foreground">Match the items:</p>
-        <div className="grid md:grid-cols-2 gap-6">
-          <div className="space-y-2">
-            {metadata.leftItems?.map((item: string, leftIdx: number) => (
-              <div key={leftIdx} className="p-3 bg-muted rounded-lg">
-                <div className="font-medium mb-2">{leftIdx + 1}. {item}</div>
-                <select
-                  className="w-full p-2 rounded border"
-                  value={matchingAnswers[leftIdx] || ""}
-                  onChange={(e) => handleMatchingChange(leftIdx, parseInt(e.target.value))}
-                  disabled={showFeedback || disabled}
-                >
-                  <option value="">Select match...</option>
-                  {metadata.rightItems?.map((rightItem: string, rightIdx: number) => (
-                    <option key={rightIdx} value={rightIdx}>
-                      {String.fromCharCode(65 + rightIdx)}. {rightItem}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            ))}
-          </div>
-          <div className="space-y-2">
-            {metadata.rightItems?.map((item: string, rightIdx: number) => (
-              <div key={rightIdx} className="p-3 bg-secondary/20 rounded-lg">
-                <span className="font-medium">{String.fromCharCode(65 + rightIdx)}. </span>
-                {item}
-              </div>
-            ))}
-          </div>
-        </div>
-        {showFeedback && (
-          <div className="text-sm">
-            <p className="font-semibold mb-2">Correct Matches:</p>
-            {metadata.correctPairs?.map(([left, right]: [number, number], idx: number) => (
-              <div key={idx}>
-                {left + 1} → {String.fromCharCode(65 + right)}
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      <MatchingQuestionDragDrop
+        leftItems={metadata.leftItems || []}
+        rightItems={metadata.rightItems || []}
+        correctPairs={metadata.correctPairs || []}
+        selectedMatches={selectedAnswer || matchingAnswers}
+        onMatchChange={(matches) => {
+          setMatchingAnswers(matches);
+          onAnswerChange(matches);
+        }}
+        showFeedback={showFeedback}
+        disabled={disabled}
+      />
     );
   }
 
