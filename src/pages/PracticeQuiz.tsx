@@ -15,9 +15,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Slider } from "@/components/ui/slider";
+import { Switch } from "@/components/ui/switch";
 import { toast } from "sonner";
 import { 
   CheckCircle2, 
@@ -72,8 +70,8 @@ export default function PracticeQuiz() {
   const [difficulty, setDifficulty] = useState<string>("all");
   const [numQuestions, setNumQuestions] = useState<number>(10);
   const [availableUnits, setAvailableUnits] = useState<Array<{ code: string; title: string }>>([]);
-  const [mode, setMode] = useState<"standard" | "sprint" | "challenge">("standard");
-  const [challengeType, setChallengeType] = useState<"speed" | "accuracy" | "endurance">("speed");
+  const [timerEnabled, setTimerEnabled] = useState(false);
+  const [gamificationEnabled, setGamificationEnabled] = useState(true);
   
   // Quiz state
   const [quizStarted, setQuizStarted] = useState(false);
@@ -119,8 +117,7 @@ export default function PracticeQuiz() {
   }, [paper]);
 
   useEffect(() => {
-    if (!quizStarted || showFeedback) return;
-    if (mode !== "sprint" && !(mode === "challenge" && challengeType === "speed")) return;
+    if (!quizStarted || showFeedback || !timerEnabled) return;
 
     const timer = setInterval(() => {
       setTimeRemaining((prev) => {
@@ -133,7 +130,7 @@ export default function PracticeQuiz() {
     }, 1000);
 
     return () => clearInterval(timer);
-  }, [quizStarted, showFeedback, mode, challengeType]);
+  }, [quizStarted, showFeedback, timerEnabled]);
 
   const fetchAvailableUnits = async () => {
     const { data: questionData, error: questionsError } = await supabase
@@ -178,17 +175,11 @@ export default function PracticeQuiz() {
         query = query.eq("unit_code", unitCode);
       }
       
-      // Challenge mode overrides difficulty setting
-      if (mode === "challenge") {
-        if (challengeType === "accuracy") {
-          query = query.eq("difficulty", "hard");
-        }
-      } else if (difficulty !== "all") {
+      if (difficulty !== "all") {
         query = query.eq("difficulty", difficulty);
       }
 
-      // Challenge endurance mode needs 50 questions
-      const questionCount = mode === "challenge" && challengeType === "endurance" ? 50 : numQuestions;
+      const questionCount = numQuestions;
       const { data, error } = await query.limit(questionCount * 3);
 
       if (error) throw error;
@@ -262,7 +253,7 @@ export default function PracticeQuiz() {
   const handleAnswer = () => {
     if (selectedAnswer === null) return;
 
-    if (!showConfidence && mode !== "sprint") {
+    if (gamificationEnabled && !showConfidence && !timerEnabled) {
       setShowConfidence(true);
       return;
     }
@@ -271,31 +262,40 @@ export default function PracticeQuiz() {
     const isCorrect = selectedAnswer === currentQuestion.correct_option_index;
     const timeSpent = (Date.now() - questionStartTime) / 1000;
 
-    // Update streak
-    if (isCorrect) {
-      const newStreak = currentStreak + 1;
-      setCurrentStreak(newStreak);
-      setMaxStreak(Math.max(maxStreak, newStreak));
+    // Update streak and XP (only if gamification enabled)
+    if (gamificationEnabled) {
+      if (isCorrect) {
+        const newStreak = currentStreak + 1;
+        setCurrentStreak(newStreak);
+        setMaxStreak(Math.max(maxStreak, newStreak));
 
-      // Calculate XP with streak bonus
-      let xp = 5; // Base XP
-      if (mode === "sprint") xp += 3; // Sprint bonus
-      if (newStreak >= 3) xp += Math.floor(newStreak / 3) * 2; // Combo multiplier
-      if (!hintRevealed) xp += 2; // No hint bonus
-      
-      setEarnedXP(earnedXP + xp);
-      
-      // Show streak toast
-      if (newStreak >= 3) {
-        toast.success(`${newStreak}x Streak! +${xp} XP (${Math.floor(newStreak / 3)}x combo bonus!)`, {
-          icon: <Flame className="w-4 h-4 text-orange-500" />,
-        });
+        // Calculate XP with streak bonus
+        let xp = 5; // Base XP
+        if (timerEnabled) xp += 3; // Timer bonus
+        if (newStreak >= 3) xp += Math.floor(newStreak / 3) * 2; // Combo multiplier
+        if (!hintRevealed) xp += 2; // No hint bonus
+        
+        setEarnedXP(earnedXP + xp);
+        
+        // Show streak toast
+        if (newStreak >= 3) {
+          toast.success(`${newStreak}x Streak! +${xp} XP (${Math.floor(newStreak / 3)}x combo bonus!)`, {
+            icon: <Flame className="w-4 h-4 text-orange-500" />,
+          });
+        } else {
+          toast.success(`Correct! +${xp} XP`);
+        }
       } else {
-        toast.success(`Correct! +${xp} XP`);
+        setCurrentStreak(0);
+        toast.error("Incorrect. Streak reset!");
       }
     } else {
-      setCurrentStreak(0);
-      toast.error("Incorrect. Streak reset!");
+      // Simple feedback without gamification
+      if (isCorrect) {
+        toast.success("Correct!");
+      } else {
+        toast.error("Incorrect");
+      }
     }
 
     // Track topic performance
@@ -372,8 +372,10 @@ export default function PracticeQuiz() {
       if (ans.correct) byDifficulty[diff].correct++;
     });
 
-    // Award final XP
-    await awardXP("quiz_complete", earnedXP);
+    // Award final XP (only if gamification enabled)
+    if (gamificationEnabled) {
+      await awardXP("quiz_complete", earnedXP);
+    }
 
     const quizResult = {
       totalQuestions,
@@ -403,7 +405,7 @@ export default function PracticeQuiz() {
         await supabase.functions.invoke("sessions-log", {
           body: {
             userId: user.id,
-            session_type: mode === "sprint" ? "sprint_drill" : "quick_drill",
+            session_type: timerEnabled ? "sprint_drill" : "quick_drill",
             total_questions: totalQuestions,
             correct_answers: correctAnswers,
             raw_log: rawLog
@@ -451,92 +453,34 @@ export default function PracticeQuiz() {
       <div className="container max-w-3xl mx-auto p-6">
         <Card>
           <CardHeader>
-            <CardTitle>Interactive Practice Drills</CardTitle>
-            <CardDescription>Choose your challenge mode and start earning XP</CardDescription>
+            <CardTitle>Practice Quiz</CardTitle>
+            <CardDescription>Customize your practice session with the options below</CardDescription>
           </CardHeader>
           <CardContent className="space-y-6">
-            <Tabs value={mode} onValueChange={(v: any) => setMode(v)}>
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="standard">
-                  <Target className="w-4 h-4 mr-2" />
-                  Standard
-                </TabsTrigger>
-                <TabsTrigger value="sprint">
-                  <Zap className="w-4 h-4 mr-2" />
-                  Sprint Mode
-                </TabsTrigger>
-                <TabsTrigger value="challenge">
-                  <TrendingUp className="w-4 h-4 mr-2" />
-                  Challenge
-                </TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="standard" className="space-y-4">
-                <Alert>
-                  <Target className="h-4 w-4" />
-                  <AlertDescription>
-                    Standard practice with confidence ratings and hints available. Earn XP for correct answers and build streaks.
-                  </AlertDescription>
-                </Alert>
-              </TabsContent>
-
-              <TabsContent value="sprint" className="space-y-4">
-                <Alert>
-                  <Timer className="h-4 w-4" />
-                  <AlertDescription>
-                    <strong>30 seconds per question!</strong> Answer fast to keep your streak alive. Bonus XP for speed.
-                  </AlertDescription>
-                </Alert>
-              </TabsContent>
-
-              <TabsContent value="challenge" className="space-y-4">
-                <Alert>
-                  <TrendingUp className="h-4 w-4" />
-                  <AlertDescription>
-                    <strong>Challenge Mode:</strong> Progressive difficulty! Questions get harder as you answer correctly. No hints allowed. Maximum streak rewards and bonus XP!
-                  </AlertDescription>
-                </Alert>
-                
-                <div className="space-y-2">
-                  <Label>Challenge Type</Label>
-                  <div className="grid grid-cols-3 gap-2">
-                    <button
-                      onClick={() => setChallengeType("speed")}
-                      className={`p-3 rounded-lg border-2 text-sm transition-all ${
-                        challengeType === "speed"
-                          ? "border-primary bg-primary/10"
-                          : "border-muted hover:border-muted-foreground/50"
-                      }`}
-                    >
-                      <div className="font-semibold">Speed</div>
-                      <div className="text-xs text-muted-foreground">20s each</div>
-                    </button>
-                    <button
-                      onClick={() => setChallengeType("accuracy")}
-                      className={`p-3 rounded-lg border-2 text-sm transition-all ${
-                        challengeType === "accuracy"
-                          ? "border-primary bg-primary/10"
-                          : "border-muted hover:border-muted-foreground/50"
-                      }`}
-                    >
-                      <div className="font-semibold">Accuracy</div>
-                      <div className="text-xs text-muted-foreground">Hard only</div>
-                    </button>
-                    <button
-                      onClick={() => setChallengeType("endurance")}
-                      className={`p-3 rounded-lg border-2 text-sm transition-all ${
-                        challengeType === "endurance"
-                          ? "border-primary bg-primary/10"
-                          : "border-muted hover:border-muted-foreground/50"
-                      }`}
-                    >
-                      <div className="font-semibold">Endurance</div>
-                      <div className="text-xs text-muted-foreground">50 questions</div>
-                    </button>
-                  </div>
+            <div className="space-y-4 p-4 bg-muted/50 rounded-lg">
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="timer-toggle">Timer Mode</Label>
+                  <p className="text-sm text-muted-foreground">30 seconds per question</p>
                 </div>
-              </TabsContent>
-            </Tabs>
+                <Switch
+                  id="timer-toggle"
+                  checked={timerEnabled}
+                  onCheckedChange={setTimerEnabled}
+                />
+              </div>
+              <div className="flex items-center justify-between">
+                <div className="space-y-0.5">
+                  <Label htmlFor="gamification-toggle">Gamification</Label>
+                  <p className="text-sm text-muted-foreground">Enable XP, streaks, and hints</p>
+                </div>
+                <Switch
+                  id="gamification-toggle"
+                  checked={gamificationEnabled}
+                  onCheckedChange={setGamificationEnabled}
+                />
+              </div>
+            </div>
 
             <div className="space-y-2">
               <Label>Paper</Label>
@@ -602,7 +546,7 @@ export default function PracticeQuiz() {
             </div>
 
             <Button onClick={startQuiz} disabled={loading} className="w-full">
-              {loading ? "Loading..." : `Start ${mode === "sprint" ? "Sprint" : mode === "challenge" ? "Challenge" : "Practice"}`}
+              {loading ? "Loading..." : "Start Quiz"}
             </Button>
           </CardContent>
         </Card>
@@ -623,57 +567,88 @@ export default function PracticeQuiz() {
               <CardDescription>Here's your performance breakdown</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="grid md:grid-cols-3 gap-4">
-                <div className="text-center p-4 border rounded-lg">
-                  <div className="text-4xl font-bold text-primary">
-                    {result.accuracy.toFixed(1)}%
+              {gamificationEnabled && (
+                <>
+                  <div className="grid md:grid-cols-3 gap-4">
+                    <div className="text-center p-4 border rounded-lg">
+                      <div className="text-4xl font-bold text-primary">
+                        {result.accuracy.toFixed(1)}%
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">Accuracy</p>
+                    </div>
+                    <div className="text-center p-4 border rounded-lg">
+                      <div className="text-4xl font-bold flex items-center justify-center gap-2">
+                        <Flame className="w-8 h-8 text-orange-500" />
+                        {result.maxStreak}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">Max Streak</p>
+                    </div>
+                    <div className="text-center p-4 border rounded-lg">
+                      <div className="text-4xl font-bold text-green-600">
+                        +{result.totalXP}
+                      </div>
+                      <p className="text-sm text-muted-foreground mt-1">XP Earned</p>
+                    </div>
                   </div>
-                  <p className="text-sm text-muted-foreground mt-1">Accuracy</p>
-                </div>
-                <div className="text-center p-4 border rounded-lg">
-                  <div className="text-4xl font-bold flex items-center justify-center gap-2">
-                    <Flame className="w-8 h-8 text-orange-500" />
-                    {result.maxStreak}
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">Max Streak</p>
-                </div>
-                <div className="text-center p-4 border rounded-lg">
-                  <div className="text-4xl font-bold text-green-600">
-                    +{result.totalXP}
-                  </div>
-                  <p className="text-sm text-muted-foreground mt-1">XP Earned</p>
-                </div>
-              </div>
 
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Score</span>
-                  <span>{result.correctAnswers} / {result.totalQuestions}</span>
-                </div>
-                {mode === "sprint" && (
-                  <div className="flex justify-between text-sm">
-                    <span>Avg Time</span>
-                    <span>{result.avgTimePerQuestion.toFixed(1)}s per question</span>
+                  <div className="space-y-2">
+                    <div className="flex justify-between text-sm">
+                      <span>Score</span>
+                      <span>{result.correctAnswers} / {result.totalQuestions}</span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span>Hints Used</span>
+                      <span>{hintsUsed}</span>
+                    </div>
                   </div>
-                )}
-                <div className="flex justify-between text-sm">
-                  <span>Hints Used</span>
-                  <span>{hintsUsed}</span>
+                </>
+              )}
+
+              {!gamificationEnabled && (
+                <div className="text-center p-6 border rounded-lg">
+                  <div className="text-5xl font-bold text-primary mb-2">
+                    {result.correctAnswers} / {result.totalQuestions}
+                  </div>
+                  <p className="text-lg text-muted-foreground">{result.accuracy.toFixed(1)}% Accuracy</p>
                 </div>
-              </div>
+              )}
 
               <div className="space-y-4">
-                <h3 className="font-semibold">By Unit</h3>
+                <h3 className="font-semibold">Performance by Unit</h3>
                 {Object.entries(result.byUnit).map(([unit, stats]) => (
                   <div key={unit} className="space-y-1">
                     <div className="flex justify-between text-sm">
                       <span>{unit}</span>
-                      <span>{stats.correct} / {stats.total}</span>
+                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
                     </div>
                     <Progress value={(stats.correct / stats.total) * 100} />
                   </div>
                 ))}
               </div>
+
+              {(() => {
+                const weakestUnit = Object.entries(result.byUnit).reduce((min, [unit, stats]) => {
+                  const accuracy = (stats.correct / stats.total) * 100;
+                  return accuracy < (min.accuracy || 100) ? { unit, accuracy, ...stats } : min;
+                }, {} as any);
+
+                if (weakestUnit.unit && weakestUnit.accuracy < 70) {
+                  return (
+                    <div className="p-4 border border-orange-500/50 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
+                      <div className="flex items-start gap-3">
+                        <TrendingUp className="w-5 h-5 text-orange-600 mt-0.5" />
+                        <div>
+                          <h4 className="font-semibold text-orange-900 dark:text-orange-100">Focus Area Identified</h4>
+                          <p className="text-sm text-orange-800 dark:text-orange-200 mt-1">
+                            <strong>{weakestUnit.unit}</strong> needs attention ({weakestUnit.accuracy.toFixed(0)}% accuracy). 
+                            Consider reviewing this topic before your next session.
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                }
+              })()}
 
               <div className="space-y-4">
                 <h3 className="font-semibold">By Difficulty</h3>
@@ -681,7 +656,7 @@ export default function PracticeQuiz() {
                   <div key={diff} className="space-y-1">
                     <div className="flex justify-between text-sm capitalize">
                       <span>{diff}</span>
-                      <span>{stats.correct} / {stats.total}</span>
+                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
                     </div>
                     <Progress value={(stats.correct / stats.total) * 100} />
                   </div>
@@ -718,82 +693,74 @@ export default function PracticeQuiz() {
     <>
       {ConfettiComponent}
       <div className="container max-w-3xl mx-auto p-6">
-        {/* Stats Bar */}
-        <div className="grid grid-cols-4 gap-3 mb-6">
-          <Card className="p-3">
-            <div className="flex items-center gap-2">
-              <Flame className={`w-5 h-5 ${getStreakColor()}`} />
-              <div>
-                <div className="text-2xl font-bold">{currentStreak}</div>
-                <div className="text-xs text-muted-foreground">Streak</div>
-              </div>
-            </div>
-          </Card>
-          <Card className="p-3">
-            <div className="flex items-center gap-2">
-              <Zap className="w-5 h-5 text-green-600" />
-              <div>
-                <div className="text-2xl font-bold">+{earnedXP}</div>
-                <div className="text-xs text-muted-foreground">XP</div>
-              </div>
-            </div>
-          </Card>
-          {mode === "sprint" && (
+        {/* Stats Bar - Only show if gamification enabled */}
+        {gamificationEnabled && (
+          <div className="grid grid-cols-4 gap-3 mb-6">
             <Card className="p-3">
               <div className="flex items-center gap-2">
-                <Timer className={`w-5 h-5 ${timeRemaining <= 10 ? 'text-red-600 animate-pulse' : 'text-primary'}`} />
+                <Flame className={`w-5 h-5 ${getStreakColor()}`} />
                 <div>
-                  <div className="text-2xl font-bold">{timeRemaining}s</div>
-                  <div className="text-xs text-muted-foreground">Left</div>
+                  <div className="text-2xl font-bold">{currentStreak}</div>
+                  <div className="text-xs text-muted-foreground">Streak</div>
                 </div>
               </div>
             </Card>
-          )}
-          <Card className="p-3">
-            <div>
-              <div className="text-2xl font-bold">{currentIndex + 1}/{questions.length}</div>
-              <div className="text-xs text-muted-foreground">Question</div>
-            </div>
-          </Card>
-        </div>
+            <Card className="p-3">
+              <div className="flex items-center gap-2">
+                <Zap className="w-5 h-5 text-green-600" />
+                <div>
+                  <div className="text-2xl font-bold">+{earnedXP}</div>
+                  <div className="text-xs text-muted-foreground">XP</div>
+                </div>
+              </div>
+            </Card>
+            {timerEnabled && (
+              <Card className="p-3">
+                <div className="flex items-center gap-2">
+                  <Timer className={`w-5 h-5 ${timeRemaining <= 10 ? 'text-red-600 animate-pulse' : 'text-primary'}`} />
+                  <div>
+                    <div className="text-2xl font-bold">{timeRemaining}s</div>
+                    <div className="text-xs text-muted-foreground">Left</div>
+                  </div>
+                </div>
+              </Card>
+            )}
+            <Card className="p-3">
+              <div>
+                <div className="text-2xl font-bold">{currentIndex + 1}/{questions.length}</div>
+                <div className="text-xs text-muted-foreground">Question</div>
+              </div>
+            </Card>
+          </div>
+        )}
 
         <div className="mb-4">
           <Progress value={progress} className="h-2" />
         </div>
 
-        {/* Confidence Meter Modal */}
-        {showConfidence && (
+        {/* Confidence Meter Modal - Only show if gamification enabled */}
+        {showConfidence && gamificationEnabled && (
           <Card className="mb-6 border-primary">
             <CardHeader>
               <CardTitle className="text-lg">How confident are you?</CardTitle>
               <CardDescription>Rate your confidence before seeing the result</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span>Not confident</span>
-                  <span>Very confident</span>
-                </div>
-                <Slider
-                  value={[confidence]}
-                  onValueChange={(val) => setConfidence(val[0])}
-                  min={1}
-                  max={5}
-                  step={1}
-                  className="w-full"
-                />
-                <div className="flex justify-center gap-2">
-                  {[1, 2, 3, 4, 5].map(level => (
-                    <Badge 
-                      key={level}
-                      variant={confidence === level ? "default" : "outline"}
-                      className="cursor-pointer"
-                      onClick={() => setConfidence(level)}
-                    >
-                      {level}
-                    </Badge>
-                  ))}
-                </div>
+              <div className="flex justify-center gap-2">
+                {[1, 2, 3, 4, 5].map(level => (
+                  <Badge 
+                    key={level}
+                    variant={confidence === level ? "default" : "outline"}
+                    className="cursor-pointer text-lg px-4 py-2"
+                    onClick={() => setConfidence(level)}
+                  >
+                    {level}
+                  </Badge>
+                ))}
+              </div>
+              <div className="flex justify-between text-sm text-muted-foreground">
+                <span>Not confident</span>
+                <span>Very confident</span>
               </div>
               <Button onClick={handleConfidenceSubmit} className="w-full">
                 Submit Answer
@@ -813,10 +780,10 @@ export default function PracticeQuiz() {
                   {currentQuestion.difficulty && (
                     <Badge variant="secondary" className="capitalize">{currentQuestion.difficulty}</Badge>
                   )}
-                  {mode === "sprint" && (
+                  {timerEnabled && (
                     <Badge variant="default">
                       <Timer className="w-3 h-3 mr-1" />
-                      Sprint
+                      Timed
                     </Badge>
                   )}
                 </div>
@@ -825,7 +792,7 @@ export default function PracticeQuiz() {
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            {!hintRevealed && !showFeedback && (
+            {gamificationEnabled && !hintRevealed && !showFeedback && (
               <Button
                 variant="outline"
                 size="sm"
@@ -837,13 +804,15 @@ export default function PracticeQuiz() {
               </Button>
             )}
 
-            {hintRevealed && !showFeedback && (
-              <Alert>
-                <Lightbulb className="h-4 w-4" />
-                <AlertDescription>
-                  <strong>Hint:</strong> Look for keywords related to {currentQuestion.unit_code}. Consider the most specific answer.
-                </AlertDescription>
-              </Alert>
+            {gamificationEnabled && hintRevealed && !showFeedback && (
+              <div className="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
+                <div className="flex items-start gap-2">
+                  <Lightbulb className="h-4 w-4 text-amber-600 mt-0.5" />
+                  <div className="text-sm">
+                    <strong>Hint:</strong> Look for keywords related to {currentQuestion.unit_code}. Consider the most specific answer.
+                  </div>
+                </div>
+              </div>
             )}
 
             <RadioGroup 
@@ -881,11 +850,11 @@ export default function PracticeQuiz() {
             </RadioGroup>
 
             {showFeedback && currentQuestion.explanation && (
-              <Alert>
-                <AlertDescription>
+              <div className="p-3 bg-blue-50 dark:bg-blue-950/20 border border-blue-200 dark:border-blue-800 rounded-lg">
+                <div className="text-sm">
                   <strong>Explanation:</strong> {currentQuestion.explanation}
-                </AlertDescription>
-              </Alert>
+                </div>
+              </div>
             )}
 
             {showFeedback && (
@@ -901,24 +870,25 @@ export default function PracticeQuiz() {
             )}
 
             <div className="flex gap-3">
-              {!showFeedback ? (
+              {!showFeedback && (
                 <Button 
                   onClick={handleAnswer} 
-                  disabled={selectedAnswer === null || showConfidence} 
-                  className="w-full"
+                  disabled={selectedAnswer === null} 
+                  className="flex-1"
                 >
-                  {showConfidence ? "Rate Confidence Above" : "Submit Answer"}
+                  Submit Answer
                 </Button>
-              ) : (
-                <Button onClick={handleNext} className="w-full">
-                  {currentIndex < questions.length - 1 ? (
-                    <>
-                      Next Question
-                      <ArrowRight className="ml-2 h-4 w-4" />
-                    </>
-                  ) : (
-                    "Finish Quiz"
-                  )}
+              )}
+              {showFeedback && currentIndex < questions.length - 1 && (
+                <Button onClick={handleNext} className="flex-1">
+                  Next Question
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              )}
+              {showFeedback && currentIndex === questions.length - 1 && (
+                <Button onClick={handleNext} className="flex-1">
+                  Finish Quiz
+                  <CheckCircle2 className="ml-2 h-4 w-4" />
                 </Button>
               )}
             </div>

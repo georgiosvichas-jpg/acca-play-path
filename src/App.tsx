@@ -148,7 +148,7 @@ const App = () => (
             <Route path="/study" element={<Navigate to="/practice" replace />} />
             <Route path="/practice-quiz" element={<Navigate to="/practice?tab=quiz" replace />} />
             <Route path="/mock-exam" element={<Navigate to="/practice?tab=mock" replace />} />
-            <Route path="/mini-test" element={<Navigate to="/practice?tab=mini" replace />} />
+            <Route path="/mini-test" element={<Navigate to="/practice?tab=quiz" replace />} />
             <Route path="/flashcards" element={<Navigate to="/learn?tab=flashcards" replace />} />
             <Route path="/question-browser" element={<Navigate to="/learn?tab=browse" replace />} />
             <Route path="/study-path" element={<Navigate to="/learn?tab=path" replace />} />
