@@ -62,6 +62,7 @@ verify_jwt = true
 
 [functions.generate-fa-flashcards]
 verify_jwt = true
+request_timeout_ms = 600000
 
 [functions.build-fa-minitests]
 verify_jwt = true
