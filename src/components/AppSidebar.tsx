@@ -48,8 +48,7 @@ const mainNavItems = [
   { path: "/dashboard", label: "Dashboard", icon: Home },
   { path: "/practice", label: "Practice", icon: Zap },
   { path: "/learn", label: "Learn", icon: BookOpen },
-  { path: "/review", label: "Review", icon: ReviewIcon },
-  { path: "/analytics", label: "Analytics", icon: BarChart3 },
+  { path: "/progress", label: "Progress", icon: BarChart3 },
   { path: "/planner", label: "Planner", icon: CalendarDays },
   { path: "/badges", label: "Badges", icon: Award },
 ];
