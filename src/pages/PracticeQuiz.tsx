@@ -41,6 +41,7 @@ interface Question {
   options: string[];
   correct_option_index: number;
   explanation: string | null;
+  unit_name?: string;
 }
 
 interface QuizResult {
@@ -156,8 +157,24 @@ export default function PracticeQuiz() {
         return;
       }
 
-      // Shuffle and take requested number
-      const shuffled = data.sort(() => Math.random() - 0.5).slice(0, Math.min(questionCount, data.length));
+      // Fetch unit names for this paper
+      const { data: unitsData } = await supabase
+        .from("syllabus_units")
+        .select("unit_code, unit_name, unit_title")
+        .eq("paper_code", paper);
+
+      const unitMap = new Map(
+        unitsData?.map(u => [u.unit_code, u.unit_name || u.unit_title]) || []
+      );
+
+      // Shuffle and take requested number, adding unit names
+      const shuffled = data
+        .sort(() => Math.random() - 0.5)
+        .slice(0, Math.min(questionCount, data.length))
+        .map(q => ({
+          ...q,
+          unit_name: q.unit_code ? unitMap.get(q.unit_code) : undefined
+        }));
       setQuestions(shuffled as Question[]);
       setQuizStarted(true);
       setCurrentIndex(0);
@@ -775,7 +792,11 @@ export default function PracticeQuiz() {
                 <div className="flex items-start gap-2">
                   <Lightbulb className="h-4 w-4 text-amber-600 mt-0.5" />
                   <div className="text-sm">
-                    <strong>Hint:</strong> Look for keywords related to {currentQuestion.unit_code}. Consider the most specific answer.
+                    <strong>Hint:</strong> This question is about{" "}
+                    <strong>{currentQuestion.unit_name || currentQuestion.unit_code || "this topic"}</strong>.{" "}
+                    {currentQuestion.explanation 
+                      ? "Think about the key principles mentioned in the explanation."
+                      : "Consider the fundamental concepts of this topic and the most accurate answer."}
                   </div>
                 </div>
               </div>
