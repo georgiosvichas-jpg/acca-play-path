@@ -2,16 +2,15 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import {
   Home,
-  GraduationCap,
-  Brain,
-  Target,
+  Zap,
+  BookOpen,
+  RefreshCw as ReviewIcon,
   BarChart3,
   CalendarDays,
   Award,
   Settings as SettingsIcon,
   LogOut,
   Crown,
-  ChevronDown,
   RefreshCw,
 } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
@@ -31,9 +30,6 @@ import {
   SidebarHeader,
   SidebarFooter,
   useSidebar,
-  SidebarMenuSub,
-  SidebarMenuSubItem,
-  SidebarMenuSubButton,
 } from "@/components/ui/sidebar";
 import {
   DropdownMenu,
@@ -43,56 +39,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger,
-} from "@/components/ui/collapsible";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import logo from "@/assets/logo-new.png";
 import XPDisplay from "./XPDisplay";
 import PeerComparisonDrawer from "./PeerComparisonDrawer";
 
 const mainNavItems = [
-  { 
-    path: "/dashboard", 
-    label: "Dashboard", 
-    icon: Home,
-  },
-  { 
-    path: "/study", 
-    label: "Study", 
-    icon: GraduationCap,
-    children: [
-      { path: "/study?tab=practice", label: "Practice Quiz" },
-      { path: "/study?tab=flashcards", label: "Flashcards" },
-      { path: "/study?tab=mock", label: "Mock Exam" },
-      { path: "/study?tab=review", label: "Spaced Repetition" },
-      { path: "/study?tab=browse", label: "Question Browser" },
-      { path: "/bookmarks", label: "Bookmarks" },
-      { path: "/weak-areas", label: "Weak Areas" },
-    ]
-  },
-  { 
-    path: "/analytics", 
-    label: "Analytics", 
-    icon: BarChart3,
-    children: [
-      { path: "/analytics?tab=overview", label: "Question Analytics" },
-      { path: "/analytics?tab=progress", label: "Progress Tracking" },
-      { path: "/analytics?tab=trends", label: "Trends" },
-    ]
-  },
-  { 
-    path: "/planner", 
-    label: "Planner", 
-    icon: CalendarDays,
-  },
-  { 
-    path: "/badges", 
-    label: "Badges", 
-    icon: Award,
-  },
+  { path: "/dashboard", label: "Dashboard", icon: Home },
+  { path: "/practice", label: "Practice", icon: Zap },
+  { path: "/learn", label: "Learn", icon: BookOpen },
+  { path: "/review", label: "Review", icon: ReviewIcon },
+  { path: "/analytics", label: "Analytics", icon: BarChart3 },
+  { path: "/planner", label: "Planner", icon: CalendarDays },
+  { path: "/badges", label: "Badges", icon: Award },
 ];
 
 export function AppSidebar() {
@@ -101,18 +60,6 @@ export function AppSidebar() {
   const { planType, refreshSubscription, openCustomerPortal } = useSubscription();
   const collapsed = state === "collapsed";
   const [isRefreshing, setIsRefreshing] = useState(false);
-
-  // Persistent collapsible state
-  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>(() => {
-    const saved = localStorage.getItem("sidebar-expanded-sections");
-    return saved ? JSON.parse(saved) : { study: true, analytics: true };
-  });
-
-  const toggleSection = (section: string, isOpen: boolean) => {
-    const newState = { ...expandedSections, [section]: isOpen };
-    setExpandedSections(newState);
-    localStorage.setItem("sidebar-expanded-sections", JSON.stringify(newState));
-  };
 
   const getPlanBadge = () => {
     if (planType === "elite") return <Badge className="bg-gradient-to-r from-primary to-secondary text-white text-xs">Elite</Badge>;
@@ -173,55 +120,11 @@ export function AppSidebar() {
             <SidebarMenu>
               {mainNavItems.map((item) => {
                 const Icon = item.icon;
-                const sectionKey = item.label.toLowerCase();
-                
-                if (item.children) {
-                  return (
-                    <Collapsible 
-                      key={item.path} 
-                      className="group/collapsible"
-                      open={expandedSections[sectionKey]}
-                      onOpenChange={(isOpen) => toggleSection(sectionKey, isOpen)}
-                    >
-                      <SidebarMenuItem>
-                        <CollapsibleTrigger asChild>
-                          <SidebarMenuButton>
-                            <Icon className="h-4 w-4" />
-                            {!collapsed && <span>{item.label}</span>}
-                            {!collapsed && (
-                              <ChevronDown className="ml-auto h-4 w-4 transition-transform group-data-[state=open]/collapsible:rotate-180" />
-                            )}
-                          </SidebarMenuButton>
-                        </CollapsibleTrigger>
-                        {!collapsed && (
-                          <CollapsibleContent>
-                            <SidebarMenuSub>
-                              {item.children.map((child) => (
-                                <SidebarMenuSubItem key={child.path}>
-                                  <SidebarMenuSubButton asChild>
-                                    <NavLink 
-                                      to={child.path}
-                                      activeClassName="bg-muted text-primary font-medium"
-                                    >
-                                      {child.label}
-                                    </NavLink>
-                                  </SidebarMenuSubButton>
-                                </SidebarMenuSubItem>
-                              ))}
-                            </SidebarMenuSub>
-                          </CollapsibleContent>
-                        )}
-                      </SidebarMenuItem>
-                    </Collapsible>
-                  );
-                }
-
                 return (
                   <SidebarMenuItem key={item.path}>
                     <SidebarMenuButton asChild>
                       <NavLink 
                         to={item.path}
-                        end
                         activeClassName="bg-primary text-primary-foreground font-medium"
                       >
                         <Icon className="h-4 w-4" />

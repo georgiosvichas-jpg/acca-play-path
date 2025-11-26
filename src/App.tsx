@@ -11,13 +11,10 @@ import Leaderboard from "./pages/Leaderboard";
 import Settings from "./pages/Settings";
 import Planner from "./pages/Planner";
 import PlannerEnhanced from "./pages/PlannerEnhanced";
-import PracticeQuiz from "./pages/PracticeQuiz";
-import MockExam from "./pages/MockExam";
-import MiniTest from "./pages/MiniTest";
-import SpacedRepetition from "./pages/SpacedRepetition";
-import QuestionBrowser from "./pages/QuestionBrowser";
 import Analytics from "./pages/Analytics";
-import Study from "./pages/Study";
+import Practice from "./pages/Practice";
+import Learn from "./pages/Learn";
+import Review from "./pages/Review";
 import { AppLayout } from "./components/AppLayout";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -46,8 +43,6 @@ import PaperStrategies from "./pages/blog/PaperStrategies";
 import MultiPaperDashboard from "./pages/MultiPaperDashboard";
 import ExamWeekMode from "./pages/ExamWeekMode";
 import AdminContentImport from "./pages/AdminContentImport";
-import Bookmarks from "./pages/Bookmarks";
-import WeakAreas from "./pages/WeakAreas";
 
 const queryClient = new QueryClient();
 
@@ -114,26 +109,29 @@ const App = () => (
                 </ProtectedRoute>
               }
             />
-            <Route
-              path="/mock-exam" 
+            
+            {/* Smart Grouping Hub Pages */}
+            <Route 
+              path="/practice" 
               element={
                 <ProtectedRoute>
-                  <MockExam />
+                  <Practice />
                 </ProtectedRoute>
               }
             />
-            <Route path="/mini-test" element={
-              <ProtectedRoute>
-                <MiniTest />
-              </ProtectedRoute>
-            } />
-            
-            {/* Unified sections */}
             <Route 
-              path="/study" 
+              path="/learn" 
               element={
                 <ProtectedRoute>
-                  <Study />
+                  <Learn />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/review" 
+              element={
+                <ProtectedRoute>
+                  <Review />
                 </ProtectedRoute>
               }
             />
@@ -146,16 +144,21 @@ const App = () => (
               }
             />
             
-            {/* Legacy routes redirect to unified sections */}
-            <Route path="/flashcards" element={<Study />} />
-            <Route path="/practice-quiz" element={<Study />} />
-            <Route path="/question-browser" element={<Study />} />
-            <Route path="/spaced-repetition" element={<Study />} />
+            {/* Legacy routes redirect to new hub pages */}
+            <Route path="/study" element={<Practice />} />
+            <Route path="/practice-quiz" element={<Practice />} />
+            <Route path="/mock-exam" element={<Practice />} />
+            <Route path="/mini-test" element={<Practice />} />
+            <Route path="/flashcards" element={<Learn />} />
+            <Route path="/question-browser" element={<Learn />} />
+            <Route path="/study-path" element={<Learn />} />
+            <Route path="/spaced-repetition" element={<Review />} />
+            <Route path="/bookmarks" element={<Review />} />
+            <Route path="/weak-areas" element={<Review />} />
             <Route path="/question-analytics" element={<Analytics />} />
             <Route path="/progress-tracking" element={<Analytics />} />
             <Route path="/progress" element={<Analytics />} />
             <Route path="/coach" element={<Dashboard />} />
-            <Route path="/study-path" element={<PlannerEnhanced />} />
             <Route
               path="/multi-paper-dashboard"
               element={
@@ -222,27 +225,11 @@ const App = () => (
           <Route path="/blog/exam-techniques" element={<ExamTechniques />} />
           <Route path="/blog/time-management" element={<TimeManagement />} />
           <Route path="/blog/paper-strategies" element={<PaperStrategies />} />
-          <Route 
+          <Route
             path="/admin/content-import" 
             element={
               <ProtectedRoute>
                 <AdminContentImport />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/bookmarks"
-            element={
-              <ProtectedRoute>
-                <Bookmarks />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/weak-areas"
-            element={
-              <ProtectedRoute>
-                <WeakAreas />
               </ProtectedRoute>
             }
           />
