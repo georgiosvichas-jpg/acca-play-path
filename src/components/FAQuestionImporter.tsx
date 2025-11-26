@@ -8,6 +8,7 @@ export function FAQuestionImporter() {
   const [importing, setImporting] = useState(false);
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
   const [importedCount, setImportedCount] = useState(0);
+  const [skippedErrors, setSkippedErrors] = useState<any[]>([]);
 
   const handleImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -16,6 +17,7 @@ export function FAQuestionImporter() {
     setImporting(true);
     setStatus("idle");
     setImportedCount(0);
+    setSkippedErrors([]);
 
     try {
       const { data: { session } } = await supabase.auth.getSession();
@@ -77,10 +79,11 @@ export function FAQuestionImporter() {
 
       const total = totalInserted + totalUpdated;
       setImportedCount(total);
+      setSkippedErrors(allErrors);
       setStatus("success");
       
       if (total === 0 && totalSkipped > 0) {
-        toast.warning(`All ${allQuestions.length} questions were skipped.`);
+        toast.warning(`All ${allQuestions.length} questions were skipped. Check error log below.`);
       } else if (totalSkipped > 0) {
         toast.success(`Imported ${total} FA questions (${totalInserted} new, ${totalUpdated} updated). ${totalSkipped} skipped.`);
         console.log("Skipped questions:", allErrors);
@@ -96,6 +99,20 @@ export function FAQuestionImporter() {
     }
   };
 
+  const downloadErrorLog = () => {
+    const errorLog = skippedErrors.map(err => 
+      `External ID: ${err.external_id}\nReason: ${err.error_reason}\n---`
+    ).join('\n');
+    
+    const blob = new Blob([errorLog], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `fa-import-errors-${new Date().toISOString()}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-4">
       {status === "success" && importedCount > 0 && (
@@ -109,6 +126,35 @@ export function FAQuestionImporter() {
         <div className="flex items-center gap-2 text-red-600">
           <AlertCircle className="h-5 w-5" />
           <span>Import failed. Please check console for details.</span>
+        </div>
+      )}
+
+      {skippedErrors.length > 0 && (
+        <div className="space-y-2">
+          <div className="flex items-center gap-2 text-orange-600">
+            <AlertCircle className="h-5 w-5" />
+            <span>{skippedErrors.length} questions skipped</span>
+          </div>
+          <Button
+            onClick={downloadErrorLog}
+            variant="outline"
+            size="sm"
+          >
+            Download Error Log
+          </Button>
+          <div className="max-h-60 overflow-y-auto bg-muted p-3 rounded text-xs space-y-2">
+            {skippedErrors.slice(0, 10).map((err, idx) => (
+              <div key={idx} className="border-b border-border pb-2">
+                <div className="font-semibold">ID: {err.external_id}</div>
+                <div className="text-muted-foreground">{err.error_reason}</div>
+              </div>
+            ))}
+            {skippedErrors.length > 10 && (
+              <div className="text-muted-foreground italic">
+                ...and {skippedErrors.length - 10} more (download full log)
+              </div>
+            )}
+          </div>
         </div>
       )}
 
