@@ -143,7 +143,7 @@ const App = () => (
             <Route path="/mini-test" element={<Navigate to="/practice?tab=quiz" replace />} />
             <Route path="/flashcards" element={<Navigate to="/learn?tab=flashcards" replace />} />
             <Route path="/question-browser" element={<Navigate to="/learn?tab=browse" replace />} />
-            <Route path="/study-path" element={<Navigate to="/learn?tab=path" replace />} />
+            <Route path="/study-path" element={<Navigate to="/planner" replace />} />
             <Route path="/review" element={<Navigate to="/progress?tab=focus" replace />} />
             <Route path="/analytics" element={<Navigate to="/progress?tab=dashboard" replace />} />
             <Route path="/spaced-repetition" element={<Navigate to="/progress?tab=focus" replace />} />
