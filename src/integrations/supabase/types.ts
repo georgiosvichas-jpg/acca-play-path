@@ -570,6 +570,7 @@ export type Database = {
           exam_date: string
           id: string
           is_active: boolean | null
+          papers: string[] | null
           path_data: Json
           progress: Json | null
           updated_at: string | null
@@ -581,6 +582,7 @@ export type Database = {
           exam_date: string
           id?: string
           is_active?: boolean | null
+          papers?: string[] | null
           path_data: Json
           progress?: Json | null
           updated_at?: string | null
@@ -592,6 +594,7 @@ export type Database = {
           exam_date?: string
           id?: string
           is_active?: boolean | null
+          papers?: string[] | null
           path_data?: Json
           progress?: Json | null
           updated_at?: string | null

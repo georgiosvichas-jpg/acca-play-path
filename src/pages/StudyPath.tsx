@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { useStudySessions } from "@/hooks/useStudySessions";
+import { usePapers } from "@/hooks/usePapers";
 import { format, isSameDay, parseISO } from "date-fns";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -15,7 +16,7 @@ import { Progress } from "@/components/ui/progress";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { Switch } from "@/components/ui/switch";
-import { Calendar, Target, Loader2, CheckCircle2, Clock, AlertCircle, Sparkles, Lock, ChevronDown, ChevronRight, Bell, BellOff, CalendarDays } from "lucide-react";
+import { Calendar, Target, Loader2, CheckCircle2, Clock, AlertCircle, Sparkles, Lock, ChevronDown, ChevronRight, Bell, BellOff, CalendarDays, ExternalLink, BookOpen, Brain, PenTool } from "lucide-react";
 import { toast } from "sonner";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 
@@ -53,6 +54,7 @@ export default function StudyPath() {
   const navigate = useNavigate();
   const { hasFeature, planType, isLoading: featureLoading } = useFeatureAccess();
   const { sessions } = useStudySessions();
+  const { papers } = usePapers();
   
   const [loading, setLoading] = useState(false);
   const [savedPath, setSavedPath] = useState<SavedPath | null>(null);
@@ -66,6 +68,7 @@ export default function StudyPath() {
   // Form state
   const [examDate, setExamDate] = useState("");
   const [weeksAvailable, setWeeksAvailable] = useState(8);
+  const [selectedPapers, setSelectedPapers] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   const canAccessFullStudyPlan = hasFeature("studyPlanDays") && planType !== "free";
@@ -192,8 +195,24 @@ export default function StudyPath() {
   useEffect(() => {
     if (user) {
       fetchSavedPath();
+      // Load user's selected papers from profile
+      loadUserPapers();
     }
   }, [user]);
+
+  const loadUserPapers = async () => {
+    if (!user) return;
+    
+    const { data } = await supabase
+      .from('user_profiles')
+      .select('selected_papers')
+      .eq('user_id', user.id)
+      .single();
+    
+    if (data?.selected_papers && data.selected_papers.length > 0) {
+      setSelectedPapers(data.selected_papers);
+    }
+  };
 
   const fetchSavedPath = async () => {
     if (!user) return;
@@ -226,6 +245,11 @@ export default function StudyPath() {
       return;
     }
 
+    if (selectedPapers.length === 0) {
+      toast.error("Please select at least one paper");
+      return;
+    }
+
     // Check if free user trying to generate plan beyond 1 week
     if (planType === "free" && weeksAvailable > 1) {
       setShowPaywall(true);
@@ -237,7 +261,7 @@ export default function StudyPath() {
 
     try {
       const { data, error: functionError } = await supabase.functions.invoke('generate-study-path', {
-        body: { examDate, weeksAvailable }
+        body: { examDate, weeksAvailable, papers: selectedPapers }
       });
 
       if (functionError) throw functionError;
@@ -295,6 +319,42 @@ export default function StudyPath() {
     return totalTasks > 0 ? (completedTasks / totalTasks) * 100 : 0;
   };
 
+  const parseTaskLink = (taskText: string): { type: string; paper: string; unit: string; link: string } | null => {
+    const practiceMatch = taskText.match(/Practice\s+([A-Z]+)\s+([A-Z0-9]+)/i);
+    const reviewMatch = taskText.match(/Review.*(?:flashcards|questions).*for\s+([A-Z]+)\s+([A-Z0-9]+)/i);
+    const mockMatch = taskText.match(/Mock.*exam.*for\s+([A-Z]+)/i);
+    
+    if (practiceMatch) {
+      const paper = practiceMatch[1];
+      const unit = practiceMatch[2];
+      return { type: 'practice', paper, unit, link: `/practice?paper=${paper}&unit=${unit}` };
+    } else if (reviewMatch) {
+      const paper = reviewMatch[1];
+      const unit = reviewMatch[2];
+      return { type: 'flashcards', paper, unit, link: `/learn?tab=flashcards&paper=${paper}` };
+    } else if (mockMatch) {
+      const paper = mockMatch[1];
+      return { type: 'mock', paper, unit: '', link: `/practice?tab=mock&paper=${paper}` };
+    }
+    
+    return null;
+  };
+
+  const getTaskIcon = (type: string) => {
+    switch (type) {
+      case 'practice': return <PenTool className="w-3 h-3" />;
+      case 'flashcards': return <Brain className="w-3 h-3" />;
+      case 'mock': return <BookOpen className="w-3 h-3" />;
+      default: return <ExternalLink className="w-3 h-3" />;
+    }
+  };
+
+  const togglePaperSelection = (paperCode: string) => {
+    setSelectedPapers(prev =>
+      prev.includes(paperCode) ? prev.filter(p => p !== paperCode) : [...prev, paperCode]
+    );
+  };
+
   if (!studyPath) {
     return (
       <>
@@ -327,6 +387,27 @@ export default function StudyPath() {
               )}
 
               <div className="space-y-4">
+                <div className="space-y-2">
+                  <Label>Select Papers</Label>
+                  <div className="grid grid-cols-2 gap-2 mt-2">
+                    {papers.map((paper) => (
+                      <div key={paper.id} className="flex items-center space-x-2">
+                        <Checkbox
+                          id={`paper-${paper.paper_code}`}
+                          checked={selectedPapers.includes(paper.paper_code)}
+                          onCheckedChange={() => togglePaperSelection(paper.paper_code)}
+                        />
+                        <label
+                          htmlFor={`paper-${paper.paper_code}`}
+                          className="text-sm font-medium leading-none cursor-pointer"
+                        >
+                          {paper.paper_code} - {paper.title}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <div className="space-y-2">
                   <Label>Exam Date</Label>
                   <Input 
@@ -684,6 +765,7 @@ export default function StudyPath() {
                                   {day.tasks.map((task, taskIdx) => {
                                     const taskId = `w${week.weekNumber}-d${dayIdx}-t${taskIdx}`;
                                     const isCompleted = progress[taskId] || false;
+                                    const taskLink = parseTaskLink(task);
                                     
                                     return (
                                       <div 
@@ -697,11 +779,26 @@ export default function StudyPath() {
                                           onCheckedChange={() => toggleTask(taskId)}
                                           className="mt-1"
                                         />
-                                        <span className={`text-sm flex-1 ${
-                                          isCompleted ? 'line-through text-muted-foreground' : ''
-                                        }`}>
-                                          {task}
-                                        </span>
+                                        {taskLink ? (
+                                          <button
+                                            onClick={() => navigate(taskLink.link)}
+                                            className={`text-sm flex-1 text-left flex items-center gap-1.5 hover:text-primary transition-colors ${
+                                              isCompleted ? 'line-through text-muted-foreground' : ''
+                                            }`}
+                                          >
+                                            <span className="flex-1">{task}</span>
+                                            <Badge variant="outline" className="text-xs gap-1">
+                                              {getTaskIcon(taskLink.type)}
+                                              {taskLink.type}
+                                            </Badge>
+                                          </button>
+                                        ) : (
+                                          <span className={`text-sm flex-1 ${
+                                            isCompleted ? 'line-through text-muted-foreground' : ''
+                                          }`}>
+                                            {task}
+                                          </span>
+                                        )}
                                         {isCompleted && (
                                           <CheckCircle2 className="h-4 w-4 text-primary flex-shrink-0 mt-1" />
                                         )}
