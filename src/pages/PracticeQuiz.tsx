@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
+import { useUserProfile } from "@/hooks/useUserProfile";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useXP } from "@/hooks/useXP";
@@ -94,6 +95,7 @@ export default function PracticeQuiz() {
   const { recordBatchReviews } = useSpacedRepetition();
   const { awardXP, currentXP, ConfettiComponent } = useXP();
   const { trackPerformance } = useTopicPerformance();
+  const { refetchProfile } = useUserProfile();
   
   // Study preferences hook
   const {
@@ -161,6 +163,9 @@ export default function PracticeQuiz() {
   }, [quizStarted, showFeedback, timerEnabled]);
 
   const startQuiz = async () => {
+    // Refresh profile to get latest XP balance
+    await refetchProfile();
+    
     setLoading(true);
     try {
       let query = supabase
@@ -254,7 +259,7 @@ export default function PracticeQuiz() {
     if (gamificationEnabled) {
       const hintCost = 5;
       if (currentXP < hintCost) {
-        toast.error(`Need ${hintCost} XP to unlock hint`);
+        toast.error(`Not enough XP! You need 5 XP but only have ${currentXP} XP.`);
         return;
       }
       awardXP("hint_used", -hintCost);
@@ -731,8 +736,10 @@ export default function PracticeQuiz() {
               <div className="flex items-center gap-2">
                 <Zap className="w-5 h-5 text-green-600" />
                 <div>
-                  <div className="text-2xl font-bold">+{earnedXP}</div>
-                  <div className="text-xs text-muted-foreground">XP</div>
+                  <div className="text-2xl font-bold">{currentXP}</div>
+                  <div className="text-xs text-muted-foreground">
+                    XP Balance {earnedXP > 0 && <span className="text-green-600">(+{earnedXP})</span>}
+                  </div>
                 </div>
               </div>
             </Card>
@@ -819,9 +826,10 @@ export default function PracticeQuiz() {
                 variant="outline"
                 size="sm"
                 onClick={unlockHint}
+                disabled={gamificationEnabled && currentXP < 5}
               >
                 <Lightbulb className="w-4 h-4 mr-2" />
-                {gamificationEnabled ? "Reveal Hint (-5 XP)" : "Reveal Hint"}
+                {gamificationEnabled ? `Reveal Hint (${currentXP}/5 XP)` : "Reveal Hint"}
               </Button>
             )}
 
