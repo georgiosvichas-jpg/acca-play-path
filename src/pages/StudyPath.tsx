@@ -513,6 +513,56 @@ export default function StudyPath() {
     return weekTasks > 0 ? (completedTasks / weekTasks) * 100 : 0;
   };
 
+  const getPaperProgress = () => {
+    if (!studyPath) return [];
+    
+    const paperStats: Record<string, { total: number; completed: number; paper: any }> = {};
+    
+    studyPath.weeks.forEach((week) => {
+      week.dailyTasks.forEach((day, dayIdx) => {
+        day.tasks.forEach((task, taskIdx) => {
+          const taskId = `w${week.weekNumber}-d${dayIdx}-t${taskIdx}`;
+          const taskLink = parseTaskLink(task);
+          
+          if (taskLink?.paper) {
+            const paperCode = taskLink.paper;
+            if (!paperStats[paperCode]) {
+              paperStats[paperCode] = { 
+                total: 0, 
+                completed: 0,
+                paper: papers.find(p => p.paper_code === paperCode)
+              };
+            }
+            paperStats[paperCode].total++;
+            if (progress[taskId]) {
+              paperStats[paperCode].completed++;
+            }
+          }
+        });
+      });
+    });
+    
+    return Object.entries(paperStats).map(([code, stats]) => ({
+      paperCode: code,
+      paperTitle: stats.paper?.title || code,
+      progress: stats.total > 0 ? (stats.completed / stats.total) * 100 : 0,
+      completed: stats.completed,
+      total: stats.total
+    }));
+  };
+
+  const getProgressColor = (progress: number) => {
+    if (progress >= 70) return 'bg-emerald-500';
+    if (progress >= 40) return 'bg-yellow-500';
+    return 'bg-red-500';
+  };
+
+  const getProgressBadgeVariant = (progress: number): "default" | "secondary" | "destructive" => {
+    if (progress >= 70) return 'default';
+    if (progress >= 40) return 'secondary';
+    return 'destructive';
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
@@ -526,66 +576,111 @@ export default function StudyPath() {
       </div>
 
       {savedPath && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <Card>
-            <CardContent className="pt-6">
-              <div className="flex items-center justify-between mb-2">
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2">
-                    <Calendar className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">Exam: {new Date(savedPath.exam_date).toLocaleDateString()}</span>
+        <div className="space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <Card>
+              <CardContent className="pt-6">
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-2">
+                      <Calendar className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">Exam: {new Date(savedPath.exam_date).toLocaleDateString()}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Clock className="h-4 w-4 text-muted-foreground" />
+                      <span className="text-sm">{savedPath.weeks_duration} weeks</span>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <Clock className="h-4 w-4 text-muted-foreground" />
-                    <span className="text-sm">{savedPath.weeks_duration} weeks</span>
-                  </div>
+                  <span className="text-2xl font-bold">{progressPercentage.toFixed(0)}%</span>
                 </div>
-                <span className="text-2xl font-bold">{progressPercentage.toFixed(0)}%</span>
-              </div>
-              <Progress value={progressPercentage} className="mb-2" />
-              <p className="text-xs text-muted-foreground text-center">Overall Progress</p>
-            </CardContent>
-          </Card>
+                <Progress value={progressPercentage} className="mb-2" />
+                <p className="text-xs text-muted-foreground text-center">Overall Progress</p>
+              </CardContent>
+            </Card>
 
-          <Card>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-base flex items-center gap-2">
+                  <Bell className="h-4 w-4" />
+                  Daily Reminders
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-4">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    {notificationsEnabled ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4 text-muted-foreground" />}
+                    <span className="text-sm">Browser Notifications</span>
+                  </div>
+                  <Switch
+                    checked={notificationsEnabled}
+                    onCheckedChange={(checked) => {
+                      if (checked) {
+                        requestNotificationPermission();
+                      } else {
+                        setNotificationsEnabled(false);
+                      }
+                    }}
+                  />
+                </div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <Bell className="h-4 w-4" />
+                    <span className="text-sm">Email Reminders</span>
+                  </div>
+                  <Switch
+                    checked={emailReminders}
+                    onCheckedChange={toggleEmailReminders}
+                  />
+                </div>
+                {(notificationsEnabled || emailReminders) && (
+                  <p className="text-xs text-muted-foreground">
+                    You'll receive reminders for upcoming tasks each morning
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Per-Paper Progress Card */}
+          <Card className="border-primary/20">
             <CardHeader>
               <CardTitle className="text-base flex items-center gap-2">
-                <Bell className="h-4 w-4" />
-                Daily Reminders
+                <Target className="h-5 w-5" />
+                Progress by Paper
               </CardTitle>
+              <CardDescription>Track completion status for each paper</CardDescription>
             </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  {notificationsEnabled ? <Bell className="h-4 w-4" /> : <BellOff className="h-4 w-4 text-muted-foreground" />}
-                  <span className="text-sm">Browser Notifications</span>
-                </div>
-                <Switch
-                  checked={notificationsEnabled}
-                  onCheckedChange={(checked) => {
-                    if (checked) {
-                      requestNotificationPermission();
-                    } else {
-                      setNotificationsEnabled(false);
-                    }
-                  }}
-                />
+            <CardContent>
+              <div className="space-y-4">
+                {getPaperProgress().map((paper) => (
+                  <div key={paper.paperCode} className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <Badge variant={getProgressBadgeVariant(paper.progress)} className="font-mono">
+                          {paper.paperCode}
+                        </Badge>
+                        <span className="text-sm font-medium">{paper.paperTitle}</span>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm text-muted-foreground">
+                          {paper.completed}/{paper.total} tasks
+                        </span>
+                        <span className="text-sm font-semibold">{paper.progress.toFixed(0)}%</span>
+                      </div>
+                    </div>
+                    <Progress 
+                      value={paper.progress} 
+                      className="h-2"
+                      indicatorClassName={getProgressColor(paper.progress)}
+                    />
+                  </div>
+                ))}
+                {getPaperProgress().length === 0 && (
+                  <p className="text-sm text-muted-foreground text-center py-4">
+                    No paper-specific tasks found in your study path
+                  </p>
+                )}
               </div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Bell className="h-4 w-4" />
-                  <span className="text-sm">Email Reminders</span>
-                </div>
-                <Switch
-                  checked={emailReminders}
-                  onCheckedChange={toggleEmailReminders}
-                />
-              </div>
-              {(notificationsEnabled || emailReminders) && (
-                <p className="text-xs text-muted-foreground">
-                  You'll receive reminders for upcoming tasks each morning
-                </p>
-              )}
             </CardContent>
           </Card>
         </div>
