@@ -1,12 +1,12 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
-import { usePapers } from "@/hooks/usePapers";
 import { useXP } from "@/hooks/useXP";
 import { useTopicPerformance } from "@/hooks/useTopicPerformance";
+import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 import { QuestionActions } from "@/components/QuestionActions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -58,19 +58,26 @@ interface QuizResult {
 export default function PracticeQuiz() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { recordBatchReviews } = useSpacedRepetition();
-  const { papers, loading: papersLoading } = usePapers();
   const { awardXP, currentXP, ConfettiComponent } = useXP();
   const { trackPerformance } = useTopicPerformance();
   
+  // Study preferences hook
+  const {
+    selectedPaper: paper,
+    selectedUnit: unitCode,
+    selectedDifficulty: difficulty,
+    setSelectedPaper: setPaper,
+    setSelectedUnit: setUnitCode,
+    setSelectedDifficulty: setDifficulty,
+    papers,
+    availableUnits,
+    loading: prefsLoading,
+  } = useStudyPreferences();
+  
   // Setup state
-  const [paper, setPaper] = useState<string>("");
-  const [unitCode, setUnitCode] = useState<string>("all");
-  const [difficulty, setDifficulty] = useState<string>("all");
   const [numQuestions, setNumQuestions] = useState<number>(10);
-  const [availableUnits, setAvailableUnits] = useState<Array<{ code: string; title: string }>>([]);
   const [timerEnabled, setTimerEnabled] = useState(false);
   const [gamificationEnabled, setGamificationEnabled] = useState(true);
   
@@ -103,27 +110,7 @@ export default function PracticeQuiz() {
   const [hintRevealed, setHintRevealed] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
 
-  // Initialize from URL params (AI Path navigation)
-  useEffect(() => {
-    const paperParam = searchParams.get("paper");
-    const unitParam = searchParams.get("unit");
-    
-    if (paperParam && papers.some(p => p.paper_code === paperParam)) {
-      setPaper(paperParam);
-      if (unitParam) {
-        setUnitCode(unitParam);
-      }
-    } else if (papers.length > 0 && !paper) {
-      setPaper(papers[0].paper_code);
-    }
-  }, [papers, searchParams]);
-
-  // Fetch available units on mount
-  useEffect(() => {
-    if (paper) {
-      fetchAvailableUnits();
-    }
-  }, [paper]);
+  // No manual initialization needed - handled by useStudyPreferences hook
 
   useEffect(() => {
     if (!quizStarted || showFeedback || !timerEnabled) return;
@@ -140,36 +127,6 @@ export default function PracticeQuiz() {
 
     return () => clearInterval(timer);
   }, [quizStarted, showFeedback, timerEnabled]);
-
-  const fetchAvailableUnits = async () => {
-    const { data: questionData, error: questionsError } = await supabase
-      .from("sb_questions")
-      .select("unit_code")
-      .eq("paper", paper)
-      .not("unit_code", "is", null);
-
-    if (questionsError || !questionData) return;
-
-    const uniqueCodes = [...new Set(questionData.map(d => d.unit_code).filter(Boolean))] as string[];
-
-    const { data: syllabusData, error: syllabusError } = await supabase
-      .from("syllabus_units")
-      .select("unit_code, unit_title")
-      .eq("paper_code", paper)
-      .in("unit_code", uniqueCodes);
-
-    if (!syllabusError && syllabusData) {
-      const unitsWithTitles = uniqueCodes.map(code => {
-        const syllabusUnit = syllabusData.find(s => s.unit_code === code);
-        return {
-          code,
-          title: syllabusUnit?.unit_title || code
-        };
-      }).sort((a, b) => a.code.localeCompare(b.code));
-      
-      setAvailableUnits(unitsWithTitles);
-    }
-  };
 
   const startQuiz = async () => {
     setLoading(true);
@@ -516,8 +473,8 @@ export default function PracticeQuiz() {
                 <SelectContent>
                   <SelectItem value="all">All Units</SelectItem>
                   {availableUnits.map(unit => (
-                    <SelectItem key={unit.code} value={unit.code}>
-                      {unit.code} - {unit.title}
+                    <SelectItem key={unit.id} value={unit.unit_code}>
+                      {unit.unit_code} - {unit.unit_title}
                     </SelectItem>
                   ))}
                 </SelectContent>

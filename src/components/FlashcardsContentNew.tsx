@@ -1,11 +1,9 @@
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserProfile } from "@/hooks/useUserProfile";
-import { usePapers } from "@/hooks/usePapers";
 import { useXP } from "@/hooks/useXP";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
+import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 import FlashcardFlipCard from "./FlashcardFlipCard";
@@ -35,9 +33,6 @@ interface Flashcard {
 
 export default function FlashcardsContentNew() {
   const { user } = useAuth();
-  const { profile } = useUserProfile();
-  const { papers: allPapers } = usePapers();
-  const [searchParams] = useSearchParams();
   const { awardXP } = useXP();
   const { 
     canUseFlashcard, 
@@ -47,6 +42,19 @@ export default function FlashcardsContentNew() {
     isLoading: usageLoading 
   } = useUsageLimits();
   const { planType, getUpgradeMessage } = useFeatureAccess();
+  
+  // Study preferences hook (allowAll for "all papers" option)
+  const {
+    selectedPaper,
+    selectedUnit,
+    selectedDifficulty,
+    setSelectedPaper,
+    setSelectedUnit,
+    setSelectedDifficulty,
+    papers,
+    loading: prefsLoading,
+  } = useStudyPreferences({ allowAll: true });
+  
   const [flashcards, setFlashcards] = useState<Flashcard[]>([]);
   const [filteredCards, setFilteredCards] = useState<Flashcard[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -58,9 +66,6 @@ export default function FlashcardsContentNew() {
   const [topicMastery, setTopicMastery] = useState<Record<string, { mastery: number; total: number; goodCount: number }>>({});
 
   // Filters
-  const [selectedPaper, setSelectedPaper] = useState<string>("all");
-  const [selectedUnit, setSelectedUnit] = useState<string>("all");
-  const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
   const [shuffleMode, setShuffleMode] = useState(false);
   const [peekMode, setPeekMode] = useState(false);
 
@@ -69,16 +74,7 @@ export default function FlashcardsContentNew() {
   const units = Array.from(new Set(flashcards.map((f) => f.unit_title))).sort();
   const difficulties = ["Easy", "Medium", "Hard"];
   
-  // Initialize selected paper from URL params (AI Path) or profile
-  useEffect(() => {
-    const paperParam = searchParams.get("paper");
-    
-    if (paperParam && flashcards.some(f => f.paper_code === paperParam)) {
-      setSelectedPaper(paperParam);
-    } else if (profile?.selected_paper && selectedPaper === "all") {
-      setSelectedPaper(profile.selected_paper);
-    }
-  }, [profile, searchParams, flashcards]);
+  // No manual initialization needed - handled by useStudyPreferences hook
 
   useEffect(() => {
     fetchFlashcards();
@@ -511,7 +507,7 @@ export default function FlashcardsContentNew() {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Papers</SelectItem>
-                      {allPapers.map((paper) => (
+                      {papers.map((paper) => (
                         <SelectItem key={paper.id} value={paper.paper_code}>
                           {paper.paper_code} - {paper.title}
                         </SelectItem>

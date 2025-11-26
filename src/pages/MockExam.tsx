@@ -1,14 +1,13 @@
 import { useState, useEffect, useRef } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserProfile } from "@/hooks/useUserProfile";
-import { usePapers } from "@/hooks/usePapers";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { useTopicPerformance } from "@/hooks/useTopicPerformance";
+import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 import { QuestionActions } from "@/components/QuestionActions";
 import { QuestionRenderer } from "@/components/QuestionRenderer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -46,10 +45,7 @@ interface Section {
 
 export default function MockExam() {
   const { user } = useAuth();
-  const { profile } = useUserProfile();
-  const { papers } = usePapers();
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { recordBatchReviews } = useSpacedRepetition();
   const { canUseMockExam, remainingMocks, incrementMockUsage, isLoading: usageLoading } = useUsageLimits();
@@ -58,8 +54,14 @@ export default function MockExam() {
   const [showPaywall, setShowPaywall] = useState(false);
   const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("pro");
   
-  // Paper selection
-  const [selectedPaper, setSelectedPaper] = useState<string>("");
+  // Study preferences hook
+  const {
+    selectedPaper,
+    setSelectedPaper,
+    papers,
+    loading: prefsLoading,
+  } = useStudyPreferences();
+  
   const [examLength, setExamLength] = useState<"quick" | "half" | "full">("full");
   const [showHistory, setShowHistory] = useState(false);
   const [examHistory, setExamHistory] = useState<any[]>([]);
@@ -105,18 +107,7 @@ export default function MockExam() {
   
   const sections = getSections();
   
-  // Initialize selected paper from URL params (AI Path) or profile
-  useEffect(() => {
-    const paperParam = searchParams.get("paper");
-    
-    if (paperParam && papers.some(p => p.paper_code === paperParam)) {
-      setSelectedPaper(paperParam);
-    } else if (profile?.selected_paper && !selectedPaper) {
-      setSelectedPaper(profile.selected_paper);
-    } else if (!selectedPaper && papers.length > 0) {
-      setSelectedPaper(papers[0].paper_code);
-    }
-  }, [profile, papers, searchParams]);
+  // No manual initialization needed - handled by useStudyPreferences hook
 
   // Fetch exam history
   useEffect(() => {

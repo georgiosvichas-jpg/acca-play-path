@@ -2,11 +2,10 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
-import { useUserProfile } from "@/hooks/useUserProfile";
-import { usePapers } from "@/hooks/usePapers";
 import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
 import { useTopicPerformance } from "@/hooks/useTopicPerformance";
+import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 import { QuestionActions } from "@/components/QuestionActions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -50,8 +49,6 @@ interface Question {
 
 export default function SpacedRepetition() {
   const { user } = useAuth();
-  const { profile } = useUserProfile();
-  const { papers } = usePapers();
   const navigate = useNavigate();
   const { 
     recordReview, 
@@ -68,8 +65,13 @@ export default function SpacedRepetition() {
   const canAccessSRS = hasFeature("spacedRepetition");
   const [showPaywall, setShowPaywall] = useState(false);
 
-  // Paper selection
-  const [selectedPaper, setSelectedPaper] = useState<string>("");
+  // Study preferences hook (with URL param support for AI Path)
+  const {
+    selectedPaper,
+    setSelectedPaper,
+    papers,
+    loading: prefsLoading,
+  } = useStudyPreferences();
 
   // Dashboard state
   const [stats, setStats] = useState<any>(null);
@@ -90,14 +92,7 @@ export default function SpacedRepetition() {
   const [reviewMode, setReviewMode] = useState<"mcq" | "retrieval">("mcq");
   const [focusMode, setFocusMode] = useState(false);
   
-  // Initialize selected paper from profile
-  useEffect(() => {
-    if (profile?.selected_paper && !selectedPaper) {
-      setSelectedPaper(profile.selected_paper);
-    } else if (!selectedPaper && papers.length > 0) {
-      setSelectedPaper(papers[0].paper_code);
-    }
-  }, [profile, papers]);
+  // No manual initialization needed - handled by useStudyPreferences hook
 
   useEffect(() => {
     if (selectedPaper) {
