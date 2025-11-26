@@ -197,10 +197,15 @@ export default function FlashcardFlipCard({
               </div>
             </CardContent>
 
-            <div className="p-4 border-t bg-background/50 space-y-2">
-              <p className="text-xs text-muted-foreground text-center mb-2">
-                Rate your recall (or press 1-4)
-              </p>
+            <div className="p-4 border-t bg-background/50 space-y-3">
+              <div className="text-center space-y-1">
+                <p className="text-sm font-medium text-foreground">
+                  How well did you remember this?
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  (press 1-4 or click)
+                </p>
+              </div>
               <div className="grid grid-cols-2 gap-2">
                 <Button
                   onClick={(e) => {
@@ -212,7 +217,7 @@ export default function FlashcardFlipCard({
                   className="border-destructive/50 hover:bg-destructive/10"
                 >
                   <RotateCcw className="w-3 h-3 mr-1" />
-                  Again
+                  Forgot
                 </Button>
                 <Button
                   onClick={(e) => {
@@ -224,7 +229,7 @@ export default function FlashcardFlipCard({
                   className="border-orange-500/50 hover:bg-orange-500/10"
                 >
                   <Frown className="w-3 h-3 mr-1" />
-                  Hard
+                  Struggled
                 </Button>
                 <Button
                   onClick={(e) => {
@@ -236,7 +241,7 @@ export default function FlashcardFlipCard({
                   className="border-primary/50 hover:bg-primary/10"
                 >
                   <ThumbsUp className="w-3 h-3 mr-1" />
-                  Good
+                  Remembered
                 </Button>
                 <Button
                   onClick={(e) => {
@@ -248,9 +253,12 @@ export default function FlashcardFlipCard({
                   className="border-emerald-500/50 hover:bg-emerald-500/10"
                 >
                   <Zap className="w-3 h-3 mr-1" />
-                  Easy
+                  Knew it!
                 </Button>
               </div>
+              <p className="text-xs text-muted-foreground text-center pt-1">
+                Your answer affects when you'll see this card again
+              </p>
             </div>
           </Card>
         </div>
