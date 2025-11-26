@@ -819,7 +819,6 @@ export default function PracticeQuiz() {
                 variant="outline"
                 size="sm"
                 onClick={unlockHint}
-                disabled={gamificationEnabled && currentXP < 5}
               >
                 <Lightbulb className="w-4 h-4 mr-2" />
                 {gamificationEnabled ? "Reveal Hint (-5 XP)" : "Reveal Hint"}
