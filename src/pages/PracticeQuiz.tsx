@@ -829,7 +829,7 @@ export default function PracticeQuiz() {
                 disabled={gamificationEnabled && currentXP < 5}
               >
                 <Lightbulb className="w-4 h-4 mr-2" />
-                {gamificationEnabled ? `Reveal Hint (${currentXP}/5 XP)` : "Reveal Hint"}
+                {gamificationEnabled ? "Reveal Hint (Costs 5 XP)" : "Reveal Hint"}
               </Button>
             )}
 
