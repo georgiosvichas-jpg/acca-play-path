@@ -77,5 +77,21 @@ export function useUserProfile() {
     }
   };
 
-  return { profile, loading, updateProfile };
+  const refetchProfile = async () => {
+    if (!user) return;
+
+    const { data, error } = await supabase
+      .from("user_profiles")
+      .select("*")
+      .eq("user_id", user.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error("Error refetching profile:", error);
+    } else if (data) {
+      setProfile(data);
+    }
+  };
+
+  return { profile, loading, updateProfile, refetchProfile };
 }
