@@ -30,7 +30,7 @@ interface ImportResult {
   skipped: Array<{ external_id: string; error_reason: string }>;
 }
 
-const VALID_QUESTION_TYPES = ["mcq", "flashcard"];
+const VALID_QUESTION_TYPES = ["MCQ_SINGLE", "MCQ_MULTI", "CALCULATION", "FILL_IN_BLANK", "SHORT_ANSWER", "mcq", "flashcard"];
 const VALID_DIFFICULTIES = ["easy", "medium", "hard"];
 
 serve(async (req) => {
@@ -179,12 +179,20 @@ serve(async (req) => {
           // Keep options as-is
           options: rawQ.options || [],
           
-          // Convert correct_option_index to letter (0→A, 1→B, 2→C, 3→D)
-          correct_answer: rawQ.correct_answer || (
-            typeof rawQ.correct_option_index === "number" 
-              ? String.fromCharCode(65 + rawQ.correct_option_index)
-              : null
-          ),
+          // Convert correct_option_index or correct_option_indices to letter format
+          correct_answer: rawQ.correct_answer || (() => {
+            // Handle MCQ_MULTI with correct_option_indices array
+            if (rawQ.correct_option_indices && Array.isArray(rawQ.correct_option_indices)) {
+              return rawQ.correct_option_indices
+                .map((idx: number) => String.fromCharCode(65 + idx))
+                .join("|");
+            }
+            // Handle single correct_option_index
+            if (typeof rawQ.correct_option_index === "number") {
+              return String.fromCharCode(65 + rawQ.correct_option_index);
+            }
+            return null;
+          })(),
           
           // Keep other fields
           official_explanation: rawQ.official_explanation || rawQ.explanation,
@@ -233,7 +241,8 @@ serve(async (req) => {
         }
 
         // Validate MCQ questions have options
-        if (normalized.question_type === "mcq" && (!normalized.options || normalized.options.length === 0)) {
+        const isMCQType = ["MCQ_SINGLE", "MCQ_MULTI", "mcq"].includes(normalized.question_type);
+        if (isMCQType && (!normalized.options || normalized.options.length === 0)) {
           skipped.push({
             external_id: normalized.external_id,
             error_reason: "MCQ question missing options array",
@@ -243,7 +252,7 @@ serve(async (req) => {
         }
 
         // Validate correct_answer for MCQ
-        if (normalized.question_type === "mcq") {
+        if (isMCQType) {
           if (!normalized.correct_answer) {
             skipped.push({
               external_id: normalized.external_id,
@@ -286,14 +295,15 @@ serve(async (req) => {
         };
 
         // Handle correct_answer mapping for MCQ
-        if (normalized.question_type === "mcq") {
-          // Store as correct_option_index (A=0, B=1, etc.)
+        const isMCQTypeForStorage = ["MCQ_SINGLE", "MCQ_MULTI", "mcq"].includes(normalized.question_type);
+        if (isMCQTypeForStorage) {
+          // For MCQ_SINGLE/mcq: store first letter as index (A=0, B=1, etc.)
           questionData.correct_option_index = normalized.correct_answer.charCodeAt(0) - 65;
           questionData.answer = null;
         } else {
-          // Other types - store as answer
+          // Other types (CALCULATION, FILL_IN_BLANK, SHORT_ANSWER) - store as answer
           questionData.correct_option_index = null;
-          questionData.answer = normalized.correct_answer;
+          questionData.answer = normalized.correct_answer || null;
         }
 
         // Check if question exists
