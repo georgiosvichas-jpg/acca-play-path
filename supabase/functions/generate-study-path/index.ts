@@ -24,11 +24,11 @@ Deno.serve(async (req) => {
       );
     }
 
-    const { examDate, weeksAvailable } = await req.json();
+    const { examDate, weeksAvailable, papers } = await req.json();
 
-    if (!examDate || !weeksAvailable) {
+    if (!examDate || !weeksAvailable || !papers || papers.length === 0) {
       return new Response(
-        JSON.stringify({ error: 'Missing required fields: examDate and weeksAvailable' }),
+        JSON.stringify({ error: 'Missing required fields: examDate, weeksAvailable, and papers' }),
         { headers: { ...corsHeaders, 'Content-Type': 'application/json' }, status: 400 }
       );
     }
@@ -47,7 +47,25 @@ Deno.serve(async (req) => {
       );
     }
 
-    console.log('Generating study path for user:', user.id);
+    console.log('Generating study path for user:', user.id, 'Papers:', papers);
+
+    // Fetch syllabus units for selected papers
+    const { data: syllabusUnits, error: syllabusError } = await supabase
+      .from('syllabus_units')
+      .select('*')
+      .in('paper_code', papers)
+      .order('paper_code, unit_code');
+
+    if (syllabusError) throw syllabusError;
+
+    // Group units by paper
+    const unitsByPaper: Record<string, any[]> = {};
+    syllabusUnits?.forEach(unit => {
+      if (!unitsByPaper[unit.paper_code]) {
+        unitsByPaper[unit.paper_code] = [];
+      }
+      unitsByPaper[unit.paper_code].push(unit);
+    });
 
     // Fetch user's study sessions for performance analysis
     const { data: sessions, error: sessionsError } = await supabase
@@ -125,41 +143,48 @@ ${Object.entries(performance.byUnit)
         messages: [
           {
             role: 'system',
-            content: `You are an expert ACCA study planner creating personalized multi-week study schedules for BT (Business and Technology) exam preparation.
+            content: `You are an expert ACCA study planner creating personalized multi-week study schedules.
 
-BT Exam Structure:
-- 16 units (BT01-BT16) covering business concepts, technology, and professional ethics
-- Mix of easy, medium, and hard difficulty questions
-- Exam duration: 2 hours for 50 questions
+Available Papers and Units:
+${papers.map((paperCode: string) => {
+  const units = unitsByPaper[paperCode] || [];
+  return `${paperCode}: ${units.map(u => u.unit_code).join(', ')}`;
+}).join('\n')}
 
 Study Planning Principles:
-1. Build foundation first (BT01-BT06)
-2. Progress to intermediate topics (BT07-BT12)
-3. Complete with advanced ethics (BT13-BT16)
-4. Include review weeks for weak areas
-5. Gradual difficulty progression (easy → medium → hard)
-6. Regular revision and mock tests
+1. Build foundation first (cover fundamental units early)
+2. Progress to intermediate then advanced topics
+3. Include review weeks for weak areas
+4. Gradual difficulty progression (easy → medium → hard)
+5. Regular revision and mock tests
+6. Balance multiple papers if applicable
 7. Leave final week for full exam simulation
 
 Create realistic, achievable plans with:
 - Daily study goals (1-3 hours max)
 - Specific unit focus per week
-- Mix of learning and practice
+- Mix of learning and practice activities
 - Built-in review sessions
-- Rest days to prevent burnout`
+- Rest days to prevent burnout
+
+CRITICAL: For each task, specify the activity type, paper, and unit so tasks can be linked to the correct feature.
+Task format: "Practice [PAPER] [UNIT]: [Description]" or "Review flashcards for [PAPER] [UNIT]" or "Mock exam for [PAPER]"`
           },
           {
             role: 'user',
-            content: `Create a ${weeksAvailable}-week personalized study plan with exam on ${examDate}.
+            content: `Create a ${weeksAvailable}-week personalized study plan for papers: ${papers.join(', ')} with exam on ${examDate}.
 
 ${performanceContext}
 
 Requirements:
 - ${weeksAvailable} weeks of structured study
+- Cover all selected papers: ${papers.join(', ')}
 - Target weak areas first
 - Progressive difficulty increase
 - Weekly goals and daily tasks
-- Include mock exam in final week`
+- Balance study time across papers
+- Include mock exam in final week
+- Each task must specify paper code and unit code for linking`
           }
         ],
         tools: [
@@ -282,6 +307,7 @@ Requirements:
         user_id: user.id,
         exam_date: examDate,
         weeks_duration: weeksAvailable,
+        papers: papers,
         path_data: studyPath,
         is_active: true
       })
