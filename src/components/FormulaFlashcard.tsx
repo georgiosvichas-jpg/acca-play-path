@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
-import { ChevronLeft, ChevronRight, Calculator } from "lucide-react";
+import { ChevronLeft, ChevronRight, Calculator, Eye } from "lucide-react";
+import { Badge } from "./ui/badge";
 
 interface FormulaFlashcardProps {
   flashcard: {
@@ -16,6 +17,7 @@ interface FormulaFlashcardProps {
   onNext: () => void;
   onPrevious: () => void;
   onRate: (rating: "again" | "hard" | "good" | "easy") => void;
+  peekMode?: boolean;
 }
 
 interface FormulaData {
@@ -31,8 +33,9 @@ export default function FormulaFlashcard({
   onNext,
   onPrevious,
   onRate,
+  peekMode = false,
 }: FormulaFlashcardProps) {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(peekMode);
 
   let formulaData: FormulaData;
   try {
@@ -83,9 +86,15 @@ export default function FormulaFlashcard({
   };
 
   const handleRate = (rating: "again" | "hard" | "good" | "easy") => {
+    if (peekMode) return; // Don't allow rating in peek mode
     onRate(rating);
     setIsFlipped(false);
   };
+
+  // Reset flip state when peekMode changes
+  useEffect(() => {
+    setIsFlipped(peekMode);
+  }, [peekMode]);
 
   return (
     <div className="w-full max-w-3xl mx-auto space-y-6">
@@ -138,6 +147,14 @@ export default function FormulaFlashcard({
           {isFlipped && (
             <div className="absolute inset-0 p-8 overflow-y-auto backface-hidden rotate-y-180">
               <div className="space-y-6">
+                {peekMode && (
+                  <div className="flex justify-center">
+                    <Badge variant="secondary" className="flex items-center gap-1">
+                      <Eye className="w-3 h-3" />
+                      Peek Mode
+                    </Badge>
+                  </div>
+                )}
                 {/* Formula Display */}
                 <div className="px-4 py-3 bg-primary/5 rounded-lg border border-primary/20">
                   <p className="text-xl font-mono text-foreground">
@@ -206,8 +223,8 @@ export default function FormulaFlashcard({
           </Button>
         </div>
 
-        {/* Rating Buttons (only show when flipped) */}
-        {isFlipped && (
+        {/* Rating Buttons (only show when flipped and not in peek mode) */}
+        {isFlipped && !peekMode && (
           <div className="grid grid-cols-4 gap-3">
             <Button
               variant="destructive"

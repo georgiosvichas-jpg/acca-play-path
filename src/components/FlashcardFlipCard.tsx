@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { ChevronLeft, ChevronRight, RotateCcw, Frown, ThumbsUp, Zap } from "lucide-react";
+import { ChevronLeft, ChevronRight, RotateCcw, Frown, ThumbsUp, Zap, Eye } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useIsMobile } from "@/hooks/use-mobile";
 
@@ -27,6 +27,7 @@ interface FlashcardFlipCardProps {
   hasPrevious: boolean;
   currentIndex: number;
   totalCards: number;
+  peekMode?: boolean;
 }
 
 export default function FlashcardFlipCard({
@@ -38,8 +39,9 @@ export default function FlashcardFlipCard({
   hasPrevious,
   currentIndex,
   totalCards,
+  peekMode = false,
 }: FlashcardFlipCardProps) {
-  const [isFlipped, setIsFlipped] = useState(false);
+  const [isFlipped, setIsFlipped] = useState(peekMode);
   const [touchStart, setTouchStart] = useState<number | null>(null);
   const [touchEnd, setTouchEnd] = useState<number | null>(null);
   const isMobile = useIsMobile();
@@ -61,12 +63,18 @@ export default function FlashcardFlipCard({
   };
 
   const handleRate = (rating: "again" | "hard" | "good" | "easy") => {
+    if (peekMode) return; // Don't allow rating in peek mode
     onRate(rating);
     setIsFlipped(false);
     if (hasNext) {
       onNext();
     }
   };
+
+  // Reset flip state when peekMode changes
+  useEffect(() => {
+    setIsFlipped(peekMode);
+  }, [peekMode]);
 
   const onTouchStart = (e: React.TouchEvent) => {
     setTouchEnd(null);
@@ -187,6 +195,14 @@ export default function FlashcardFlipCard({
             )}
           >
             <CardContent className="p-8 space-y-6 flex-1 flex flex-col justify-center">
+              {peekMode && (
+                <div className="flex justify-center mb-2">
+                  <Badge variant="secondary" className="flex items-center gap-1">
+                    <Eye className="w-3 h-3" />
+                    Peek Mode
+                  </Badge>
+                </div>
+              )}
               <div className="space-y-4">
                 <p className="text-xs uppercase tracking-wide text-primary font-semibold text-center">
                   Answer
@@ -197,69 +213,71 @@ export default function FlashcardFlipCard({
               </div>
             </CardContent>
 
-            <div className="p-4 border-t bg-background/50 space-y-3">
-              <div className="text-center space-y-1">
-                <p className="text-sm font-medium text-foreground">
-                  How well did you remember this?
-                </p>
-                <p className="text-xs text-muted-foreground">
-                  (press 1-4 or click)
+            {!peekMode && (
+              <div className="p-4 border-t bg-background/50 space-y-3">
+                <div className="text-center space-y-1">
+                  <p className="text-sm font-medium text-foreground">
+                    How well did you remember this?
+                  </p>
+                  <p className="text-xs text-muted-foreground">
+                    (press 1-4 or click)
+                  </p>
+                </div>
+                <div className="grid grid-cols-2 gap-2">
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRate("again");
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="border-destructive/50 hover:bg-destructive/10"
+                  >
+                    <RotateCcw className="w-3 h-3 mr-1" />
+                    Forgot
+                  </Button>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRate("hard");
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="border-orange-500/50 hover:bg-orange-500/10"
+                  >
+                    <Frown className="w-3 h-3 mr-1" />
+                    Struggled
+                  </Button>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRate("good");
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="border-primary/50 hover:bg-primary/10"
+                  >
+                    <ThumbsUp className="w-3 h-3 mr-1" />
+                    Remembered
+                  </Button>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      handleRate("easy");
+                    }}
+                    variant="outline"
+                    size="sm"
+                    className="border-emerald-500/50 hover:bg-emerald-500/10"
+                  >
+                    <Zap className="w-3 h-3 mr-1" />
+                    Knew it!
+                  </Button>
+                </div>
+                <p className="text-xs text-muted-foreground text-center pt-1">
+                  Your answer affects when you'll see this card again
                 </p>
               </div>
-              <div className="grid grid-cols-2 gap-2">
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRate("again");
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="border-destructive/50 hover:bg-destructive/10"
-                >
-                  <RotateCcw className="w-3 h-3 mr-1" />
-                  Forgot
-                </Button>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRate("hard");
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="border-orange-500/50 hover:bg-orange-500/10"
-                >
-                  <Frown className="w-3 h-3 mr-1" />
-                  Struggled
-                </Button>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRate("good");
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="border-primary/50 hover:bg-primary/10"
-                >
-                  <ThumbsUp className="w-3 h-3 mr-1" />
-                  Remembered
-                </Button>
-                <Button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRate("easy");
-                  }}
-                  variant="outline"
-                  size="sm"
-                  className="border-emerald-500/50 hover:bg-emerald-500/10"
-                >
-                  <Zap className="w-3 h-3 mr-1" />
-                  Knew it!
-                </Button>
-              </div>
-              <p className="text-xs text-muted-foreground text-center pt-1">
-                Your answer affects when you'll see this card again
-              </p>
-            </div>
+            )}
           </Card>
         </div>
       </div>
@@ -277,7 +295,10 @@ export default function FlashcardFlipCard({
         </Button>
 
         <Button onClick={handleFlip} variant="ghost" size="sm">
-          {isFlipped ? "Show Question" : "Show Answer"}
+          {peekMode 
+            ? (isFlipped ? "Show Question" : "Show Answer")
+            : (isFlipped ? "Show Question" : "Show Answer")
+          }
           <Badge variant="outline" className="ml-2 text-xs">Space</Badge>
         </Button>
 

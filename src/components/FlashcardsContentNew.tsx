@@ -15,7 +15,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from ".
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
 import { Progress } from "./ui/progress";
-import { Filter, BookOpen, Lock, AlertCircle, TrendingUp } from "lucide-react";
+import { Filter, BookOpen, Lock, AlertCircle, TrendingUp, Eye } from "lucide-react";
 import { PaywallModal } from "./PaywallModal";
 import { UpgradeNudge } from "./UpgradeNudge";
 import { Alert, AlertDescription } from "./ui/alert";
@@ -60,6 +60,7 @@ export default function FlashcardsContentNew() {
   const [selectedUnit, setSelectedUnit] = useState<string>("all");
   const [selectedDifficulty, setSelectedDifficulty] = useState<string>("all");
   const [shuffleMode, setShuffleMode] = useState(false);
+  const [peekMode, setPeekMode] = useState(false);
 
   // Get unique values for filters
   const availablePaperCodes = Array.from(new Set(flashcards.map((f) => f.paper_code))).sort();
@@ -475,13 +476,23 @@ export default function FlashcardsContentNew() {
                   <Filter className="w-5 h-5 text-primary" />
                   Filter Flashcards
                 </CardTitle>
-                <Button
-                  variant={shuffleMode ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setShuffleMode(!shuffleMode)}
-                >
-                  {shuffleMode ? "Shuffle ON" : "Shuffle OFF"}
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    variant={shuffleMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setShuffleMode(!shuffleMode)}
+                  >
+                    {shuffleMode ? "Shuffle ON" : "Shuffle OFF"}
+                  </Button>
+                  <Button
+                    variant={peekMode ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setPeekMode(!peekMode)}
+                  >
+                    <Eye className="w-4 h-4 mr-1" />
+                    {peekMode ? "Peek ON" : "Peek OFF"}
+                  </Button>
+                </div>
               </div>
             </CardHeader>
             <CardContent>
@@ -580,6 +591,7 @@ export default function FlashcardsContentNew() {
               onRate={handleRate}
               currentIndex={currentIndex}
               totalCards={filteredCards.length}
+              peekMode={peekMode}
             />
           ) : (
             <FlashcardFlipCard
@@ -591,6 +603,7 @@ export default function FlashcardsContentNew() {
               hasPrevious={currentIndex > 0}
               currentIndex={currentIndex}
               totalCards={filteredCards.length}
+              peekMode={peekMode}
             />
           )}
         </div>
