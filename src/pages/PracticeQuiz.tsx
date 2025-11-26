@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/hooks/useAuth";
 import { useBadgeChecker } from "@/hooks/useBadgeChecker";
@@ -58,6 +58,7 @@ interface QuizResult {
 export default function PracticeQuiz() {
   const { user } = useAuth();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { checkAndAwardBadges } = useBadgeChecker();
   const { recordBatchReviews } = useSpacedRepetition();
   const { papers, loading: papersLoading } = usePapers();
@@ -102,12 +103,20 @@ export default function PracticeQuiz() {
   const [hintRevealed, setHintRevealed] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
 
-  // Set first paper when papers load
+  // Initialize from URL params (AI Path navigation)
   useEffect(() => {
-    if (papers.length > 0 && !paper) {
+    const paperParam = searchParams.get("paper");
+    const unitParam = searchParams.get("unit");
+    
+    if (paperParam && papers.some(p => p.paper_code === paperParam)) {
+      setPaper(paperParam);
+      if (unitParam) {
+        setUnitCode(unitParam);
+      }
+    } else if (papers.length > 0 && !paper) {
       setPaper(papers[0].paper_code);
     }
-  }, [papers, paper]);
+  }, [papers, searchParams]);
 
   // Fetch available units on mount
   useEffect(() => {

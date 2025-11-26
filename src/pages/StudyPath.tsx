@@ -100,6 +100,99 @@ export default function StudyPath() {
     }
   };
 
+  // Auto-progress tracking: Check for matching completed sessions
+  useEffect(() => {
+    if (!user || !studyPath || !savedPath) return;
+
+    const checkCompletedSessions = async () => {
+      try {
+        // Fetch recent study sessions (last 24 hours)
+        const oneDayAgo = new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString();
+        const { data: sessions, error } = await supabase
+          .from("sb_study_sessions")
+          .select("*")
+          .eq("user_id", user.id)
+          .gte("created_at", oneDayAgo)
+          .order("created_at", { ascending: false });
+
+        if (error || !sessions) return;
+
+        // Parse study path to find tasks
+        let updatedProgress = false;
+        const newProgress = { ...progress };
+
+        studyPath.weeks.forEach((week, weekIdx) => {
+          week.dailyTasks.forEach((day, dayIdx) => {
+            day.tasks.forEach((task, taskIdx) => {
+              const taskId = `w${weekIdx + 1}-d${dayIdx}-t${taskIdx}`;
+              
+              // Skip if already completed
+              if (newProgress[taskId]) return;
+
+              // Extract task metadata
+              const taskData = typeof task === 'object' ? task : { text: task };
+              const { type, paper, unit } = taskData as any;
+
+              if (!type || !paper) return;
+
+              // Match against completed sessions
+              const matchingSession = sessions.find(session => {
+                // Match session_type to task type
+                const typeMatch = 
+                  (type === 'practice' && session.session_type?.includes('drill')) ||
+                  (type === 'mock' && session.session_type === 'mock_exam') ||
+                  (type === 'flashcards' && session.session_type === 'flashcard_session');
+
+                if (!typeMatch) return false;
+
+                // Check raw_log for paper and unit match
+                if (!session.raw_log || !Array.isArray(session.raw_log)) return false;
+
+                // For unit-specific tasks, check if session contains that unit
+                if (unit) {
+                  return session.raw_log.some((log: any) => 
+                    log.unit_code === unit && log.correct !== undefined
+                  );
+                }
+
+                // For paper-level tasks, just check paper presence
+                return true;
+              });
+
+              if (matchingSession) {
+                newProgress[taskId] = true;
+                updatedProgress = true;
+              }
+            });
+          });
+        });
+
+        // Update progress if any tasks were auto-completed
+        if (updatedProgress) {
+          setProgress(newProgress);
+          
+          // Save to database
+          await supabase
+            .from("study_paths")
+            .update({ progress: newProgress })
+            .eq("id", savedPath.id);
+
+          toast.success("Progress automatically updated based on completed activities!");
+        }
+      } catch (error) {
+        console.error("Error checking completed sessions:", error);
+      }
+    };
+
+    // Check immediately on mount
+    checkCompletedSessions();
+
+    // Set up interval to check every 2 minutes
+    const interval = setInterval(checkCompletedSessions, 2 * 60 * 1000);
+
+    return () => clearInterval(interval);
+  }, [user, studyPath, savedPath, progress]);
+
   const requestNotificationPermission = async () => {
     if ('Notification' in window) {
       const permission = await Notification.requestPermission();

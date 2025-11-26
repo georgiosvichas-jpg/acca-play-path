@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { usePapers } from "@/hooks/usePapers";
@@ -36,6 +37,7 @@ export default function FlashcardsContentNew() {
   const { user } = useAuth();
   const { profile } = useUserProfile();
   const { papers: allPapers } = usePapers();
+  const [searchParams] = useSearchParams();
   const { awardXP } = useXP();
   const { 
     canUseFlashcard, 
@@ -67,12 +69,16 @@ export default function FlashcardsContentNew() {
   const units = Array.from(new Set(flashcards.map((f) => f.unit_title))).sort();
   const difficulties = ["Easy", "Medium", "Hard"];
   
-  // Initialize selected paper from profile
+  // Initialize selected paper from URL params (AI Path) or profile
   useEffect(() => {
-    if (profile?.selected_paper && selectedPaper === "all") {
+    const paperParam = searchParams.get("paper");
+    
+    if (paperParam && flashcards.some(f => f.paper_code === paperParam)) {
+      setSelectedPaper(paperParam);
+    } else if (profile?.selected_paper && selectedPaper === "all") {
       setSelectedPaper(profile.selected_paper);
     }
-  }, [profile]);
+  }, [profile, searchParams, flashcards]);
 
   useEffect(() => {
     fetchFlashcards();
