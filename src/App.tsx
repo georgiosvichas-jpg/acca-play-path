@@ -14,7 +14,7 @@ import PlannerEnhanced from "./pages/PlannerEnhanced";
 import Analytics from "./pages/Analytics";
 import Practice from "./pages/Practice";
 import Learn from "./pages/Learn";
-import Review from "./pages/Review";
+import ProgressNew from "./pages/ProgressNew";
 import { AppLayout } from "./components/AppLayout";
 import Auth from "./components/Auth";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -128,18 +128,10 @@ const App = () => (
               }
             />
             <Route 
-              path="/review" 
+              path="/progress" 
               element={
                 <ProtectedRoute>
-                  <Review />
-                </ProtectedRoute>
-              }
-            />
-            <Route 
-              path="/analytics" 
-              element={
-                <ProtectedRoute>
-                  <Analytics />
+                  <ProgressNew />
                 </ProtectedRoute>
               }
             />
@@ -152,12 +144,13 @@ const App = () => (
             <Route path="/flashcards" element={<Navigate to="/learn?tab=flashcards" replace />} />
             <Route path="/question-browser" element={<Navigate to="/learn?tab=browse" replace />} />
             <Route path="/study-path" element={<Navigate to="/learn?tab=path" replace />} />
-            <Route path="/spaced-repetition" element={<Navigate to="/review?tab=spaced" replace />} />
-            <Route path="/bookmarks" element={<Navigate to="/review?tab=bookmarks" replace />} />
-            <Route path="/weak-areas" element={<Navigate to="/review?tab=weak" replace />} />
-            <Route path="/question-analytics" element={<Navigate to="/analytics?tab=overview" replace />} />
-            <Route path="/progress-tracking" element={<Navigate to="/analytics?tab=progress" replace />} />
-            <Route path="/progress" element={<Navigate to="/analytics?tab=progress" replace />} />
+            <Route path="/review" element={<Navigate to="/progress?tab=focus" replace />} />
+            <Route path="/analytics" element={<Navigate to="/progress?tab=dashboard" replace />} />
+            <Route path="/spaced-repetition" element={<Navigate to="/progress?tab=focus" replace />} />
+            <Route path="/bookmarks" element={<Navigate to="/progress?tab=saved" replace />} />
+            <Route path="/weak-areas" element={<Navigate to="/progress?tab=focus" replace />} />
+            <Route path="/question-analytics" element={<Navigate to="/progress?tab=dashboard" replace />} />
+            <Route path="/progress-tracking" element={<Navigate to="/progress?tab=dashboard" replace />} />
             <Route path="/coach" element={<Navigate to="/dashboard" replace />} />
             <Route
               path="/multi-paper-dashboard"

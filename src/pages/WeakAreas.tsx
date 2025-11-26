@@ -32,15 +32,10 @@ export default function WeakAreas() {
   const [generatingQuiz, setGeneratingQuiz] = useState(false);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/");
-      return;
-    }
-
     if (papers.length > 0 && !selectedPaper) {
       setSelectedPaper(papers[0].paper_code);
     }
-  }, [user, papers, selectedPaper, navigate]);
+  }, [papers, selectedPaper]);
 
   useEffect(() => {
     if (selectedPaper) {

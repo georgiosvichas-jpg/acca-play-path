@@ -32,17 +32,12 @@ export default function Bookmarks() {
   const [fetchingDetails, setFetchingDetails] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      navigate("/");
-      return;
-    }
-    
     if (!loading && bookmarks.length > 0) {
       fetchQuestionDetails();
     } else if (!loading) {
       setFetchingDetails(false);
     }
-  }, [user, loading, bookmarks, navigate]);
+  }, [loading, bookmarks]);
 
   const fetchQuestionDetails = async () => {
     try {
