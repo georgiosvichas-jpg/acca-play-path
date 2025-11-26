@@ -211,11 +211,10 @@ export default function MockExam() {
     const timeInSeconds = minutes * 60;
 
     try {
-      // Use content-batch to fetch questions
+      // Use content-batch to fetch questions (all types)
       const { data, error } = await supabase.functions.invoke("content-batch", {
         body: { 
           paper: selectedPaper, 
-          type: "mcq",
           size: numQuestions
         },
       });
