@@ -54,7 +54,7 @@ serve(async (req) => {
     if (difficulty) query = query.eq("difficulty", difficulty);
 
     // Get questions (fetch more than needed for randomization)
-    const { data: questions, error } = await query.limit(size * 2);
+    const { data: questions, error } = await query.limit(size * 5);
 
     if (error) throw error;
 
