@@ -450,9 +450,9 @@ export default function PracticeQuiz() {
 
             <div className="space-y-2">
               <Label>Paper</Label>
-              <Select value={paper} onValueChange={setPaper} disabled={papersLoading}>
+              <Select value={paper} onValueChange={setPaper} disabled={prefsLoading}>
                 <SelectTrigger>
-                  <SelectValue placeholder={papersLoading ? "Loading papers..." : "Select a paper"} />
+                  <SelectValue placeholder={prefsLoading ? "Loading papers..." : "Select a paper"} />
                 </SelectTrigger>
                 <SelectContent>
                   {papers.map((p) => (
