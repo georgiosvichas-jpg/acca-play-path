@@ -251,17 +251,21 @@ export default function PracticeQuiz() {
   };
 
   const unlockHint = () => {
-    const hintCost = 5;
-    if (currentXP < hintCost) {
-      toast.error(`Need ${hintCost} XP to unlock hint`);
-      return;
+    if (gamificationEnabled) {
+      const hintCost = 5;
+      if (currentXP < hintCost) {
+        toast.error(`Need ${hintCost} XP to unlock hint`);
+        return;
+      }
+      awardXP("hint_used", -hintCost);
+      toast.success("Hint revealed! (-5 XP)");
+    } else {
+      // Free hint when gamification is off
+      toast.success("Hint revealed!");
     }
-
-    // Deduct XP (would need backend to do this properly)
-    awardXP("hint_used", -hintCost);
+    
     setHintRevealed(true);
     setHintsUsed(hintsUsed + 1);
-    toast.success("Hint revealed! (-5 XP)");
   };
 
   const handleConfidenceSubmit = () => {
@@ -490,7 +494,7 @@ export default function PracticeQuiz() {
               <div className="flex items-center justify-between">
                 <div className="space-y-0.5">
                   <Label htmlFor="gamification-toggle">Gamification</Label>
-                  <p className="text-sm text-muted-foreground">Enable XP, streaks, and hints</p>
+                  <p className="text-sm text-muted-foreground">Enable XP, streaks, and bonus rewards</p>
                 </div>
                 <Switch
                   id="gamification-toggle"
@@ -810,19 +814,19 @@ export default function PracticeQuiz() {
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
-            {gamificationEnabled && !hintRevealed && !showFeedback && (
+            {!hintRevealed && !showFeedback && (
               <Button
                 variant="outline"
                 size="sm"
                 onClick={unlockHint}
-                disabled={currentXP < 5}
+                disabled={gamificationEnabled && currentXP < 5}
               >
                 <Lightbulb className="w-4 h-4 mr-2" />
-                Reveal Hint (-5 XP)
+                {gamificationEnabled ? "Reveal Hint (-5 XP)" : "Reveal Hint"}
               </Button>
             )}
 
-            {gamificationEnabled && hintRevealed && !showFeedback && (
+            {hintRevealed && !showFeedback && (
               <div className="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <div className="flex items-start gap-2">
                   <Lightbulb className="h-4 w-4 text-amber-600 mt-0.5" />
