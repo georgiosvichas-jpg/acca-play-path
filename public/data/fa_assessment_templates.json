@@ -1,119 +1,153 @@
 {
   "paper": "FA",
-  "description": "Mini-test and mock exam templates for ACCA FA used by Outcomeo’s AI tutor. Structural blueprints, not specific question IDs.",
+  "description": "Mini-test and mock exam templates for ACCA FA used by Outcomeo's AI tutor. Structural blueprints covering all 30 units.",
   "mini_tests": [
     {
       "id": "FA_MINI_1",
-      "title": "FA Mini Test 1 – Concepts & Double Entry",
-      "target_units": [
-        "FA01",
-        "FA02"
-      ],
+      "title": "FA Mini Test 1 – Foundations & Recording",
+      "target_units": ["FA01", "FA02", "FA03"],
       "question_count": 10,
       "format": "MCQ-only, mixed conceptual and simple numeric",
       "notes_for_agent": [
-        "Focus on accounting concepts, the accounting equation and simple double-entry.",
-        "Include straightforward ledger postings (e.g. cash sale, credit purchase, capital introduced).",
-        "Use simple numbers; the priority is understanding debits and credits."
+        "Focus on accounting concepts, the accounting equation, and basic recording transactions.",
+        "Include double-entry principles, T-accounts, ledger postings.",
+        "Test understanding of capital vs revenue expenditure."
       ]
     },
     {
       "id": "FA_MINI_2",
-      "title": "FA Mini Test 2 – Adjustments & Trial Balance",
-      "target_units": [
-        "FA06",
-        "FA07"
-      ],
+      "title": "FA Mini Test 2 – Assets & Adjustments",
+      "target_units": ["FA04", "FA05", "FA06"],
       "question_count": 10,
-      "format": "MCQ with small adjustments",
+      "format": "MCQ with numeric calculations",
       "notes_for_agent": [
-        "Test understanding of accruals, prepayments and simple error correction.",
-        "Include questions where candidates adjust profit or closing balances.",
-        "Make sure at least a couple of questions ask which errors DO or DO NOT affect the trial balance."
+        "Cover inventory valuation (FIFO, AVCO), accruals, and prepayments.",
+        "Include non-current asset calculations (depreciation, carrying value).",
+        "Test year-end adjustments and their impact on financial statements."
       ]
     },
     {
       "id": "FA_MINI_3",
-      "title": "FA Mini Test 3 – Financial Statements & Ratios",
-      "target_units": [
-        "FA08",
-        "FA10"
-      ],
+      "title": "FA Mini Test 3 – Corrections & Statements",
+      "target_units": ["FA07", "FA08", "FA09"],
       "question_count": 10,
-      "format": "MCQ-only, short scenarios",
+      "format": "MCQ-only, error correction focus",
       "notes_for_agent": [
-        "Use small SPL/SFP extracts and ask for missing figures or simple interpretation.",
-        "Include simple ratio questions on current ratio, gross margin or net margin.",
-        "Emphasise interpretation at an introductory FA level rather than advanced commentary."
+        "Focus on impairment, error types, and trial balance corrections.",
+        "Include questions on suspense accounts and which errors affect TB.",
+        "Test preparation of SPL and SFP from adjusted trial balance."
+      ]
+    },
+    {
+      "id": "FA_MINI_4",
+      "title": "FA Mini Test 4 – Analysis & Partnerships",
+      "target_units": ["FA10", "FA11", "FA12"],
+      "question_count": 10,
+      "format": "MCQ with ratio calculations",
+      "notes_for_agent": [
+        "Cover financial ratios (current, gross margin, net margin, gearing).",
+        "Include partnership accounting (profit sharing, capital accounts).",
+        "Test share capital concepts (ordinary vs preference shares)."
+      ]
+    },
+    {
+      "id": "FA_MINI_5",
+      "title": "FA Mini Test 5 – Cash Flow & Records",
+      "target_units": ["FA13", "FA14", "FA15", "FA16"],
+      "question_count": 10,
+      "format": "MCQ with statement preparation",
+      "notes_for_agent": [
+        "Focus on cash flow statement preparation (indirect method).",
+        "Include bank reconciliation and control account reconciliation.",
+        "Test incomplete records and missing figure calculations."
+      ]
+    },
+    {
+      "id": "FA_MINI_6",
+      "title": "FA Mini Test 6 – Advanced Accounting",
+      "target_units": ["FA17", "FA18", "FA19", "FA20", "FA21", "FA22", "FA23", "FA24"],
+      "question_count": 12,
+      "format": "MCQ covering revaluation, distributions, ethics",
+      "notes_for_agent": [
+        "Cover suspense accounts, asset revaluation, disposal calculations.",
+        "Include dividend distributions, bonus/rights issues.",
+        "Test ethical principles and professional conduct scenarios."
+      ]
+    },
+    {
+      "id": "FA_MINI_7",
+      "title": "FA Mini Test 7 – Specialist Topics",
+      "target_units": ["FA25", "FA26", "FA27", "FA28", "FA29", "FA30"],
+      "question_count": 10,
+      "format": "MCQ covering advanced FA topics",
+      "notes_for_agent": [
+        "Focus on consignment accounting, agency relationships.",
+        "Include revenue recognition principles (IFRS 15 basics).",
+        "Test lease accounting, provisions, and contingent liabilities."
       ]
     }
   ],
   "mock_exams": [
     {
       "id": "FA_MOCK_1",
-      "title": "FA Mock Exam 1 – Balanced Coverage",
+      "title": "FA Mock Exam 1 – Comprehensive Coverage",
       "duration_minutes": 120,
       "question_count": 50,
-      "format": "MCQ-only, all units FA01–FA10",
+      "format": "MCQ-only, all units FA01–FA30",
       "structure": {
         "sections": [
           {
-            "name": "Section A – Core Techniques",
+            "name": "Section A – Core Foundations",
             "approx_questions": 25,
-            "focus_units": [
-              "FA02",
-              "FA06",
-              "FA07"
-            ]
+            "focus_units": ["FA01", "FA02", "FA03", "FA04", "FA05", "FA06", "FA07", "FA08", "FA09", "FA10"]
           },
           {
-            "name": "Section B – Financial Statements & Interpretation",
-            "approx_questions": 25,
-            "focus_units": [
-              "FA08",
-              "FA09",
-              "FA10"
-            ]
+            "name": "Section B – Intermediate Topics",
+            "approx_questions": 15,
+            "focus_units": ["FA11", "FA12", "FA13", "FA14", "FA15", "FA16", "FA17", "FA18", "FA19", "FA20"]
+          },
+          {
+            "name": "Section C – Advanced & Specialist",
+            "approx_questions": 10,
+            "focus_units": ["FA21", "FA22", "FA23", "FA24", "FA25", "FA26", "FA27", "FA28", "FA29", "FA30"]
           }
         ]
       },
       "notes_for_agent": [
-        "Mix short, focused questions with a few mini-scenarios.",
-        "Ensure that the majority of marks come from double-entry, adjustments and basic financial statements.",
-        "Provide detailed explanations in review mode, linking back to FA01–FA10 units."
+        "Balanced mix across all 30 units with heavier weight on foundations.",
+        "Ensure representation from each major topic area.",
+        "Include mix of conceptual, calculation, and application questions."
       ]
     },
     {
       "id": "FA_MOCK_2",
-      "title": "FA Mock Exam 2 – Adjustments & Errors Focus",
+      "title": "FA Mock Exam 2 – Problem Areas Focus",
       "duration_minutes": 120,
       "question_count": 50,
-      "format": "MCQ-only with heavier emphasis on year-end adjustments",
+      "format": "MCQ-only with emphasis on commonly challenging topics",
       "structure": {
         "sections": [
           {
-            "name": "Section A – Adjustments and Trial Balance",
-            "approx_questions": 30,
-            "focus_units": [
-              "FA06",
-              "FA07"
-            ]
+            "name": "Section A – Recording & Adjustments",
+            "approx_questions": 25,
+            "focus_units": ["FA03", "FA05", "FA06", "FA07", "FA08", "FA15", "FA16"]
           },
           {
-            "name": "Section B – Financial Statements & Concepts",
-            "approx_questions": 20,
-            "focus_units": [
-              "FA01",
-              "FA08",
-              "FA10"
-            ]
+            "name": "Section B – Analysis & Cash Flow",
+            "approx_questions": 15,
+            "focus_units": ["FA10", "FA13", "FA14", "FA18", "FA22"]
+          },
+          {
+            "name": "Section C – Specialist & Advanced",
+            "approx_questions": 10,
+            "focus_units": ["FA17", "FA19", "FA20", "FA23", "FA25", "FA26", "FA27", "FA28", "FA29", "FA30"]
           }
         ]
       },
       "notes_for_agent": [
-        "Increase the proportion of questions where students must adjust for accruals, prepayments and basic errors.",
-        "Include several questions where the trial balance does not balance and ask for suspense account or corrected profit.",
-        "In the debrief, emphasise how adjustments flow into SPL and SFP."
+        "Heavier emphasis on adjustments, error correction, and reconciliations.",
+        "Include challenging ratio analysis and cash flow scenarios.",
+        "Test advanced topics like revaluation, provisions, and revenue recognition."
       ]
     }
   ]
