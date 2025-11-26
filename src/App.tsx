@@ -3,7 +3,7 @@ import CookieConsent from "@/components/CookieConsent";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Landing from "./components/Landing";
 import Dashboard from "./components/Dashboard";
 import BadgesReal from "./components/BadgesReal";
@@ -145,20 +145,20 @@ const App = () => (
             />
             
             {/* Legacy routes redirect to new hub pages */}
-            <Route path="/study" element={<Practice />} />
-            <Route path="/practice-quiz" element={<Practice />} />
-            <Route path="/mock-exam" element={<Practice />} />
-            <Route path="/mini-test" element={<Practice />} />
-            <Route path="/flashcards" element={<Learn />} />
-            <Route path="/question-browser" element={<Learn />} />
-            <Route path="/study-path" element={<Learn />} />
-            <Route path="/spaced-repetition" element={<Review />} />
-            <Route path="/bookmarks" element={<Review />} />
-            <Route path="/weak-areas" element={<Review />} />
-            <Route path="/question-analytics" element={<Analytics />} />
-            <Route path="/progress-tracking" element={<Analytics />} />
-            <Route path="/progress" element={<Analytics />} />
-            <Route path="/coach" element={<Dashboard />} />
+            <Route path="/study" element={<Navigate to="/practice" replace />} />
+            <Route path="/practice-quiz" element={<Navigate to="/practice?tab=quiz" replace />} />
+            <Route path="/mock-exam" element={<Navigate to="/practice?tab=mock" replace />} />
+            <Route path="/mini-test" element={<Navigate to="/practice?tab=mini" replace />} />
+            <Route path="/flashcards" element={<Navigate to="/learn?tab=flashcards" replace />} />
+            <Route path="/question-browser" element={<Navigate to="/learn?tab=browse" replace />} />
+            <Route path="/study-path" element={<Navigate to="/learn?tab=path" replace />} />
+            <Route path="/spaced-repetition" element={<Navigate to="/review?tab=spaced" replace />} />
+            <Route path="/bookmarks" element={<Navigate to="/review?tab=bookmarks" replace />} />
+            <Route path="/weak-areas" element={<Navigate to="/review?tab=weak" replace />} />
+            <Route path="/question-analytics" element={<Navigate to="/analytics?tab=overview" replace />} />
+            <Route path="/progress-tracking" element={<Navigate to="/analytics?tab=progress" replace />} />
+            <Route path="/progress" element={<Navigate to="/analytics?tab=progress" replace />} />
+            <Route path="/coach" element={<Navigate to="/dashboard" replace />} />
             <Route
               path="/multi-paper-dashboard"
               element={
