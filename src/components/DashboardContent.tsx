@@ -22,6 +22,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserProfile } from "@/hooks/useUserProfile";
 import { usePapers } from "@/hooks/usePapers";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 import { PaperUnlockModal } from "./UpgradeModals";
 import Footer from "./Footer";
 import { EmptyState } from "./EmptyStates";
