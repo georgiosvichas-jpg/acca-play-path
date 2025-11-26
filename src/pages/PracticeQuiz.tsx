@@ -56,6 +56,25 @@ interface QuizResult {
   byDifficulty: Record<string, { correct: number; total: number }>;
 }
 
+function generateHint(question: Question): string {
+  if (question.unit_name) {
+    return `This question is about ${question.unit_name}. Think about the core principles of this topic.`;
+  }
+
+  if (question.explanation) {
+    const firstSentence = question.explanation.split(".")[0]?.trim();
+    if (firstSentence && firstSentence.length > 20 && firstSentence.length < 200) {
+      return `Think about: ${firstSentence}.`;
+    }
+  }
+
+  if (question.unit_code) {
+    return `This question tests a core concept from unit ${question.unit_code}. Try to recall what this unit focuses on.`;
+  }
+
+  return "Focus on the main concept being tested rather than small details.";
+}
+
 export default function PracticeQuiz() {
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -158,13 +177,17 @@ export default function PracticeQuiz() {
       }
 
       // Fetch unit names for this paper
-      const { data: unitsData } = await supabase
+      const { data: unitsData, error: unitsError } = await supabase
         .from("syllabus_units")
         .select("unit_code, unit_name, unit_title")
         .eq("paper_code", paper);
 
+      if (unitsError) {
+        console.error("Failed to fetch syllabus units for practice quiz", unitsError);
+      }
+
       const unitMap = new Map(
-        unitsData?.map(u => [u.unit_code, u.unit_name || u.unit_title]) || []
+        (unitsData ?? []).map((u) => [u.unit_code, u.unit_name || u.unit_title])
       );
 
       // Shuffle and take requested number, adding unit names
@@ -792,11 +815,7 @@ export default function PracticeQuiz() {
                 <div className="flex items-start gap-2">
                   <Lightbulb className="h-4 w-4 text-amber-600 mt-0.5" />
                   <div className="text-sm">
-                    <strong>Hint:</strong> This question is about{" "}
-                    <strong>{currentQuestion.unit_name || currentQuestion.unit_code || "this topic"}</strong>.{" "}
-                    {currentQuestion.explanation 
-                      ? "Think about the key principles mentioned in the explanation."
-                      : "Consider the fundamental concepts of this topic and the most accurate answer."}
+                    <strong>Hint:</strong> {generateHint(currentQuestion)}
                   </div>
                 </div>
               </div>
