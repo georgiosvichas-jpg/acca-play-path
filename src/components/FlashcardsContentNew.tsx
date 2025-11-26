@@ -153,15 +153,15 @@ export default function FlashcardsContentNew() {
   const applyFilters = () => {
     let filtered = [...flashcards];
 
-    if (selectedPaper !== "all") {
+    if (selectedPaper && selectedPaper !== "all") {
       filtered = filtered.filter((f) => f.paper_code === selectedPaper);
     }
 
-    if (selectedUnit !== "all") {
+    if (selectedUnit && selectedUnit !== "all") {
       filtered = filtered.filter((f) => f.unit_title === selectedUnit);
     }
 
-    if (selectedDifficulty !== "all") {
+    if (selectedDifficulty && selectedDifficulty !== "all") {
       filtered = filtered.filter((f) => f.difficulty === selectedDifficulty);
     }
 
@@ -311,7 +311,7 @@ export default function FlashcardsContentNew() {
     setSelectedDifficulty("all");
   };
 
-  if (loading) {
+  if (loading || prefsLoading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
