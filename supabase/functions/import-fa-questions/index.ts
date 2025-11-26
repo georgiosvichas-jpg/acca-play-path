@@ -294,6 +294,26 @@ serve(async (req) => {
           is_active: true,
         };
 
+        // Handle MATCHING type questions - extract left_column, right_column, correct_matches
+        if (normalized.question_type === "MATCHING") {
+          const leftColumn = rawQ.left_column || [];
+          const rightColumn = rawQ.right_column || [];
+          const correctMatches = rawQ.correct_matches || {};
+          
+          // Convert correct_matches object {"0": 3, "1": 0} to array [[0, 3], [1, 0]]
+          const correctPairs = Object.entries(correctMatches).map(
+            ([leftIdx, rightIdx]) => [parseInt(leftIdx), rightIdx as number]
+          );
+          
+          questionData.metadata = {
+            leftItems: leftColumn,
+            rightItems: rightColumn,
+            correctPairs: correctPairs,
+          };
+          
+          console.log(`MATCHING question ${normalized.external_id}: leftItems=${leftColumn.length}, rightItems=${rightColumn.length}, pairs=${correctPairs.length}`);
+        }
+
         // Handle correct_answer mapping for MCQ
         const isMCQTypeForStorage = ["MCQ_SINGLE", "MCQ_MULTI", "mcq"].includes(normalized.question_type);
         if (isMCQTypeForStorage) {
