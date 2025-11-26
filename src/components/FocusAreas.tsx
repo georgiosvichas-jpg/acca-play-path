@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { usePapers } from "@/hooks/usePapers";
+import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 import { supabase } from "@/integrations/supabase/client";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -30,17 +30,20 @@ interface SpacedRepetitionStats {
 export default function FocusAreas() {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const { papers } = usePapers();
-  const [selectedPaper, setSelectedPaper] = useState<string>("");
+  
+  // Study preferences hook
+  const {
+    selectedPaper,
+    setSelectedPaper,
+    papers,
+    loading: prefsLoading,
+  } = useStudyPreferences();
+  
   const [weakTopics, setWeakTopics] = useState<TopicPerformance[]>([]);
   const [spacedStats, setSpacedStats] = useState<SpacedRepetitionStats | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    if (papers.length > 0 && !selectedPaper) {
-      setSelectedPaper(papers[0].paper_code);
-    }
-  }, [papers, selectedPaper]);
+  // No manual initialization needed - handled by useStudyPreferences hook
 
   useEffect(() => {
     if (selectedPaper && user) {

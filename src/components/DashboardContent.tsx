@@ -43,8 +43,14 @@ interface Task {
 export default function DashboardContent() {
   const { user } = useAuth();
   const { profile, updateProfile } = useUserProfile();
-  const { papers } = usePapers();
   const { planType } = useSubscription();
+  
+  // Study preferences hook
+  const {
+    selectedPaper,
+    papers,
+    loading: prefsLoading,
+  } = useStudyPreferences();
   const { getMessage } = useMotivationalMessage();
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
@@ -85,12 +91,9 @@ export default function DashboardContent() {
   };
 
   useEffect(() => {
-    if (!user) return;
+    if (!user || !selectedPaper) return;
 
     const fetchTasks = async () => {
-      // Get user's selected paper or default to first paper
-      const selectedPaper = profile?.selected_paper || papers[0]?.paper_code;
-
       if (!selectedPaper) {
         setLoading(false);
         return;
@@ -130,10 +133,8 @@ export default function DashboardContent() {
       setLoading(false);
     };
 
-    if (papers.length > 0) {
-      fetchTasks();
-    }
-  }, [user, profile, papers]);
+    fetchTasks();
+  }, [user, selectedPaper]);
 
   if (loading) {
     return (
@@ -143,7 +144,7 @@ export default function DashboardContent() {
     );
   }
 
-  const selectedPaper = papers.find((p) => p.paper_code === profile?.selected_paper) || papers[0];
+  const currentPaper = papers.find((p) => p.paper_code === selectedPaper) || papers[0];
   const completedTasks = tasks.filter((t) => t.completed).length;
   const progress = tasks.length > 0 ? Math.round((completedTasks / tasks.length) * 100) : 0;
 
@@ -173,7 +174,7 @@ export default function DashboardContent() {
                 </div>
 
                 <h1 className="text-4xl md:text-5xl font-display font-extrabold mb-4">
-                  Your Study Plan for {selectedPaper?.paper_code}
+                  Your Study Plan for {currentPaper?.paper_code}
                 </h1>
 
                 <p className="text-xl text-white/90 mb-6">
