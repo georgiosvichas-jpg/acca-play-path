@@ -30,7 +30,7 @@ interface ImportResult {
   skipped: Array<{ external_id: string; error_reason: string }>;
 }
 
-const VALID_QUESTION_TYPES = ["MCQ_SINGLE", "MCQ_MULTI", "CALCULATION", "FILL_IN_BLANK", "SHORT_ANSWER", "mcq", "flashcard"];
+const VALID_QUESTION_TYPES = ["MCQ_SINGLE", "MCQ_MULTI", "CALCULATION", "FILL_IN_BLANK", "SHORT_ANSWER", "MATCHING", "mcq", "flashcard"];
 const VALID_DIFFICULTIES = ["easy", "medium", "hard"];
 
 serve(async (req) => {
