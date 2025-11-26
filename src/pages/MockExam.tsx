@@ -10,11 +10,11 @@ import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { useTopicPerformance } from "@/hooks/useTopicPerformance";
 import { QuestionActions } from "@/components/QuestionActions";
+import { QuestionRenderer } from "@/components/QuestionRenderer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Progress } from "@/components/ui/progress";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Badge } from "@/components/ui/badge";
@@ -35,6 +35,8 @@ interface Question {
   options: string[];
   correct_option_index: number;
   explanation: string | null;
+  answer?: string;
+  metadata?: any;
 }
 
 interface Section {
@@ -65,7 +67,7 @@ export default function MockExam() {
   const [examStarted, setExamStarted] = useState(false);
   const [agreedToRules, setAgreedToRules] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [answers, setAnswers] = useState<(number | null)[]>([]);
+  const [answers, setAnswers] = useState<any[]>([]);
   const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(new Set());
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
@@ -247,9 +249,9 @@ export default function MockExam() {
     }
   };
 
-  const handleAnswerSelect = (questionIndex: number, answerIndex: number) => {
+  const handleAnswerSelect = (questionIndex: number, answer: any) => {
     const newAnswers = [...answers];
-    newAnswers[questionIndex] = answerIndex;
+    newAnswers[questionIndex] = answer;
     setAnswers(newAnswers);
   };
   
@@ -280,9 +282,66 @@ export default function MockExam() {
   };
   
   const getQuestionStatus = (index: number) => {
-    if (answers[index] !== null) return 'answered';
+    if (answers[index] !== null && answers[index] !== undefined) return 'answered';
     if (flaggedQuestions.has(index)) return 'flagged';
     return 'unanswered';
+  };
+  
+  // Validate answer based on question type
+  const validateAnswer = (question: Question, answer: any): boolean => {
+    if (answer === null || answer === undefined) return false;
+    
+    const type = question.type;
+    
+    // MCQ Single
+    if (type === "MCQ_SINGLE" || type === "mcq") {
+      return answer === question.correct_option_index;
+    }
+    
+    // MCQ Multi
+    if (type === "MCQ_MULTI") {
+      const correctAnswers = question.metadata?.correctAnswers || [];
+      if (!Array.isArray(answer)) return false;
+      return answer.length === correctAnswers.length && 
+             answer.every((a: number) => correctAnswers.includes(a));
+    }
+    
+    // Fill in the Blank
+    if (type === "FILL_IN_BLANK") {
+      const blanks = question.metadata?.blanks || [];
+      if (typeof answer !== 'object') return false;
+      return blanks.every((blank: any, idx: number) => 
+        answer[idx]?.toLowerCase().trim() === blank.correctAnswer?.toLowerCase().trim()
+      );
+    }
+    
+    // Calculation
+    if (type === "CALCULATION") {
+      const correctAnswer = parseFloat(question.answer || "0");
+      const tolerance = question.metadata?.tolerance || 0;
+      const userAnswer = parseFloat(answer);
+      return Math.abs(userAnswer - correctAnswer) <= tolerance;
+    }
+    
+    // Matching
+    if (type === "MATCHING") {
+      const correctPairs = question.metadata?.correctPairs || [];
+      if (typeof answer !== 'object') return false;
+      return correctPairs.every(([left, right]: [number, number]) => 
+        answer[left] === right
+      );
+    }
+    
+    // Scenario Based
+    if (type === "SCENARIO_BASED") {
+      const subQuestions = question.metadata?.subQuestions || [];
+      if (typeof answer !== 'object') return false;
+      return subQuestions.every((subQ: any, idx: number) => 
+        answer[idx] === subQ.correctAnswer
+      );
+    }
+    
+    return false;
   };
   
   const getSectionStats = (section: Section) => {
@@ -307,7 +366,7 @@ export default function MockExam() {
       const sectionResults: any[] = [];
 
       questions.forEach((q, idx) => {
-        const isCorrect = answers[idx] === q.correct_option_index;
+        const isCorrect = validateAnswer(q, answers[idx]);
         if (isCorrect) correctCount++;
 
         rawLog.push({
@@ -327,7 +386,7 @@ export default function MockExam() {
         let sectionTime = 0;
         
         for (let i = start; i <= end; i++) {
-          if (answers[i] === questions[i].correct_option_index) sectionCorrect++;
+          if (validateAnswer(questions[i], answers[i])) sectionCorrect++;
           sectionTime += finalTimes[i] || 0;
         }
         
@@ -550,7 +609,7 @@ export default function MockExam() {
                       <AlertDescription>
                         <strong>Exam Rules:</strong>
                         <ul className="list-disc ml-6 mt-2 space-y-1">
-                          <li>Multiple choice questions</li>
+                          <li>Various question types (MCQ, fill-in-the-blank, calculations, matching)</li>
                           <li>Once started, the timer cannot be paused</li>
                           <li>You can navigate between questions freely</li>
                           <li>Exam will auto-submit when time expires</li>
@@ -565,6 +624,7 @@ export default function MockExam() {
                       <ul className="list-disc ml-6 space-y-1 text-sm">
                         <li>Questions cover all {selectedPaper} units</li>
                         <li>Mixed difficulty levels</li>
+                        <li>Mixed question formats (MCQ, calculations, scenario questions)</li>
                         <li>Realistic exam format</li>
                         <li>Detailed results after submission</li>
                       </ul>
@@ -913,54 +973,14 @@ export default function MockExam() {
               </div>
             </CardHeader>
             <CardContent className="space-y-6">
-              {/* Answer Options */}
-              <div className="space-y-3">
-                {currentQ.options.map((option, optIdx) => {
-                  const isUserAnswer = userAnswer === optIdx;
-                  const isCorrectOption = correctAnswer === optIdx;
-                  
-                  let optionClass = "p-4 rounded-lg border-2 transition-all";
-                  
-                  if (isCorrectOption) {
-                    optionClass += " bg-green-50 border-green-500 text-green-900";
-                  } else if (isUserAnswer && !isCorrect) {
-                    optionClass += " bg-red-50 border-red-500 text-red-900";
-                  } else {
-                    optionClass += " bg-muted/30 border-muted";
-                  }
-                  
-                  return (
-                    <div key={optIdx} className={optionClass}>
-                      <div className="flex items-start gap-3">
-                        <div className="flex items-center gap-2 min-w-fit">
-                          {isCorrectOption && (
-                            <CheckCircle2 className="w-5 h-5 text-green-600" />
-                          )}
-                          {isUserAnswer && !isCorrect && (
-                            <XCircle className="w-5 h-5 text-red-600" />
-                          )}
-                          <span className="font-semibold">
-                            {String.fromCharCode(65 + optIdx)}.
-                          </span>
-                        </div>
-                        <div className="flex-1">
-                          <p>{option}</p>
-                          {isCorrectOption && (
-                            <p className="text-sm font-medium text-green-700 mt-1">
-                              ✓ Correct Answer
-                            </p>
-                          )}
-                          {isUserAnswer && !isCorrect && (
-                            <p className="text-sm font-medium text-red-700 mt-1">
-                              Your Answer
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
+              {/* Answer Section */}
+              <QuestionRenderer
+                question={currentQ}
+                selectedAnswer={userAnswer}
+                onAnswerChange={() => {}}
+                showFeedback={true}
+                disabled={true}
+              />
 
               {/* Explanation */}
               {currentQ.explanation && (
@@ -1176,22 +1196,13 @@ export default function MockExam() {
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <RadioGroup
-                      value={answers[idx]?.toString() || ""}
-                      onValueChange={(value) => handleAnswerSelect(idx, parseInt(value))}
-                    >
-                      {q.options.map((option, optIdx) => (
-                        <div key={optIdx} className="flex items-center space-x-2 py-2">
-                          <RadioGroupItem value={optIdx.toString()} id={`q${idx}-opt${optIdx}`} />
-                          <Label
-                            htmlFor={`q${idx}-opt${optIdx}`}
-                            className="flex-1 cursor-pointer"
-                          >
-                            {option}
-                          </Label>
-                        </div>
-                      ))}
-                    </RadioGroup>
+                    <QuestionRenderer
+                      question={q}
+                      selectedAnswer={answers[idx]}
+                      onAnswerChange={(answer) => handleAnswerSelect(idx, answer)}
+                      showFeedback={false}
+                      disabled={false}
+                    />
                   </CardContent>
                 </Card>
               ))}
