@@ -2,10 +2,9 @@ import { useSearchParams } from "react-router-dom";
 import ProtectedRoute from "@/components/ProtectedRoute";
 import Footer from "@/components/Footer";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Zap, Target, Clock } from "lucide-react";
+import { Zap, Target } from "lucide-react";
 import PracticeQuiz from "./PracticeQuiz";
 import MockExam from "./MockExam";
-import MiniTest from "./MiniTest";
 
 export default function Practice() {
   const [searchParams] = useSearchParams();
@@ -21,7 +20,7 @@ export default function Practice() {
           </div>
 
           <Tabs defaultValue={defaultTab} className="space-y-6">
-            <TabsList className="grid w-full grid-cols-3 lg:w-auto">
+            <TabsList className="grid w-full grid-cols-2 lg:w-auto">
               <TabsTrigger value="quiz" className="flex items-center gap-2">
                 <Zap className="w-4 h-4" />
                 <span className="hidden sm:inline">Practice Quiz</span>
@@ -32,11 +31,6 @@ export default function Practice() {
                 <span className="hidden sm:inline">Mock Exam</span>
                 <span className="sm:hidden">Mock</span>
               </TabsTrigger>
-              <TabsTrigger value="mini" className="flex items-center gap-2">
-                <Clock className="w-4 h-4" />
-                <span className="hidden sm:inline">Mini Test</span>
-                <span className="sm:hidden">Mini</span>
-              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="quiz">
@@ -45,10 +39,6 @@ export default function Practice() {
 
             <TabsContent value="mock">
               <MockExam />
-            </TabsContent>
-
-            <TabsContent value="mini">
-              <MiniTest />
             </TabsContent>
           </Tabs>
         </main>
