@@ -57,22 +57,34 @@ interface QuizResult {
 }
 
 function generateHint(question: Question): string {
+  // Use unit name for safe topical context
   if (question.unit_name) {
-    return `This question is about ${question.unit_name}. Think about the core principles of this topic.`;
+    return `This question is about ${question.unit_name}. Try to recall the key concepts you learned in this area.`;
   }
 
-  if (question.explanation) {
-    const firstSentence = question.explanation.split(".")[0]?.trim();
-    if (firstSentence && firstSentence.length > 20 && firstSentence.length < 200) {
-      return `Think about: ${firstSentence}.`;
-    }
+  // Topic-specific safe hints that guide thinking without revealing answers
+  const topicHints: Record<string, string> = {
+    'FA01': 'Think about the purpose and users of financial accounting.',
+    'FA02': 'Consider how debits and credits maintain the accounting equation.',
+    'FA03': 'Think about how transactions flow through the ledger system.',
+    'FA04': 'Consider the key differences between capital and revenue items.',
+    'FA05': 'Think about how assets are recorded at their cost.',
+    'FA06': 'Consider depreciation methods and their impacts.',
+    'FA07': 'Think about how errors affect different sides of the ledger.',
+    'FA08': 'Consider the purpose of control accounts and reconciliations.',
+    'FA09': 'Think about what adjustments are needed at year-end.',
+    'FA10': 'Consider the components of published financial statements.',
+  };
+
+  if (question.unit_code && topicHints[question.unit_code]) {
+    return topicHints[question.unit_code];
   }
 
   if (question.unit_code) {
-    return `This question tests a core concept from unit ${question.unit_code}. Try to recall what this unit focuses on.`;
+    return `This tests a concept from ${question.unit_code}. Focus on the core principles of this topic.`;
   }
 
-  return "Focus on the main concept being tested rather than small details.";
+  return "Focus on the fundamental concept being tested. Eliminate obviously wrong answers first.";
 }
 
 export default function PracticeQuiz() {
