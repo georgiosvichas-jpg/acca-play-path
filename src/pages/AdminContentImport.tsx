@@ -485,12 +485,15 @@ export default function AdminContentImport() {
   };
 
   const downloadSkippedQuestions = (skipped: Array<{ external_id: string; error_reason: string }>, filename: string) => {
-    const json = JSON.stringify(skipped, null, 2);
-    const blob = new Blob([json], { type: "application/json" });
+    const errorLog = skipped.map(err => 
+      `External ID: ${err.external_id}\nReason: ${err.error_reason}\n---`
+    ).join('\n');
+    
+    const blob = new Blob([errorLog], { type: "text/plain" });
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = filename;
+    a.download = filename.replace('.json', '.txt');
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -779,37 +782,30 @@ export default function AdminContentImport() {
 
           {faQuestionResult && faQuestionResult.skipped.length > 0 && (
             <div className="space-y-2">
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  {faQuestionResult.skipped.length} questions had errors during import
-                </AlertDescription>
-              </Alert>
+              <div className="flex items-center gap-2 text-orange-600">
+                <AlertCircle className="h-5 w-5" />
+                <span>{faQuestionResult.skipped.length} questions skipped</span>
+              </div>
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => downloadSkippedQuestions(faQuestionResult.skipped, "fa-questions-skipped.json")}
+                onClick={() => downloadSkippedQuestions(faQuestionResult.skipped, "fa-import-errors.txt")}
               >
                 <Download className="mr-2 h-4 w-4" />
-                Download Skipped Questions
+                Download Error Log
               </Button>
-              <div className="border rounded-lg overflow-hidden max-h-60 overflow-y-auto">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>External ID</TableHead>
-                      <TableHead>Error Reason</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {faQuestionResult.skipped.map((item, idx) => (
-                      <TableRow key={idx}>
-                        <TableCell className="font-medium">{item.external_id}</TableCell>
-                        <TableCell className="text-sm">{item.error_reason}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
+              <div className="max-h-60 overflow-y-auto bg-muted p-3 rounded text-xs space-y-2">
+                {faQuestionResult.skipped.slice(0, 10).map((err, idx) => (
+                  <div key={idx} className="border-b border-border pb-2">
+                    <div className="font-semibold">ID: {err.external_id}</div>
+                    <div className="text-muted-foreground">{err.error_reason}</div>
+                  </div>
+                ))}
+                {faQuestionResult.skipped.length > 10 && (
+                  <div className="text-muted-foreground italic">
+                    ...and {faQuestionResult.skipped.length - 10} more (download full log)
+                  </div>
+                )}
               </div>
             </div>
           )}
