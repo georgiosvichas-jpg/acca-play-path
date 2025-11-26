@@ -704,7 +704,7 @@ export default function MockExam() {
     );
   }
 
-  if (examSubmitted && results) {
+  if (examSubmitted && results && !reviewMode) {
     const formatTime = (seconds: number) => {
       const mins = Math.floor(seconds / 60);
       const secs = seconds % 60;
