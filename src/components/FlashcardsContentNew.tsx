@@ -168,8 +168,21 @@ export default function FlashcardsContentNew() {
         const unitTitle = matchingUnit?.unit_title;
         
         if (unitTitle) {
-          // Filter by the actual unit title
-          filtered = filtered.filter((f) => f.unit_title === unitTitle);
+          // Try exact match first
+          let exactMatches = filtered.filter((f) => f.unit_title === unitTitle);
+          
+          // If no exact matches, try fuzzy matching using key words from unit title
+          if (exactMatches.length === 0) {
+            const keywords = unitTitle.toLowerCase().split(' ').filter(w => w.length > 3);
+            exactMatches = filtered.filter((f) => {
+              const cardTitle = f.unit_title?.toLowerCase() || '';
+              // Match if the card title contains at least 60% of the keywords
+              const matchCount = keywords.filter(kw => cardTitle.includes(kw)).length;
+              return matchCount >= Math.ceil(keywords.length * 0.6);
+            });
+          }
+          
+          filtered = exactMatches;
         } else {
           // Fallback: try fuzzy matching against unit_title
           filtered = filtered.filter((f) => 
