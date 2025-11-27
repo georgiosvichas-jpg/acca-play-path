@@ -53,7 +53,7 @@ interface QuizResult {
   maxStreak: number;
   totalXP: number;
   avgTimePerQuestion: number;
-  byUnit: Record<string, { correct: number; total: number }>;
+  byUnit: Record<string, { correct: number; total: number; unitName?: string }>;
   byDifficulty: Record<string, { correct: number; total: number }>;
 }
 
@@ -140,6 +140,7 @@ export default function PracticeQuiz() {
     questionId: string; 
     correct: boolean; 
     unitCode: string | null; 
+    unitName?: string;
     difficulty: string | null;
     timeSpent: number;
   }>>([]);
@@ -348,6 +349,7 @@ export default function PracticeQuiz() {
       questionId: currentQuestion.id,
       correct: isCorrect,
       unitCode: currentQuestion.unit_code,
+      unitName: currentQuestion.unit_name,
       difficulty: currentQuestion.difficulty,
       timeSpent
     }]);
@@ -379,6 +381,7 @@ export default function PracticeQuiz() {
       questionId: currentQuestion.id,
       correct: isCorrect,
       unitCode: currentQuestion.unit_code,
+      unitName: currentQuestion.unit_name,
       difficulty: currentQuestion.difficulty,
       timeSpent
     }];
@@ -388,10 +391,10 @@ export default function PracticeQuiz() {
     const avgTime = finalAnswers.reduce((sum, a) => sum + a.timeSpent, 0) / totalQuestions;
 
     // Calculate by unit
-    const byUnit: Record<string, { correct: number; total: number }> = {};
+    const byUnit: Record<string, { correct: number; total: number; unitName?: string }> = {};
     finalAnswers.forEach(ans => {
       const unit = ans.unitCode || "Unknown";
-      if (!byUnit[unit]) byUnit[unit] = { correct: 0, total: 0 };
+      if (!byUnit[unit]) byUnit[unit] = { correct: 0, total: 0, unitName: ans.unitName };
       byUnit[unit].total++;
       if (ans.correct) byUnit[unit].correct++;
     });
@@ -666,16 +669,24 @@ export default function PracticeQuiz() {
                 }, {} as any);
 
                 if (weakestUnit.unit && weakestUnit.accuracy < 70) {
+                  const unitDisplay = weakestUnit.unitName || weakestUnit.unit;
                   return (
                     <div className="p-4 border border-orange-500/50 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
                       <div className="flex items-start gap-3">
-                        <TrendingUp className="w-5 h-5 text-orange-600 mt-0.5" />
-                        <div>
+                        <TrendingUp className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
+                        <div className="flex-1">
                           <h4 className="font-semibold text-orange-900 dark:text-orange-100">Focus Area Identified</h4>
                           <p className="text-sm text-orange-800 dark:text-orange-200 mt-1">
-                            <strong>{weakestUnit.unit}</strong> needs attention ({weakestUnit.accuracy.toFixed(0)}% accuracy). 
-                            Consider reviewing this topic before your next session.
+                            <strong>{unitDisplay}</strong> needs attention ({weakestUnit.accuracy.toFixed(0)}% accuracy).
                           </p>
+                          <Button
+                            onClick={() => navigate(`/learn?paper=${paper}&unit=${weakestUnit.unit}`)}
+                            size="sm"
+                            className="mt-3"
+                            variant="outline"
+                          >
+                            Review Flashcards on This Topic
+                          </Button>
                         </div>
                       </div>
                     </div>
