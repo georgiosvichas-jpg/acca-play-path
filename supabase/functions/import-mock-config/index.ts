@@ -7,10 +7,17 @@ const corsHeaders = {
 };
 
 interface MockConfigRow {
+  mock_id: string;
   paper_code: string;
+  title: string;
   duration_minutes: number;
   total_questions: number;
   pass_mark_percentage: number;
+  easy_ratio?: number;
+  medium_ratio?: number;
+  hard_ratio?: number;
+  unit_scope?: string[];
+  description?: string;
   sections_json?: string;
 }
 
@@ -231,8 +238,13 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
     throw new Error("CSV file is empty or has no data rows");
   }
 
-  // Parse header
-  const header = lines[0].split(",").map(h => h.trim());
+  // Parse header and create column aliases
+  const rawHeader = lines[0].split(",").map(h => h.trim());
+  const header = rawHeader.map(col => {
+    // Column aliases
+    if (col === "question_count") return "total_questions";
+    return col;
+  });
   
   let inserted = 0;
   let updated = 0;
@@ -253,10 +265,10 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
       });
 
       // Validate required fields
-      if (!row.paper_code || !row.duration_minutes || !row.total_questions) {
+      if (!row.mock_id || !row.paper_code || !row.duration_minutes || !row.total_questions) {
         errors.push({
           row: i + 1,
-          error: "Missing required fields: paper_code, duration_minutes, or total_questions",
+          error: "Missing required fields: mock_id, paper_code, duration_minutes, or total_questions",
           data: line
         });
         skipped++;
@@ -296,19 +308,32 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
         }
       }
 
+      // Parse unit_scope from comma-separated string to array
+      let unitScope = null;
+      if (row.unit_scope && row.unit_scope.trim()) {
+        unitScope = row.unit_scope.split(",").map((u: string) => u.trim()).filter((u: string) => u);
+      }
+
       const mockConfig: any = {
+        mock_id: row.mock_id,
         paper_code: row.paper_code,
+        title: row.title || "Mock Exam",
         duration_minutes: parseInt(row.duration_minutes),
         total_questions: parseInt(row.total_questions),
         pass_mark_percentage: row.pass_mark_percentage ? parseInt(row.pass_mark_percentage) : 50,
+        easy_ratio: row.easy_ratio ? parseFloat(row.easy_ratio) : null,
+        medium_ratio: row.medium_ratio ? parseFloat(row.medium_ratio) : null,
+        hard_ratio: row.hard_ratio ? parseFloat(row.hard_ratio) : null,
+        unit_scope: unitScope,
+        description: row.description || null,
         sections_json: sectionsJson,
       };
 
-      // Upsert (insert or update)
+      // Upsert (insert or update based on mock_id)
       const { data: result, error: upsertError } = await supabase
         .from("mock_config")
         .upsert(mockConfig, {
-          onConflict: "paper_code"
+          onConflict: "mock_id"
         })
         .select()
         .single();
@@ -321,7 +346,7 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
       const { data: existing } = await supabase
         .from("mock_config")
         .select("created_at, updated_at")
-        .eq("paper_code", row.paper_code)
+        .eq("mock_id", row.mock_id)
         .single();
 
       if (existing && existing.created_at !== existing.updated_at) {
