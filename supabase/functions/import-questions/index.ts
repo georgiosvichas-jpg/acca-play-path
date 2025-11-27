@@ -8,6 +8,7 @@ const corsHeaders = {
 
 interface Question {
   external_id?: string;
+  id?: string;
   unit_code: string;
   question_type?: string;
   type?: string;
@@ -16,6 +17,7 @@ interface Question {
   options?: any[];
   correct_answer?: string;
   correct_option_index?: number;
+  answer?: string;
   explanation?: string;
   difficulty?: string;
   estimated_time_seconds?: number;
@@ -25,6 +27,12 @@ interface Question {
   left_column?: any[];
   right_column?: any[];
   correct_matches?: any;
+  scenario_text?: string;
+  sub_questions?: any[];
+  calculation_steps?: string[];
+  acceptable_range?: any;
+  unit_of_measurement?: string;
+  acceptable_answers?: any[];
 }
 
 interface ImportResult {
@@ -90,14 +98,42 @@ serve(async (req) => {
     const validUnitCodes = new Set(syllabusUnits?.map((u) => u.unit_code) || []);
     console.log(`[IMPORT-QUESTIONS] Valid unit codes for ${paper_code}:`, Array.from(validUnitCodes));
 
+    // Pre-process: Flatten SCENARIO_BASED questions into individual questions
+    const expandedQuestions: Question[] = [];
+    for (let i = 0; i < questions.length; i++) {
+      const q = questions[i];
+      const questionType = (q.question_type || q.type || "MCQ_SINGLE").toUpperCase();
+      
+      if (questionType === "SCENARIO_BASED" && q.sub_questions && Array.isArray(q.sub_questions)) {
+        // Flatten each sub_question into a separate question with scenario prefix
+        const scenarioText = q.scenario_text || q.stem || q.question || "";
+        q.sub_questions.forEach((subQ: any, subIdx: number) => {
+          expandedQuestions.push({
+            ...subQ,
+            external_id: subQ.external_id || `${q.external_id || `${paper_code}_Q${String(i + 1).padStart(3, "0")}`}_${subIdx + 1}`,
+            stem: `**Scenario:** ${scenarioText}\n\n**Question:** ${subQ.stem || subQ.question}`,
+            question: `**Scenario:** ${scenarioText}\n\n**Question:** ${subQ.stem || subQ.question}`,
+            unit_code: q.unit_code, // Inherit from parent scenario
+            difficulty: subQ.difficulty || q.difficulty,
+            question_type: subQ.question_type || subQ.type,
+          });
+        });
+      } else {
+        // Non-scenario question, keep as is
+        expandedQuestions.push(q);
+      }
+    }
+
+    console.log(`[IMPORT-QUESTIONS] Expanded ${questions.length} questions to ${expandedQuestions.length} (flattened SCENARIO_BASED)`);
+
     let inserted = 0;
     let updated = 0;
     let skipped = 0;
     const skipped_details: Array<{ external_id: string; reason: string }> = [];
 
     // Process each question
-    for (let i = 0; i < questions.length; i++) {
-      const q = questions[i];
+    for (let i = 0; i < expandedQuestions.length; i++) {
+      const q = expandedQuestions[i];
       const questionNum = i + 1;
 
       try {
@@ -108,6 +144,10 @@ serve(async (req) => {
         // Normalize common type aliases
         if (question_type === "MCQ") {
           question_type = "MCQ_SINGLE"; // Default MCQ to single-answer
+        } else if (question_type === "FILL_IN_BLANK") {
+          question_type = "SHORT"; // Written/fill-in response
+        } else if (question_type === "CALCULATION") {
+          question_type = "NUMERIC"; // Numeric calculation response
         }
         
         const stem = q.stem || q.question;
@@ -225,6 +265,16 @@ serve(async (req) => {
           questionData.options = null;
           questionData.correct_option_index = null;
           questionData.answer = q.correct_answer || q.answer || null;
+          
+          // Handle CALCULATION-specific metadata (for NUMERIC type)
+          if (question_type === "NUMERIC" && (q.calculation_steps || q.acceptable_range || q.unit_of_measurement || q.acceptable_answers)) {
+            questionData.metadata = {
+              calculation_steps: q.calculation_steps || null,
+              acceptable_range: q.acceptable_range || null,
+              unit_of_measurement: q.unit_of_measurement || null,
+              acceptable_answers: q.acceptable_answers || null,
+            };
+          }
         }
 
         // Upsert question
