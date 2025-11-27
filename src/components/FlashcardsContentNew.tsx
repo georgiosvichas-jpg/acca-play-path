@@ -158,7 +158,21 @@ export default function FlashcardsContentNew() {
     }
 
     if (selectedUnit && selectedUnit !== "all") {
-      filtered = filtered.filter((f) => f.unit_title === selectedUnit);
+      // Check if selectedUnit looks like a unit code (e.g., "FA05") or unit title
+      // If it contains numbers at the end, assume it's a unit code
+      const isUnitCode = /[A-Z]+\d+/.test(selectedUnit);
+      
+      if (isUnitCode) {
+        // Filter by unit_code - flashcards don't have unit_code, so we need to match against unit_title
+        // Extract the code from the title if present (e.g., "Accruals and prepayments (FA05)")
+        filtered = filtered.filter((f) => {
+          // Check if unit_title contains the unit code in parentheses
+          return f.unit_title?.includes(`(${selectedUnit})`) || f.unit_title === selectedUnit;
+        });
+      } else {
+        // Filter by exact unit title match
+        filtered = filtered.filter((f) => f.unit_title === selectedUnit);
+      }
     }
 
     if (selectedDifficulty && selectedDifficulty !== "all") {

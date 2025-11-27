@@ -203,7 +203,11 @@ export default function PracticeQuiz() {
     return () => clearInterval(timer);
   }, [quizStarted, showFeedback, timerEnabled]);
 
-  const startQuiz = async () => {
+  const startQuiz = async (overridePaper?: string, overrideUnit?: string) => {
+    // Use override values if provided, otherwise use hook values
+    const quizPaper = overridePaper || paper;
+    const quizUnit = overrideUnit || unitCode;
+    
     // Refresh profile to get latest XP balance
     await refetchProfile();
     
@@ -212,11 +216,11 @@ export default function PracticeQuiz() {
       let query = supabase
         .from("sb_questions")
         .select("*")
-        .eq("paper", paper)
+        .eq("paper", quizPaper)
         .in("type", ["mcq", "MCQ_SINGLE", "MCQ_MULTI"]);
 
-      if (unitCode !== "all") {
-        query = query.eq("unit_code", unitCode);
+      if (quizUnit !== "all") {
+        query = query.eq("unit_code", quizUnit);
       }
       
       if (difficulty !== "all") {
@@ -625,7 +629,7 @@ export default function PracticeQuiz() {
               </Select>
             </div>
 
-            <Button onClick={startQuiz} disabled={loading} className="w-full">
+            <Button onClick={() => startQuiz()} disabled={loading} className="w-full">
               {loading ? "Loading..." : "Start Quiz"}
             </Button>
           </CardContent>
@@ -755,7 +759,20 @@ export default function PracticeQuiz() {
 
                         <div className="flex gap-2 flex-wrap">
                           <Button
-                            onClick={() => navigate(`/practice?paper=${paper}&unit=${weakestUnit.unit}`)}
+                            onClick={async () => {
+                              // Reset quiz state and start a new quiz with the weak unit
+                              setQuizStarted(false);
+                              setQuizCompleted(false);
+                              setResult(null);
+                              setAnswers([]);
+                              setCurrentIndex(0);
+                              setEarnedXP(0);
+                              setCurrentStreak(0);
+                              setMaxStreak(0);
+                              
+                              // Start quiz with specific filters
+                              await startQuiz(paper, weakestUnit.unit);
+                            }}
                             size="sm"
                             className="flex-1"
                           >
