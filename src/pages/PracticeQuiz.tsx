@@ -979,7 +979,7 @@ export default function PracticeQuiz() {
 
             <RadioGroup 
               key={currentQuestion.id} 
-              value={selectedAnswer?.toString()} 
+              value={selectedAnswer !== null ? selectedAnswer.toString() : ""} 
               onValueChange={(val) => setSelectedAnswer(parseInt(val))}
             >
               {currentQuestion.options.map((option, idx) => (

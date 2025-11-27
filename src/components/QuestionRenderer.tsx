@@ -51,7 +51,7 @@ export function QuestionRenderer({
   if (question.type === "MCQ_SINGLE" || question.type === "mcq") {
     return (
       <RadioGroup
-        value={selectedAnswer?.toString()}
+        value={selectedAnswer !== null && selectedAnswer !== undefined ? selectedAnswer.toString() : ""}
         onValueChange={(val) => onAnswerChange(parseInt(val))}
         disabled={disabled}
       >
