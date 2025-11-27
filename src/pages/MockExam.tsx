@@ -458,7 +458,7 @@ export default function MockExam() {
                       <Clock className="w-6 h-6" />
                       ACCA {selectedPaper} Mock Exam
                     </CardTitle>
-                    <CardDescription>
+                    <CardDescription className="mt-1.5">
                       Simulated exam under real ACCA conditions
                     </CardDescription>
                   </div>
