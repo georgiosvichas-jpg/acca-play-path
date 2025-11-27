@@ -127,7 +127,6 @@ export default function PracticeQuiz() {
     unitCode: string | null; 
     difficulty: string | null;
     timeSpent: number;
-    confidence: number;
   }>>([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
   const [result, setResult] = useState<QuizResult | null>(null);
@@ -137,8 +136,6 @@ export default function PracticeQuiz() {
   const [currentStreak, setCurrentStreak] = useState(0);
   const [maxStreak, setMaxStreak] = useState(0);
   const [earnedXP, setEarnedXP] = useState(0);
-  const [confidence, setConfidence] = useState(3);
-  const [showConfidence, setShowConfidence] = useState(false);
   const [timeRemaining, setTimeRemaining] = useState(30);
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [hintRevealed, setHintRevealed] = useState(false);
@@ -247,8 +244,7 @@ export default function PracticeQuiz() {
       correct: false,
       unitCode: currentQuestion.unit_code,
       difficulty: currentQuestion.difficulty,
-      timeSpent,
-      confidence: 0
+      timeSpent
     }]);
 
     setCurrentStreak(0);
@@ -273,17 +269,8 @@ export default function PracticeQuiz() {
     setHintsUsed(hintsUsed + 1);
   };
 
-  const handleConfidenceSubmit = () => {
-    setShowConfidence(false);
-  };
-
   const handleAnswer = () => {
     if (selectedAnswer === null) return;
-
-    if (gamificationEnabled && !showConfidence && !timerEnabled) {
-      setShowConfidence(true);
-      return;
-    }
 
     const currentQuestion = questions[currentIndex];
     const isCorrect = selectedAnswer === currentQuestion.correct_option_index;
@@ -340,8 +327,7 @@ export default function PracticeQuiz() {
       correct: isCorrect,
       unitCode: currentQuestion.unit_code,
       difficulty: currentQuestion.difficulty,
-      timeSpent,
-      confidence: showConfidence ? confidence : 3
+      timeSpent
     }]);
 
     setShowFeedback(true);
@@ -352,8 +338,6 @@ export default function PracticeQuiz() {
       setCurrentIndex(currentIndex + 1);
       setSelectedAnswer(null);
       setShowFeedback(false);
-      setShowConfidence(false);
-      setConfidence(3);
       setHintRevealed(false);
       setQuestionStartTime(Date.now());
       setTimeRemaining(30);
@@ -373,8 +357,7 @@ export default function PracticeQuiz() {
       correct: isCorrect,
       unitCode: currentQuestion.unit_code,
       difficulty: currentQuestion.difficulty,
-      timeSpent,
-      confidence: showConfidence ? confidence : 3
+      timeSpent
     }];
 
     const correctAnswers = finalAnswers.filter(a => a.correct).length;
@@ -767,37 +750,6 @@ export default function PracticeQuiz() {
           <Progress value={progress} className="h-2" />
         </div>
 
-        {/* Confidence Meter Modal - Only show if gamification enabled */}
-        {showConfidence && gamificationEnabled && (
-          <Card className="mb-6 border-primary">
-            <CardHeader>
-              <CardTitle className="text-lg">How confident are you?</CardTitle>
-              <CardDescription>Rate your confidence before seeing the result</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="flex justify-center gap-2">
-                {[1, 2, 3, 4, 5].map(level => (
-                  <Badge 
-                    key={level}
-                    variant={confidence === level ? "default" : "outline"}
-                    className="cursor-pointer text-lg px-4 py-2"
-                    onClick={() => setConfidence(level)}
-                  >
-                    {level}
-                  </Badge>
-                ))}
-              </div>
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Not confident</span>
-                <span>Very confident</span>
-              </div>
-              <Button onClick={handleConfidenceSubmit} className="w-full">
-                Submit Answer
-              </Button>
-            </CardContent>
-          </Card>
-        )}
-
         <Card>
           <CardHeader>
             <div className="flex justify-between items-start">
@@ -848,7 +800,6 @@ export default function PracticeQuiz() {
               key={currentQuestion.id} 
               value={selectedAnswer?.toString()} 
               onValueChange={(val) => setSelectedAnswer(parseInt(val))}
-              disabled={showConfidence}
             >
               {currentQuestion.options.map((option, idx) => (
                 <div 
@@ -862,9 +813,9 @@ export default function PracticeQuiz() {
                         : "border-border"
                       : "border-border hover:border-primary"
                   }`}
-                  onClick={() => !showFeedback && !showConfidence && setSelectedAnswer(idx)}
+                  onClick={() => !showFeedback && setSelectedAnswer(idx)}
                 >
-                  <RadioGroupItem value={idx.toString()} id={`option-${idx}`} disabled={showFeedback || showConfidence} />
+                  <RadioGroupItem value={idx.toString()} id={`option-${idx}`} disabled={showFeedback} />
                   <Label htmlFor={`option-${idx}`} className="flex-1 cursor-pointer">
                     {option}
                     {showFeedback && idx === currentQuestion.correct_option_index && (
