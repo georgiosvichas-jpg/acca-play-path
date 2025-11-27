@@ -468,7 +468,7 @@ export default function MockExam() {
                   <div>
                     <CardTitle className="flex items-center gap-2">
                       
-                      ACCA {selectedPaper} Mock Exam
+                      Mock Exam
                     </CardTitle>
                     <CardDescription className="mt-1.5">
                       Simulated exam under real ACCA conditions
