@@ -778,7 +778,7 @@ export default function PracticeQuiz() {
                           </p>
                         </div>
 
-                        <div className="flex gap-2 flex-wrap">
+                        <div className="grid grid-cols-2 gap-3">
                           <Button
                             onClick={async () => {
                               // Reset quiz state and start a new quiz with the weak unit
@@ -794,17 +794,15 @@ export default function PracticeQuiz() {
                               // Start focused 5-question quiz on the weak unit
                               await startQuiz(paper, weakestUnit.unit, 5);
                             }}
-                            size="sm"
-                            className="flex-1"
+                            className="w-full"
                           >
                             <Target className="w-4 h-4 mr-2" />
                             Practice This Topic
                           </Button>
                           <Button
                             onClick={() => navigate(`/learn?paper=${paper}&unit=${weakestUnit.unit}`)}
-                            size="sm"
                             variant="outline"
-                            className="flex-1"
+                            className="w-full"
                           >
                             <BookOpen className="w-4 h-4 mr-2" />
                             Review Flashcards
@@ -836,11 +834,11 @@ export default function PracticeQuiz() {
                 }
               })()}
 
-              <div className="flex gap-3">
-                <Button onClick={resetQuiz} variant="outline" className="flex-1">
+              <div className="grid grid-cols-2 gap-3">
+                <Button onClick={resetQuiz} variant="outline" className="w-full">
                   New Quiz
                 </Button>
-                <Button onClick={() => navigate("/analytics")} className="flex-1">
+                <Button onClick={() => navigate("/analytics")} className="w-full">
                   <BarChart3 className="mr-2 h-4 w-4" />
                   View Analytics
                 </Button>
