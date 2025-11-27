@@ -703,17 +703,32 @@ export default function PracticeQuiz() {
                 </div>
               )}
 
-              <div className="space-y-4">
-                <h3 className="font-semibold">Performance by Unit</h3>
-                {Object.entries(result.byUnit).map(([unit, stats]) => (
-                  <div key={unit} className="space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span>{stats.unitName || unit}</span>
-                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="font-semibold">Performance by Unit</h3>
+                  {Object.entries(result.byUnit).map(([unit, stats]) => (
+                    <div key={unit} className="space-y-1">
+                      <div className="flex justify-between text-sm">
+                        <span>{stats.unitName || unit}</span>
+                        <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
+                      </div>
+                      <Progress value={(stats.correct / stats.total) * 100} />
                     </div>
-                    <Progress value={(stats.correct / stats.total) * 100} />
-                  </div>
-                ))}
+                  ))}
+                </div>
+
+                <div className="space-y-4">
+                  <h3 className="font-semibold">By Difficulty</h3>
+                  {Object.entries(result.byDifficulty).map(([diff, stats]) => (
+                    <div key={diff} className="space-y-1">
+                      <div className="flex justify-between text-sm capitalize">
+                        <span>{diff}</span>
+                        <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
+                      </div>
+                      <Progress value={(stats.correct / stats.total) * 100} />
+                    </div>
+                  ))}
+                </div>
               </div>
 
               {(() => {
@@ -820,19 +835,6 @@ export default function PracticeQuiz() {
                   );
                 }
               })()}
-
-              <div className="space-y-4">
-                <h3 className="font-semibold">By Difficulty</h3>
-                {Object.entries(result.byDifficulty).map(([diff, stats]) => (
-                  <div key={diff} className="space-y-1">
-                    <div className="flex justify-between text-sm capitalize">
-                      <span>{diff}</span>
-                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
-                    </div>
-                    <Progress value={(stats.correct / stats.total) * 100} />
-                  </div>
-                ))}
-              </div>
 
               <div className="flex gap-3">
                 <Button onClick={resetQuiz} variant="outline" className="flex-1">
