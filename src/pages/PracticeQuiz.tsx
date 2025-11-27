@@ -780,6 +780,14 @@ export default function PracticeQuiz() {
 
                         <div className="grid grid-cols-2 gap-3">
                           <Button
+                            onClick={() => navigate(`/learn?paper=${paper}&unit=${weakestUnit.unit}`)}
+                            variant="outline"
+                            className="w-full"
+                          >
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Review Flashcards
+                          </Button>
+                          <Button
                             onClick={async () => {
                               // Reset quiz state and start a new quiz with the weak unit
                               setQuizStarted(false);
@@ -798,14 +806,6 @@ export default function PracticeQuiz() {
                           >
                             <Target className="w-4 h-4 mr-2" />
                             Practice This Topic
-                          </Button>
-                          <Button
-                            onClick={() => navigate(`/learn?paper=${paper}&unit=${weakestUnit.unit}`)}
-                            variant="outline"
-                            className="w-full"
-                          >
-                            <BookOpen className="w-4 h-4 mr-2" />
-                            Review Flashcards
                           </Button>
                         </div>
 
