@@ -18,7 +18,6 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { toast } from "sonner";
 import { 
   CheckCircle2, 
@@ -704,212 +703,17 @@ export default function PracticeQuiz() {
                 </div>
               )}
 
-              {/* Side-by-Side Performance Charts */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
-                {/* Performance by Unit - Vertical Bar Chart */}
-                <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 bg-gradient-to-br from-card to-card/80">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-md bg-primary/10">
-                        <Target className="w-4 h-4 text-primary" />
-                      </div>
-                      <h3 className="font-semibold text-base">Performance by Unit</h3>
+              <div className="space-y-4">
+                <h3 className="font-semibold">Performance by Unit</h3>
+                {Object.entries(result.byUnit).map(([unit, stats]) => (
+                  <div key={unit} className="space-y-1">
+                    <div className="flex justify-between text-sm">
+                      <span>{stats.unitName || unit}</span>
+                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
                     </div>
-                    <p className="text-xs text-muted-foreground mt-1">Topic breakdown</p>
-                  </CardHeader>
-                  <CardContent className="pt-2">
-                    <ResponsiveContainer width="100%" height={300}>
-                      <BarChart
-                        data={Object.entries(result.byUnit).map(([unit, stats]) => ({
-                          name: stats.unitName || unit,
-                          accuracy: ((stats.correct / stats.total) * 100),
-                          correct: stats.correct,
-                          total: stats.total,
-                        }))}
-                        margin={{ top: 10, right: 10, left: 10, bottom: 80 }}
-                      >
-                        <defs>
-                          <linearGradient id="colorGreen" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="hsl(142, 71%, 45%)" stopOpacity={1}/>
-                            <stop offset="100%" stopColor="hsl(142, 71%, 45%)" stopOpacity={0.8}/>
-                          </linearGradient>
-                          <linearGradient id="colorAmber" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="hsl(38, 92%, 50%)" stopOpacity={1}/>
-                            <stop offset="100%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0.8}/>
-                          </linearGradient>
-                          <linearGradient id="colorRed" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="hsl(0, 84%, 60%)" stopOpacity={1}/>
-                            <stop offset="100%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.8}/>
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid 
-                          strokeDasharray="3 3" 
-                          stroke="hsl(var(--border))" 
-                          vertical={false}
-                          opacity={0.3}
-                        />
-                        <XAxis 
-                          dataKey="name"
-                          stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 10 }}
-                          angle={-45}
-                          textAnchor="end"
-                          height={80}
-                        />
-                        <YAxis 
-                          type="number" 
-                          domain={[0, 100]} 
-                          stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 11 }}
-                          tickFormatter={(value) => `${value}%`}
-                        />
-                        <Tooltip 
-                          cursor={{ fill: 'hsl(var(--muted) / 0.1)' }}
-                          content={({ active, payload }) => {
-                            if (active && payload && payload.length) {
-                              const data = payload[0].payload;
-                              const accuracy = data.accuracy;
-                              return (
-                                <div className="bg-background/95 backdrop-blur-sm border-2 border-border rounded-lg p-3 shadow-xl animate-scale-in">
-                                  <p className="font-semibold text-sm mb-1">{data.name}</p>
-                                  <div className="flex items-center gap-2">
-                                    <div className={`w-2 h-2 rounded-full ${
-                                      accuracy >= 70 ? 'bg-green-500' : 
-                                      accuracy >= 50 ? 'bg-amber-500' : 
-                                      'bg-red-500'
-                                    }`} />
-                                    <p className="text-sm font-medium">
-                                      {accuracy.toFixed(0)}%
-                                    </p>
-                                  </div>
-                                  <p className="text-xs text-muted-foreground mt-1">
-                                    {data.correct} of {data.total} correct
-                                  </p>
-                                </div>
-                              );
-                            }
-                            return null;
-                          }}
-                        />
-                        <Bar 
-                          dataKey="accuracy" 
-                          radius={[6, 6, 0, 0]}
-                          animationDuration={800}
-                          animationBegin={0}
-                        >
-                          {Object.entries(result.byUnit).map(([unit, stats], index) => {
-                            const accuracy = (stats.correct / stats.total) * 100;
-                            let fill = "url(#colorGreen)";
-                            if (accuracy < 50) fill = "url(#colorRed)";
-                            else if (accuracy < 70) fill = "url(#colorAmber)";
-                            return <Cell key={`cell-${index}`} fill={fill} />;
-                          })}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
-
-                {/* Performance by Difficulty - Vertical Bar Chart */}
-                <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 bg-gradient-to-br from-card to-card/80">
-                  <CardHeader className="pb-3">
-                    <div className="flex items-center gap-2">
-                      <div className="p-1.5 rounded-md bg-primary/10">
-                        <TrendingUp className="w-4 h-4 text-primary" />
-                      </div>
-                      <h3 className="font-semibold text-base">Performance by Difficulty</h3>
-                    </div>
-                    <p className="text-xs text-muted-foreground mt-1">Challenge level analysis</p>
-                  </CardHeader>
-                  <CardContent className="pt-2">
-                    <ResponsiveContainer width="100%" height={300}>
-                      <BarChart
-                        data={Object.entries(result.byDifficulty).map(([diff, stats]) => ({
-                          name: diff.charAt(0).toUpperCase() + diff.slice(1),
-                          accuracy: ((stats.correct / stats.total) * 100),
-                          correct: stats.correct,
-                          total: stats.total,
-                        }))}
-                        margin={{ top: 10, right: 10, left: 10, bottom: 40 }}
-                      >
-                        <defs>
-                          <linearGradient id="colorGreenDiff" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="hsl(142, 71%, 45%)" stopOpacity={1}/>
-                            <stop offset="100%" stopColor="hsl(142, 71%, 45%)" stopOpacity={0.8}/>
-                          </linearGradient>
-                          <linearGradient id="colorAmberDiff" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="hsl(38, 92%, 50%)" stopOpacity={1}/>
-                            <stop offset="100%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0.8}/>
-                          </linearGradient>
-                          <linearGradient id="colorRedDiff" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="0%" stopColor="hsl(0, 84%, 60%)" stopOpacity={1}/>
-                            <stop offset="100%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.8}/>
-                          </linearGradient>
-                        </defs>
-                        <CartesianGrid 
-                          strokeDasharray="3 3" 
-                          stroke="hsl(var(--border))" 
-                          vertical={false}
-                          opacity={0.3}
-                        />
-                        <XAxis 
-                          dataKey="name"
-                          stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 11 }}
-                        />
-                        <YAxis 
-                          type="number" 
-                          domain={[0, 100]} 
-                          stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 11 }}
-                          tickFormatter={(value) => `${value}%`}
-                        />
-                        <Tooltip 
-                          cursor={{ fill: 'hsl(var(--muted) / 0.1)' }}
-                          content={({ active, payload }) => {
-                            if (active && payload && payload.length) {
-                              const data = payload[0].payload;
-                              const accuracy = data.accuracy;
-                              return (
-                                <div className="bg-background/95 backdrop-blur-sm border-2 border-border rounded-lg p-3 shadow-xl animate-scale-in">
-                                  <p className="font-semibold text-sm mb-1">{data.name}</p>
-                                  <div className="flex items-center gap-2">
-                                    <div className={`w-2 h-2 rounded-full ${
-                                      accuracy >= 70 ? 'bg-green-500' : 
-                                      accuracy >= 50 ? 'bg-amber-500' : 
-                                      'bg-red-500'
-                                    }`} />
-                                    <p className="text-sm font-medium">
-                                      {accuracy.toFixed(0)}%
-                                    </p>
-                                  </div>
-                                  <p className="text-xs text-muted-foreground mt-1">
-                                    {data.correct} of {data.total} correct
-                                  </p>
-                                </div>
-                              );
-                            }
-                            return null;
-                          }}
-                        />
-                        <Bar 
-                          dataKey="accuracy" 
-                          radius={[6, 6, 0, 0]}
-                          animationDuration={800}
-                          animationBegin={200}
-                        >
-                          {Object.entries(result.byDifficulty).map(([_, stats], index) => {
-                            const accuracy = (stats.correct / stats.total) * 100;
-                            let fill = "url(#colorGreenDiff)";
-                            if (accuracy < 50) fill = "url(#colorRedDiff)";
-                            else if (accuracy < 70) fill = "url(#colorAmberDiff)";
-                            return <Cell key={`cell-${index}`} fill={fill} />;
-                          })}
-                        </Bar>
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </CardContent>
-                </Card>
+                    <Progress value={(stats.correct / stats.total) * 100} />
+                  </div>
+                ))}
               </div>
 
               {(() => {
@@ -1017,6 +821,18 @@ export default function PracticeQuiz() {
                 }
               })()}
 
+              <div className="space-y-4">
+                <h3 className="font-semibold">By Difficulty</h3>
+                {Object.entries(result.byDifficulty).map(([diff, stats]) => (
+                  <div key={diff} className="space-y-1">
+                    <div className="flex justify-between text-sm capitalize">
+                      <span>{diff}</span>
+                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
+                    </div>
+                    <Progress value={(stats.correct / stats.total) * 100} />
+                  </div>
+                ))}
+              </div>
 
               <div className="flex gap-3">
                 <Button onClick={resetQuiz} variant="outline" className="flex-1">
