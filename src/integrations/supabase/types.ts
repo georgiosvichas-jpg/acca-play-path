@@ -225,32 +225,53 @@ export type Database = {
       mock_config: {
         Row: {
           created_at: string | null
+          description: string | null
           duration_minutes: number
+          easy_ratio: number | null
+          hard_ratio: number | null
           id: string
+          medium_ratio: number | null
+          mock_id: string
           paper_code: string
           pass_mark_percentage: number
           sections_json: Json | null
+          title: string | null
           total_questions: number
+          unit_scope: string[] | null
           updated_at: string | null
         }
         Insert: {
           created_at?: string | null
+          description?: string | null
           duration_minutes: number
+          easy_ratio?: number | null
+          hard_ratio?: number | null
           id?: string
+          medium_ratio?: number | null
+          mock_id: string
           paper_code: string
           pass_mark_percentage?: number
           sections_json?: Json | null
+          title?: string | null
           total_questions: number
+          unit_scope?: string[] | null
           updated_at?: string | null
         }
         Update: {
           created_at?: string | null
+          description?: string | null
           duration_minutes?: number
+          easy_ratio?: number | null
+          hard_ratio?: number | null
           id?: string
+          medium_ratio?: number | null
+          mock_id?: string
           paper_code?: string
           pass_mark_percentage?: number
           sections_json?: Json | null
+          title?: string | null
           total_questions?: number
+          unit_scope?: string[] | null
           updated_at?: string | null
         }
         Relationships: [
