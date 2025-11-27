@@ -693,7 +693,7 @@ export default function PracticeQuiz() {
         {gamificationEnabled && (
           <div className={`grid ${timerEnabled ? 'grid-cols-4' : 'grid-cols-3'} gap-3 mb-6`}>
             <Card className="p-3">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center gap-2 text-center">
                 <Flame className={`w-5 h-5 ${getStreakColor()}`} />
                 <div>
                   <div className="text-2xl font-bold">{currentStreak}</div>
@@ -702,7 +702,7 @@ export default function PracticeQuiz() {
               </div>
             </Card>
             <Card className="p-3">
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col items-center gap-2 text-center">
                 <Zap className="w-5 h-5 text-green-600" />
                 <div>
                   <div className="text-2xl font-bold">{currentXP}</div>
@@ -714,7 +714,7 @@ export default function PracticeQuiz() {
             </Card>
             {timerEnabled && (
               <Card className="p-3">
-                <div className="flex items-center gap-2">
+                <div className="flex flex-col items-center gap-2 text-center">
                   <Timer className={`w-5 h-5 ${timeRemaining <= 10 ? 'text-red-600 animate-pulse' : 'text-primary'}`} />
                   <div>
                     <div className="text-2xl font-bold">{timeRemaining}s</div>
@@ -724,7 +724,7 @@ export default function PracticeQuiz() {
               </Card>
             )}
             <Card className="p-3">
-              <div>
+              <div className="flex flex-col items-center gap-2 text-center">
                 <div className="text-2xl font-bold">{currentIndex + 1}/{questions.length}</div>
                 <div className="text-xs text-muted-foreground">Question</div>
               </div>
