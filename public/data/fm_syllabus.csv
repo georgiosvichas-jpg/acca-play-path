@@ -1,0 +1,111 @@
+﻿paper,unit_code,unit_title,area,level
+FM,FM01,Role and objectives of financial management,Introduction to FM,core
+FM,FM02,Financial management environment and stakeholders,Introduction to FM,core
+FM,FM03,Forms of business organisation and agency problems,Introduction to FM,core
+FM,FM04,Financial markets and instruments overview,Introduction to FM,core
+FM,FM05,Ethics and professional behaviour in finance,Introduction to FM,core
+FM,FM06,Time value of money – single sums,Time value of money,core
+FM,FM07,Time value of money – annuities and perpetuities,Time value of money,core
+FM,FM08,Effective annual rates and compounding,Time value of money,core
+FM,FM09,Loan amortisation and schedules,Time value of money,core
+FM,FM10,Valuation of bonds and preference shares,Time value of money,core
+FM,FM11,Cost of equity – dividend and CAPM,Cost of capital,core
+FM,FM12,Cost of debt and preference capital,Cost of capital,core
+FM,FM13,Weighted average cost of capital (WACC),Cost of capital,core
+FM,FM14,Marginal cost of capital and financing,Cost of capital,core
+FM,FM15,Capital structure theories (traditional and MM),Cost of capital,core
+FM,FM16,Capital structure in practice and gearing impact,Cost of capital,core
+FM,FM17,"Business risk, financial risk and total risk",Risk and return,core
+FM,FM18,Portfolio risk and diversification,Risk and return,core
+FM,FM19,Systematic risk and beta,Risk and return,core
+FM,FM20,Required returns and the SML,Risk and return,core
+FM,FM21,Investment appraisal – payback and ARR,Investment appraisal,core
+FM,FM22,Investment appraisal – NPV and IRR,Investment appraisal,core
+FM,FM23,Discounted cash flow in capital budgeting,Investment appraisal,core
+FM,FM24,Mutually exclusive projects and ranking conflicts,Investment appraisal,core
+FM,FM25,Capital rationing and project selection,Investment appraisal,core
+FM,FM26,Inflation and taxation in investment appraisal,Investment appraisal,core
+FM,FM27,Replacement decisions and asset lives,Investment appraisal,core
+FM,FM28,Real options intuition in investment appraisal,Investment appraisal,advanced
+FM,FM29,"Sensitivity, scenario and simulation analysis",,advanced
+FM,FM30,Post-completion audit of investment projects,Investment appraisal,core
+FM,FM31,"Short-term finance sources (overdraft, lines)",Working capital,core
+FM,FM32,Trade credit and supplier terms,Working capital,core
+FM,FM33,Inventory management and EOQ,Working capital,core
+FM,FM34,Receivables management and credit policy,Working capital,core
+FM,FM35,"Cash management models (Baumol, Miller-Orr)",Working capital,advanced
+FM,FM36,Working capital ratios and operating cycle,Working capital,core
+FM,FM37,Overtrading and overcapitalisation,Working capital,core
+FM,FM38,Factoring and invoice discounting,Working capital,core
+FM,FM39,Working capital financing mix,Working capital,core
+FM,FM40,Managing working capital under growth,Working capital,advanced
+FM,FM41,Equity financing and rights issues,Raising finance,core
+FM,FM42,Debt capital markets and loan finance,Raising finance,core
+FM,FM43,Lease finance vs purchase decisions,Raising finance,core
+FM,FM44,Islamic finance principles and products,Raising finance,advanced
+FM,FM45,"Hybrid instruments (convertibles, warrants)",Raising finance,advanced
+FM,FM46,Private equity and venture capital,Raising finance,advanced
+FM,FM47,Costs and process of issuing securities,Raising finance,core
+FM,FM48,Dividend policy theories and practice,Distributions and retention,core
+FM,FM49,Share buybacks and alternative payouts,Distributions and retention,core
+FM,FM50,Internal financing and retention decisions,Distributions and retention,core
+FM,FM51,Foreign currency markets and spot/forward,Foreign exchange risk,core
+FM,FM52,"Transaction, translation and economic risk",Foreign exchange risk,core
+FM,FM53,Money market hedging,Foreign exchange risk,core
+FM,FM54,Forward and futures hedging,Foreign exchange risk,advanced
+FM,FM55,Options for FX risk management,Foreign exchange risk,advanced
+FM,FM56,Interest rate risk – types and measures,Interest rate risk,core
+FM,FM57,"FRAs, futures and options on interest rates",Interest rate risk,advanced
+FM,FM58,Interest rate swaps and managing borrowing cost,Interest rate risk,advanced
+FM,FM59,Risk management policy and limits,Risk management,core
+FM,FM60,Enterprise-wide risk management overview,Risk management,advanced
+FM,FM61,Valuation of equity using dividends,Valuation and M&A,core
+FM,FM62,Valuation using free cash flows,Valuation and M&A,core
+FM,FM63,Valuation using multiples and comparables,Valuation and M&A,core
+FM,FM64,Takeovers and acquisitions – overview,Valuation and M&A,core
+FM,FM65,Defences against hostile takeovers,Valuation and M&A,advanced
+FM,FM66,Financing acquisitions and leveraged deals,Valuation and M&A,advanced
+FM,FM67,Purchase consideration methods,Valuation and M&A,core
+FM,FM68,Impact of mergers on EPS and gearing,Valuation and M&A,core
+FM,FM69,Post-acquisition integration and value realisation,Valuation and M&A,advanced
+FM,FM70,Financial strategy and shareholder value,Financial strategy,core
+FM,FM71,Dividend policy and payout structures,Financial strategy,core
+FM,FM72,Advanced working capital optimisation,Financial strategy,advanced
+FM,FM73,M&A financial considerations and goodwill,Financial strategy,advanced
+FM,FM74,Behavioural influences on financial decisions,Financial strategy,advanced
+FM,FM75,Executive incentives and agency alignment,Financial strategy,advanced
+FM,FM76,International cost of capital and country risk,International finance,advanced
+FM,FM77,"Corporate restructuring (spin-offs, divestments)",Corporate restructuring,advanced
+FM,FM78,Strategic financing decisions and refinancing,Financing strategy,advanced
+FM,FM79,Peer benchmarking and ratio comparison,Performance analysis,core
+FM,FM80,"Treasury risk limits, controls and governance",Treasury management,advanced
+FM,FM81,Pension finance and long-term liabilities,Special topics,advanced
+FM,FM82,Infrastructure finance and PPPs,Special topics,advanced
+FM,FM83,Bank regulation basics (capital and liquidity),Special topics,advanced
+FM,FM84,"Alternative investments (hedge, private debt, REITs)",Special topics,advanced
+FM,FM85,Corporate taxation and financing decisions,Special topics,core
+FM,FM86,ESG risk and sustainable cost of capital,ESG and sustainability,advanced
+FM,FM87,FinTech applications in financial management,ESG and sustainability,advanced
+FM,FM88,Credit analysis and default prediction,Special topics,advanced
+FM,FM89,"Risk-adjusted performance (RAROC, EVA)",Performance analysis,advanced
+FM,FM90,Financial modelling and model risk,Financial modelling,advanced
+FM,FM91,"Bankruptcy, reorganisation and liquidation",Corporate restructuring,advanced
+FM,FM92,Financial distress prediction and turnaround,Corporate restructuring,advanced
+FM,FM93,Derivatives for corporate hedging,Derivatives and hedging,advanced
+FM,FM94,Real options and strategic investment,Investment appraisal,advanced
+FM,FM95,"Budgeting, forecasting and control",Planning and control,core
+FM,FM96,Capital allocation and portfolio construction,Portfolio and value,advanced
+FM,FM97,Cost of distress and optimal capital structure,Capital structure,advanced
+FM,FM98,Liquidity stress testing and resilience,Working capital,advanced
+FM,FM99,Financing under macroeconomic shocks,Financing strategy,advanced
+FM,FM100,Integrated financial planning and strategy,Planning and control,advanced
+FM,FM101,Advanced capital markets and microstructure,Capital markets,advanced
+FM,FM102,Behavioural finance in corporate decisions,Behavioural finance,advanced
+FM,FM103,Advanced performance metrics and value drivers,Performance analysis,advanced
+FM,FM104,Treasury risk strategy and integrated hedging,Treasury management,advanced
+FM,FM105,ESG finance and green instruments,ESG and sustainability,advanced
+FM,FM106,Advanced international capital budgeting,International finance,advanced
+FM,FM107,Advanced treasury and cash pooling,Telecom treasury,advanced
+FM,FM108,Modelling frameworks and sensitivity analysis,Financial modelling,advanced
+FM,FM109,Strategic M&A finance and deal design,Valuation and M&A,advanced
+FM,FM110,Integrated enterprise value management,Financial strategy,advanced

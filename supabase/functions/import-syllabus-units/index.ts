@@ -86,11 +86,19 @@ serve(async (req) => {
           row[key] = values[idx] || null;
         });
 
+        // Flexible column name mapping (supports both formats)
+        const paperCode = row.paper_code || row.paper;
+        const unitCode = row.unit_code;
+        const unitTitle = row.unit_title;
+        const unitName = row.unit_name || row.unit_title;
+        const chapter = row.chapter || row.area || row.unit_code;
+        const unitLevel = row.unit_level || row.level;
+
         // Validate required fields
-        if (!row.paper_code || !row.unit_code) {
+        if (!paperCode || !unitCode) {
           errors.push({
             row: i + 1,
-            error: "Missing required fields: paper_code or unit_code",
+            error: "Missing required fields: paper_code/paper or unit_code",
             data: line
           });
           skipped++;
@@ -98,13 +106,13 @@ serve(async (req) => {
         }
 
         const syllabusUnit: any = {
-          paper_code: row.paper_code,
-          unit_code: row.unit_code,
+          paper_code: paperCode,
+          unit_code: unitCode,
           parent_unit_code: row.parent_unit_code || null,
-          unit_name: row.unit_name,
-          unit_title: row.unit_title || row.unit_name,
-          chapter: row.chapter || row.unit_code,
-          unit_level: row.unit_level,
+          unit_name: unitName,
+          unit_title: unitTitle || unitName,
+          chapter: chapter,
+          unit_level: unitLevel,
           description: row.description || null,
           estimated_study_minutes: row.estimated_study_minutes ? parseInt(row.estimated_study_minutes) : null,
         };

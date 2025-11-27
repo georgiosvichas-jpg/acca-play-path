@@ -623,7 +623,7 @@ export default function AdminContentImport() {
         <CardHeader>
           <CardTitle>Import Syllabus Units</CardTitle>
           <CardDescription>
-            Upload a CSV file to import or update syllabus units. Required columns: paper_code, unit_code, unit_name, unit_level
+            Upload a CSV file to import or update syllabus units. Required columns: paper_code (or paper), unit_code, unit_title, unit_level (or level). Supports both FA and FM CSV formats.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
