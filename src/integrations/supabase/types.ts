@@ -278,7 +278,7 @@ export type Database = {
           {
             foreignKeyName: "fk_mock_config_paper"
             columns: ["paper_code"]
-            isOneToOne: true
+            isOneToOne: false
             referencedRelation: "papers"
             referencedColumns: ["paper_code"]
           },
