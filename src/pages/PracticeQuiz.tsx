@@ -59,6 +59,29 @@ interface QuizResult {
   byDifficulty: Record<string, { correct: number; total: number }>;
 }
 
+// Helper function to shuffle options and update correct index
+function shuffleOptions(options: string[], correctIndex: number) {
+  // Create array of {option, originalIndex} pairs
+  const pairs = options.map((opt, idx) => ({ 
+    option: opt, 
+    originalIndex: idx 
+  }));
+  
+  // Fisher-Yates shuffle
+  for (let i = pairs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pairs[i], pairs[j]] = [pairs[j], pairs[i]];
+  }
+  
+  // Find new correct index
+  const newCorrectIndex = pairs.findIndex(p => p.originalIndex === correctIndex);
+  
+  return {
+    shuffledOptions: pairs.map(p => p.option),
+    newCorrectIndex
+  };
+}
+
 // AI-powered hint generation
 async function generateAIHint(
   question: Question,
@@ -225,7 +248,7 @@ export default function PracticeQuiz() {
         (unitsData ?? []).map((u) => [u.unit_code, u.unit_name || u.unit_title])
       );
 
-      // Shuffle and take requested number, adding unit names
+      // Shuffle questions and take requested number, adding unit names
       const shuffled = data
         .sort(() => Math.random() - 0.5)
         .slice(0, Math.min(questionCount, data.length))
@@ -233,7 +256,24 @@ export default function PracticeQuiz() {
           ...q,
           unit_name: q.unit_code ? unitMap.get(q.unit_code) : undefined
         }));
-      setQuestions(shuffled as Question[]);
+
+      // Shuffle options for each question to randomize correct answer positions
+      const shuffledQuestions = shuffled.map(q => {
+        if (q.options && Array.isArray(q.options) && q.correct_option_index !== null) {
+          const { shuffledOptions, newCorrectIndex } = shuffleOptions(
+            q.options as string[], 
+            q.correct_option_index
+          );
+          return {
+            ...q,
+            options: shuffledOptions,
+            correct_option_index: newCorrectIndex
+          };
+        }
+        return q;
+      });
+
+      setQuestions(shuffledQuestions as Question[]);
       setQuizStarted(true);
       setCurrentIndex(0);
       setAnswers([]);
