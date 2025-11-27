@@ -24,7 +24,6 @@ import { toast } from "sonner";
 import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock, Bookmark, BookmarkCheck, Grid3x3, BarChart3, Timer, History, TrendingUp } from "lucide-react";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
-
 interface Question {
   id: string;
   paper: string;
@@ -38,34 +37,50 @@ interface Question {
   answer?: string;
   metadata?: any;
 }
-
 interface Section {
   name: string;
   questionRange: [number, number];
 }
-
 export default function MockExam() {
-  const { user } = useAuth();
+  const {
+    user
+  } = useAuth();
   const navigate = useNavigate();
-  const { checkAndAwardBadges } = useBadgeChecker();
-  const { recordBatchReviews } = useSpacedRepetition();
-  const { canUseMockExam, remainingMocks, incrementMockUsage, isLoading: usageLoading } = useUsageLimits();
-  const { planType, getUpgradeMessage } = useFeatureAccess();
-  const { trackBatchPerformance } = useTopicPerformance();
+  const {
+    checkAndAwardBadges
+  } = useBadgeChecker();
+  const {
+    recordBatchReviews
+  } = useSpacedRepetition();
+  const {
+    canUseMockExam,
+    remainingMocks,
+    incrementMockUsage,
+    isLoading: usageLoading
+  } = useUsageLimits();
+  const {
+    planType,
+    getUpgradeMessage
+  } = useFeatureAccess();
+  const {
+    trackBatchPerformance
+  } = useTopicPerformance();
   const [showPaywall, setShowPaywall] = useState(false);
   const [requiredTier, setRequiredTier] = useState<"pro" | "elite">("pro");
-  
+
   // Study preferences hook
   const {
     selectedPaper,
     setSelectedPaper,
     papers,
-    loading: prefsLoading,
+    loading: prefsLoading
   } = useStudyPreferences();
-  
+
   // Bookmarks hook
-  const { isBookmarked, toggleBookmark } = useBookmarks();
-  
+  const {
+    isBookmarked,
+    toggleBookmark
+  } = useBookmarks();
   const [examLength, setExamLength] = useState<"quick" | "half" | "full">("full");
   const [showHistory, setShowHistory] = useState(false);
   const [examHistory, setExamHistory] = useState<any[]>([]);
@@ -87,29 +102,38 @@ export default function MockExam() {
   const [reviewMode, setReviewMode] = useState(false);
   const [reviewQuestionIndex, setReviewQuestionIndex] = useState(0);
   const [showIncorrectOnly, setShowIncorrectOnly] = useState(false);
-  
   const questionRefs = useRef<(HTMLDivElement | null)[]>([]);
-  
+
   // Define sections (like real ACCA papers) - dynamically calculated based on total questions
   const getSections = (): Section[] => {
     if (totalQuestions === 15) {
-      return [{ name: "Section A", questionRange: [0, 14] }];
+      return [{
+        name: "Section A",
+        questionRange: [0, 14]
+      }];
     } else if (totalQuestions === 25) {
-      return [
-        { name: "Section A", questionRange: [0, 11] },
-        { name: "Section B", questionRange: [12, 24] }
-      ];
+      return [{
+        name: "Section A",
+        questionRange: [0, 11]
+      }, {
+        name: "Section B",
+        questionRange: [12, 24]
+      }];
     } else {
-      return [
-        { name: "Section A", questionRange: [0, 14] },
-        { name: "Section B", questionRange: [15, 34] },
-        { name: "Section C", questionRange: [35, 49] }
-      ];
+      return [{
+        name: "Section A",
+        questionRange: [0, 14]
+      }, {
+        name: "Section B",
+        questionRange: [15, 34]
+      }, {
+        name: "Section C",
+        questionRange: [35, 49]
+      }];
     }
   };
-  
   const sections = getSections();
-  
+
   // No manual initialization needed - handled by useStudyPreferences hook
 
   // Fetch exam history
@@ -118,17 +142,14 @@ export default function MockExam() {
       fetchExamHistory();
     }
   }, [user, selectedPaper]);
-
   const fetchExamHistory = async () => {
     try {
-      const { data, error } = await supabase
-        .from("sb_study_sessions")
-        .select("*")
-        .eq("user_id", user?.id)
-        .eq("session_type", "mock_exam")
-        .order("created_at", { ascending: false })
-        .limit(10);
-
+      const {
+        data,
+        error
+      } = await supabase.from("sb_study_sessions").select("*").eq("user_id", user?.id).eq("session_type", "mock_exam").order("created_at", {
+        ascending: false
+      }).limit(10);
       if (error) throw error;
       setExamHistory(data || []);
     } catch (error) {
@@ -139,18 +160,22 @@ export default function MockExam() {
   // Keyboard navigation for review mode
   useEffect(() => {
     if (!reviewMode) return;
-
     const handleKeyPress = (e: KeyboardEvent) => {
       if (e.key === "ArrowLeft") {
         if (reviewQuestionIndex > 0) {
           setReviewQuestionIndex(reviewQuestionIndex - 1);
         }
       } else if (e.key === "ArrowRight") {
-        const incorrectQuestions = questions
-          .map((q, idx) => ({ question: q, index: idx }))
-          .filter(({ index }) => answers[index] !== questions[index].correct_option_index);
-        const questionsToReview = showIncorrectOnly ? incorrectQuestions : questions.map((q, idx) => ({ question: q, index: idx }));
-        
+        const incorrectQuestions = questions.map((q, idx) => ({
+          question: q,
+          index: idx
+        })).filter(({
+          index
+        }) => answers[index] !== questions[index].correct_option_index);
+        const questionsToReview = showIncorrectOnly ? incorrectQuestions : questions.map((q, idx) => ({
+          question: q,
+          index: idx
+        }));
         if (reviewQuestionIndex < questionsToReview.length - 1) {
           setReviewQuestionIndex(reviewQuestionIndex + 1);
         }
@@ -160,7 +185,6 @@ export default function MockExam() {
         setShowIncorrectOnly(false);
       }
     };
-
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, [reviewMode, reviewQuestionIndex, showIncorrectOnly, questions, answers]);
@@ -168,9 +192,8 @@ export default function MockExam() {
   // Timer effect
   useEffect(() => {
     if (!examStarted || examSubmitted) return;
-
     const timer = setInterval(() => {
-      setTimeRemaining((prev) => {
+      setTimeRemaining(prev => {
         if (prev <= 1) {
           handleSubmitExam();
           return 0;
@@ -178,17 +201,14 @@ export default function MockExam() {
         return prev - 1;
       });
     }, 1000);
-
     return () => clearInterval(timer);
   }, [examStarted, examSubmitted]);
-
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
-    const minutes = Math.floor((seconds % 3600) / 60);
+    const minutes = Math.floor(seconds % 3600 / 60);
     const secs = seconds % 60;
     return `${hours}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
-
   const startExam = async () => {
     if (!agreedToRules) {
       toast.error("Please agree to exam rules");
@@ -205,25 +225,36 @@ export default function MockExam() {
 
     // Determine exam parameters based on length
     const examConfig = {
-      quick: { questions: 15, minutes: 36 },
-      half: { questions: 25, minutes: 60 },
-      full: { questions: 50, minutes: 120 }
+      quick: {
+        questions: 15,
+        minutes: 36
+      },
+      half: {
+        questions: 25,
+        minutes: 60
+      },
+      full: {
+        questions: 50,
+        minutes: 120
+      }
     };
-    
-    const { questions: numQuestions, minutes } = examConfig[examLength];
+    const {
+      questions: numQuestions,
+      minutes
+    } = examConfig[examLength];
     const timeInSeconds = minutes * 60;
-
     try {
       // Use content-batch to fetch questions (all types)
-      const { data, error } = await supabase.functions.invoke("content-batch", {
-        body: { 
-          paper: selectedPaper, 
+      const {
+        data,
+        error
+      } = await supabase.functions.invoke("content-batch", {
+        body: {
+          paper: selectedPaper,
           size: numQuestions
-        },
+        }
       });
-
       if (error) throw error;
-
       const shuffled = data || [];
       setQuestions(shuffled.map(q => ({
         ...q,
@@ -236,71 +267,65 @@ export default function MockExam() {
       setInitialTime(timeInSeconds);
       setExamStarted(true);
       setQuestionStartTime(Date.now());
-      
+
       // Increment usage counter
       await incrementMockUsage();
-      
       toast.success(`Mock exam started! ${numQuestions} questions, ${minutes} minutes. Good luck!`);
     } catch (error) {
       console.error("Error starting exam:", error);
       toast.error("Failed to start exam");
     }
   };
-
   const handleAnswerSelect = (questionIndex: number, answer: any) => {
     const newAnswers = [...answers];
     newAnswers[questionIndex] = answer;
     setAnswers(newAnswers);
   };
-  
   const navigateToQuestion = (index: number) => {
     // Save time spent on current question
     const timeSpent = Date.now() - questionStartTime;
     const newTimes = [...timePerQuestion];
     newTimes[currentQuestion] = (newTimes[currentQuestion] || 0) + timeSpent;
     setTimePerQuestion(newTimes);
-    
     setCurrentQuestion(index);
     setQuestionStartTime(Date.now());
-    
+
     // Scroll to question
-    questionRefs.current[index]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    questionRefs.current[index]?.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center'
+    });
   };
-  
   const getQuestionStatus = (index: number) => {
     if (answers[index] !== null && answers[index] !== undefined) return 'answered';
     if (isBookmarked(questions[index]?.id)) return 'bookmarked';
     return 'unanswered';
   };
-  
+
   // Validate answer based on question type
   const validateAnswer = (question: Question, answer: any): boolean => {
     if (answer === null || answer === undefined) return false;
-    
     const type = question.type;
-    
+
     // MCQ Single
     if (type === "MCQ_SINGLE" || type === "mcq") {
       return answer === question.correct_option_index;
     }
-    
+
     // MCQ Multi
     if (type === "MCQ_MULTI") {
       const correctAnswers = question.metadata?.correctAnswers || [];
       if (!Array.isArray(answer)) return false;
-      return answer.length === correctAnswers.length && 
-             answer.every((a: number) => correctAnswers.includes(a));
+      return answer.length === correctAnswers.length && answer.every((a: number) => correctAnswers.includes(a));
     }
-    
+
     // Fill in the Blank
     if (type === "FILL_IN_BLANK") {
       const blanks = question.metadata?.blanks || [];
       if (typeof answer !== 'object') return false;
-      return blanks.every((blank: any, idx: number) => 
-        answer[idx]?.toLowerCase().trim() === blank.correctAnswer?.toLowerCase().trim()
-      );
+      return blanks.every((blank: any, idx: number) => answer[idx]?.toLowerCase().trim() === blank.correctAnswer?.toLowerCase().trim());
     }
-    
+
     // Calculation
     if (type === "CALCULATION") {
       const correctAnswer = parseFloat(question.answer || "0");
@@ -308,59 +333,53 @@ export default function MockExam() {
       const userAnswer = parseFloat(answer);
       return Math.abs(userAnswer - correctAnswer) <= tolerance;
     }
-    
+
     // Matching
     if (type === "MATCHING") {
       const correctPairs = question.metadata?.correctPairs || [];
       if (typeof answer !== 'object') return false;
-      return correctPairs.every(([left, right]: [number, number]) => 
-        answer[left] === right
-      );
+      return correctPairs.every(([left, right]: [number, number]) => answer[left] === right);
     }
-    
+
     // Scenario Based
     if (type === "SCENARIO_BASED") {
       const subQuestions = question.metadata?.subQuestions || [];
       if (typeof answer !== 'object') return false;
-      return subQuestions.every((subQ: any, idx: number) => 
-        answer[idx] === subQ.correctAnswer
-      );
+      return subQuestions.every((subQ: any, idx: number) => answer[idx] === subQ.correctAnswer);
     }
-    
     return false;
   };
-  
   const getSectionStats = (section: Section) => {
     const [start, end] = section.questionRange;
     const sectionAnswers = answers.slice(start, end + 1);
     const answered = sectionAnswers.filter(a => a !== null).length;
     const bookmarked = questions.slice(start, end + 1).filter(q => isBookmarked(q.id)).length;
-    return { answered, total: end - start + 1, bookmarked };
+    return {
+      answered,
+      total: end - start + 1,
+      bookmarked
+    };
   };
-
   const handleSubmitExam = async () => {
     // Save time for current question
     const timeSpent = Date.now() - questionStartTime;
     const finalTimes = [...timePerQuestion];
     finalTimes[currentQuestion] = (finalTimes[currentQuestion] || 0) + timeSpent;
     setTimePerQuestion(finalTimes);
-    
     try {
       // Calculate results
       let correctCount = 0;
       const rawLog: any[] = [];
       const sectionResults: any[] = [];
-
       questions.forEach((q, idx) => {
         const isCorrect = validateAnswer(q, answers[idx]);
         if (isCorrect) correctCount++;
-
         rawLog.push({
           question_id: q.id,
           unit_code: q.unit_code,
           difficulty: q.difficulty,
           correct: isCorrect,
-          time_spent: Math.round(finalTimes[idx] / 1000), // Convert to seconds
+          time_spent: Math.round(finalTimes[idx] / 1000) // Convert to seconds
         });
       });
 
@@ -370,22 +389,19 @@ export default function MockExam() {
         let sectionCorrect = 0;
         let sectionTotal = end - start + 1;
         let sectionTime = 0;
-        
         for (let i = start; i <= end; i++) {
           if (validateAnswer(questions[i], answers[i])) sectionCorrect++;
           sectionTime += finalTimes[i] || 0;
         }
-        
         sectionResults.push({
           name: section.name,
           correct: sectionCorrect,
           total: sectionTotal,
-          accuracy: ((sectionCorrect / sectionTotal) * 100).toFixed(1),
-          timeSpent: Math.round(sectionTime / 1000),
+          accuracy: (sectionCorrect / sectionTotal * 100).toFixed(1),
+          timeSpent: Math.round(sectionTime / 1000)
         });
       });
-
-      const accuracy = (correctCount / totalQuestions) * 100;
+      const accuracy = correctCount / totalQuestions * 100;
       const totalTime = initialTime - timeRemaining;
 
       // Log session via edge function
@@ -398,16 +414,16 @@ export default function MockExam() {
           isCorrect: answers[idx] === q.correct_option_index
         }));
         await trackBatchPerformance(performanceData);
-
-        const { error: sessionError } = await supabase.functions.invoke("sessions-log", {
+        const {
+          error: sessionError
+        } = await supabase.functions.invoke("sessions-log", {
           body: {
             session_type: "mock_exam",
             total_questions: 50,
             correct_answers: correctCount,
-            raw_log: rawLog,
-          },
+            raw_log: rawLog
+          }
         });
-
         if (sessionError) {
           console.error("Error logging session:", sessionError);
         }
@@ -422,7 +438,6 @@ export default function MockExam() {
         // Check for badges
         await checkAndAwardBadges();
       }
-
       setResults({
         correct: correctCount,
         total: totalQuestions,
@@ -432,12 +447,11 @@ export default function MockExam() {
         totalTime,
         timePerQuestion: finalTimes,
         unansweredCount: answers.filter(a => a === null).length,
-        examLength: totalQuestions === 15 ? "Quick" : totalQuestions === 25 ? "Half" : "Full",
+        examLength: totalQuestions === 15 ? "Quick" : totalQuestions === 25 ? "Half" : "Full"
       });
       setExamSubmitted(true);
-      
       toast.success(`Exam completed! Score: ${correctCount}/${totalQuestions} (${accuracy.toFixed(1)}%)`);
-      
+
       // Refresh history
       fetchExamHistory();
     } catch (error) {
@@ -445,58 +459,44 @@ export default function MockExam() {
       toast.error("Failed to submit exam");
     }
   };
-
   if (!examStarted) {
-    return (
-      <>
+    return <>
         <div className="container max-w-4xl mx-auto p-6">
           <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
                     <CardTitle className="flex items-center gap-2">
-                      <Clock className="w-6 h-6" />
+                      
                       ACCA {selectedPaper} Mock Exam
                     </CardTitle>
                     <CardDescription className="mt-1.5">
                       Simulated exam under real ACCA conditions
                     </CardDescription>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setShowHistory(!showHistory)}
-                  >
+                  <Button variant="outline" size="sm" onClick={() => setShowHistory(!showHistory)}>
                     <History className="w-4 h-4 mr-2" />
                     {showHistory ? "New Exam" : "View History"}
                   </Button>
                 </div>
               </CardHeader>
               <CardContent className="space-y-6">
-                {showHistory ? (
-                  /* Exam History View */
-                  <div className="space-y-4">
+                {showHistory ? (/* Exam History View */
+            <div className="space-y-4">
                     <div className="flex items-center gap-2 text-lg font-semibold">
                       <History className="w-5 h-5" />
                       Exam History
                     </div>
                     
-                    {examHistory.length === 0 ? (
-                      <div className="text-center py-12 text-muted-foreground">
+                    {examHistory.length === 0 ? <div className="text-center py-12 text-muted-foreground">
                         <History className="w-12 h-12 mx-auto mb-4 opacity-50" />
                         <p>No exam attempts yet</p>
                         <p className="text-sm mt-2">Complete your first mock exam to see your history</p>
-                      </div>
-                    ) : (
-                      <div className="space-y-3">
+                      </div> : <div className="space-y-3">
                         {examHistory.map((exam: any, idx: number) => {
-                          const accuracy = exam.total_questions > 0 
-                            ? ((exam.correct_answers / exam.total_questions) * 100).toFixed(1)
-                            : 0;
-                          const passed = parseFloat(accuracy as string) >= 50;
-                          
-                          return (
-                            <Card key={exam.id} className="p-4">
+                  const accuracy = exam.total_questions > 0 ? (exam.correct_answers / exam.total_questions * 100).toFixed(1) : 0;
+                  const passed = parseFloat(accuracy as string) >= 50;
+                  return <Card key={exam.id} className="p-4">
                               <div className="flex items-center justify-between">
                                 <div className="flex-1">
                                   <div className="flex items-center gap-3">
@@ -515,19 +515,13 @@ export default function MockExam() {
                                     </span>
                                   </div>
                                 </div>
-                                {idx === 0 && (
-                                  <TrendingUp className="w-5 h-5 text-green-600" />
-                                )}
+                                {idx === 0 && <TrendingUp className="w-5 h-5 text-green-600" />}
                               </div>
-                            </Card>
-                          );
-                        })}
-                      </div>
-                    )}
-                  </div>
-                ) : (
-                  /* New Exam Setup */
-                  <>
+                            </Card>;
+                })}
+                      </div>}
+                  </div>) : (/* New Exam Setup */
+            <>
                     {/* Paper Selection */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Select Paper</label>
@@ -536,11 +530,9 @@ export default function MockExam() {
                           <SelectValue placeholder="Choose paper..." />
                         </SelectTrigger>
                         <SelectContent>
-                          {papers.map((paper) => (
-                            <SelectItem key={paper.id} value={paper.paper_code}>
+                          {papers.map(paper => <SelectItem key={paper.id} value={paper.paper_code}>
                               {paper.paper_code} - {paper.title}
-                            </SelectItem>
-                          ))}
+                            </SelectItem>)}
                         </SelectContent>
                       </Select>
                     </div>
@@ -549,38 +541,17 @@ export default function MockExam() {
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Exam Length</label>
                       <div className="grid grid-cols-3 gap-3">
-                        <button
-                          onClick={() => setExamLength("quick")}
-                          className={`p-4 rounded-lg border-2 transition-all ${
-                            examLength === "quick"
-                              ? "border-primary bg-primary/10"
-                              : "border-muted hover:border-muted-foreground/50"
-                          }`}
-                        >
+                        <button onClick={() => setExamLength("quick")} className={`p-4 rounded-lg border-2 transition-all ${examLength === "quick" ? "border-primary bg-primary/10" : "border-muted hover:border-muted-foreground/50"}`}>
                           <div className="font-semibold">Quick</div>
                           <div className="text-sm text-muted-foreground">15 Questions</div>
                           <div className="text-xs text-muted-foreground">36 minutes</div>
                         </button>
-                        <button
-                          onClick={() => setExamLength("half")}
-                          className={`p-4 rounded-lg border-2 transition-all ${
-                            examLength === "half"
-                              ? "border-primary bg-primary/10"
-                              : "border-muted hover:border-muted-foreground/50"
-                          }`}
-                        >
+                        <button onClick={() => setExamLength("half")} className={`p-4 rounded-lg border-2 transition-all ${examLength === "half" ? "border-primary bg-primary/10" : "border-muted hover:border-muted-foreground/50"}`}>
                           <div className="font-semibold">Half</div>
                           <div className="text-sm text-muted-foreground">25 Questions</div>
                           <div className="text-xs text-muted-foreground">60 minutes</div>
                         </button>
-                        <button
-                          onClick={() => setExamLength("full")}
-                          className={`p-4 rounded-lg border-2 transition-all ${
-                            examLength === "full"
-                              ? "border-primary bg-primary/10"
-                              : "border-muted hover:border-muted-foreground/50"
-                          }`}
-                        >
+                        <button onClick={() => setExamLength("full")} className={`p-4 rounded-lg border-2 transition-all ${examLength === "full" ? "border-primary bg-primary/10" : "border-muted hover:border-muted-foreground/50"}`}>
                           <div className="font-semibold">Full</div>
                           <div className="text-sm text-muted-foreground">50 Questions</div>
                           <div className="text-xs text-muted-foreground">120 minutes</div>
@@ -613,95 +584,56 @@ export default function MockExam() {
                         <li>Detailed results after submission</li>
                       </ul>
                     </div>
-                  </>
-                )}
+                  </>)}
 
-                {!showHistory && !usageLoading && (
-                  <>
-                    {remainingMocks === 0 && planType === "pro" && (
-                      <UpgradeNudge
-                        type="mock-limit-ribbon"
-                        message="Weekly limit reached. Go Elite for unlimited mocks."
-                        tier="elite"
-                        variant="banner"
-                      />
-                    )}
+                {!showHistory && !usageLoading && <>
+                    {remainingMocks === 0 && planType === "pro" && <UpgradeNudge type="mock-limit-ribbon" message="Weekly limit reached. Go Elite for unlimited mocks." tier="elite" variant="banner" />}
                     <Alert>
                       <AlertCircle className="h-4 w-4" />
                       <AlertDescription>
-                        {planType === "free" && (
-                          <div>
+                        {planType === "free" && <div>
                             <strong>Free Plan:</strong> {remainingMocks === 0 ? "No mock exams remaining" : `${remainingMocks} mock exam available`}
-                          </div>
-                        )}
-                        {planType === "pro" && (
-                          <div>
+                          </div>}
+                        {planType === "pro" && <div>
                             <strong>Pro Plan:</strong> {remainingMocks} of 4 mock exams remaining this week
                             {remainingMocks === 0 && <div className="mt-2">Resets every Monday.</div>}
-                          </div>
-                        )}
-                        {planType === "elite" && (
-                          <div>
+                          </div>}
+                        {planType === "elite" && <div>
                             <strong>Elite Plan:</strong> Unlimited mock exams
-                          </div>
-                        )}
+                          </div>}
                       </AlertDescription>
                     </Alert>
-                  </>
-                )}
+                  </>}
 
-                {!showHistory && (
-                  <>
+                {!showHistory && <>
                     <div className="flex items-center space-x-2">
-                      <input
-                        type="checkbox"
-                        id="rules"
-                        checked={agreedToRules}
-                        onChange={(e) => setAgreedToRules(e.target.checked)}
-                        className="w-4 h-4"
-                      />
+                      <input type="checkbox" id="rules" checked={agreedToRules} onChange={e => setAgreedToRules(e.target.checked)} className="w-4 h-4" />
                       <Label htmlFor="rules">
                         I understand the exam rules and am ready to begin
                       </Label>
                     </div>
 
-                    <Button
-                      onClick={startExam}
-                      disabled={!agreedToRules || !canUseMockExam || !selectedPaper}
-                      size="lg"
-                      className="w-full"
-                    >
-                      {canUseMockExam ? "Start Mock Exam" : (
-                        <span className="flex items-center gap-2">
+                    <Button onClick={startExam} disabled={!agreedToRules || !canUseMockExam || !selectedPaper} size="lg" className="w-full">
+                      {canUseMockExam ? "Start Mock Exam" : <span className="flex items-center gap-2">
                           <Lock className="w-4 h-4" />
                           Limit Reached - Upgrade Required
-                        </span>
-                      )}
+                        </span>}
                     </Button>
-                  </>
-                )}
+                  </>}
               </CardContent>
             </Card>
         </div>
 
-        <FeaturePaywallModal
-          open={showPaywall}
-          onOpenChange={setShowPaywall}
-          paywallType={planType === "free" ? "mock-exam-limit" : "mock-weekly-limit"}
-        />
-      </>
-    );
+        <FeaturePaywallModal open={showPaywall} onOpenChange={setShowPaywall} paywallType={planType === "free" ? "mock-exam-limit" : "mock-weekly-limit"} />
+      </>;
   }
-
   if (examSubmitted && results && !reviewMode) {
     const formatTime = (seconds: number) => {
       const mins = Math.floor(seconds / 60);
       const secs = seconds % 60;
       return `${mins}m ${secs}s`;
     };
-
-    return (
-      <>
+    return <>
         <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
           <div className="container mx-auto px-4 py-8 max-w-6xl">
             <Card>
@@ -728,12 +660,10 @@ export default function MockExam() {
                       <Timer className="w-4 h-4" />
                       Total Time: {formatTime(results.totalTime)}
                     </div>
-                    {results.unansweredCount > 0 && (
-                      <div className="flex items-center gap-2 text-orange-600">
+                    {results.unansweredCount > 0 && <div className="flex items-center gap-2 text-orange-600">
                         <AlertCircle className="w-4 h-4" />
                         Unanswered: {results.unansweredCount}
-                      </div>
-                    )}
+                      </div>}
                   </div>
                 </div>
 
@@ -744,8 +674,7 @@ export default function MockExam() {
                     Performance by Section
                   </div>
                   <div className="grid gap-4">
-                    {results.sectionResults.map((section: any, idx: number) => (
-                      <Card key={idx}>
+                    {results.sectionResults.map((section: any, idx: number) => <Card key={idx}>
                         <CardHeader className="pb-3">
                           <div className="flex items-center justify-between">
                             <CardTitle className="text-base">{section.name}</CardTitle>
@@ -765,8 +694,7 @@ export default function MockExam() {
                           </div>
                           <Progress value={parseFloat(section.accuracy)} className="h-2" />
                         </CardContent>
-                      </Card>
-                    ))}
+                      </Card>)}
                   </div>
                 </div>
 
@@ -831,30 +759,26 @@ export default function MockExam() {
               </CardContent>
             </Card>
             
-            <UpgradeNudge
-              type="mock-complete"
-              message="See question-by-question review with explanations – unlock with Pro."
-              tier="pro"
-              variant="inline"
-              className="mt-6"
-            />
+            <UpgradeNudge type="mock-complete" message="See question-by-question review with explanations – unlock with Pro." tier="pro" variant="inline" className="mt-6" />
           </div>
         </div>
-      </>
-    );
+      </>;
   }
 
   // Review Mode
   if (examSubmitted && results && reviewMode) {
-    const incorrectQuestions = questions
-      .map((q, idx) => ({ question: q, index: idx }))
-      .filter(({ index }) => answers[index] !== questions[index].correct_option_index);
-    
-    const questionsToReview = showIncorrectOnly ? incorrectQuestions : questions.map((q, idx) => ({ question: q, index: idx }));
-    
+    const incorrectQuestions = questions.map((q, idx) => ({
+      question: q,
+      index: idx
+    })).filter(({
+      index
+    }) => answers[index] !== questions[index].correct_option_index);
+    const questionsToReview = showIncorrectOnly ? incorrectQuestions : questions.map((q, idx) => ({
+      question: q,
+      index: idx
+    }));
     if (questionsToReview.length === 0) {
-      return (
-        <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+      return <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
           <div className="container mx-auto px-4 py-8 max-w-4xl">
             <Card>
               <CardHeader>
@@ -867,60 +791,44 @@ export default function MockExam() {
               </CardContent>
             </Card>
           </div>
-        </div>
-      );
+        </div>;
     }
-    
     const currentReviewItem = questionsToReview[reviewQuestionIndex];
     const currentQ = currentReviewItem.question;
     const currentIdx = currentReviewItem.index;
     const userAnswer = answers[currentIdx];
     const correctAnswer = currentQ.correct_option_index;
     const isCorrect = userAnswer === correctAnswer;
-    
     const goToPrevious = () => {
       if (reviewQuestionIndex > 0) {
         setReviewQuestionIndex(reviewQuestionIndex - 1);
       }
     };
-    
     const goToNext = () => {
       if (reviewQuestionIndex < questionsToReview.length - 1) {
         setReviewQuestionIndex(reviewQuestionIndex + 1);
       }
     };
-    
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
+    return <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
         {/* Header */}
         <div className="fixed top-16 left-0 right-0 bg-background border-b z-40">
           <div className="container mx-auto px-4 py-3 flex items-center justify-between">
             <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  setReviewMode(false);
-                  setReviewQuestionIndex(0);
-                  setShowIncorrectOnly(false);
-                }}
-              >
+              <Button variant="outline" size="sm" onClick={() => {
+              setReviewMode(false);
+              setReviewQuestionIndex(0);
+              setShowIncorrectOnly(false);
+            }}>
                 ← Back to Results
               </Button>
               <span className="font-semibold">Review Mode</span>
             </div>
             <div className="flex items-center gap-4">
               <div className="flex items-center gap-2">
-                <input
-                  type="checkbox"
-                  id="incorrectOnly"
-                  checked={showIncorrectOnly}
-                  onChange={(e) => {
-                    setShowIncorrectOnly(e.target.checked);
-                    setReviewQuestionIndex(0);
-                  }}
-                  className="w-4 h-4"
-                />
+                <input type="checkbox" id="incorrectOnly" checked={showIncorrectOnly} onChange={e => {
+                setShowIncorrectOnly(e.target.checked);
+                setReviewQuestionIndex(0);
+              }} className="w-4 h-4" />
                 <Label htmlFor="incorrectOnly" className="text-sm cursor-pointer">
                   Show incorrect only ({incorrectQuestions.length})
                 </Label>
@@ -939,11 +847,7 @@ export default function MockExam() {
                 <div>
                   <CardTitle className="flex items-center gap-2">
                     Question {currentIdx + 1} of 50
-                    {isCorrect ? (
-                      <CheckCircle2 className="w-5 h-5 text-green-600" />
-                    ) : (
-                      <XCircle className="w-5 h-5 text-red-600" />
-                    )}
+                    {isCorrect ? <CheckCircle2 className="w-5 h-5 text-green-600" /> : <XCircle className="w-5 h-5 text-red-600" />}
                   </CardTitle>
                   <CardDescription className="text-base mt-2">{currentQ.question}</CardDescription>
                 </div>
@@ -954,83 +858,49 @@ export default function MockExam() {
             </CardHeader>
             <CardContent className="space-y-6">
               {/* Answer Section */}
-              <QuestionRenderer
-                question={currentQ}
-                selectedAnswer={userAnswer}
-                onAnswerChange={() => {}}
-                showFeedback={true}
-                disabled={true}
-              />
+              <QuestionRenderer question={currentQ} selectedAnswer={userAnswer} onAnswerChange={() => {}} showFeedback={true} disabled={true} />
 
               {/* Explanation */}
-              {currentQ.explanation && (
-                <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
+              {currentQ.explanation && <div className="bg-blue-50 border-l-4 border-blue-500 p-4 rounded">
                   <h4 className="font-semibold text-blue-900 mb-2">Explanation</h4>
                   <p className="text-blue-800">{currentQ.explanation}</p>
-                </div>
-              )}
+                </div>}
 
-              {!currentQ.explanation && (
-                <div className="bg-muted/50 p-4 rounded">
+              {!currentQ.explanation && <div className="bg-muted/50 p-4 rounded">
                   <p className="text-muted-foreground text-sm">
                     No explanation available for this question.
                   </p>
-                </div>
-              )}
+                </div>}
 
               {/* Question Actions */}
-              <QuestionActions
-                questionId={currentQ.id}
-                sourceType="mock"
-                question={currentQ.question}
-                options={currentQ.options}
-                correctAnswer={correctAnswer}
-                userAnswer={userAnswer}
-                explanation={currentQ.explanation}
-              />
+              <QuestionActions questionId={currentQ.id} sourceType="mock" question={currentQ.question} options={currentQ.options} correctAnswer={correctAnswer} userAnswer={userAnswer} explanation={currentQ.explanation} />
 
               {/* Metadata */}
               <div className="flex items-center gap-4 text-sm text-muted-foreground pt-4 border-t">
-                {currentQ.unit_code && (
-                  <span>Unit: {currentQ.unit_code}</span>
-                )}
-                {currentQ.difficulty && (
-                  <Badge variant="outline">{currentQ.difficulty}</Badge>
-                )}
+                {currentQ.unit_code && <span>Unit: {currentQ.unit_code}</span>}
+                {currentQ.difficulty && <Badge variant="outline">{currentQ.difficulty}</Badge>}
               </div>
             </CardContent>
           </Card>
 
           {/* Navigation */}
           <div className="flex items-center justify-between mt-6">
-            <Button
-              onClick={goToPrevious}
-              disabled={reviewQuestionIndex === 0}
-              variant="outline"
-            >
+            <Button onClick={goToPrevious} disabled={reviewQuestionIndex === 0} variant="outline">
               ← Previous Question
             </Button>
             <span className="text-sm text-muted-foreground">
               Question {reviewQuestionIndex + 1} of {questionsToReview.length}
             </span>
-            <Button
-              onClick={goToNext}
-              disabled={reviewQuestionIndex === questionsToReview.length - 1}
-              variant="outline"
-            >
+            <Button onClick={goToNext} disabled={reviewQuestionIndex === questionsToReview.length - 1} variant="outline">
               Next Question →
             </Button>
           </div>
         </div>
-      </div>
-    );
+      </div>;
   }
-
-  const answeredCount = answers.filter((a) => a !== null).length;
-  const progressPercent = (answeredCount / totalQuestions) * 100;
-
-  return (
-    <>
+  const answeredCount = answers.filter(a => a !== null).length;
+  const progressPercent = answeredCount / totalQuestions * 100;
+  return <>
       <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
         {/* Timer Bar */}
         <div className="fixed top-16 left-0 right-0 bg-background border-b z-40">
@@ -1040,18 +910,12 @@ export default function MockExam() {
               <span className="font-mono text-lg font-semibold">
                 {formatTime(timeRemaining)}
               </span>
-              {timeRemaining < 600 && (
-                <span className="text-red-600 text-sm font-medium animate-pulse">
+              {timeRemaining < 600 && <span className="text-red-600 text-sm font-medium animate-pulse">
                   (Less than 10 minutes!)
-                </span>
-              )}
+                </span>}
             </div>
             <div className="flex items-center gap-4">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => setShowNavigator(!showNavigator)}
-              >
+              <Button variant="outline" size="sm" onClick={() => setShowNavigator(!showNavigator)}>
                 <Grid3x3 className="w-4 h-4 mr-2" />
                 {showNavigator ? 'Hide' : 'Show'} Navigator
               </Button>
@@ -1068,8 +932,7 @@ export default function MockExam() {
 
         <div className="container mx-auto px-4 py-8 mt-16 flex gap-6">
           {/* Question Navigator Panel */}
-          {showNavigator && (
-            <Card className="w-80 h-fit sticky top-24">
+          {showNavigator && <Card className="w-80 h-fit sticky top-24">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm flex items-center gap-2">
                   <Grid3x3 className="w-4 h-4" />
@@ -1095,101 +958,66 @@ export default function MockExam() {
                 <ScrollArea className="h-[calc(100vh-280px)]">
                   <div className="space-y-4">
                     {sections.map((section, sectionIdx) => {
-                      const stats = getSectionStats(section);
-                      return (
-                        <div key={sectionIdx} className="space-y-2">
+                  const stats = getSectionStats(section);
+                  return <div key={sectionIdx} className="space-y-2">
                           <div className="flex items-center justify-between text-xs font-semibold text-muted-foreground">
                             <span>{section.name}</span>
                             <span>{stats.answered}/{stats.total}</span>
                           </div>
                           <div className="grid grid-cols-5 gap-2">
-                            {Array.from({ length: section.questionRange[1] - section.questionRange[0] + 1 }, (_, i) => {
-                              const qIndex = section.questionRange[0] + i;
-                              const status = getQuestionStatus(qIndex);
-                              return (
-                                <button
-                                  key={qIndex}
-                                  onClick={() => navigateToQuestion(qIndex)}
-                                  className={`
+                            {Array.from({
+                        length: section.questionRange[1] - section.questionRange[0] + 1
+                      }, (_, i) => {
+                        const qIndex = section.questionRange[0] + i;
+                        const status = getQuestionStatus(qIndex);
+                        return <button key={qIndex} onClick={() => navigateToQuestion(qIndex)} className={`
                                     relative w-10 h-10 rounded-md text-xs font-medium
                                     transition-all hover:scale-105
                                     ${currentQuestion === qIndex ? 'ring-2 ring-primary' : ''}
                                     ${status === 'answered' ? 'bg-green-500 text-white' : ''}
                                     ${status === 'bookmarked' ? 'bg-primary text-primary-foreground' : ''}
                                     ${status === 'unanswered' ? 'bg-muted hover:bg-muted/80' : ''}
-                                  `}
-                                >
+                                  `}>
                                   {qIndex + 1}
-                                  {isBookmarked(questions[qIndex]?.id) && (
-                                    <Bookmark className="absolute -top-1 -right-1 w-3 h-3 fill-current" />
-                                  )}
-                                </button>
-                              );
-                            })}
+                                  {isBookmarked(questions[qIndex]?.id) && <Bookmark className="absolute -top-1 -right-1 w-3 h-3 fill-current" />}
+                                </button>;
+                      })}
                           </div>
                           {sectionIdx < sections.length - 1 && <Separator className="mt-4" />}
-                        </div>
-                      );
-                    })}
+                        </div>;
+                })}
                   </div>
                 </ScrollArea>
               </CardContent>
-            </Card>
-          )}
+            </Card>}
 
           {/* Questions */}
           <div className="flex-1 max-w-4xl">
             <div className="space-y-6">
-              {questions.map((q, idx) => (
-                <Card 
-                  key={q.id} 
-                  id={`question-${idx}`}
-                  ref={el => questionRefs.current[idx] = el}
-                  className={currentQuestion === idx ? 'ring-2 ring-primary' : ''}
-                >
+              {questions.map((q, idx) => <Card key={q.id} id={`question-${idx}`} ref={el => questionRefs.current[idx] = el} className={currentQuestion === idx ? 'ring-2 ring-primary' : ''}>
                   <CardHeader>
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <CardTitle className="text-lg flex items-center gap-2">
                           Question {idx + 1} of {totalQuestions}
-                          {sections.find(s => idx >= s.questionRange[0] && idx <= s.questionRange[1]) && (
-                            <Badge variant="outline" className="text-xs">
+                          {sections.find(s => idx >= s.questionRange[0] && idx <= s.questionRange[1]) && <Badge variant="outline" className="text-xs">
                               {sections.find(s => idx >= s.questionRange[0] && idx <= s.questionRange[1])?.name}
-                            </Badge>
-                          )}
-                          {q.unit_code && (
-                            <span className="text-sm font-normal text-muted-foreground">
+                            </Badge>}
+                          {q.unit_code && <span className="text-sm font-normal text-muted-foreground">
                               ({q.unit_code})
-                            </span>
-                          )}
+                            </span>}
                         </CardTitle>
                         <CardDescription className="text-base mt-2">{q.question}</CardDescription>
                       </div>
-                      <Button
-                        variant={isBookmarked(q.id) ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => toggleBookmark(q.id, "mock")}
-                        className="ml-4"
-                      >
-                        {isBookmarked(q.id) ? (
-                          <BookmarkCheck className="w-4 h-4" />
-                        ) : (
-                          <Bookmark className="w-4 h-4" />
-                        )}
+                      <Button variant={isBookmarked(q.id) ? "default" : "outline"} size="sm" onClick={() => toggleBookmark(q.id, "mock")} className="ml-4">
+                        {isBookmarked(q.id) ? <BookmarkCheck className="w-4 h-4" /> : <Bookmark className="w-4 h-4" />}
                       </Button>
                     </div>
                   </CardHeader>
                   <CardContent>
-                    <QuestionRenderer
-                      question={q}
-                      selectedAnswer={answers[idx]}
-                      onAnswerChange={(answer) => handleAnswerSelect(idx, answer)}
-                      showFeedback={false}
-                      disabled={false}
-                    />
+                    <QuestionRenderer question={q} selectedAnswer={answers[idx]} onAnswerChange={answer => handleAnswerSelect(idx, answer)} showFeedback={false} disabled={false} />
                   </CardContent>
-                </Card>
-              ))}
+                </Card>)}
             </div>
             
             <Card className="mt-6 p-6 text-center">
@@ -1203,6 +1031,5 @@ export default function MockExam() {
           </div>
         </div>
       </div>
-    </>
-  );
+    </>;
 }
