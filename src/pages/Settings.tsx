@@ -19,14 +19,6 @@ import { cn } from "@/lib/utils";
 import { CheckCircle2 } from "lucide-react";
 import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
-import { BTQuestionImporter } from "@/components/BTQuestionImporter";
-import { FAQuestionImporter } from "@/components/FAQuestionImporter";
-import { FRQuestionImporter } from "@/components/FRQuestionImporter";
-import { LWQuestionImporter } from "@/components/LWQuestionImporter";
-import { MAQuestionImporter } from "@/components/MAQuestionImporter";
-import PMQuestionImporter from "@/components/PMQuestionImporter";
-import { FMQuestionImporter } from "@/components/FMQuestionImporter";
-import { AAQuestionImporter } from "@/components/AAQuestionImporter";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface Invoice {
@@ -547,57 +539,6 @@ export default function Settings() {
                 </CardContent>
               </Card>
             )}
-
-            {/* Data Management - Question Import */}
-            <Card>
-              <CardHeader>
-                <CardTitle className="flex items-center gap-2">
-                  <Download className="w-5 h-5 text-primary" />
-                  Import Question Banks
-                </CardTitle>
-                <CardDescription>
-                  Import questions for practice quizzes, mock exams, and spaced repetition
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Tabs defaultValue="BT">
-                  <TabsList className="grid w-full grid-cols-8">
-                    <TabsTrigger value="BT">BT</TabsTrigger>
-                    <TabsTrigger value="MA">MA</TabsTrigger>
-                    <TabsTrigger value="FA">FA</TabsTrigger>
-                    <TabsTrigger value="LW">LW</TabsTrigger>
-                    <TabsTrigger value="FR">FR</TabsTrigger>
-                    <TabsTrigger value="PM">PM</TabsTrigger>
-                    <TabsTrigger value="FM">FM</TabsTrigger>
-                    <TabsTrigger value="AA">AA</TabsTrigger>
-                  </TabsList>
-                  <TabsContent value="BT" className="mt-4">
-                    <BTQuestionImporter />
-                  </TabsContent>
-                  <TabsContent value="MA" className="mt-4">
-                    <MAQuestionImporter />
-                  </TabsContent>
-                  <TabsContent value="FA" className="mt-4">
-                    <FAQuestionImporter />
-                  </TabsContent>
-                  <TabsContent value="LW" className="mt-4">
-                    <LWQuestionImporter />
-                  </TabsContent>
-                  <TabsContent value="FR" className="mt-4">
-                    <FRQuestionImporter />
-                  </TabsContent>
-                  <TabsContent value="PM" className="mt-4">
-                    <PMQuestionImporter />
-                  </TabsContent>
-                  <TabsContent value="FM" className="mt-4">
-                    <FMQuestionImporter />
-                  </TabsContent>
-                  <TabsContent value="AA" className="mt-4">
-                    <AAQuestionImporter />
-                  </TabsContent>
-                </Tabs>
-              </CardContent>
-            </Card>
 
             {/* Help & Support */}
             <Card>
