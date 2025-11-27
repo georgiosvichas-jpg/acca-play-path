@@ -49,6 +49,11 @@ interface FAQuestionImportResult {
     skipped_count: number;
   };
   skipped: Array<{ external_id: string; error_reason: string }>;
+  skipped_details?: Array<{ external_id: string; error_reason: string }>;
+  total_questions?: number;
+  inserted_count?: number;
+  updated_count?: number;
+  skipped_count?: number;
 }
 
 interface FlashcardGenerationResult {
@@ -231,126 +236,6 @@ export default function AdminContentImport() {
     }
   };
 
-  const handleQuestionImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (!file) return;
-
-    if (!selectedPaper) {
-      toast({
-        title: "No Paper Selected",
-        description: "Please select a paper before importing questions",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setQuestionLoading(true);
-    setQuestionResult(null);
-    setQuestionFileName(file.name);
-
-    try {
-      const reader = new FileReader();
-      reader.onload = async (e) => {
-        try {
-          const content = e.target?.result as string;
-          const parsed = JSON.parse(content);
-
-          let questionsArray: any[] = [];
-          if (Array.isArray(parsed)) {
-            questionsArray = parsed;
-          } else if (parsed.questions && Array.isArray(parsed.questions)) {
-            questionsArray = parsed.questions;
-          } else {
-            throw new Error("Invalid JSON format. Expected array or object with 'questions' array");
-          }
-
-          setQuestionContent(questionsArray);
-
-          const { data: { session } } = await supabase.auth.getSession();
-          if (!session) {
-            throw new Error("Not authenticated");
-          }
-
-          const CHUNK_SIZE = 10;
-          let totalInserted = 0;
-          let totalUpdated = 0;
-          let totalSkipped = 0;
-          const allSkippedDetails: any[] = [];
-
-          for (let i = 0; i < questionsArray.length; i += CHUNK_SIZE) {
-            const chunk = questionsArray.slice(i, i + CHUNK_SIZE);
-            const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
-            const totalChunks = Math.ceil(questionsArray.length / CHUNK_SIZE);
-
-            toast({
-              title: "Importing...",
-              description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / questionsArray.length) * 100)}% complete)`,
-            });
-
-            const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-questions`, {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${session.access_token}`,
-              },
-              body: JSON.stringify({
-                paper_code: selectedPaper,
-                questions: chunk,
-              }),
-            });
-
-            if (!response.ok) {
-              const errorText = await response.text();
-              throw new Error(`Import failed: ${errorText}`);
-            }
-
-            const result = await response.json();
-            totalInserted += result.inserted || 0;
-            totalUpdated += result.updated || 0;
-            totalSkipped += result.skipped || 0;
-            if (result.skipped_details) {
-              allSkippedDetails.push(...result.skipped_details);
-            }
-          }
-
-          setQuestionResult({
-            success: true,
-            summary: {
-              total_questions: questionsArray.length,
-              inserted_count: totalInserted,
-              updated_count: totalUpdated,
-              skipped_count: totalSkipped,
-            },
-            skipped: allSkippedDetails,
-          });
-
-          toast({
-            title: "Import Complete",
-            description: `${totalInserted} inserted, ${totalUpdated} updated, ${totalSkipped} skipped`,
-          });
-        } catch (err) {
-          console.error("Import error:", err);
-          toast({
-            title: "Import Failed",
-            description: err instanceof Error ? err.message : "Unknown error",
-            variant: "destructive",
-          });
-        } finally {
-          setQuestionLoading(false);
-        }
-      };
-      reader.readAsText(file);
-    } catch (error) {
-      console.error("File read error:", error);
-      toast({
-        title: "File Read Failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
-      setQuestionLoading(false);
-    }
-  };
-
   const handleGenerateFlashcards = async () => {
     if (!flashcardPaper) {
       toast({
@@ -526,7 +411,163 @@ export default function AdminContentImport() {
     }
   };
 
-  const downloadSkippedQuestions = (skipped: Array<{ external_id: string; error_reason: string }>, filename: string) => {
+  const handleSyllabusFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      setSyllabusFile(file);
+    }
+  };
+
+  const handleQuestionFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    if (!selectedPaper) {
+      toast({
+        title: "No Paper Selected",
+        description: "Please select a paper before importing questions",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setQuestionFileName(file.name);
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      try {
+        const content = event.target?.result as string;
+        const parsed = JSON.parse(content);
+
+        let questionsArray: any[] = [];
+        if (Array.isArray(parsed)) {
+          questionsArray = parsed;
+        } else if (parsed.questions && Array.isArray(parsed.questions)) {
+          questionsArray = parsed.questions;
+        } else {
+          throw new Error("Invalid JSON format. Expected array or object with 'questions' array");
+        }
+
+        setQuestionContent(questionsArray);
+        toast({
+          title: "File loaded",
+          description: `${questionsArray.length} questions ready to import`,
+        });
+      } catch (err) {
+        console.error("File parse error:", err);
+        toast({
+          title: "File Parse Failed",
+          description: err instanceof Error ? err.message : "Unknown error",
+          variant: "destructive",
+        });
+      }
+    };
+    reader.readAsText(file);
+  };
+
+  const handleQuestionImportClick = async () => {
+    if (!selectedPaper) {
+      toast({
+        title: "No Paper Selected",
+        description: "Please select a paper before importing questions",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (questionContent.length === 0) {
+      toast({
+        title: "No questions loaded",
+        description: "Please select a file first",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setQuestionLoading(true);
+    setQuestionResult(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Not authenticated");
+      }
+
+      const CHUNK_SIZE = 10;
+      let totalInserted = 0;
+      let totalUpdated = 0;
+      let totalSkipped = 0;
+      const allSkippedDetails: any[] = [];
+
+      for (let i = 0; i < questionContent.length; i += CHUNK_SIZE) {
+        const chunk = questionContent.slice(i, i + CHUNK_SIZE);
+        const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
+        const totalChunks = Math.ceil(questionContent.length / CHUNK_SIZE);
+
+        toast({
+          title: "Importing...",
+          description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / questionContent.length) * 100)}% complete)`,
+        });
+
+        const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-questions`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${session.access_token}`,
+          },
+          body: JSON.stringify({
+            paper_code: selectedPaper,
+            questions: chunk,
+          }),
+        });
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          throw new Error(`Import failed: ${errorText}`);
+        }
+
+        const result = await response.json();
+        totalInserted += result.inserted || 0;
+        totalUpdated += result.updated || 0;
+        totalSkipped += result.skipped || 0;
+        if (result.skipped_details) {
+          allSkippedDetails.push(...result.skipped_details);
+        }
+      }
+
+      setQuestionResult({
+        success: true,
+        summary: {
+          total_questions: questionContent.length,
+          inserted_count: totalInserted,
+          updated_count: totalUpdated,
+          skipped_count: totalSkipped,
+        },
+        skipped: allSkippedDetails,
+        skipped_details: allSkippedDetails,
+        total_questions: questionContent.length,
+        inserted_count: totalInserted,
+        updated_count: totalUpdated,
+        skipped_count: totalSkipped,
+      });
+
+      toast({
+        title: "Import Complete",
+        description: `${totalInserted} inserted, ${totalUpdated} updated, ${totalSkipped} skipped`,
+      });
+    } catch (err) {
+      console.error("Import error:", err);
+      toast({
+        title: "Import Failed",
+        description: err instanceof Error ? err.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setQuestionLoading(false);
+    }
+  };
+
+  const downloadSkippedQuestions = (skipped: Array<{ external_id: string; error_reason: string }>) => {
     const errorLog = skipped.map(err => 
       `External ID: ${err.external_id}\nReason: ${err.error_reason}\n---`
     ).join('\n');
@@ -535,7 +576,7 @@ export default function AdminContentImport() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = filename.replace('.json', '.txt');
+    a.download = `${selectedPaper}_skipped_questions.txt`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -550,110 +591,144 @@ export default function AdminContentImport() {
       {/* Syllabus Units Import */}
       <Card>
         <CardHeader>
-          <CardTitle>Import Syllabus Units</CardTitle>
+          <CardTitle>Import Syllabus Units (CSV)</CardTitle>
           <CardDescription>
-            Upload a CSV file to import or update syllabus units. Required columns: paper_code (or paper), unit_code, unit_title, unit_level (or level). Supports both FA and FM CSV formats.
+            Upload a CSV file with columns: paper_code, unit_code, parent_unit_code, unit_name,
+            unit_level, estimated_study_minutes, description
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="syllabus-file">CSV File</Label>
+          <div>
+            <Label htmlFor="syllabusFile">CSV File</Label>
             <Input
-              id="syllabus-file"
+              id="syllabusFile"
               type="file"
               accept=".csv"
-              onChange={(e) => setSyllabusFile(e.target.files?.[0] || null)}
+              onChange={handleSyllabusFileChange}
+              disabled={syllabusLoading}
             />
           </div>
 
           <Button
             onClick={handleSyllabusImport}
             disabled={!syllabusFile || syllabusLoading}
-            className="w-full sm:w-auto"
+            className="w-full"
           >
-            {syllabusLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Importing...
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                Import Syllabus Units
-              </>
-            )}
+            <Upload className="w-4 h-4 mr-2" />
+            {syllabusLoading ? "Importing..." : "Import Syllabus Units"}
           </Button>
 
           {syllabusSummary && (
             <Alert>
-              <CheckCircle className="h-4 w-4" />
               <AlertDescription>
-                <div className="font-semibold mb-2">Import Summary</div>
-                <div className="space-y-1 text-sm">
-                  <div>Total rows: {syllabusSummary.total}</div>
-                  <div>Inserted: {syllabusSummary.inserted}</div>
-                  <div>Updated: {syllabusSummary.updated}</div>
-                  <div>Skipped: {syllabusSummary.skipped}</div>
-                  <div>Errors: {syllabusSummary.errors}</div>
+                <div className="space-y-1">
+                  <p className="font-semibold">Import Summary:</p>
+                  <p>Total Rows: {syllabusSummary.total}</p>
+                  <p>Inserted: {syllabusSummary.inserted}</p>
+                  <p>Updated: {syllabusSummary.updated}</p>
+                  <p>Skipped: {syllabusSummary.skipped}</p>
+                  {syllabusErrors && syllabusErrors.length > 0 && (
+                    <details className="mt-2">
+                      <summary className="cursor-pointer text-sm text-muted-foreground">
+                        View Errors ({syllabusErrors.length})
+                      </summary>
+                      <ul className="mt-2 space-y-1 text-xs">
+                        {syllabusErrors.slice(0, 10).map((err, i) => (
+                          <li key={i}>
+                            Row {err.row}: {err.error}
+                          </li>
+                        ))}
+                      </ul>
+                    </details>
+                  )}
                 </div>
               </AlertDescription>
             </Alert>
           )}
+        </CardContent>
+      </Card>
 
-          {syllabusErrors.length > 0 && (
-            <div className="space-y-2">
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  {syllabusErrors.length} rows had errors during import
-                </AlertDescription>
-              </Alert>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  const csv = syllabusErrors.map(e => `${e.row},${e.error},${e.data}`).join('\n');
-                  const blob = new Blob([csv], { type: 'text/csv' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = "syllabus-import-errors.csv";
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download Error Log
-              </Button>
-            </div>
-          )}
+      {/* Question Bank Import */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Import Question Bank (JSON)</CardTitle>
+          <CardDescription>
+            Upload a JSON file to import questions for any paper. Supports all question types (MCQ, MATCHING, NUMERIC, SHORT).
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div>
+            <Label htmlFor="questionPaper">Paper</Label>
+            <Select value={selectedPaper} onValueChange={setSelectedPaper}>
+              <SelectTrigger id="questionPaper">
+                <SelectValue placeholder="Select paper" />
+              </SelectTrigger>
+              <SelectContent>
+                {papers.map((paper) => (
+                  <SelectItem key={paper.id} value={paper.paper_code}>
+                    {paper.paper_code} - {paper.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
 
-          {syllabusUnits.length > 0 && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold">Imported Syllabus Units</h3>
-              <div className="border rounded-lg overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Unit Code</TableHead>
-                      <TableHead>Unit Name</TableHead>
-                      <TableHead>Parent Unit</TableHead>
-                      <TableHead>Level</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {syllabusUnits.map((unit) => (
-                      <TableRow key={unit.unit_code}>
-                        <TableCell className="font-medium">{unit.unit_code}</TableCell>
-                        <TableCell>{unit.unit_name}</TableCell>
-                        <TableCell>{unit.parent_unit_code || '-'}</TableCell>
-                        <TableCell>{unit.unit_level}</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
+          <div>
+            <Label htmlFor="questionFile">JSON File</Label>
+            <Input
+              id="questionFile"
+              type="file"
+              accept=".json"
+              onChange={handleQuestionFileChange}
+              disabled={questionLoading}
+            />
+          </div>
+
+          <Button
+            onClick={handleQuestionImportClick}
+            disabled={!selectedPaper || questionContent.length === 0 || questionLoading}
+            className="w-full"
+          >
+            <Upload className="w-4 h-4 mr-2" />
+            {questionLoading ? "Importing..." : "Import Questions"}
+          </Button>
+
+          {questionResult && (
+            <Alert>
+              <AlertDescription>
+                <div className="space-y-1">
+                  <p className="font-semibold">Import Summary:</p>
+                  <p>Total Questions: {questionResult.total_questions}</p>
+                  <p>Inserted: {questionResult.inserted_count}</p>
+                  <p>Updated: {questionResult.updated_count}</p>
+                  <p>Skipped: {questionResult.skipped_count}</p>
+                  {questionResult.skipped_details && questionResult.skipped_details.length > 0 && (
+                    <>
+                      <details className="mt-2">
+                        <summary className="cursor-pointer text-sm text-muted-foreground">
+                          View Skipped ({questionResult.skipped_details.length})
+                        </summary>
+                        <ul className="mt-2 space-y-1 text-xs">
+                          {questionResult.skipped_details.slice(0, 10).map((skip, i) => (
+                            <li key={i}>
+                              {skip.external_id}: {skip.error_reason}
+                            </li>
+                          ))}
+                        </ul>
+                      </details>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => downloadSkippedQuestions(questionResult.skipped_details)}
+                        className="mt-2"
+                      >
+                        Download Skipped Questions Log
+                      </Button>
+                    </>
+                  )}
+                </div>
+              </AlertDescription>
+            </Alert>
           )}
         </CardContent>
       </Card>
