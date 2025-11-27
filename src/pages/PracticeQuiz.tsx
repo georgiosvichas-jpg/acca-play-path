@@ -691,7 +691,7 @@ export default function PracticeQuiz() {
       <div className="container max-w-3xl mx-auto p-6">
         {/* Stats Bar - Only show if gamification enabled */}
         {gamificationEnabled && (
-          <div className="grid grid-cols-4 gap-3 mb-6">
+          <div className={`grid ${timerEnabled ? 'grid-cols-4' : 'grid-cols-3'} gap-3 mb-6`}>
             <Card className="p-3">
               <div className="flex items-center gap-2">
                 <Flame className={`w-5 h-5 ${getStreakColor()}`} />
