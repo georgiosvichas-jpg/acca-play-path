@@ -57,21 +57,50 @@ interface QuizResult {
   byDifficulty: Record<string, { correct: number; total: number }>;
 }
 
+// AI-powered hint generation
+async function generateAIHint(
+  question: Question,
+  setHintLoading: (loading: boolean) => void,
+  setGeneratedHint: (hint: string) => void,
+  setHintRevealed: (revealed: boolean) => void
+): Promise<void> {
+  setHintLoading(true);
+  try {
+    const { data, error } = await supabase.functions.invoke('ai-hint', {
+      body: {
+        question: question.question,
+        options: question.options,
+        unit_code: question.unit_code,
+        unit_name: question.unit_name,
+        difficulty: question.difficulty
+      }
+    });
+
+    if (error) {
+      console.error('Error generating hint:', error);
+      toast.error(error.message || 'Failed to generate hint');
+      setHintRevealed(false);
+      return;
+    }
+
+    if (data?.hint) {
+      setGeneratedHint(data.hint);
+    } else {
+      toast.error('No hint could be generated');
+      setHintRevealed(false);
+    }
+  } catch (error) {
+    console.error('Error generating hint:', error);
+    toast.error('Failed to generate hint. Please try again.');
+    setHintRevealed(false);
+  } finally {
+    setHintLoading(false);
+  }
+}
+
+// Legacy function - kept for reference but unused
 function generateHint(question: Question): string {
-  // Provide strategic thinking guidance without revealing answers
-  const hints = [
-    "Read the question carefully and identify what is specifically being asked.",
-    "Look for key terms in the question that point to the concept being tested.",
-    "Eliminate answers that are obviously incorrect or don't match the question format.",
-    "Consider the fundamental principles that apply to this type of question.",
-    "If it's a calculation question, think about what formula or method applies.",
-    "Look for clues in the question wording that narrow down the correct approach.",
-    "Consider whether the question is asking for a definition, calculation, or application.",
-    "Think about common patterns you've seen in similar questions from your studies."
-  ];
-  
-  // Return a random strategic hint
-  return hints[Math.floor(Math.random() * hints.length)];
+  return "Generating AI-powered hint...";
 }
 
 export default function PracticeQuiz() {
@@ -126,6 +155,8 @@ export default function PracticeQuiz() {
   const [questionStartTime, setQuestionStartTime] = useState(Date.now());
   const [hintRevealed, setHintRevealed] = useState(false);
   const [hintsUsed, setHintsUsed] = useState(0);
+  const [hintLoading, setHintLoading] = useState(false);
+  const [generatedHint, setGeneratedHint] = useState<string>("");
 
   // No manual initialization needed - handled by useStudyPreferences hook
 
@@ -237,7 +268,7 @@ export default function PracticeQuiz() {
     setShowFeedback(true);
   };
 
-  const unlockHint = () => {
+  const unlockHint = async () => {
     if (gamificationEnabled) {
       const hintCost = 5;
       if (currentXP < hintCost) {
@@ -245,14 +276,19 @@ export default function PracticeQuiz() {
         return;
       }
       awardXP("hint_used", -hintCost);
-      toast.success("Hint revealed! (-5 XP)");
-    } else {
-      // Free hint when gamification is off
-      toast.success("Hint revealed!");
+      toast.success("Generating hint... (-5 XP)");
     }
     
     setHintRevealed(true);
     setHintsUsed(hintsUsed + 1);
+    
+    // Generate AI hint
+    await generateAIHint(
+      questions[currentIndex],
+      setHintLoading,
+      setGeneratedHint,
+      setHintRevealed
+    );
   };
 
   const handleAnswer = () => {
@@ -325,6 +361,7 @@ export default function PracticeQuiz() {
       setSelectedAnswer(null);
       setShowFeedback(false);
       setHintRevealed(false);
+      setGeneratedHint("");
       setQuestionStartTime(Date.now());
       setTimeRemaining(30);
     } else {
@@ -775,19 +812,28 @@ export default function PracticeQuiz() {
                 variant="outline"
                 size="sm"
                 onClick={unlockHint}
-                disabled={gamificationEnabled && currentXP < 5}
+                disabled={hintLoading || (gamificationEnabled && currentXP < 5)}
               >
-                <Lightbulb className="w-4 h-4 mr-2" />
-                {gamificationEnabled ? "Reveal Hint (Costs 5 XP)" : "Reveal Hint"}
+                {hintLoading ? (
+                  <>
+                    <span className="animate-spin mr-2">⏳</span>
+                    Generating...
+                  </>
+                ) : (
+                  <>
+                    <Lightbulb className="w-4 h-4 mr-2" />
+                    {gamificationEnabled ? "Reveal Hint (Costs 5 XP)" : "Reveal Hint"}
+                  </>
+                )}
               </Button>
             )}
 
-            {hintRevealed && !showFeedback && (
+            {hintRevealed && !showFeedback && generatedHint && (
               <div className="p-3 bg-amber-50 dark:bg-amber-950/20 border border-amber-200 dark:border-amber-800 rounded-lg">
                 <div className="flex items-start gap-2">
                   <Lightbulb className="h-4 w-4 text-amber-600 mt-0.5" />
                   <div className="text-sm">
-                    <strong>Hint:</strong> {generateHint(currentQuestion)}
+                    <strong>Strategic Hint:</strong> {generatedHint}
                   </div>
                 </div>
               </div>
