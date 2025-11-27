@@ -1,0 +1,104 @@
+{
+  "paper": "FM",
+  "description": "Mini-test and mock exam templates for ACCA FM (Financial Management) covering all syllabus areas",
+  "mini_tests": [
+    {
+      "id": "FM_MINI_1",
+      "title": "FM Mini Test 1 – Introduction & Foundations",
+      "target_units": ["FM01", "FM02", "FM03", "FM04", "FM05"],
+      "question_count": 10,
+      "format": "MCQ",
+      "notes_for_agent": [
+        "Focus on role of financial manager and environment",
+        "Cover stakeholder objectives and financial markets",
+        "Include ethics and corporate governance basics"
+      ]
+    },
+    {
+      "id": "FM_MINI_2",
+      "title": "FM Mini Test 2 – Time Value of Money",
+      "target_units": ["FM06", "FM07", "FM08", "FM09", "FM10"],
+      "question_count": 10,
+      "format": "MCQ with calculations",
+      "notes_for_agent": [
+        "Cover present and future value calculations",
+        "Include annuities and perpetuities",
+        "Test EAR and bond valuation"
+      ]
+    },
+    {
+      "id": "FM_MINI_3",
+      "title": "FM Mini Test 3 – Cost of Capital",
+      "target_units": ["FM11", "FM12", "FM13", "FM14", "FM15", "FM16"],
+      "question_count": 12,
+      "format": "MCQ with calculations",
+      "notes_for_agent": [
+        "Focus on CAPM and beta calculations",
+        "Cover cost of equity and cost of debt",
+        "Include WACC calculations and capital structure theories"
+      ]
+    },
+    {
+      "id": "FM_MINI_4",
+      "title": "FM Mini Test 4 – Risk & Return",
+      "target_units": ["FM17", "FM18", "FM19", "FM20"],
+      "question_count": 10,
+      "format": "MCQ",
+      "notes_for_agent": [
+        "Test business and financial risk concepts",
+        "Cover portfolio theory and diversification",
+        "Include Security Market Line applications"
+      ]
+    },
+    {
+      "id": "FM_MINI_5",
+      "title": "FM Mini Test 5 – Investment Appraisal",
+      "target_units": ["FM21", "FM22", "FM23", "FM24", "FM25", "FM26", "FM27", "FM28", "FM29", "FM30"],
+      "question_count": 15,
+      "format": "MCQ with calculations",
+      "notes_for_agent": [
+        "Heavy focus on NPV and IRR calculations",
+        "Include payback, ARR, and MIRR methods",
+        "Cover capital rationing, sensitivity, and scenario analysis",
+        "Test taxation and inflation adjustments"
+      ]
+    },
+    {
+      "id": "FM_MINI_6",
+      "title": "FM Mini Test 6 – Working Capital Management",
+      "target_units": ["FM31", "FM32", "FM33", "FM34", "FM35", "FM36", "FM37", "FM38", "FM39"],
+      "question_count": 12,
+      "format": "MCQ with calculations",
+      "notes_for_agent": [
+        "Focus on inventory management (EOQ, JIT)",
+        "Cover receivables management and credit policies",
+        "Include cash management and working capital financing"
+      ]
+    },
+    {
+      "id": "FM_MINI_7",
+      "title": "FM Mini Test 7 – Financing & Distributions",
+      "target_units": ["FM41", "FM42", "FM43", "FM44", "FM45", "FM46", "FM47", "FM48", "FM49", "FM50"],
+      "question_count": 10,
+      "format": "MCQ",
+      "notes_for_agent": [
+        "Cover sources of equity and debt finance",
+        "Include convertibles, warrants, and hybrid instruments",
+        "Test dividend policy theories and distributions"
+      ]
+    },
+    {
+      "id": "FM_MINI_8",
+      "title": "FM Mini Test 8 – FX, Interest & Risk Management",
+      "target_units": ["FM51", "FM52", "FM53", "FM54", "FM55", "FM56", "FM57", "FM58", "FM59", "FM60"],
+      "question_count": 10,
+      "format": "MCQ with calculations",
+      "notes_for_agent": [
+        "Focus on foreign exchange risk hedging (forward, futures, options)",
+        "Cover interest rate risk management",
+        "Include derivatives and financial risk management strategies"
+      ]
+    }
+  ],
+  "mock_exams": []
+}
