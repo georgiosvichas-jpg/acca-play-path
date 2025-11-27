@@ -6,8 +6,10 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
+import { usePapers } from "@/hooks/usePapers";
 import { Loader2, Upload, CheckCircle, AlertCircle, Download } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import FormulaCardImporter from "@/components/FormulaCardImporter";
 
 interface ImportSummary {
@@ -91,6 +93,8 @@ interface MockConfigImportResult {
 
 export default function AdminContentImport() {
   const { toast } = useToast();
+  const { papers } = usePapers();
+  
   const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
   const [mockFile, setMockFile] = useState<File | null>(null);
   const [syllabusLoading, setSyllabusLoading] = useState(false);
@@ -101,20 +105,20 @@ export default function AdminContentImport() {
   const [mockErrors, setMockErrors] = useState<ImportError[]>([]);
   const [mockConfigs, setMockConfigs] = useState<MockConfigPreview[]>([]);
   const [syllabusUnits, setSyllabusUnits] = useState<SyllabusUnitPreview[]>([]);
-  const [faQuestionContent, setFaQuestionContent] = useState<string | null>(null);
-  const [faQuestionFileName, setFaQuestionFileName] = useState<string | null>(null);
-  const [faQuestionLoading, setFaQuestionLoading] = useState(false);
-  const [faQuestionResult, setFaQuestionResult] = useState<FAQuestionImportResult | null>(null);
+  
+  // Unified Question Import State
+  const [selectedPaper, setSelectedPaper] = useState("");
+  const [questionContent, setQuestionContent] = useState<any[]>([]);
+  const [questionFileName, setQuestionFileName] = useState("");
+  const [questionLoading, setQuestionLoading] = useState(false);
+  const [questionResult, setQuestionResult] = useState<FAQuestionImportResult | null>(null);
+  
   const [flashcardGenerating, setFlashcardGenerating] = useState(false);
   const [flashcardResult, setFlashcardResult] = useState<FlashcardGenerationResult | null>(null);
   const [minitestBuilding, setMinitestBuilding] = useState(false);
   const [minitestResult, setMinitestResult] = useState<MiniTestBuildResult | null>(null);
   const [mockConfigImporting, setMockConfigImporting] = useState(false);
   const [mockConfigResult, setMockConfigResult] = useState<MockConfigImportResult | null>(null);
-  const [fmQuestionContent, setFmQuestionContent] = useState<string | null>(null);
-  const [fmQuestionFileName, setFmQuestionFileName] = useState<string | null>(null);
-  const [fmQuestionLoading, setFmQuestionLoading] = useState(false);
-  const [fmQuestionResult, setFmQuestionResult] = useState<FAQuestionImportResult | null>(null);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -222,112 +226,123 @@ export default function AdminContentImport() {
     }
   };
 
-  const handleFaQuestionImport = async () => {
-    if (!faQuestionContent) {
+  const handleQuestionImport = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    if (!selectedPaper) {
       toast({
-        title: "No file selected",
-        description: "Please select a JSON file to import",
+        title: "No Paper Selected",
+        description: "Please select a paper before importing questions",
         variant: "destructive",
       });
       return;
     }
 
-    setFaQuestionLoading(true);
-    setFaQuestionResult(null);
+    setQuestionLoading(true);
+    setQuestionResult(null);
+    setQuestionFileName(file.name);
 
     try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Not authenticated");
-      }
+      const reader = new FileReader();
+      reader.onload = async (e) => {
+        try {
+          const content = e.target?.result as string;
+          const parsed = JSON.parse(content);
 
-      // Parse already-loaded file content
-      const parsed = JSON.parse(faQuestionContent);
-      
-      // Extract questions array
-      let allQuestions = Array.isArray(parsed) ? parsed : parsed.questions || [];
-      
-      console.log(`Processing ${allQuestions.length} questions in batches...`);
-      
-      // Process in chunks of 10 questions to avoid payload limits
-      const CHUNK_SIZE = 10;
-      let totalInserted = 0;
-      let totalUpdated = 0;
-      let totalSkipped = 0;
-      const allErrors: any[] = [];
-      
-      for (let i = 0; i < allQuestions.length; i += CHUNK_SIZE) {
-        const chunk = allQuestions.slice(i, i + CHUNK_SIZE);
-        const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
-        const totalChunks = Math.ceil(allQuestions.length / CHUNK_SIZE);
-        
-        console.log(`Processing chunk ${chunkNum}/${totalChunks} (${chunk.length} questions)...`);
-        
-        toast({
-          title: "Importing...",
-          description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / allQuestions.length) * 100)}% complete)`,
-        });
-        
-        // Use fetch directly with proper headers
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fa-questions`,
-          {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${session.access_token}`,
-              "Content-Type": "application/json",
-              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+          let questionsArray: any[] = [];
+          if (Array.isArray(parsed)) {
+            questionsArray = parsed;
+          } else if (parsed.questions && Array.isArray(parsed.questions)) {
+            questionsArray = parsed.questions;
+          } else {
+            throw new Error("Invalid JSON format. Expected array or object with 'questions' array");
+          }
+
+          setQuestionContent(questionsArray);
+
+          const { data: { session } } = await supabase.auth.getSession();
+          if (!session) {
+            throw new Error("Not authenticated");
+          }
+
+          const CHUNK_SIZE = 10;
+          let totalInserted = 0;
+          let totalUpdated = 0;
+          let totalSkipped = 0;
+          const allSkippedDetails: any[] = [];
+
+          for (let i = 0; i < questionsArray.length; i += CHUNK_SIZE) {
+            const chunk = questionsArray.slice(i, i + CHUNK_SIZE);
+            const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
+            const totalChunks = Math.ceil(questionsArray.length / CHUNK_SIZE);
+
+            toast({
+              title: "Importing...",
+              description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / questionsArray.length) * 100)}% complete)`,
+            });
+
+            const response = await fetch(`${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-questions`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${session.access_token}`,
+              },
+              body: JSON.stringify({
+                paper_code: selectedPaper,
+                questions: chunk,
+              }),
+            });
+
+            if (!response.ok) {
+              const errorText = await response.text();
+              throw new Error(`Import failed: ${errorText}`);
+            }
+
+            const result = await response.json();
+            totalInserted += result.inserted || 0;
+            totalUpdated += result.updated || 0;
+            totalSkipped += result.skipped || 0;
+            if (result.skipped_details) {
+              allSkippedDetails.push(...result.skipped_details);
+            }
+          }
+
+          setQuestionResult({
+            success: true,
+            summary: {
+              total_questions: questionsArray.length,
+              inserted_count: totalInserted,
+              updated_count: totalUpdated,
+              skipped_count: totalSkipped,
             },
-            body: JSON.stringify({ questions: chunk, chunk_offset: i }),
-          }
-        );
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error(`Chunk ${chunkNum} error:`, errorText);
-          throw new Error(`Failed at batch ${chunkNum}: ${errorText}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data?.success) {
-          totalInserted += data.summary.inserted_count || 0;
-          totalUpdated += data.summary.updated_count || 0;
-          totalSkipped += data.summary.skipped_count || 0;
-          if (data.skipped) {
-            allErrors.push(...data.skipped);
-          }
-        } else {
-          throw new Error(data?.error || "Import failed");
-        }
-      }
-      
-      const finalResult = {
-        success: true,
-        summary: {
-          total_questions: allQuestions.length,
-          inserted_count: totalInserted,
-          updated_count: totalUpdated,
-          skipped_count: totalSkipped,
-        },
-        skipped: allErrors,
-      };
-      
-      setFaQuestionResult(finalResult);
+            skipped: allSkippedDetails,
+          });
 
-      toast({
-        title: "Import completed",
-        description: `${totalInserted} inserted, ${totalUpdated} updated, ${totalSkipped} skipped`,
-      });
+          toast({
+            title: "Import Complete",
+            description: `${totalInserted} inserted, ${totalUpdated} updated, ${totalSkipped} skipped`,
+          });
+        } catch (err) {
+          console.error("Import error:", err);
+          toast({
+            title: "Import Failed",
+            description: err instanceof Error ? err.message : "Unknown error",
+            variant: "destructive",
+          });
+        } finally {
+          setQuestionLoading(false);
+        }
+      };
+      reader.readAsText(file);
     } catch (error) {
-      console.error("Error importing FA questions:", error);
+      console.error("File read error:", error);
       toast({
-        title: "Import failed",
+        title: "File Read Failed",
         description: error instanceof Error ? error.message : "Unknown error",
         variant: "destructive",
       });
-    } finally {
-      setFaQuestionLoading(false);
+      setQuestionLoading(false);
     }
   };
 
@@ -473,116 +488,7 @@ export default function AdminContentImport() {
     }
   };
 
-  const handleFmQuestionImport = async () => {
-    if (!fmQuestionContent) {
-      toast({
-        title: "No file selected",
-        description: "Please select a JSON file to import",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setFmQuestionLoading(true);
-    setFmQuestionResult(null);
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Not authenticated");
-      }
-
-      // Parse already-loaded file content
-      const parsed = JSON.parse(fmQuestionContent);
-      
-      // Extract questions array
-      let allQuestions = Array.isArray(parsed) ? parsed : parsed.questions || [];
-      
-      console.log(`Processing ${allQuestions.length} FM questions in batches...`);
-      
-      // Process in chunks of 10 questions to avoid payload limits
-      const CHUNK_SIZE = 10;
-      let totalInserted = 0;
-      let totalUpdated = 0;
-      let totalSkipped = 0;
-      const allErrors: any[] = [];
-      
-      for (let i = 0; i < allQuestions.length; i += CHUNK_SIZE) {
-        const chunk = allQuestions.slice(i, i + CHUNK_SIZE);
-        const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
-        const totalChunks = Math.ceil(allQuestions.length / CHUNK_SIZE);
-        
-        console.log(`Processing chunk ${chunkNum}/${totalChunks} (${chunk.length} questions)...`);
-        
-        toast({
-          title: "Importing...",
-          description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / allQuestions.length) * 100)}% complete)`,
-        });
-        
-        // Use fetch directly with proper headers
-        const response = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fm-questions`,
-          {
-            method: "POST",
-            headers: {
-              "Authorization": `Bearer ${session.access_token}`,
-              "Content-Type": "application/json",
-              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-            },
-            body: JSON.stringify({ questions: chunk }),
-          }
-        );
-        
-        if (!response.ok) {
-          const errorText = await response.text();
-          console.error(`Chunk ${chunkNum} error:`, errorText);
-          throw new Error(`Failed at batch ${chunkNum}: ${errorText}`);
-        }
-        
-        const data = await response.json();
-        
-        if (data?.success) {
-          totalInserted += data.summary.inserted_count || 0;
-          totalUpdated += data.summary.updated_count || 0;
-          totalSkipped += data.summary.skipped_count || 0;
-          if (data.skipped) {
-            allErrors.push(...data.skipped);
-          }
-        } else {
-          throw new Error(data?.error || "Import failed");
-        }
-      }
-      
-      const finalResult = {
-        success: true,
-        summary: {
-          total_questions: allQuestions.length,
-          inserted_count: totalInserted,
-          updated_count: totalUpdated,
-          skipped_count: totalSkipped,
-        },
-        skipped: allErrors,
-      };
-      
-      setFmQuestionResult(finalResult);
-
-      toast({
-        title: "Import completed",
-        description: `${totalInserted} inserted, ${totalUpdated} updated, ${totalSkipped} skipped`,
-      });
-    } catch (error) {
-      console.error("Error importing FM questions:", error);
-      toast({
-        title: "Import failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
-    } finally {
-      setFmQuestionLoading(false);
-    }
-  };
-
-  const downloadErrorLog = (errors: ImportError[], filename: string) => {
+  const downloadSkippedQuestions = (skippedQuestions: any[]) => {
     const csv = [
       "Row,Error,Data",
       ...errors.map(e => `${e.row},"${e.error}","${e.data}"`)
