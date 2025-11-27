@@ -738,7 +738,7 @@ export default function PracticeQuiz() {
 
         <Card>
           <CardHeader>
-            <div className="flex justify-between items-start">
+            <div className="flex justify-between items-start gap-4">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-2">
                   {currentQuestion.unit_code && (
@@ -756,6 +756,17 @@ export default function PracticeQuiz() {
                 </div>
                 <CardTitle className="text-lg">{currentQuestion.question}</CardTitle>
               </div>
+              {showFeedback && (
+                <QuestionActions
+                  questionId={currentQuestion.id}
+                  sourceType="practice"
+                  question={currentQuestion.question}
+                  options={currentQuestion.options}
+                  correctAnswer={currentQuestion.correct_option_index}
+                  userAnswer={selectedAnswer}
+                  explanation={currentQuestion.explanation}
+                />
+              )}
             </div>
           </CardHeader>
           <CardContent className="space-y-6">
@@ -821,18 +832,6 @@ export default function PracticeQuiz() {
                   <strong>Explanation:</strong> {currentQuestion.explanation}
                 </div>
               </div>
-            )}
-
-            {showFeedback && (
-              <QuestionActions
-                questionId={currentQuestion.id}
-                sourceType="practice"
-                question={currentQuestion.question}
-                options={currentQuestion.options}
-                correctAnswer={currentQuestion.correct_option_index}
-                userAnswer={selectedAnswer}
-                explanation={currentQuestion.explanation}
-              />
             )}
 
             <div className="flex gap-3">
