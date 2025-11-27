@@ -14,6 +14,42 @@ interface MockConfigRow {
   sections_json?: string;
 }
 
+interface MockExamTemplate {
+  id: string;
+  title: string;
+  duration_minutes: number;
+  question_count: number;
+  structure?: {
+    sections?: Array<{
+      name: string;
+      approx_questions: number;
+      focus_units: string[];
+    }>;
+  };
+}
+
+interface ImportResult {
+  success: boolean;
+  summary: {
+    total?: number;
+    inserted?: number;
+    updated?: number;
+    skipped?: number;
+    errors?: number;
+    configs_created?: number;
+    configs_updated?: number;
+  };
+  preview?: Array<{
+    paper_code: string;
+    duration_minutes: number;
+    total_questions: number;
+    pass_mark_percentage: number;
+    sections?: any[];
+  }>;
+  configs?: Array<any>;
+  errors?: Array<any>;
+}
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -50,147 +86,16 @@ serve(async (req) => {
       throw new Error("User is not an admin");
     }
 
-    const formData = await req.formData();
-    const file = formData.get("file") as File;
-
-    if (!file) {
-      throw new Error("No file uploaded");
-    }
-
-    const csvContent = await file.text();
-    const lines = csvContent.split("\n").filter(line => line.trim());
+    // Check if request contains FormData (CSV) or JSON (template-based)
+    const contentType = req.headers.get("content-type") || "";
     
-    if (lines.length < 2) {
-      throw new Error("CSV file is empty or has no data rows");
+    if (contentType.includes("multipart/form-data")) {
+      // Handle CSV file upload
+      return await handleCSVImport(req, supabase, corsHeaders);
+    } else {
+      // Handle JSON template-based import
+      return await handleTemplateImport(req, supabase, corsHeaders);
     }
-
-    // Parse header
-    const header = lines[0].split(",").map(h => h.trim());
-    
-    let inserted = 0;
-    let updated = 0;
-    let skipped = 0;
-    const errors: Array<{ row: number; error: string; data: string }> = [];
-    const configs: Array<any> = [];
-
-    // Process each row
-    for (let i = 1; i < lines.length; i++) {
-      const line = lines[i].trim();
-      if (!line) continue;
-
-      try {
-        const values = line.split(",").map(v => v.trim().replace(/^["']|["']$/g, ""));
-        const row: any = {};
-        header.forEach((key, idx) => {
-          row[key] = values[idx] || null;
-        });
-
-        // Validate required fields
-        if (!row.paper_code || !row.duration_minutes || !row.total_questions) {
-          errors.push({
-            row: i + 1,
-            error: "Missing required fields: paper_code, duration_minutes, or total_questions",
-            data: line
-          });
-          skipped++;
-          continue;
-        }
-
-        // Verify paper exists
-        const { data: paperExists } = await supabase
-          .from("papers")
-          .select("paper_code")
-          .eq("paper_code", row.paper_code)
-          .maybeSingle();
-
-        if (!paperExists) {
-          errors.push({
-            row: i + 1,
-            error: `Paper code ${row.paper_code} does not exist in papers table`,
-            data: line
-          });
-          skipped++;
-          continue;
-        }
-
-        // Parse sections_json if provided
-        let sectionsJson = null;
-        if (row.sections_json) {
-          try {
-            sectionsJson = JSON.parse(row.sections_json);
-          } catch (e) {
-            errors.push({
-              row: i + 1,
-              error: "Invalid JSON in sections_json field",
-              data: line
-            });
-            skipped++;
-            continue;
-          }
-        }
-
-        const mockConfig: any = {
-          paper_code: row.paper_code,
-          duration_minutes: parseInt(row.duration_minutes),
-          total_questions: parseInt(row.total_questions),
-          pass_mark_percentage: row.pass_mark_percentage ? parseInt(row.pass_mark_percentage) : 50,
-          sections_json: sectionsJson,
-        };
-
-        // Upsert (insert or update)
-        const { data: result, error: upsertError } = await supabase
-          .from("mock_config")
-          .upsert(mockConfig, {
-            onConflict: "paper_code"
-          })
-          .select()
-          .single();
-
-        if (upsertError) {
-          throw upsertError;
-        }
-
-        // Check if it was an insert or update by looking if it existed before
-        const { data: existing } = await supabase
-          .from("mock_config")
-          .select("created_at, updated_at")
-          .eq("paper_code", row.paper_code)
-          .single();
-
-        if (existing && existing.created_at !== existing.updated_at) {
-          updated++;
-        } else {
-          inserted++;
-        }
-
-        configs.push(mockConfig);
-
-      } catch (error) {
-        console.error(`Error processing row ${i + 1}:`, error);
-        errors.push({
-          row: i + 1,
-          error: error instanceof Error ? error.message : "Unknown error",
-          data: line
-        });
-        skipped++;
-      }
-    }
-
-    return new Response(
-      JSON.stringify({
-        success: true,
-        summary: {
-          total: lines.length - 1,
-          inserted,
-          updated,
-          skipped,
-          errors: errors.length
-        },
-        configs,
-        errors
-      }),
-      { headers: { ...corsHeaders, "Content-Type": "application/json" } }
-    );
 
   } catch (error) {
     console.error("Error importing mock config:", error);
@@ -203,3 +108,254 @@ serve(async (req) => {
     );
   }
 });
+
+async function handleTemplateImport(req: Request, supabase: any, corsHeaders: any) {
+  // Get mock_exams and paper_code from request body
+  const body = await req.json();
+  const mockExams: MockExamTemplate[] = body.mock_exams || [];
+  const paperCode = body.paper_code;
+
+  if (!paperCode) {
+    throw new Error("paper_code is required in request body");
+  }
+
+  if (mockExams.length === 0) {
+    throw new Error("No mock exams provided in request");
+  }
+
+  console.log(`Found ${mockExams.length} mock exam templates for ${paperCode}`);
+
+  let configsCreated = 0;
+  let configsUpdated = 0;
+  const preview: Array<any> = [];
+
+  // Process each mock exam template (only use first one per paper)
+  for (const mockExam of mockExams) {
+    console.log(`Processing mock exam: ${mockExam.title}`);
+
+    try {
+      // Build sections_json from structure
+      let sectionsJson = null;
+      if (mockExam.structure?.sections) {
+        sectionsJson = mockExam.structure.sections.map(section => ({
+          name: section.name,
+          num_questions: section.approx_questions,
+          focus_units: section.focus_units,
+        }));
+      }
+
+      const mockConfigData = {
+        paper_code: paperCode,
+        duration_minutes: mockExam.duration_minutes,
+        total_questions: mockExam.question_count,
+        pass_mark_percentage: 50,
+        sections_json: sectionsJson,
+      };
+
+      // Check if config already exists for this paper
+      const { data: existing } = await supabase
+        .from("mock_config")
+        .select("id")
+        .eq("paper_code", paperCode)
+        .maybeSingle();
+
+      if (existing) {
+        // Update existing config
+        const { error: updateError } = await supabase
+          .from("mock_config")
+          .update(mockConfigData)
+          .eq("id", existing.id);
+
+        if (updateError) {
+          throw updateError;
+        }
+        configsUpdated++;
+        console.log(`Updated existing ${paperCode} mock config`);
+      } else {
+        // Insert new config
+        const { error: insertError } = await supabase
+          .from("mock_config")
+          .insert(mockConfigData);
+
+        if (insertError) {
+          throw insertError;
+        }
+        configsCreated++;
+        console.log(`Created new ${paperCode} mock config`);
+      }
+
+      // Add to preview
+      preview.push({
+        paper_code: paperCode,
+        duration_minutes: mockExam.duration_minutes,
+        total_questions: mockExam.question_count,
+        pass_mark_percentage: 50,
+        sections: sectionsJson || [],
+      });
+
+      // Only process the first mock exam (since we can only have one config per paper)
+      break;
+
+    } catch (error) {
+      console.error(`Error processing mock exam ${mockExam.title}:`, error);
+      throw error;
+    }
+  }
+
+  const result: ImportResult = {
+    success: true,
+    summary: {
+      configs_created: configsCreated,
+      configs_updated: configsUpdated,
+    },
+    preview,
+  };
+
+  return new Response(JSON.stringify(result), {
+    headers: { ...corsHeaders, "Content-Type": "application/json" },
+  });
+}
+
+async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
+  const formData = await req.formData();
+  const file = formData.get("file") as File;
+
+  if (!file) {
+    throw new Error("No file uploaded");
+  }
+
+  const csvContent = await file.text();
+  const lines = csvContent.split("\n").filter(line => line.trim());
+  
+  if (lines.length < 2) {
+    throw new Error("CSV file is empty or has no data rows");
+  }
+
+  // Parse header
+  const header = lines[0].split(",").map(h => h.trim());
+  
+  let inserted = 0;
+  let updated = 0;
+  let skipped = 0;
+  const errors: Array<{ row: number; error: string; data: string }> = [];
+  const configs: Array<any> = [];
+
+  // Process each row
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    try {
+      const values = line.split(",").map(v => v.trim().replace(/^["']|["']$/g, ""));
+      const row: any = {};
+      header.forEach((key, idx) => {
+        row[key] = values[idx] || null;
+      });
+
+      // Validate required fields
+      if (!row.paper_code || !row.duration_minutes || !row.total_questions) {
+        errors.push({
+          row: i + 1,
+          error: "Missing required fields: paper_code, duration_minutes, or total_questions",
+          data: line
+        });
+        skipped++;
+        continue;
+      }
+
+      // Verify paper exists
+      const { data: paperExists } = await supabase
+        .from("papers")
+        .select("paper_code")
+        .eq("paper_code", row.paper_code)
+        .maybeSingle();
+
+      if (!paperExists) {
+        errors.push({
+          row: i + 1,
+          error: `Paper code ${row.paper_code} does not exist in papers table`,
+          data: line
+        });
+        skipped++;
+        continue;
+      }
+
+      // Parse sections_json if provided
+      let sectionsJson = null;
+      if (row.sections_json) {
+        try {
+          sectionsJson = JSON.parse(row.sections_json);
+        } catch (e) {
+          errors.push({
+            row: i + 1,
+            error: "Invalid JSON in sections_json field",
+            data: line
+          });
+          skipped++;
+          continue;
+        }
+      }
+
+      const mockConfig: any = {
+        paper_code: row.paper_code,
+        duration_minutes: parseInt(row.duration_minutes),
+        total_questions: parseInt(row.total_questions),
+        pass_mark_percentage: row.pass_mark_percentage ? parseInt(row.pass_mark_percentage) : 50,
+        sections_json: sectionsJson,
+      };
+
+      // Upsert (insert or update)
+      const { data: result, error: upsertError } = await supabase
+        .from("mock_config")
+        .upsert(mockConfig, {
+          onConflict: "paper_code"
+        })
+        .select()
+        .single();
+
+      if (upsertError) {
+        throw upsertError;
+      }
+
+      // Check if it was an insert or update
+      const { data: existing } = await supabase
+        .from("mock_config")
+        .select("created_at, updated_at")
+        .eq("paper_code", row.paper_code)
+        .single();
+
+      if (existing && existing.created_at !== existing.updated_at) {
+        updated++;
+      } else {
+        inserted++;
+      }
+
+      configs.push(mockConfig);
+
+    } catch (error) {
+      console.error(`Error processing row ${i + 1}:`, error);
+      errors.push({
+        row: i + 1,
+        error: error instanceof Error ? error.message : "Unknown error",
+        data: line
+      });
+      skipped++;
+    }
+  }
+
+  return new Response(
+    JSON.stringify({
+      success: true,
+      summary: {
+        total: lines.length - 1,
+        inserted,
+        updated,
+        skipped,
+        errors: errors.length
+      },
+      configs,
+      errors
+    }),
+    { headers: { ...corsHeaders, "Content-Type": "application/json" } }
+  );
+}

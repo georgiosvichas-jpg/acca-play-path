@@ -113,6 +113,11 @@ export default function AdminContentImport() {
   const [questionLoading, setQuestionLoading] = useState(false);
   const [questionResult, setQuestionResult] = useState<FAQuestionImportResult | null>(null);
   
+  // Content Tools Paper Selection
+  const [flashcardPaper, setFlashcardPaper] = useState("");
+  const [minitestPaper, setMinitestPaper] = useState("");
+  const [mockConfigPaper, setMockConfigPaper] = useState("");
+  
   const [flashcardGenerating, setFlashcardGenerating] = useState(false);
   const [flashcardResult, setFlashcardResult] = useState<FlashcardGenerationResult | null>(null);
   const [minitestBuilding, setMinitestBuilding] = useState(false);
@@ -347,6 +352,15 @@ export default function AdminContentImport() {
   };
 
   const handleGenerateFlashcards = async () => {
+    if (!flashcardPaper) {
+      toast({
+        title: "No Paper Selected",
+        description: "Please select a paper before generating flashcards",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setFlashcardGenerating(true);
     setFlashcardResult(null);
 
@@ -358,11 +372,11 @@ export default function AdminContentImport() {
 
       toast({
         title: "Generating flashcards",
-        description: "This may take a few minutes. AI is analyzing FA content...",
+        description: `AI is analyzing ${flashcardPaper} content. This may take a few minutes...`,
       });
 
-      const response = await supabase.functions.invoke("generate-fa-flashcards", {
-        body: {},
+      const response = await supabase.functions.invoke("generate-flashcards", {
+        body: { paper_code: flashcardPaper },
       });
 
       if (response.error) {
@@ -389,6 +403,15 @@ export default function AdminContentImport() {
   };
 
   const handleBuildMinitests = async () => {
+    if (!minitestPaper) {
+      toast({
+        title: "No Paper Selected",
+        description: "Please select a paper before building mini tests",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setMinitestBuilding(true);
     setMinitestResult(null);
 
@@ -400,18 +423,21 @@ export default function AdminContentImport() {
 
       toast({
         title: "Building mini tests",
-        description: "Processing templates and selecting questions...",
+        description: `Processing templates and selecting ${minitestPaper} questions...`,
       });
 
-      // Load template file
-      const templateResponse = await fetch('/data/fa_assessment_templates.json');
+      // Load template file for the selected paper
+      const templateResponse = await fetch(`/data/${minitestPaper.toLowerCase()}_assessment_templates.json`);
       if (!templateResponse.ok) {
-        throw new Error("Could not load FA assessment templates");
+        throw new Error(`No assessment templates found for ${minitestPaper}`);
       }
       const templateData = await templateResponse.json();
 
-      const response = await supabase.functions.invoke("build-fa-minitests", {
-        body: { mini_tests: templateData.mini_tests },
+      const response = await supabase.functions.invoke("build-minitests", {
+        body: { 
+          paper_code: minitestPaper,
+          mini_tests: templateData.mini_tests 
+        },
       });
 
       if (response.error) {
@@ -438,6 +464,15 @@ export default function AdminContentImport() {
   };
 
   const handleImportMockConfig = async () => {
+    if (!mockConfigPaper) {
+      toast({
+        title: "No Paper Selected",
+        description: "Please select a paper before importing mock config",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setMockConfigImporting(true);
     setMockConfigResult(null);
 
@@ -449,19 +484,22 @@ export default function AdminContentImport() {
 
       toast({
         title: "Importing mock config",
-        description: "Processing mock exam templates...",
+        description: `Processing ${mockConfigPaper} mock exam templates...`,
       });
 
-      // Fetch templates from public folder
-      const templateResponse = await fetch('/data/fa_assessment_templates.json');
+      // Fetch templates from public folder for the selected paper
+      const templateResponse = await fetch(`/data/${mockConfigPaper.toLowerCase()}_assessment_templates.json`);
       if (!templateResponse.ok) {
-        throw new Error("Could not load assessment templates file");
+        throw new Error(`No assessment templates found for ${mockConfigPaper}`);
       }
       const templateData = await templateResponse.json();
 
       // Pass templates to edge function
-      const response = await supabase.functions.invoke("import-fa-mock-config", {
-        body: { mock_exams: templateData.mock_exams },
+      const response = await supabase.functions.invoke("import-mock-config", {
+        body: { 
+          paper_code: mockConfigPaper,
+          mock_exams: templateData.mock_exams 
+        },
       });
 
       if (response.error) {
@@ -474,7 +512,7 @@ export default function AdminContentImport() {
       const action = result.summary.configs_updated > 0 ? "updated" : "created";
       toast({
         title: "Mock config imported",
-        description: `FA mock exam configuration ${action} successfully`,
+        description: `${mockConfigPaper} mock exam configuration ${action} successfully`,
       });
     } catch (error) {
       console.error("Error importing mock config:", error);
@@ -731,24 +769,37 @@ export default function AdminContentImport() {
         </CardContent>
       </Card>
 
-      {/* Auto-Generate FA Flashcards */}
+      {/* Auto-Generate Flashcards */}
       <Card>
         <CardHeader>
-          <CardTitle>Auto-Generate FA Flashcards</CardTitle>
+          <CardTitle>Auto-Generate Flashcards</CardTitle>
           <CardDescription>
-            Use AI to automatically generate flashcards from FA questions and syllabus units. Creates 5-15 flashcards per unit covering definitions, formulas, concepts, and principles.
+            Use AI to automatically generate flashcards from questions and syllabus units. Creates 5-15 flashcards per unit covering definitions, formulas, concepts, and principles.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
+            <Label htmlFor="flashcard-paper">Select Paper</Label>
+            <Select value={flashcardPaper} onValueChange={setFlashcardPaper}>
+              <SelectTrigger id="flashcard-paper">
+                <SelectValue placeholder="Select a paper" />
+              </SelectTrigger>
+              <SelectContent>
+                {papers.map((paper) => (
+                  <SelectItem key={paper.id} value={paper.paper_code}>
+                    {paper.paper_code} - {paper.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <p className="text-sm text-muted-foreground">
-              This tool will analyze all FA syllabus units and questions to generate comprehensive flashcards. The process may take several minutes.
+              This tool will analyze all syllabus units and questions for the selected paper to generate comprehensive flashcards. The process may take several minutes.
             </p>
           </div>
 
           <Button
             onClick={handleGenerateFlashcards}
-            disabled={flashcardGenerating}
+            disabled={flashcardGenerating || !flashcardPaper}
             className="w-full sm:w-auto"
           >
             {flashcardGenerating ? (
@@ -759,7 +810,7 @@ export default function AdminContentImport() {
             ) : (
               <>
                 <Upload className="mr-2 h-4 w-4" />
-                Generate FA Flashcards
+                Generate {flashcardPaper || ''} Flashcards
               </>
             )}
           </Button>
@@ -815,24 +866,37 @@ export default function AdminContentImport() {
         </CardContent>
       </Card>
 
-      {/* Auto-Build FA Mini Tests */}
+      {/* Auto-Build Mini Tests */}
       <Card>
         <CardHeader>
-          <CardTitle>Auto-Build FA Mini Tests</CardTitle>
+          <CardTitle>Auto-Build Mini Tests</CardTitle>
           <CardDescription>
-            Automatically create mini tests from templates by randomly sampling questions from target syllabus units. Creates 3 tests covering different FA topics.
+            Automatically create mini tests from templates by randomly sampling questions from target syllabus units.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
+            <Label htmlFor="minitest-paper">Select Paper</Label>
+            <Select value={minitestPaper} onValueChange={setMinitestPaper}>
+              <SelectTrigger id="minitest-paper">
+                <SelectValue placeholder="Select a paper" />
+              </SelectTrigger>
+              <SelectContent>
+                {papers.map((paper) => (
+                  <SelectItem key={paper.id} value={paper.paper_code}>
+                    {paper.paper_code} - {paper.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <p className="text-sm text-muted-foreground">
-              This tool uses fa_assessment_templates.json to create curated mini tests. Each test targets specific units and includes 10 questions with recommended timing.
+              This tool uses assessment templates to create curated mini tests. Each test targets specific units with recommended timing.
             </p>
           </div>
 
           <Button
             onClick={handleBuildMinitests}
-            disabled={minitestBuilding}
+            disabled={minitestBuilding || !minitestPaper}
             className="w-full sm:w-auto"
           >
             {minitestBuilding ? (
@@ -843,7 +907,7 @@ export default function AdminContentImport() {
             ) : (
               <>
                 <Upload className="mr-2 h-4 w-4" />
-                Build FA Mini Tests
+                Build {minitestPaper || ''} Mini Tests
               </>
             )}
           </Button>
@@ -883,24 +947,37 @@ export default function AdminContentImport() {
         </CardContent>
       </Card>
 
-      {/* Import FA Mock Configuration */}
+      {/* Import Mock Configuration */}
       <Card>
         <CardHeader>
-          <CardTitle>Import FA Mock Configuration</CardTitle>
+          <CardTitle>Import Mock Configuration</CardTitle>
           <CardDescription>
-            Import mock exam settings from templates including duration, total questions, and section structure for full FA mock exams.
+            Import mock exam settings from templates including duration, total questions, and section structure for full mock exams.
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="space-y-2">
+            <Label htmlFor="mockconfig-paper">Select Paper</Label>
+            <Select value={mockConfigPaper} onValueChange={setMockConfigPaper}>
+              <SelectTrigger id="mockconfig-paper">
+                <SelectValue placeholder="Select a paper" />
+              </SelectTrigger>
+              <SelectContent>
+                {papers.map((paper) => (
+                  <SelectItem key={paper.id} value={paper.paper_code}>
+                    {paper.paper_code} - {paper.title}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
             <p className="text-sm text-muted-foreground">
-              This tool reads FA mock exam templates and configures the mock exam system with duration, question count, and sectional breakdown.
+              This tool reads mock exam templates and configures the mock exam system with duration, question count, and sectional breakdown.
             </p>
           </div>
 
           <Button
             onClick={handleImportMockConfig}
-            disabled={mockConfigImporting}
+            disabled={mockConfigImporting || !mockConfigPaper}
             className="w-full sm:w-auto"
           >
             {mockConfigImporting ? (
@@ -911,7 +988,7 @@ export default function AdminContentImport() {
             ) : (
               <>
                 <Upload className="mr-2 h-4 w-4" />
-                Import FA Mock Config
+                Import {mockConfigPaper || ''} Mock Config
               </>
             )}
           </Button>

@@ -56,29 +56,46 @@ serve(async (req) => {
 
     if (!roleData) throw new Error("User is not an admin");
 
-    console.log("Fetching FA syllabus units...");
+    // Get paper_code from request body
+    const body = await req.json();
+    const paperCode = body.paper_code;
+
+    if (!paperCode) {
+      throw new Error("paper_code is required in request body");
+    }
+
+    // Get paper details
+    const { data: paperData } = await supabase
+      .from("papers")
+      .select("title")
+      .eq("paper_code", paperCode)
+      .single();
+
+    const paperTitle = paperData?.title || paperCode;
+
+    console.log(`Fetching ${paperCode} syllabus units...`);
     const { data: syllabusUnits, error: syllabusError } = await supabase
       .from("syllabus_units")
       .select("unit_code, unit_name, description")
-      .eq("paper_code", "FA")
+      .eq("paper_code", paperCode)
       .order("unit_code");
 
     if (syllabusError) throw syllabusError;
     if (!syllabusUnits || syllabusUnits.length === 0) {
-      throw new Error("No FA syllabus units found");
+      throw new Error(`No syllabus units found for ${paperCode}`);
     }
 
-    console.log(`Found ${syllabusUnits.length} FA syllabus units`);
+    console.log(`Found ${syllabusUnits.length} ${paperCode} syllabus units`);
 
-    // Fetch all FA questions
-    console.log("Fetching FA questions...");
+    // Fetch all questions for this paper
+    console.log(`Fetching ${paperCode} questions...`);
     const { data: questions, error: questionsError } = await supabase
       .from("sb_questions")
       .select("unit_code, question, explanation, options")
-      .eq("paper", "FA");
+      .eq("paper", paperCode);
 
     if (questionsError) throw questionsError;
-    console.log(`Found ${questions?.length || 0} FA questions`);
+    console.log(`Found ${questions?.length || 0} ${paperCode} questions`);
 
     let totalGenerated = 0;
     let totalInserted = 0;
@@ -103,7 +120,7 @@ serve(async (req) => {
         })),
       };
 
-      const prompt = `Generate 5-15 flashcards for the ACCA FA (Financial Accounting) syllabus unit below.
+      const prompt = `Generate 5-15 flashcards for the ACCA ${paperCode} (${paperTitle}) syllabus unit below.
 
 Unit: ${context.unit_code} - ${context.unit_name}
 Description: ${context.unit_description}
@@ -114,8 +131,8 @@ ${context.sample_questions.map((q, i) => `${i + 1}. ${q.question}\nExplanation: 
 Create flashcards that cover:
 - Key term definitions
 - Basic formulas or calculations
-- Conceptual contrasts (e.g., asset vs liability, debit vs credit)
-- Core accounting principles
+- Conceptual contrasts
+- Core principles
 - Practical applications
 
 Each flashcard should have:
@@ -136,7 +153,7 @@ Generate between 5-15 flashcards depending on the complexity of the unit.`;
           body: JSON.stringify({
             model: "google/gemini-2.5-flash",
             messages: [
-              { role: "system", content: "You are an ACCA FA exam expert creating study flashcards." },
+              { role: "system", content: `You are an ACCA ${paperCode} exam expert creating study flashcards.` },
               { role: "user", content: prompt },
             ],
             tools: [{
@@ -197,7 +214,7 @@ Generate between 5-15 flashcards depending on the complexity of the unit.`;
           const { data: existing } = await supabase
             .from("flashcards")
             .select("id")
-            .eq("paper_code", "FA")
+            .eq("paper_code", paperCode)
             .eq("question", card.front)
             .eq("unit_title", unit.unit_name)
             .maybeSingle();
@@ -211,8 +228,8 @@ Generate between 5-15 flashcards depending on the complexity of the unit.`;
           const { error: insertError } = await supabase
             .from("flashcards")
             .insert({
-              paper_code: "FA",
-              paper_name: "Financial Accounting",
+              paper_code: paperCode,
+              paper_name: paperTitle,
               unit_title: unit.unit_name,
               question: card.front,
               answer: card.back,
