@@ -223,6 +223,40 @@ async function handleTemplateImport(req: Request, supabase: any, corsHeaders: an
   });
 }
 
+// Helper function to parse CSV line properly handling quoted fields
+function parseCSVLine(line: string): string[] {
+  const result: string[] = [];
+  let current = '';
+  let inQuotes = false;
+  
+  for (let i = 0; i < line.length; i++) {
+    const char = line[i];
+    const nextChar = line[i + 1];
+    
+    if (char === '"') {
+      // Handle escaped quotes ("")
+      if (inQuotes && nextChar === '"') {
+        current += '"';
+        i++; // Skip next quote
+      } else {
+        // Toggle quote state
+        inQuotes = !inQuotes;
+      }
+    } else if (char === ',' && !inQuotes) {
+      // Field boundary - push current field and reset
+      result.push(current.trim());
+      current = '';
+    } else {
+      current += char;
+    }
+  }
+  
+  // Push the last field
+  result.push(current.trim());
+  
+  return result;
+}
+
 async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
   const formData = await req.formData();
   const file = formData.get("file") as File;
@@ -238,13 +272,16 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
     throw new Error("CSV file is empty or has no data rows");
   }
 
-  // Parse header and create column aliases
-  const rawHeader = lines[0].split(",").map(h => h.trim());
+  // Parse header using proper CSV parser
+  const rawHeader = parseCSVLine(lines[0]);
   const header = rawHeader.map(col => {
+    const cleanCol = col.trim().replace(/^["']|["']$/g, "");
     // Column aliases
-    if (col === "question_count") return "total_questions";
-    return col;
+    if (cleanCol === "question_count") return "total_questions";
+    return cleanCol;
   });
+  
+  console.log(`[CSV Import] Parsed header columns:`, header);
   
   let inserted = 0;
   let updated = 0;
@@ -258,17 +295,41 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
     if (!line) continue;
 
     try {
-      const values = line.split(",").map(v => v.trim().replace(/^["']|["']$/g, ""));
+      // Use proper CSV parser that handles quoted fields
+      const values = parseCSVLine(line).map(v => {
+        // Remove surrounding quotes if present
+        const trimmed = v.trim();
+        if ((trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+            (trimmed.startsWith("'") && trimmed.endsWith("'"))) {
+          return trimmed.slice(1, -1);
+        }
+        return trimmed;
+      });
+      
       const row: any = {};
       header.forEach((key, idx) => {
         row[key] = values[idx] || null;
       });
+      
+      console.log(`[Row ${i + 1}] Parsed values:`, { 
+        mock_id: row.mock_id, 
+        paper_code: row.paper_code,
+        title: row.title?.substring(0, 30),
+        description: row.description?.substring(0, 30)
+      });
 
       // Validate required fields
       if (!row.mock_id || !row.paper_code || !row.duration_minutes || !row.total_questions) {
+        const missingFields = [];
+        if (!row.mock_id) missingFields.push('mock_id');
+        if (!row.paper_code) missingFields.push('paper_code');
+        if (!row.duration_minutes) missingFields.push('duration_minutes');
+        if (!row.total_questions) missingFields.push('total_questions');
+        
+        console.error(`[Row ${i + 1}] Missing fields:`, missingFields);
         errors.push({
           row: i + 1,
-          error: "Missing required fields: mock_id, paper_code, duration_minutes, or total_questions",
+          error: `Missing required fields: ${missingFields.join(', ')}`,
           data: line
         });
         skipped++;
@@ -308,10 +369,21 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
         }
       }
 
-      // Parse unit_scope from comma-separated string to array
+      // Parse unit_scope from semicolon or comma-separated string to array
       let unitScope = null;
-      if (row.unit_scope && row.unit_scope.trim()) {
-        unitScope = row.unit_scope.split(",").map((u: string) => u.trim()).filter((u: string) => u);
+      if (row.unit_scope && row.unit_scope.trim() && row.unit_scope !== 'null') {
+        // Handle both semicolon and comma separators
+        const separator = row.unit_scope.includes(';') ? ';' : ',';
+        unitScope = row.unit_scope
+          .split(separator)
+          .map((u: string) => u.trim())
+          .filter((u: string) => u && u !== 'null');
+        
+        if (unitScope.length === 0) {
+          unitScope = null;
+        }
+        
+        console.log(`[Row ${i + 1}] Parsed unit_scope:`, unitScope);
       }
 
       const mockConfig: any = {
@@ -339,6 +411,7 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
         .single();
 
       if (upsertError) {
+        console.error(`[Row ${i + 1}] Upsert error:`, upsertError);
         throw upsertError;
       }
 
@@ -351,22 +424,26 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
 
       if (existing && existing.created_at !== existing.updated_at) {
         updated++;
+        console.log(`[Row ${i + 1}] Updated mock_id: ${row.mock_id}`);
       } else {
         inserted++;
+        console.log(`[Row ${i + 1}] Inserted mock_id: ${row.mock_id}`);
       }
 
       configs.push(mockConfig);
 
     } catch (error) {
-      console.error(`Error processing row ${i + 1}:`, error);
+      console.error(`[Row ${i + 1}] Processing error:`, error);
       errors.push({
         row: i + 1,
         error: error instanceof Error ? error.message : "Unknown error",
-        data: line
+        data: line.substring(0, 100) + (line.length > 100 ? '...' : '')
       });
       skipped++;
     }
   }
+  
+  console.log(`[CSV Import] Summary: ${inserted} inserted, ${updated} updated, ${skipped} skipped/errors`);
 
   return new Response(
     JSON.stringify({
