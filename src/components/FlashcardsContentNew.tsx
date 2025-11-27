@@ -52,6 +52,7 @@ export default function FlashcardsContentNew() {
     setSelectedUnit,
     setSelectedDifficulty,
     papers,
+    availableUnits,
     loading: prefsLoading,
   } = useStudyPreferences({ allowAll: true });
   
@@ -158,17 +159,23 @@ export default function FlashcardsContentNew() {
     }
 
     if (selectedUnit && selectedUnit !== "all") {
-      // Check if selectedUnit looks like a unit code (e.g., "FA05") or unit title
-      // If it contains numbers at the end, assume it's a unit code
-      const isUnitCode = /[A-Z]+\d+/.test(selectedUnit);
+      // Check if selectedUnit looks like a unit code (e.g., "FA05")
+      const isUnitCode = /^[A-Z]+\d+$/.test(selectedUnit);
       
       if (isUnitCode) {
-        // Filter by unit_code - flashcards don't have unit_code, so we need to match against unit_title
-        // Extract the code from the title if present (e.g., "Accruals and prepayments (FA05)")
-        filtered = filtered.filter((f) => {
-          // Check if unit_title contains the unit code in parentheses
-          return f.unit_title?.includes(`(${selectedUnit})`) || f.unit_title === selectedUnit;
-        });
+        // Look up the unit title from availableUnits
+        const matchingUnit = availableUnits.find(u => u.unit_code === selectedUnit);
+        const unitTitle = matchingUnit?.unit_title;
+        
+        if (unitTitle) {
+          // Filter by the actual unit title
+          filtered = filtered.filter((f) => f.unit_title === unitTitle);
+        } else {
+          // Fallback: try fuzzy matching against unit_title
+          filtered = filtered.filter((f) => 
+            f.unit_title?.toLowerCase().includes(selectedUnit.toLowerCase())
+          );
+        }
       } else {
         // Filter by exact unit title match
         filtered = filtered.filter((f) => f.unit_title === selectedUnit);
