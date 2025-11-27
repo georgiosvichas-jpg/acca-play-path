@@ -276,8 +276,13 @@ async function handleCSVImport(req: Request, supabase: any, corsHeaders: any) {
   const rawHeader = parseCSVLine(lines[0]);
   const header = rawHeader.map(col => {
     const cleanCol = col.trim().replace(/^["']|["']$/g, "");
-    // Column aliases
+    // Column aliases from source format -> internal field names
     if (cleanCol === "question_count") return "total_questions";
+    if (cleanCol === "paper") return "paper_code";
+    if (cleanCol === "mock_code") return "mock_id";
+    if (cleanCol === "mock_name") return "title";
+    if (cleanCol === "unit_filter") return "unit_scope";
+    if (cleanCol === "notes") return "description";
     return cleanCol;
   });
   
