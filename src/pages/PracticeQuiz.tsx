@@ -28,7 +28,8 @@ import {
   Timer, 
   Lightbulb,
   Target,
-  TrendingUp
+  TrendingUp,
+  BookOpen
 } from "lucide-react";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
 
@@ -257,13 +258,14 @@ export default function PracticeQuiz() {
     const currentQuestion = questions[currentIndex];
     const timeSpent = (Date.now() - questionStartTime) / 1000;
     
-    setAnswers([...answers, {
-      questionId: currentQuestion.id,
-      correct: false,
-      unitCode: currentQuestion.unit_code,
-      difficulty: currentQuestion.difficulty,
-      timeSpent
-    }]);
+      setAnswers([...answers, {
+        questionId: currentQuestion.id,
+        correct: false,
+        unitCode: currentQuestion.unit_code,
+        unitName: currentQuestion.unit_name,
+        difficulty: currentQuestion.difficulty,
+        timeSpent
+      }]);
 
     setCurrentStreak(0);
     setShowFeedback(true);
@@ -654,7 +656,7 @@ export default function PracticeQuiz() {
                 {Object.entries(result.byUnit).map(([unit, stats]) => (
                   <div key={unit} className="space-y-1">
                     <div className="flex justify-between text-sm">
-                      <span>{unit}</span>
+                      <span>{stats.unitName || unit}</span>
                       <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
                     </div>
                     <Progress value={(stats.correct / stats.total) * 100} />
@@ -671,25 +673,65 @@ export default function PracticeQuiz() {
                 if (weakestUnit.unit && weakestUnit.accuracy < 70) {
                   const unitDisplay = weakestUnit.unitName || weakestUnit.unit;
                   return (
-                    <div className="p-4 border border-orange-500/50 bg-orange-50 dark:bg-orange-950/20 rounded-lg">
-                      <div className="flex items-start gap-3">
-                        <TrendingUp className="w-5 h-5 text-orange-600 mt-0.5 flex-shrink-0" />
-                        <div className="flex-1">
-                          <h4 className="font-semibold text-orange-900 dark:text-orange-100">Focus Area Identified</h4>
-                          <p className="text-sm text-orange-800 dark:text-orange-200 mt-1">
-                            <strong>{unitDisplay}</strong> needs attention ({weakestUnit.accuracy.toFixed(0)}% accuracy).
+                    <Card className="border-orange-200 bg-gradient-to-br from-orange-50 to-amber-50 dark:from-orange-950/20 dark:to-amber-950/20">
+                      <CardHeader className="pb-3">
+                        <div className="flex items-center gap-2">
+                          <TrendingUp className="w-5 h-5 text-orange-600" />
+                          <CardTitle className="text-lg">Focus Area Identified</CardTitle>
+                        </div>
+                      </CardHeader>
+                      <CardContent className="space-y-4">
+                        <div>
+                          <Badge variant="outline" className="bg-orange-100 dark:bg-orange-900/40 border-orange-300 text-orange-900 dark:text-orange-100 mb-3">
+                            {unitDisplay}
+                            {weakestUnit.unitName && (
+                              <span className="ml-1 text-xs opacity-60">({weakestUnit.unit})</span>
+                            )}
+                          </Badge>
+                          
+                          <div className="space-y-2">
+                            <div className="flex justify-between text-sm">
+                              <span className="text-muted-foreground">Your accuracy</span>
+                              <span className="font-medium">{weakestUnit.accuracy.toFixed(0)}%</span>
+                            </div>
+                            <Progress 
+                              value={weakestUnit.accuracy} 
+                              className="h-2"
+                              indicatorClassName={weakestUnit.accuracy < 40 ? "bg-red-500" : "bg-orange-500"}
+                            />
+                            <p className="text-xs text-muted-foreground">
+                              {weakestUnit.correct} of {weakestUnit.total} questions correct
+                            </p>
+                          </div>
+                        </div>
+
+                        <div className="p-3 bg-blue-50 dark:bg-blue-950/20 rounded-md border border-blue-200 dark:border-blue-800">
+                          <p className="text-sm text-blue-900 dark:text-blue-100">
+                            <strong>💡 Tip:</strong> Review this topic's core concepts to strengthen your understanding before retrying.
                           </p>
+                        </div>
+
+                        <div className="flex gap-2 flex-wrap">
+                          <Button
+                            onClick={() => navigate(`/practice?paper=${paper}&unit=${weakestUnit.unit}`)}
+                            size="sm"
+                            className="flex-1"
+                          >
+                            <Target className="w-4 h-4 mr-2" />
+                            Practice This Topic
+                          </Button>
                           <Button
                             onClick={() => navigate(`/learn?paper=${paper}&unit=${weakestUnit.unit}`)}
                             size="sm"
-                            className="mt-3"
                             variant="outline"
+                            className="flex-1"
                           >
-                            Review Flashcards on This Topic
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Review Flashcards
                           </Button>
                         </div>
-                      </div>
-                    </div>
+                      </CardContent>
+                    </Card>
                   );
                 }
               })()}
