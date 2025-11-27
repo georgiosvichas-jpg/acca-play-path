@@ -203,7 +203,7 @@ export default function PracticeQuiz() {
     return () => clearInterval(timer);
   }, [quizStarted, showFeedback, timerEnabled]);
 
-  const startQuiz = async (overridePaper?: string, overrideUnit?: string) => {
+  const startQuiz = async (overridePaper?: string, overrideUnit?: string, overrideQuestionCount?: number) => {
     // Use override values if provided, otherwise use hook values
     const quizPaper = overridePaper || paper;
     const quizUnit = overrideUnit || unitCode;
@@ -227,7 +227,7 @@ export default function PracticeQuiz() {
         query = query.eq("difficulty", difficulty);
       }
 
-      const questionCount = numQuestions;
+      const questionCount = overrideQuestionCount || numQuestions;
       const { data, error } = await query.limit(questionCount * 3);
 
       if (error) throw error;
@@ -770,8 +770,8 @@ export default function PracticeQuiz() {
                               setCurrentStreak(0);
                               setMaxStreak(0);
                               
-                              // Start quiz with specific filters
-                              await startQuiz(paper, weakestUnit.unit);
+                              // Start focused 5-question quiz on the weak unit
+                              await startQuiz(paper, weakestUnit.unit, 5);
                             }}
                             size="sm"
                             className="flex-1"
