@@ -8,6 +8,7 @@ import { useUsageLimits } from "@/hooks/useUsageLimits";
 import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { useTopicPerformance } from "@/hooks/useTopicPerformance";
 import { useStudyPreferences } from "@/hooks/useStudyPreferences";
+import { useBookmarks } from "@/hooks/useBookmarks";
 import { QuestionActions } from "@/components/QuestionActions";
 import { QuestionRenderer } from "@/components/QuestionRenderer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,7 +21,7 @@ import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
-import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock, Flag, Grid3x3, BarChart3, Timer, History, TrendingUp } from "lucide-react";
+import { Clock, AlertCircle, CheckCircle2, XCircle, Trophy, Lock, Bookmark, BookmarkCheck, Grid3x3, BarChart3, Timer, History, TrendingUp } from "lucide-react";
 import { FeaturePaywallModal } from "@/components/FeaturePaywallModal";
 import { UpgradeNudge } from "@/components/UpgradeNudge";
 
@@ -62,6 +63,9 @@ export default function MockExam() {
     loading: prefsLoading,
   } = useStudyPreferences();
   
+  // Bookmarks hook
+  const { isBookmarked, toggleBookmark } = useBookmarks();
+  
   const [examLength, setExamLength] = useState<"quick" | "half" | "full">("full");
   const [showHistory, setShowHistory] = useState(false);
   const [examHistory, setExamHistory] = useState<any[]>([]);
@@ -71,7 +75,6 @@ export default function MockExam() {
   const [agreedToRules, setAgreedToRules] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [answers, setAnswers] = useState<any[]>([]);
-  const [flaggedQuestions, setFlaggedQuestions] = useState<Set<number>>(new Set());
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [timeRemaining, setTimeRemaining] = useState(7200); // 2 hours in seconds
   const [initialTime, setInitialTime] = useState(7200);
@@ -250,18 +253,6 @@ export default function MockExam() {
     setAnswers(newAnswers);
   };
   
-  const toggleFlag = (questionIndex: number) => {
-    setFlaggedQuestions(prev => {
-      const newSet = new Set(prev);
-      if (newSet.has(questionIndex)) {
-        newSet.delete(questionIndex);
-      } else {
-        newSet.add(questionIndex);
-      }
-      return newSet;
-    });
-  };
-  
   const navigateToQuestion = (index: number) => {
     // Save time spent on current question
     const timeSpent = Date.now() - questionStartTime;
@@ -278,7 +269,7 @@ export default function MockExam() {
   
   const getQuestionStatus = (index: number) => {
     if (answers[index] !== null && answers[index] !== undefined) return 'answered';
-    if (flaggedQuestions.has(index)) return 'flagged';
+    if (isBookmarked(questions[index]?.id)) return 'bookmarked';
     return 'unanswered';
   };
   
@@ -343,8 +334,8 @@ export default function MockExam() {
     const [start, end] = section.questionRange;
     const sectionAnswers = answers.slice(start, end + 1);
     const answered = sectionAnswers.filter(a => a !== null).length;
-    const flagged = Array.from(flaggedQuestions).filter(idx => idx >= start && idx <= end).length;
-    return { answered, total: end - start + 1, flagged };
+    const bookmarked = questions.slice(start, end + 1).filter(q => isBookmarked(q.id)).length;
+    return { answered, total: end - start + 1, bookmarked };
   };
 
   const handleSubmitExam = async () => {
@@ -440,7 +431,6 @@ export default function MockExam() {
         sectionResults,
         totalTime,
         timePerQuestion: finalTimes,
-        flaggedCount: flaggedQuestions.size,
         unansweredCount: answers.filter(a => a === null).length,
         examLength: totalQuestions === 15 ? "Quick" : totalQuestions === 25 ? "Half" : "Full",
       });
@@ -739,10 +729,6 @@ export default function MockExam() {
                       <Timer className="w-4 h-4" />
                       Total Time: {formatTime(results.totalTime)}
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Flag className="w-4 h-4" />
-                      Flagged: {results.flaggedCount}
-                    </div>
                     {results.unansweredCount > 0 && (
                       <div className="flex items-center gap-2 text-orange-600">
                         <AlertCircle className="w-4 h-4" />
@@ -830,7 +816,7 @@ export default function MockExam() {
                 <Separator />
                 <div className="space-y-2">
                   <Button onClick={() => setReviewMode(true)} className="w-full" size="lg">
-                    <Flag className="w-4 h-4 mr-2" />
+                    <BookmarkCheck className="w-4 h-4 mr-2" />
                     Review Answers with Explanations
                   </Button>
                   <Button onClick={() => navigate("/question-analytics")} variant="outline" className="w-full">
@@ -1098,8 +1084,8 @@ export default function MockExam() {
                     <span>Answered</span>
                   </div>
                   <div className="flex items-center gap-1">
-                    <div className="w-3 h-3 rounded-full bg-orange-500" />
-                    <span>Flagged</span>
+                    <div className="w-3 h-3 rounded-full bg-primary" />
+                    <span>Bookmarked</span>
                   </div>
                   <div className="flex items-center gap-1">
                     <div className="w-3 h-3 rounded-full bg-muted" />
@@ -1130,13 +1116,13 @@ export default function MockExam() {
                                     transition-all hover:scale-105
                                     ${currentQuestion === qIndex ? 'ring-2 ring-primary' : ''}
                                     ${status === 'answered' ? 'bg-green-500 text-white' : ''}
-                                    ${status === 'flagged' ? 'bg-orange-500 text-white' : ''}
+                                    ${status === 'bookmarked' ? 'bg-primary text-primary-foreground' : ''}
                                     ${status === 'unanswered' ? 'bg-muted hover:bg-muted/80' : ''}
                                   `}
                                 >
                                   {qIndex + 1}
-                                  {flaggedQuestions.has(qIndex) && (
-                                    <Flag className="absolute -top-1 -right-1 w-3 h-3 fill-orange-500 text-orange-500" />
+                                  {isBookmarked(questions[qIndex]?.id) && (
+                                    <Bookmark className="absolute -top-1 -right-1 w-3 h-3 fill-current" />
                                   )}
                                 </button>
                               );
@@ -1181,12 +1167,16 @@ export default function MockExam() {
                         <CardDescription className="text-base mt-2">{q.question}</CardDescription>
                       </div>
                       <Button
-                        variant={flaggedQuestions.has(idx) ? "default" : "outline"}
+                        variant={isBookmarked(q.id) ? "default" : "outline"}
                         size="sm"
-                        onClick={() => toggleFlag(idx)}
+                        onClick={() => toggleBookmark(q.id, "mock")}
                         className="ml-4"
                       >
-                        <Flag className={`w-4 h-4 ${flaggedQuestions.has(idx) ? 'fill-current' : ''}`} />
+                        {isBookmarked(q.id) ? (
+                          <BookmarkCheck className="w-4 h-4" />
+                        ) : (
+                          <Bookmark className="w-4 h-4" />
+                        )}
                       </Button>
                     </div>
                   </CardHeader>
@@ -1208,7 +1198,7 @@ export default function MockExam() {
                 Submit Exam
               </Button>
                 <p className="text-sm text-muted-foreground mt-4">
-                  Make sure you've answered all questions. Flagged: {flaggedQuestions.size}
+                  Make sure you've answered all questions.
                 </p>
             </Card>
           </div>
