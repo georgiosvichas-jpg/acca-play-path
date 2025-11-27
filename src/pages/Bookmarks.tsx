@@ -82,7 +82,7 @@ export default function Bookmarks() {
 
   if (loading || fetchingDetails) {
     return (
-      <div className="container mx-auto px-4 py-8">
+      <div className="container max-w-4xl mx-auto p-6">
         <Card>
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
@@ -103,7 +103,7 @@ export default function Bookmarks() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container max-w-4xl mx-auto p-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2">

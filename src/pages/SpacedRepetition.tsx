@@ -271,9 +271,8 @@ export default function SpacedRepetition() {
     const accuracy = (correctCount / answers.length) * 100;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <Card>
+      <div className="container max-w-4xl mx-auto p-6">
+        <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Brain className="w-6 h-6" />
@@ -309,7 +308,6 @@ export default function SpacedRepetition() {
               </div>
             </CardContent>
           </Card>
-        </div>
       </div>
     );
   }
@@ -318,10 +316,9 @@ export default function SpacedRepetition() {
   if (!featureLoading && !canAccessSRS) {
     return (
       <>
-        <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-          <div className="container mx-auto px-4 py-8 max-w-6xl">
-            <div className="space-y-6">
-              <Card className="relative overflow-hidden">
+        <div className="container max-w-4xl mx-auto p-6">
+          <div className="space-y-6">
+            <Card className="relative overflow-hidden">
                 <div className="absolute inset-0 backdrop-blur-sm bg-background/80 flex items-center justify-center z-10">
                   <div className="text-center space-y-4 p-8 max-w-md">
                     <div className="w-16 h-16 mx-auto rounded-full bg-primary/10 flex items-center justify-center">
@@ -377,10 +374,9 @@ export default function SpacedRepetition() {
                 </CardContent>
               </Card>
             </div>
-          </div>
         </div>
 
-        <FeaturePaywallModal 
+        <FeaturePaywallModal
           open={showPaywall} 
           onOpenChange={setShowPaywall}
           paywallType="spaced-repetition"
@@ -394,9 +390,8 @@ export default function SpacedRepetition() {
     const progressPercent = ((currentIndex + 1) / questions.length) * 100;
 
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-        <div className="container mx-auto px-4 py-8 max-w-4xl">
-          <Card>
+      <div className="container max-w-4xl mx-auto p-6">
+        <Card>
             <CardHeader>
               <div className="flex items-center justify-between mb-2">
                 <CardTitle>
@@ -547,16 +542,14 @@ export default function SpacedRepetition() {
               )}
             </CardContent>
           </Card>
-        </div>
       </div>
     );
   }
 
   return (
     <>
-      <div className={`min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20 ${focusMode ? "bg-black" : ""}`}>
-        <div className="container mx-auto px-4 py-8 max-w-6xl">
-          <div className="space-y-6">
+      <div className={`container max-w-4xl mx-auto p-6 ${focusMode ? "bg-black" : ""}`}>
+        <div className="space-y-6">
             {/* Header */}
             <Card>
               <CardHeader>
@@ -822,7 +815,6 @@ export default function SpacedRepetition() {
             </Tabs>
           </div>
         </div>
-      </div>
     </>
   );
 }

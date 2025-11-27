@@ -418,8 +418,8 @@ export default function FlashcardsContentNew() {
   if (filteredCards.length === 0) {
     return (
       <>
-        <div className="min-h-screen p-4 md:p-8">
-          <div className="max-w-6xl mx-auto space-y-6">
+        <div className="container max-w-4xl mx-auto p-6">
+          <div className="space-y-6">
             <Card>
               <CardHeader>
                 <CardTitle className="flex items-center gap-2">
@@ -443,8 +443,8 @@ export default function FlashcardsContentNew() {
 
   return (
     <>
-      <div className="min-h-screen p-4 md:p-8">
-        <div className="max-w-6xl mx-auto space-y-8">
+      <div className="container max-w-4xl mx-auto p-6">
+        <div className="space-y-8">
           {/* Header */}
           <div className="text-center space-y-2">
             <h1 className="text-4xl font-bold text-foreground">ACCA Flashcards</h1>
