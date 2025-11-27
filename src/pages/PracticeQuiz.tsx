@@ -213,7 +213,7 @@ export default function PracticeQuiz() {
         .from("sb_questions")
         .select("*")
         .eq("paper", paper)
-        .eq("type", "mcq");
+        .in("type", ["mcq", "MCQ_SINGLE", "MCQ_MULTI"]);
 
       if (unitCode !== "all") {
         query = query.eq("unit_code", unitCode);
