@@ -103,7 +103,13 @@ serve(async (req) => {
       try {
         // Normalize field names
         const external_id = q.external_id || q.id || `${paper_code}_Q${String(questionNum).padStart(3, "0")}`;
-        const question_type = (q.question_type || q.type || "MCQ_SINGLE").toUpperCase();
+        let question_type = (q.question_type || q.type || "MCQ_SINGLE").toUpperCase();
+        
+        // Normalize common type aliases
+        if (question_type === "MCQ") {
+          question_type = "MCQ_SINGLE"; // Default MCQ to single-answer
+        }
+        
         const stem = q.stem || q.question;
         const difficulty = (q.difficulty || "medium").toLowerCase();
         const unit_code = q.unit_code;
