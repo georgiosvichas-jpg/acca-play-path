@@ -111,6 +111,10 @@ export default function AdminContentImport() {
   const [minitestResult, setMinitestResult] = useState<MiniTestBuildResult | null>(null);
   const [mockConfigImporting, setMockConfigImporting] = useState(false);
   const [mockConfigResult, setMockConfigResult] = useState<MockConfigImportResult | null>(null);
+  const [fmQuestionContent, setFmQuestionContent] = useState<string | null>(null);
+  const [fmQuestionFileName, setFmQuestionFileName] = useState<string | null>(null);
+  const [fmQuestionLoading, setFmQuestionLoading] = useState(false);
+  const [fmQuestionResult, setFmQuestionResult] = useState<FAQuestionImportResult | null>(null);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -469,6 +473,115 @@ export default function AdminContentImport() {
     }
   };
 
+  const handleFmQuestionImport = async () => {
+    if (!fmQuestionContent) {
+      toast({
+        title: "No file selected",
+        description: "Please select a JSON file to import",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setFmQuestionLoading(true);
+    setFmQuestionResult(null);
+
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) {
+        throw new Error("Not authenticated");
+      }
+
+      // Parse already-loaded file content
+      const parsed = JSON.parse(fmQuestionContent);
+      
+      // Extract questions array
+      let allQuestions = Array.isArray(parsed) ? parsed : parsed.questions || [];
+      
+      console.log(`Processing ${allQuestions.length} FM questions in batches...`);
+      
+      // Process in chunks of 10 questions to avoid payload limits
+      const CHUNK_SIZE = 10;
+      let totalInserted = 0;
+      let totalUpdated = 0;
+      let totalSkipped = 0;
+      const allErrors: any[] = [];
+      
+      for (let i = 0; i < allQuestions.length; i += CHUNK_SIZE) {
+        const chunk = allQuestions.slice(i, i + CHUNK_SIZE);
+        const chunkNum = Math.floor(i / CHUNK_SIZE) + 1;
+        const totalChunks = Math.ceil(allQuestions.length / CHUNK_SIZE);
+        
+        console.log(`Processing chunk ${chunkNum}/${totalChunks} (${chunk.length} questions)...`);
+        
+        toast({
+          title: "Importing...",
+          description: `Processing batch ${chunkNum} of ${totalChunks} (${Math.round((i / allQuestions.length) * 100)}% complete)`,
+        });
+        
+        // Use fetch directly with proper headers
+        const response = await fetch(
+          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/import-fm-questions`,
+          {
+            method: "POST",
+            headers: {
+              "Authorization": `Bearer ${session.access_token}`,
+              "Content-Type": "application/json",
+              "apikey": import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+            },
+            body: JSON.stringify({ questions: chunk }),
+          }
+        );
+        
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error(`Chunk ${chunkNum} error:`, errorText);
+          throw new Error(`Failed at batch ${chunkNum}: ${errorText}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data?.success) {
+          totalInserted += data.summary.inserted_count || 0;
+          totalUpdated += data.summary.updated_count || 0;
+          totalSkipped += data.summary.skipped_count || 0;
+          if (data.skipped) {
+            allErrors.push(...data.skipped);
+          }
+        } else {
+          throw new Error(data?.error || "Import failed");
+        }
+      }
+      
+      const finalResult = {
+        success: true,
+        summary: {
+          total_questions: allQuestions.length,
+          inserted_count: totalInserted,
+          updated_count: totalUpdated,
+          skipped_count: totalSkipped,
+        },
+        skipped: allErrors,
+      };
+      
+      setFmQuestionResult(finalResult);
+
+      toast({
+        title: "Import completed",
+        description: `${totalInserted} inserted, ${totalUpdated} updated, ${totalSkipped} skipped`,
+      });
+    } catch (error) {
+      console.error("Error importing FM questions:", error);
+      toast({
+        title: "Import failed",
+        description: error instanceof Error ? error.message : "Unknown error",
+        variant: "destructive",
+      });
+    } finally {
+      setFmQuestionLoading(false);
+    }
+  };
+
   const downloadErrorLog = (errors: ImportError[], filename: string) => {
     const csv = [
       "Row,Error,Data",
@@ -804,6 +917,109 @@ export default function AdminContentImport() {
                 {faQuestionResult.skipped.length > 10 && (
                   <div className="text-muted-foreground italic">
                     ...and {faQuestionResult.skipped.length - 10} more (download full log)
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* FM Question Bank Import */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Import FM Question Bank (JSON)</CardTitle>
+          <CardDescription>
+            Upload a JSON file containing FM questions. The file should contain external_id, unit_code, question_type, stem, options, correct_answer, difficulty, and optional fields.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="fm-question-file">JSON File</Label>
+            <Input
+              id="fm-question-file"
+              type="file"
+              accept=".json"
+              onChange={async (e) => {
+                const file = e.target.files?.[0];
+                if (file) {
+                  try {
+                    const content = await file.text();
+                    setFmQuestionContent(content);
+                    setFmQuestionFileName(file.name);
+                    toast({
+                      title: "File loaded",
+                      description: `${file.name} is ready to import`,
+                    });
+                  } catch (error) {
+                    toast({
+                      title: "Error reading file",
+                      description: error instanceof Error ? error.message : "Unknown error",
+                      variant: "destructive",
+                    });
+                  }
+                }
+              }}
+            />
+          </div>
+
+          <Button
+            onClick={handleFmQuestionImport}
+            disabled={!fmQuestionContent || fmQuestionLoading}
+            className="w-full sm:w-auto"
+          >
+            {fmQuestionLoading ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Importing...
+              </>
+            ) : (
+              <>
+                <Upload className="mr-2 h-4 w-4" />
+                Import FM Questions
+              </>
+            )}
+          </Button>
+
+          {fmQuestionResult && (
+            <Alert>
+              <CheckCircle className="h-4 w-4" />
+              <AlertDescription>
+                <div className="font-semibold mb-2">Import Summary</div>
+                <div className="space-y-1 text-sm">
+                  <div>Total questions: {fmQuestionResult.summary.total_questions}</div>
+                  <div>Inserted: {fmQuestionResult.summary.inserted_count}</div>
+                  <div>Updated: {fmQuestionResult.summary.updated_count}</div>
+                  <div>Skipped: {fmQuestionResult.summary.skipped_count}</div>
+                </div>
+              </AlertDescription>
+            </Alert>
+          )}
+
+          {fmQuestionResult && fmQuestionResult.skipped.length > 0 && (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 text-orange-600">
+                <AlertCircle className="h-5 w-5" />
+                <span>{fmQuestionResult.skipped.length} questions skipped</span>
+              </div>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => downloadSkippedQuestions(fmQuestionResult.skipped, "fm-import-errors.txt")}
+              >
+                <Download className="mr-2 h-4 w-4" />
+                Download Error Log
+              </Button>
+              <div className="max-h-60 overflow-y-auto bg-muted p-3 rounded text-xs space-y-2">
+                {fmQuestionResult.skipped.slice(0, 10).map((err, idx) => (
+                  <div key={idx} className="border-b border-border pb-2">
+                    <div className="font-semibold">ID: {err.external_id}</div>
+                    <div className="text-muted-foreground">{err.error_reason}</div>
+                  </div>
+                ))}
+                {fmQuestionResult.skipped.length > 10 && (
+                  <div className="text-muted-foreground italic">
+                    ...and {fmQuestionResult.skipped.length - 10} more (download full log)
                   </div>
                 )}
               </div>
