@@ -288,6 +288,12 @@ export default function PracticeQuiz() {
       setHintsUsed(0);
       setQuestionStartTime(Date.now());
       setTimeRemaining(30);
+      
+      // Reset feedback and hint states for clean start
+      setShowFeedback(false);
+      setSelectedAnswer(null);
+      setHintRevealed(false);
+      setGeneratedHint("");
     } catch (error) {
       console.error("Error starting quiz:", error);
       toast.error("Failed to load questions");
