@@ -705,14 +705,20 @@ export default function PracticeQuiz() {
               )}
 
               {/* Side-by-Side Performance Charts */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-fade-in">
                 {/* Performance by Unit - Horizontal Bar Chart */}
-                <Card>
-                  <CardHeader className="pb-2">
-                    <h3 className="font-semibold">Performance by Unit</h3>
+                <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 bg-gradient-to-br from-card to-card/80">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-md bg-primary/10">
+                        <Target className="w-4 h-4 text-primary" />
+                      </div>
+                      <h3 className="font-semibold text-base">Performance by Unit</h3>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Topic breakdown</p>
                   </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={Math.max(150, Object.keys(result.byUnit).length * 50)}>
+                  <CardContent className="pt-2">
+                    <ResponsiveContainer width="100%" height={Math.max(180, Object.keys(result.byUnit).length * 55)}>
                       <BarChart
                         data={Object.entries(result.byUnit).map(([unit, stats]) => ({
                           name: stats.unitName || unit,
@@ -721,31 +727,64 @@ export default function PracticeQuiz() {
                           total: stats.total,
                         }))}
                         layout="vertical"
-                        margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+                        margin={{ top: 10, right: 20, left: 10, bottom: 10 }}
                       >
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <defs>
+                          <linearGradient id="colorGreen" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stopColor="hsl(142, 71%, 45%)" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="hsl(142, 71%, 45%)" stopOpacity={1}/>
+                          </linearGradient>
+                          <linearGradient id="colorAmber" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="hsl(38, 92%, 50%)" stopOpacity={1}/>
+                          </linearGradient>
+                          <linearGradient id="colorRed" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="hsl(0, 84%, 60%)" stopOpacity={1}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid 
+                          strokeDasharray="3 3" 
+                          stroke="hsl(var(--border))" 
+                          horizontal={true}
+                          vertical={false}
+                          opacity={0.3}
+                        />
                         <XAxis 
                           type="number" 
                           domain={[0, 100]} 
                           stroke="hsl(var(--muted-foreground))"
-                          label={{ value: 'Accuracy %', position: 'insideBottom', offset: -5 }}
+                          tick={{ fontSize: 11 }}
+                          tickFormatter={(value) => `${value}%`}
                         />
                         <YAxis 
                           dataKey="name" 
                           type="category" 
-                          width={100} 
+                          width={110} 
                           stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 12 }}
+                          tick={{ fontSize: 11 }}
                         />
                         <Tooltip 
+                          cursor={{ fill: 'hsl(var(--muted) / 0.1)' }}
                           content={({ active, payload }) => {
                             if (active && payload && payload.length) {
                               const data = payload[0].payload;
+                              const accuracy = data.accuracy;
                               return (
-                                <div className="bg-background border border-border rounded-lg p-2 shadow-lg">
-                                  <p className="font-semibold text-sm">{data.name}</p>
-                                  <p className="text-sm text-muted-foreground">
-                                    {data.accuracy.toFixed(0)}% - {data.correct}/{data.total} correct
+                                <div className="bg-background/95 backdrop-blur-sm border-2 border-border rounded-lg p-3 shadow-xl animate-scale-in">
+                                  <p className="font-semibold text-sm mb-1">{data.name}</p>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-2 h-2 rounded-full ${
+                                      accuracy >= 70 ? 'bg-green-500' : 
+                                      accuracy >= 50 ? 'bg-amber-500' : 
+                                      'bg-red-500'
+                                    }`} />
+                                    <p className="text-sm font-medium">
+                                      {accuracy.toFixed(0)}%
+                                    </p>
+                                  </div>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    {data.correct} of {data.total} correct
                                   </p>
                                 </div>
                               );
@@ -753,13 +792,18 @@ export default function PracticeQuiz() {
                             return null;
                           }}
                         />
-                        <Bar dataKey="accuracy" radius={[0, 4, 4, 0]}>
+                        <Bar 
+                          dataKey="accuracy" 
+                          radius={[0, 6, 6, 0]}
+                          animationDuration={800}
+                          animationBegin={0}
+                        >
                           {Object.entries(result.byUnit).map(([unit, stats], index) => {
                             const accuracy = (stats.correct / stats.total) * 100;
-                            let color = "hsl(142, 71%, 45%)"; // green for >70%
-                            if (accuracy < 50) color = "hsl(0, 84%, 60%)"; // red for <50%
-                            else if (accuracy < 70) color = "hsl(38, 92%, 50%)"; // amber for 50-70%
-                            return <Cell key={`cell-${index}`} fill={color} />;
+                            let fill = "url(#colorGreen)";
+                            if (accuracy < 50) fill = "url(#colorRed)";
+                            else if (accuracy < 70) fill = "url(#colorAmber)";
+                            return <Cell key={`cell-${index}`} fill={fill} />;
                           })}
                         </Bar>
                       </BarChart>
@@ -768,12 +812,18 @@ export default function PracticeQuiz() {
                 </Card>
 
                 {/* Performance by Difficulty - Horizontal Bar Chart */}
-                <Card>
-                  <CardHeader className="pb-2">
-                    <h3 className="font-semibold">Performance by Difficulty</h3>
+                <Card className="border-border/50 shadow-sm hover:shadow-md transition-shadow duration-300 bg-gradient-to-br from-card to-card/80">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center gap-2">
+                      <div className="p-1.5 rounded-md bg-primary/10">
+                        <TrendingUp className="w-4 h-4 text-primary" />
+                      </div>
+                      <h3 className="font-semibold text-base">Performance by Difficulty</h3>
+                    </div>
+                    <p className="text-xs text-muted-foreground mt-1">Challenge level analysis</p>
                   </CardHeader>
-                  <CardContent>
-                    <ResponsiveContainer width="100%" height={150}>
+                  <CardContent className="pt-2">
+                    <ResponsiveContainer width="100%" height={180}>
                       <BarChart
                         data={Object.entries(result.byDifficulty).map(([diff, stats]) => ({
                           name: diff.charAt(0).toUpperCase() + diff.slice(1),
@@ -782,31 +832,64 @@ export default function PracticeQuiz() {
                           total: stats.total,
                         }))}
                         layout="vertical"
-                        margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+                        margin={{ top: 10, right: 20, left: 10, bottom: 10 }}
                       >
-                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <defs>
+                          <linearGradient id="colorGreen" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stopColor="hsl(142, 71%, 45%)" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="hsl(142, 71%, 45%)" stopOpacity={1}/>
+                          </linearGradient>
+                          <linearGradient id="colorAmber" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stopColor="hsl(38, 92%, 50%)" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="hsl(38, 92%, 50%)" stopOpacity={1}/>
+                          </linearGradient>
+                          <linearGradient id="colorRed" x1="0" y1="0" x2="1" y2="0">
+                            <stop offset="0%" stopColor="hsl(0, 84%, 60%)" stopOpacity={0.8}/>
+                            <stop offset="100%" stopColor="hsl(0, 84%, 60%)" stopOpacity={1}/>
+                          </linearGradient>
+                        </defs>
+                        <CartesianGrid 
+                          strokeDasharray="3 3" 
+                          stroke="hsl(var(--border))" 
+                          horizontal={true}
+                          vertical={false}
+                          opacity={0.3}
+                        />
                         <XAxis 
                           type="number" 
                           domain={[0, 100]} 
                           stroke="hsl(var(--muted-foreground))"
-                          label={{ value: 'Accuracy %', position: 'insideBottom', offset: -5 }}
+                          tick={{ fontSize: 11 }}
+                          tickFormatter={(value) => `${value}%`}
                         />
                         <YAxis 
                           dataKey="name" 
                           type="category" 
-                          width={100} 
+                          width={110} 
                           stroke="hsl(var(--muted-foreground))"
-                          tick={{ fontSize: 12 }}
+                          tick={{ fontSize: 11 }}
                         />
                         <Tooltip 
+                          cursor={{ fill: 'hsl(var(--muted) / 0.1)' }}
                           content={({ active, payload }) => {
                             if (active && payload && payload.length) {
                               const data = payload[0].payload;
+                              const accuracy = data.accuracy;
                               return (
-                                <div className="bg-background border border-border rounded-lg p-2 shadow-lg">
-                                  <p className="font-semibold text-sm">{data.name}</p>
-                                  <p className="text-sm text-muted-foreground">
-                                    {data.accuracy.toFixed(0)}% - {data.correct}/{data.total} correct
+                                <div className="bg-background/95 backdrop-blur-sm border-2 border-border rounded-lg p-3 shadow-xl animate-scale-in">
+                                  <p className="font-semibold text-sm mb-1">{data.name}</p>
+                                  <div className="flex items-center gap-2">
+                                    <div className={`w-2 h-2 rounded-full ${
+                                      accuracy >= 70 ? 'bg-green-500' : 
+                                      accuracy >= 50 ? 'bg-amber-500' : 
+                                      'bg-red-500'
+                                    }`} />
+                                    <p className="text-sm font-medium">
+                                      {accuracy.toFixed(0)}%
+                                    </p>
+                                  </div>
+                                  <p className="text-xs text-muted-foreground mt-1">
+                                    {data.correct} of {data.total} correct
                                   </p>
                                 </div>
                               );
@@ -814,13 +897,18 @@ export default function PracticeQuiz() {
                             return null;
                           }}
                         />
-                        <Bar dataKey="accuracy" radius={[0, 4, 4, 0]}>
+                        <Bar 
+                          dataKey="accuracy" 
+                          radius={[0, 6, 6, 0]}
+                          animationDuration={800}
+                          animationBegin={200}
+                        >
                           {Object.entries(result.byDifficulty).map(([_, stats], index) => {
                             const accuracy = (stats.correct / stats.total) * 100;
-                            let color = "hsl(142, 71%, 45%)"; // green for >70%
-                            if (accuracy < 50) color = "hsl(0, 84%, 60%)"; // red for <50%
-                            else if (accuracy < 70) color = "hsl(38, 92%, 50%)"; // amber for 50-70%
-                            return <Cell key={`cell-${index}`} fill={color} />;
+                            let fill = "url(#colorGreen)";
+                            if (accuracy < 50) fill = "url(#colorRed)";
+                            else if (accuracy < 70) fill = "url(#colorAmber)";
+                            return <Cell key={`cell-${index}`} fill={fill} />;
                           })}
                         </Bar>
                       </BarChart>
