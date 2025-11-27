@@ -51,15 +51,20 @@ serve(async (req) => {
 
     if (!roleData) throw new Error("User is not an admin");
 
-    // Expect mini test templates in request body
-    const body = await req.json().catch(() => ({}));
+    // Get paper_code and mini test templates from request body
+    const body = await req.json();
+    const paperCode = body.paper_code;
     const miniTests: MiniTestTemplate[] = Array.isArray(body.mini_tests) ? body.mini_tests : [];
+
+    if (!paperCode) {
+      throw new Error("paper_code is required in request body");
+    }
 
     if (miniTests.length === 0) {
       throw new Error("No mini tests provided in request body");
     }
 
-    console.log(`Received ${miniTests.length} mini test templates`);
+    console.log(`Received ${miniTests.length} mini test templates for ${paperCode}`);
 
     let testsCreated = 0;
     const questionsPerTest: Record<string, number> = {};
@@ -74,7 +79,7 @@ serve(async (req) => {
         const { data: existingTest } = await supabase
           .from("sb_minitests")
           .select("id")
-          .eq("paper", "FA")
+          .eq("paper", paperCode)
           .eq("title", template.title)
           .maybeSingle();
 
@@ -96,7 +101,7 @@ serve(async (req) => {
         const { data: questions, error: questionsError } = await supabase
           .from("sb_questions")
           .select("id, unit_code, difficulty")
-          .eq("paper", "FA")
+          .eq("paper", paperCode)
           .in("unit_code", template.target_units);
 
         if (questionsError) {
@@ -129,7 +134,7 @@ serve(async (req) => {
         const { error: insertError } = await supabase
           .from("sb_minitests")
           .insert({
-            paper: "FA",
+            paper: paperCode,
             title: template.title,
             question_ids: questionIds,
             duration_minutes: recommendedTime,
