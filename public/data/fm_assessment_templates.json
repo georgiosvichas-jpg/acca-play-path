@@ -17,7 +17,7 @@
       "id": "FM_MINI_2",
       "title": "FM Mini Test 2 – Advanced Topics Mix 2",
       "target_units": ["FM91", "FM92", "FM96"],
-      "question_count": 7,
+      "question_count": 6,
       "format": "MCQ",
       "notes_for_agent": [
         "Advanced topics from units FM91, FM92, FM96"
@@ -27,7 +27,7 @@
       "id": "FM_MINI_3",
       "title": "FM Mini Test 3 – Advanced Performance & Strategy",
       "target_units": ["FM103", "FM106", "FM107", "FM108"],
-      "question_count": 9,
+      "question_count": 8,
       "format": "MCQ",
       "notes_for_agent": [
         "Advanced performance metrics and value drivers",
