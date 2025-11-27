@@ -58,34 +58,20 @@ interface QuizResult {
 }
 
 function generateHint(question: Question): string {
-  // Use unit name for safe topical context
-  if (question.unit_name) {
-    return `This question is about ${question.unit_name}. Try to recall the key concepts you learned in this area.`;
-  }
-
-  // Topic-specific safe hints that guide thinking without revealing answers
-  const topicHints: Record<string, string> = {
-    'FA01': 'Think about the purpose and users of financial accounting.',
-    'FA02': 'Consider how debits and credits maintain the accounting equation.',
-    'FA03': 'Think about how transactions flow through the ledger system.',
-    'FA04': 'Consider the key differences between capital and revenue items.',
-    'FA05': 'Think about how assets are recorded at their cost.',
-    'FA06': 'Consider depreciation methods and their impacts.',
-    'FA07': 'Think about how errors affect different sides of the ledger.',
-    'FA08': 'Consider the purpose of control accounts and reconciliations.',
-    'FA09': 'Think about what adjustments are needed at year-end.',
-    'FA10': 'Consider the components of published financial statements.',
-  };
-
-  if (question.unit_code && topicHints[question.unit_code]) {
-    return topicHints[question.unit_code];
-  }
-
-  if (question.unit_code) {
-    return `This tests a concept from ${question.unit_code}. Focus on the core principles of this topic.`;
-  }
-
-  return "Focus on the fundamental concept being tested. Eliminate obviously wrong answers first.";
+  // Provide strategic thinking guidance without revealing answers
+  const hints = [
+    "Read the question carefully and identify what is specifically being asked.",
+    "Look for key terms in the question that point to the concept being tested.",
+    "Eliminate answers that are obviously incorrect or don't match the question format.",
+    "Consider the fundamental principles that apply to this type of question.",
+    "If it's a calculation question, think about what formula or method applies.",
+    "Look for clues in the question wording that narrow down the correct approach.",
+    "Consider whether the question is asking for a definition, calculation, or application.",
+    "Think about common patterns you've seen in similar questions from your studies."
+  ];
+  
+  // Return a random strategic hint
+  return hints[Math.floor(Math.random() * hints.length)];
 }
 
 export default function PracticeQuiz() {
