@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Progress } from "@/components/ui/progress";
 import { Badge } from "@/components/ui/badge";
 import { Switch } from "@/components/ui/switch";
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from "recharts";
 import { toast } from "sonner";
 import { 
   CheckCircle2, 
@@ -703,17 +704,129 @@ export default function PracticeQuiz() {
                 </div>
               )}
 
-              <div className="space-y-4">
-                <h3 className="font-semibold">Performance by Unit</h3>
-                {Object.entries(result.byUnit).map(([unit, stats]) => (
-                  <div key={unit} className="space-y-1">
-                    <div className="flex justify-between text-sm">
-                      <span>{stats.unitName || unit}</span>
-                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
-                    </div>
-                    <Progress value={(stats.correct / stats.total) * 100} />
-                  </div>
-                ))}
+              {/* Side-by-Side Performance Charts */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {/* Performance by Unit - Horizontal Bar Chart */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <h3 className="font-semibold">Performance by Unit</h3>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={Math.max(150, Object.keys(result.byUnit).length * 50)}>
+                      <BarChart
+                        data={Object.entries(result.byUnit).map(([unit, stats]) => ({
+                          name: stats.unitName || unit,
+                          accuracy: ((stats.correct / stats.total) * 100),
+                          correct: stats.correct,
+                          total: stats.total,
+                        }))}
+                        layout="vertical"
+                        margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis 
+                          type="number" 
+                          domain={[0, 100]} 
+                          stroke="hsl(var(--muted-foreground))"
+                          label={{ value: 'Accuracy %', position: 'insideBottom', offset: -5 }}
+                        />
+                        <YAxis 
+                          dataKey="name" 
+                          type="category" 
+                          width={100} 
+                          stroke="hsl(var(--muted-foreground))"
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip 
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length) {
+                              const data = payload[0].payload;
+                              return (
+                                <div className="bg-background border border-border rounded-lg p-2 shadow-lg">
+                                  <p className="font-semibold text-sm">{data.name}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {data.accuracy.toFixed(0)}% - {data.correct}/{data.total} correct
+                                  </p>
+                                </div>
+                              );
+                            }
+                            return null;
+                          }}
+                        />
+                        <Bar dataKey="accuracy" radius={[0, 4, 4, 0]}>
+                          {Object.entries(result.byUnit).map(([unit, stats], index) => {
+                            const accuracy = (stats.correct / stats.total) * 100;
+                            let color = "hsl(142, 71%, 45%)"; // green for >70%
+                            if (accuracy < 50) color = "hsl(0, 84%, 60%)"; // red for <50%
+                            else if (accuracy < 70) color = "hsl(38, 92%, 50%)"; // amber for 50-70%
+                            return <Cell key={`cell-${index}`} fill={color} />;
+                          })}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* Performance by Difficulty - Horizontal Bar Chart */}
+                <Card>
+                  <CardHeader className="pb-2">
+                    <h3 className="font-semibold">Performance by Difficulty</h3>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={150}>
+                      <BarChart
+                        data={Object.entries(result.byDifficulty).map(([diff, stats]) => ({
+                          name: diff.charAt(0).toUpperCase() + diff.slice(1),
+                          accuracy: ((stats.correct / stats.total) * 100),
+                          correct: stats.correct,
+                          total: stats.total,
+                        }))}
+                        layout="vertical"
+                        margin={{ top: 5, right: 30, left: 10, bottom: 5 }}
+                      >
+                        <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+                        <XAxis 
+                          type="number" 
+                          domain={[0, 100]} 
+                          stroke="hsl(var(--muted-foreground))"
+                          label={{ value: 'Accuracy %', position: 'insideBottom', offset: -5 }}
+                        />
+                        <YAxis 
+                          dataKey="name" 
+                          type="category" 
+                          width={100} 
+                          stroke="hsl(var(--muted-foreground))"
+                          tick={{ fontSize: 12 }}
+                        />
+                        <Tooltip 
+                          content={({ active, payload }) => {
+                            if (active && payload && payload.length) {
+                              const data = payload[0].payload;
+                              return (
+                                <div className="bg-background border border-border rounded-lg p-2 shadow-lg">
+                                  <p className="font-semibold text-sm">{data.name}</p>
+                                  <p className="text-sm text-muted-foreground">
+                                    {data.accuracy.toFixed(0)}% - {data.correct}/{data.total} correct
+                                  </p>
+                                </div>
+                              );
+                            }
+                            return null;
+                          }}
+                        />
+                        <Bar dataKey="accuracy" radius={[0, 4, 4, 0]}>
+                          {Object.entries(result.byDifficulty).map(([_, stats], index) => {
+                            const accuracy = (stats.correct / stats.total) * 100;
+                            let color = "hsl(142, 71%, 45%)"; // green for >70%
+                            if (accuracy < 50) color = "hsl(0, 84%, 60%)"; // red for <50%
+                            else if (accuracy < 70) color = "hsl(38, 92%, 50%)"; // amber for 50-70%
+                            return <Cell key={`cell-${index}`} fill={color} />;
+                          })}
+                        </Bar>
+                      </BarChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
               </div>
 
               {(() => {
@@ -821,18 +934,6 @@ export default function PracticeQuiz() {
                 }
               })()}
 
-              <div className="space-y-4">
-                <h3 className="font-semibold">By Difficulty</h3>
-                {Object.entries(result.byDifficulty).map(([diff, stats]) => (
-                  <div key={diff} className="space-y-1">
-                    <div className="flex justify-between text-sm capitalize">
-                      <span>{diff}</span>
-                      <span>{stats.correct} / {stats.total} ({((stats.correct / stats.total) * 100).toFixed(0)}%)</span>
-                    </div>
-                    <Progress value={(stats.correct / stats.total) * 100} />
-                  </div>
-                ))}
-              </div>
 
               <div className="flex gap-3">
                 <Button onClick={resetQuiz} variant="outline" className="flex-1">
