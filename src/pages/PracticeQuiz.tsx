@@ -540,7 +540,7 @@ export default function PracticeQuiz() {
 
   if (!quizStarted) {
     return (
-      <div className="container max-w-3xl mx-auto p-6">
+      <div className="container max-w-4xl mx-auto p-6">
         <Card>
           <CardHeader>
             <CardTitle>Practice Quiz</CardTitle>
@@ -648,7 +648,7 @@ export default function PracticeQuiz() {
     return (
       <>
         {ConfettiComponent}
-        <div className="container max-w-3xl mx-auto p-6 space-y-6">
+        <div className="container max-w-4xl mx-auto p-6 space-y-6">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">

@@ -449,9 +449,8 @@ export default function MockExam() {
   if (!examStarted) {
     return (
       <>
-        <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 pt-20">
-          <div className="container mx-auto px-4 py-8 max-w-4xl">
-            <Card>
+        <div className="container max-w-4xl mx-auto p-6">
+          <Card>
               <CardHeader>
                 <div className="flex items-center justify-between">
                   <div>
@@ -683,8 +682,8 @@ export default function MockExam() {
                 )}
               </CardContent>
             </Card>
-          </div>
         </div>
+
         <FeaturePaywallModal
           open={showPaywall}
           onOpenChange={setShowPaywall}
