@@ -17,6 +17,7 @@ interface Question {
   options?: any[];
   correct_answer?: string;
   correct_option_index?: number;
+  correct_option_indices?: number[];
   answer?: string;
   explanation?: string;
   difficulty?: string;
@@ -211,29 +212,46 @@ serve(async (req) => {
             continue;
           }
 
-          // Convert correct_answer letter(s) to index
-          let correctIndex: number | null = null;
-          if (correct_answer) {
-            const answerLetter = correct_answer.trim().toUpperCase();
-            correctIndex = answerLetter.charCodeAt(0) - 65; // A=0, B=1, C=2, D=3
-            if (correctIndex < 0 || correctIndex >= options.length) {
+          // Handle MCQ_MULTI with correct_option_indices array
+          if (question_type === "MCQ_MULTI" && q.correct_option_indices && Array.isArray(q.correct_option_indices) && q.correct_option_indices.length > 0) {
+            // Validate all indices are within range
+            const invalidIndices = q.correct_option_indices.filter(idx => idx < 0 || idx >= options.length);
+            if (invalidIndices.length > 0) {
               skipped++;
-              skipped_details.push({ external_id, reason: `Invalid correct_answer: ${correct_answer}` });
+              skipped_details.push({ external_id, reason: `Invalid correct_option_indices: ${invalidIndices.join(", ")}` });
               continue;
             }
-          } else if (q.correct_option_index !== undefined) {
-            correctIndex = q.correct_option_index;
-          }
 
-          if (correctIndex === null) {
-            skipped++;
-            skipped_details.push({ external_id, reason: "Missing correct_answer or correct_option_index" });
-            continue;
-          }
+            // Store array in metadata for app to use
+            questionData.options = options;
+            questionData.correct_option_index = q.correct_option_indices[0]; // First index as database fallback
+            questionData.answer = null;
+            questionData.metadata = { correctAnswers: q.correct_option_indices };
+          } else {
+            // Handle MCQ_SINGLE or MCQ_MULTI with single correct_answer/correct_option_index
+            let correctIndex: number | null = null;
+            if (correct_answer) {
+              const answerLetter = correct_answer.trim().toUpperCase();
+              correctIndex = answerLetter.charCodeAt(0) - 65; // A=0, B=1, C=2, D=3
+              if (correctIndex < 0 || correctIndex >= options.length) {
+                skipped++;
+                skipped_details.push({ external_id, reason: `Invalid correct_answer: ${correct_answer}` });
+                continue;
+              }
+            } else if (q.correct_option_index !== undefined) {
+              correctIndex = q.correct_option_index;
+            }
 
-          questionData.options = options;
-          questionData.correct_option_index = correctIndex;
-          questionData.answer = null;
+            if (correctIndex === null) {
+              skipped++;
+              skipped_details.push({ external_id, reason: "Missing correct_answer or correct_option_index" });
+              continue;
+            }
+
+            questionData.options = options;
+            questionData.correct_option_index = correctIndex;
+            questionData.answer = null;
+          }
         } else if (question_type === "MATCHING") {
           // Handle MATCHING questions
           const leftItems = q.left_column || [];
