@@ -8,6 +8,7 @@ import { useSpacedRepetition } from "@/hooks/useSpacedRepetition";
 import { useXP } from "@/hooks/useXP";
 import { useTopicPerformance } from "@/hooks/useTopicPerformance";
 import { useStudyPreferences } from "@/hooks/useStudyPreferences";
+import { useSubscription } from "@/hooks/useSubscription";
 import { QuestionActions } from "@/components/QuestionActions";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -112,6 +113,7 @@ export default function PracticeQuiz() {
   const { awardXP, currentXP, ConfettiComponent } = useXP();
   const { trackPerformance } = useTopicPerformance();
   const { refetchProfile } = useUserProfile();
+  const { planType } = useSubscription();
   
   // Study preferences hook
   const {
@@ -730,6 +732,26 @@ export default function PracticeQuiz() {
                             Review Flashcards
                           </Button>
                         </div>
+
+                        {/* Upgrade nudges based on plan tier */}
+                        {planType === "free" && (
+                          <UpgradeNudge
+                            type="elite-insights"
+                            message="Get deeper insights and advanced drill modes – upgrade to Pro."
+                            tier="pro"
+                            variant="inline"
+                            className="mt-2"
+                          />
+                        )}
+                        {planType === "pro" && (
+                          <UpgradeNudge
+                            type="elite-insights"
+                            message="Unlock Elite insights and predictive analytics – upgrade to Elite."
+                            tier="elite"
+                            variant="inline"
+                            className="mt-2"
+                          />
+                        )}
                       </CardContent>
                     </Card>
                   );
