@@ -121,14 +121,11 @@ export default function AdminContentImport() {
   // Content Tools Paper Selection
   const [flashcardPaper, setFlashcardPaper] = useState("");
   const [minitestPaper, setMinitestPaper] = useState("");
-  const [mockConfigPaper, setMockConfigPaper] = useState("");
   
   const [flashcardGenerating, setFlashcardGenerating] = useState(false);
   const [flashcardResult, setFlashcardResult] = useState<FlashcardGenerationResult | null>(null);
   const [minitestBuilding, setMinitestBuilding] = useState(false);
   const [minitestResult, setMinitestResult] = useState<MiniTestBuildResult | null>(null);
-  const [mockConfigImporting, setMockConfigImporting] = useState(false);
-  const [mockConfigResult, setMockConfigResult] = useState<MockConfigImportResult | null>(null);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -348,68 +345,6 @@ export default function AdminContentImport() {
     }
   };
 
-  const handleImportMockConfig = async () => {
-    if (!mockConfigPaper) {
-      toast({
-        title: "No Paper Selected",
-        description: "Please select a paper before importing mock config",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setMockConfigImporting(true);
-    setMockConfigResult(null);
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Not authenticated");
-      }
-
-      toast({
-        title: "Importing mock config",
-        description: `Processing ${mockConfigPaper} mock exam templates...`,
-      });
-
-      // Fetch templates from public folder for the selected paper
-      const templateResponse = await fetch(`/data/${mockConfigPaper.toLowerCase()}_assessment_templates.json`);
-      if (!templateResponse.ok) {
-        throw new Error(`No assessment templates found for ${mockConfigPaper}`);
-      }
-      const templateData = await templateResponse.json();
-
-      // Pass templates to edge function
-      const response = await supabase.functions.invoke("import-mock-config", {
-        body: { 
-          paper_code: mockConfigPaper,
-          mock_exams: templateData.mock_exams 
-        },
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
-
-      const result = response.data as MockConfigImportResult;
-      setMockConfigResult(result);
-
-      const action = result.summary.configs_updated > 0 ? "updated" : "created";
-      toast({
-        title: "Mock config imported",
-        description: `${mockConfigPaper} mock exam configuration ${action} successfully`,
-      });
-    } catch (error) {
-      console.error("Error importing mock config:", error);
-      toast({
-        title: "Import failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
-    } finally {
-      setMockConfigImporting(false);
-    }
-  };
 
   const handleSyllabusFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -1017,109 +952,6 @@ export default function AdminContentImport() {
                   </ul>
                 </AlertDescription>
               </Alert>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Import Mock Configuration */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Import Mock Configuration</CardTitle>
-          <CardDescription>
-            Import mock exam settings from templates including duration, total questions, and section structure for full mock exams.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="mockconfig-paper">Select Paper</Label>
-            <Select value={mockConfigPaper} onValueChange={setMockConfigPaper}>
-              <SelectTrigger id="mockconfig-paper">
-                <SelectValue placeholder="Select a paper" />
-              </SelectTrigger>
-              <SelectContent>
-                {papers.map((paper) => (
-                  <SelectItem key={paper.id} value={paper.paper_code}>
-                    {paper.paper_code} - {paper.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-sm text-muted-foreground">
-              This tool reads mock exam templates and configures the mock exam system with duration, question count, and sectional breakdown.
-            </p>
-          </div>
-
-          <Button
-            onClick={handleImportMockConfig}
-            disabled={mockConfigImporting || !mockConfigPaper}
-            className="w-full sm:w-auto"
-          >
-            {mockConfigImporting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Importing...
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                Import {mockConfigPaper || ''} Mock Config
-              </>
-            )}
-          </Button>
-
-          {mockConfigResult && (
-            <Alert>
-              <CheckCircle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="font-semibold mb-2">Import Summary</div>
-                <div className="space-y-1 text-sm">
-                  <div>Configs created: {mockConfigResult.summary.configs_created}</div>
-                  <div>Configs updated: {mockConfigResult.summary.configs_updated}</div>
-                </div>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {mockConfigResult && mockConfigResult.preview.length > 0 && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold">Mock Exam Configuration</h3>
-              <div className="border rounded-lg p-4 space-y-3">
-                {mockConfigResult.preview.map((config, idx) => (
-                  <div key={idx} className="space-y-2">
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div>
-                        <span className="font-medium">Paper:</span> {config.paper_code}
-                      </div>
-                      <div>
-                        <span className="font-medium">Duration:</span> {config.duration_minutes} minutes
-                      </div>
-                      <div>
-                        <span className="font-medium">Total Questions:</span> {config.total_questions}
-                      </div>
-                      <div>
-                        <span className="font-medium">Pass Mark:</span> {config.pass_mark_percentage}%
-                      </div>
-                    </div>
-                    
-                    {config.sections && config.sections.length > 0 && (
-                      <div className="mt-2">
-                        <div className="font-medium text-sm mb-1">Sections:</div>
-                        <div className="space-y-1">
-                          {config.sections.map((section: any, sIdx: number) => (
-                            <div key={sIdx} className="text-xs bg-muted p-2 rounded">
-                              <div className="font-medium">{section.name}</div>
-                              <div className="text-muted-foreground">
-                                {section.num_questions} questions • Units: {section.focus_units?.join(", ")}
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                ))}
-              </div>
             </div>
           )}
         </CardContent>
