@@ -488,21 +488,6 @@ export default function AdminContentImport() {
     }
   };
 
-  const downloadSkippedQuestions = (skippedQuestions: any[]) => {
-    const csv = [
-      "Row,Error,Data",
-      ...errors.map(e => `${e.row},"${e.error}","${e.data}"`)
-    ].join("\n");
-
-    const blob = new Blob([csv], { type: "text/csv" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = filename;
-    a.click();
-    URL.revokeObjectURL(url);
-  };
-
   const downloadSkippedQuestions = (skipped: Array<{ external_id: string; error_reason: string }>, filename: string) => {
     const errorLog = skipped.map(err => 
       `External ID: ${err.external_id}\nReason: ${err.error_reason}\n---`
@@ -588,7 +573,16 @@ export default function AdminContentImport() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => downloadErrorLog(syllabusErrors, "syllabus-import-errors.csv")}
+                onClick={() => {
+                  const csv = syllabusErrors.map(e => `${e.row},${e.error},${e.data}`).join('\n');
+                  const blob = new Blob([csv], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = "syllabus-import-errors.csv";
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download Error Log
@@ -690,7 +684,16 @@ export default function AdminContentImport() {
               <Button
                 variant="outline"
                 size="sm"
-                onClick={() => downloadErrorLog(mockErrors, "mock-config-import-errors.csv")}
+                onClick={() => {
+                  const csv = mockErrors.map(e => `${e.row},${e.error},${e.data}`).join('\n');
+                  const blob = new Blob([csv], { type: 'text/csv' });
+                  const url = URL.createObjectURL(blob);
+                  const a = document.createElement('a');
+                  a.href = url;
+                  a.download = "mock-config-import-errors.csv";
+                  a.click();
+                  URL.revokeObjectURL(url);
+                }}
               >
                 <Download className="mr-2 h-4 w-4" />
                 Download Error Log
@@ -722,212 +725,6 @@ export default function AdminContentImport() {
                     ))}
                   </TableBody>
                 </Table>
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* FA Question Bank Import */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Import FA Question Bank (JSON)</CardTitle>
-          <CardDescription>
-            Upload a JSON file containing FA questions. The file should contain external_id, unit_code, question_type, stem, options, correct_answer, difficulty, and optional fields.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="fa-question-file">JSON File</Label>
-            <Input
-              id="fa-question-file"
-              type="file"
-              accept=".json"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  try {
-                    const content = await file.text();
-                    setFaQuestionContent(content);
-                    setFaQuestionFileName(file.name);
-                    toast({
-                      title: "File loaded",
-                      description: `${file.name} is ready to import`,
-                    });
-                  } catch (error) {
-                    toast({
-                      title: "Error reading file",
-                      description: error instanceof Error ? error.message : "Unknown error",
-                      variant: "destructive",
-                    });
-                  }
-                }
-              }}
-            />
-          </div>
-
-          <Button
-            onClick={handleFaQuestionImport}
-            disabled={!faQuestionContent || faQuestionLoading}
-            className="w-full sm:w-auto"
-          >
-            {faQuestionLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Importing...
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                Import FA Questions
-              </>
-            )}
-          </Button>
-
-          {faQuestionResult && (
-            <Alert>
-              <CheckCircle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="font-semibold mb-2">Import Summary</div>
-                <div className="space-y-1 text-sm">
-                  <div>Total questions: {faQuestionResult.summary.total_questions}</div>
-                  <div>Inserted: {faQuestionResult.summary.inserted_count}</div>
-                  <div>Updated: {faQuestionResult.summary.updated_count}</div>
-                  <div>Skipped: {faQuestionResult.summary.skipped_count}</div>
-                </div>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {faQuestionResult && faQuestionResult.skipped.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-orange-600">
-                <AlertCircle className="h-5 w-5" />
-                <span>{faQuestionResult.skipped.length} questions skipped</span>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => downloadSkippedQuestions(faQuestionResult.skipped, "fa-import-errors.txt")}
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download Error Log
-              </Button>
-              <div className="max-h-60 overflow-y-auto bg-muted p-3 rounded text-xs space-y-2">
-                {faQuestionResult.skipped.slice(0, 10).map((err, idx) => (
-                  <div key={idx} className="border-b border-border pb-2">
-                    <div className="font-semibold">ID: {err.external_id}</div>
-                    <div className="text-muted-foreground">{err.error_reason}</div>
-                  </div>
-                ))}
-                {faQuestionResult.skipped.length > 10 && (
-                  <div className="text-muted-foreground italic">
-                    ...and {faQuestionResult.skipped.length - 10} more (download full log)
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* FM Question Bank Import */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Import FM Question Bank (JSON)</CardTitle>
-          <CardDescription>
-            Upload a JSON file containing FM questions. The file should contain external_id, unit_code, question_type, stem, options, correct_answer, difficulty, and optional fields.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="fm-question-file">JSON File</Label>
-            <Input
-              id="fm-question-file"
-              type="file"
-              accept=".json"
-              onChange={async (e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  try {
-                    const content = await file.text();
-                    setFmQuestionContent(content);
-                    setFmQuestionFileName(file.name);
-                    toast({
-                      title: "File loaded",
-                      description: `${file.name} is ready to import`,
-                    });
-                  } catch (error) {
-                    toast({
-                      title: "Error reading file",
-                      description: error instanceof Error ? error.message : "Unknown error",
-                      variant: "destructive",
-                    });
-                  }
-                }
-              }}
-            />
-          </div>
-
-          <Button
-            onClick={handleFmQuestionImport}
-            disabled={!fmQuestionContent || fmQuestionLoading}
-            className="w-full sm:w-auto"
-          >
-            {fmQuestionLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Importing...
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                Import FM Questions
-              </>
-            )}
-          </Button>
-
-          {fmQuestionResult && (
-            <Alert>
-              <CheckCircle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="font-semibold mb-2">Import Summary</div>
-                <div className="space-y-1 text-sm">
-                  <div>Total questions: {fmQuestionResult.summary.total_questions}</div>
-                  <div>Inserted: {fmQuestionResult.summary.inserted_count}</div>
-                  <div>Updated: {fmQuestionResult.summary.updated_count}</div>
-                  <div>Skipped: {fmQuestionResult.summary.skipped_count}</div>
-                </div>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {fmQuestionResult && fmQuestionResult.skipped.length > 0 && (
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-orange-600">
-                <AlertCircle className="h-5 w-5" />
-                <span>{fmQuestionResult.skipped.length} questions skipped</span>
-              </div>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => downloadSkippedQuestions(fmQuestionResult.skipped, "fm-import-errors.txt")}
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download Error Log
-              </Button>
-              <div className="max-h-60 overflow-y-auto bg-muted p-3 rounded text-xs space-y-2">
-                {fmQuestionResult.skipped.slice(0, 10).map((err, idx) => (
-                  <div key={idx} className="border-b border-border pb-2">
-                    <div className="font-semibold">ID: {err.external_id}</div>
-                    <div className="text-muted-foreground">{err.error_reason}</div>
-                  </div>
-                ))}
-                {fmQuestionResult.skipped.length > 10 && (
-                  <div className="text-muted-foreground italic">
-                    ...and {fmQuestionResult.skipped.length - 10} more (download full log)
-                  </div>
-                )}
               </div>
             </div>
           )}
