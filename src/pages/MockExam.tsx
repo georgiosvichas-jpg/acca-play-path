@@ -318,7 +318,7 @@ export default function MockExam() {
     }
 
     // Calculation
-    if (type === "CALCULATION") {
+    if (type === "CALCULATION" || type === "NUMERIC") {
       const correctAnswer = parseFloat(question.answer || "0");
       const tolerance = question.metadata?.tolerance || 0;
       const userAnswer = parseFloat(answer);

@@ -168,7 +168,7 @@ export function QuestionRenderer({
   }
 
   // Calculation
-  if (question.type === "CALCULATION") {
+  if (question.type === "CALCULATION" || question.type === "NUMERIC") {
     const metadata = question.metadata || {};
     return (
       <div className="space-y-4">
