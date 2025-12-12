@@ -1,60 +1,45 @@
 {
   "paper": "FM",
-  "description": "Mini-test templates for ACCA FM covering available question units (33 questions total covering advanced topics)",
+  "description": "Mini-test templates for ACCA FM covering foundational units FM01-FM03 (18 questions total)",
   "mini_tests": [
     {
       "id": "FM_MINI_1",
-      "title": "FM Mini Test 1 – Advanced Topics Mix 1",
-      "target_units": ["FM71", "FM76", "FM81", "FM86"],
-      "question_count": 8,
+      "title": "FM Mini Test 1 – Financial Objectives & Governance",
+      "target_units": ["FM01"],
+      "question_count": 5,
       "format": "MCQ",
       "notes_for_agent": [
-        "Mixed advanced topics from available questions",
-        "Cover units FM71, FM76, FM81, FM86"
+        "Covers shareholder wealth maximization, agency problem, EPS, ROCE, financial risk"
       ]
     },
     {
       "id": "FM_MINI_2",
-      "title": "FM Mini Test 2 – Advanced Topics Mix 2",
-      "target_units": ["FM91", "FM92", "FM96"],
-      "question_count": 6,
+      "title": "FM Mini Test 2 – Financial Markets & Risk",
+      "target_units": ["FM02"],
+      "question_count": 5,
       "format": "MCQ",
       "notes_for_agent": [
-        "Advanced topics from units FM91, FM92, FM96"
+        "Financial markets roles, EMH, systematic vs unsystematic risk, money markets"
       ]
     },
     {
       "id": "FM_MINI_3",
-      "title": "FM Mini Test 3 – Advanced Performance & Strategy",
-      "target_units": ["FM103", "FM106", "FM107", "FM108"],
-      "question_count": 8,
+      "title": "FM Mini Test 3 – Working Capital Management",
+      "target_units": ["FM03"],
+      "question_count": 2,
       "format": "MCQ",
       "notes_for_agent": [
-        "Advanced performance metrics and value drivers",
-        "International capital budgeting and treasury",
-        "Modelling frameworks"
+        "Working capital definition, current assets"
       ]
     },
     {
       "id": "FM_MINI_4",
-      "title": "FM Mini Test 4 – M&A and Enterprise Value",
-      "target_units": ["FM109", "FM110"],
-      "question_count": 11,
+      "title": "FM Mini Test 4 – Comprehensive FM Foundations",
+      "target_units": ["FM01", "FM02", "FM03"],
+      "question_count": 10,
       "format": "MCQ",
       "notes_for_agent": [
-        "Strategic M&A finance and deal design",
-        "Integrated enterprise value management"
-      ]
-    },
-    {
-      "id": "FM_MINI_5",
-      "title": "FM Mini Test 5 – Comprehensive Advanced Review",
-      "target_units": ["FM71", "FM76", "FM81", "FM86", "FM91", "FM92", "FM96", "FM103", "FM106", "FM107", "FM108", "FM109", "FM110"],
-      "question_count": 15,
-      "format": "MCQ",
-      "notes_for_agent": [
-        "Comprehensive review across all available FM units",
-        "Mix of all advanced topics"
+        "Comprehensive review across all foundational FM topics"
       ]
     }
   ],
