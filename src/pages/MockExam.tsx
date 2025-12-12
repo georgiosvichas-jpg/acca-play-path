@@ -9,7 +9,7 @@ import { useFeatureAccess } from "@/hooks/useFeatureAccess";
 import { useTopicPerformance } from "@/hooks/useTopicPerformance";
 import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 import { useBookmarks } from "@/hooks/useBookmarks";
-import { useMockConfigs } from "@/hooks/useMockConfigs";
+
 import { QuestionActions } from "@/components/QuestionActions";
 import { QuestionRenderer } from "@/components/QuestionRenderer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -82,11 +82,6 @@ export default function MockExam() {
     isBookmarked,
     toggleBookmark
   } = useBookmarks();
-  
-  // Mock configs hook
-  const { data: mockConfigs = [], isLoading: mocksLoading } = useMockConfigs(selectedPaper);
-  const [selectedMockId, setSelectedMockId] = useState<string | null>(null);
-  const selectedMock = mockConfigs.find(m => m.mock_id === selectedMockId);
   
   const [examLength, setExamLength] = useState<"quick" | "half" | "full">("full");
   const [showHistory, setShowHistory] = useState(false);
@@ -230,43 +225,20 @@ export default function MockExam() {
       return;
     }
 
-    // Determine exam parameters (use mock config if selected, otherwise use exam length)
-    let numQuestions: number;
-    let minutes: number;
-    
-    if (selectedMock) {
-      // Use mock config parameters
-      numQuestions = selectedMock.total_questions;
-      minutes = selectedMock.duration_minutes;
-    } else {
-      // Use standard exam length config
-      const examConfig = {
-        quick: {
-          questions: 15,
-          minutes: 36
-        },
-        half: {
-          questions: 25,
-          minutes: 60
-        },
-        full: {
-          questions: 50,
-          minutes: 120
-        }
-      };
-      const config = examConfig[examLength];
-      numQuestions = config.questions;
-      minutes = config.minutes;
-    }
-    
+    // Determine exam parameters from exam length
+    const examConfig = {
+      quick: { questions: 15, minutes: 36 },
+      half: { questions: 25, minutes: 60 },
+      full: { questions: 50, minutes: 120 }
+    };
+    const config = examConfig[examLength];
+    const numQuestions = config.questions;
+    const minutes = config.minutes;
     const timeInSeconds = minutes * 60;
     
     try {
       // Use content-batch to fetch questions (all types)
-      const {
-        data,
-        error
-      } = await supabase.functions.invoke("content-batch", {
+      const { data, error } = await supabase.functions.invoke("content-batch", {
         body: {
           paper: selectedPaper,
           size: numQuestions
@@ -289,8 +261,7 @@ export default function MockExam() {
       // Increment usage counter
       await incrementMockUsage();
       
-      const mockVariantMsg = selectedMock ? ` (${selectedMock.title})` : "";
-      toast.success(`Mock exam started${mockVariantMsg}! ${numQuestions} questions, ${minutes} minutes. Good luck!`);
+      toast.success(`Mock exam started! ${numQuestions} questions, ${minutes} minutes. Good luck!`);
     } catch (error) {
       console.error("Error starting exam:", error);
       toast.error("Failed to start exam");
@@ -545,10 +516,7 @@ export default function MockExam() {
                     {/* Paper Selection */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Select Paper</label>
-                      <Select value={selectedPaper} onValueChange={(value) => {
-                        setSelectedPaper(value);
-                        setSelectedMockId(null); // Reset mock selection
-                      }}>
+                      <Select value={selectedPaper} onValueChange={setSelectedPaper}>
                         <SelectTrigger>
                           <SelectValue placeholder="Choose paper..." />
                         </SelectTrigger>
@@ -560,130 +528,7 @@ export default function MockExam() {
                       </Select>
                     </div>
 
-                    {/* Mock Variant Selection */}
-                    {mockConfigs.length > 0 && (
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Mock Variant (Optional)</label>
-                        <Select value={selectedMockId || "default"} onValueChange={(value) => setSelectedMockId(value === "default" ? null : value)}>
-                          <SelectTrigger>
-                            <SelectValue placeholder="Choose mock variant..." />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="default">Standard Mock (Balanced)</SelectItem>
-                            {mockConfigs.map(mock => (
-                              <SelectItem key={mock.mock_id} value={mock.mock_id}>
-                                {mock.title}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    )}
-
-                    {/* Mock Config Metadata Card */}
-                    {selectedMock && (
-                      <Card className="border-primary/20 bg-primary/5">
-                        <CardHeader className="pb-3">
-                          <CardTitle className="text-base">{selectedMock.title}</CardTitle>
-                          {selectedMock.description && (
-                            <CardDescription>{selectedMock.description}</CardDescription>
-                          )}
-                        </CardHeader>
-                        <CardContent className="space-y-3">
-                          <div className="grid grid-cols-2 gap-3 text-sm">
-                            <div>
-                              <span className="text-muted-foreground">Duration:</span>
-                              <span className="ml-2 font-medium">{selectedMock.duration_minutes} min</span>
-                            </div>
-                            <div>
-                              <span className="text-muted-foreground">Questions:</span>
-                              <span className="ml-2 font-medium">{selectedMock.total_questions}</span>
-                            </div>
-                          </div>
-                          
-                          {(selectedMock.easy_ratio || selectedMock.medium_ratio || selectedMock.hard_ratio) && (
-                            <div className="space-y-2">
-                              <div className="text-sm font-medium">Difficulty Distribution</div>
-                              <div className="flex gap-1 h-6 rounded overflow-hidden">
-                                {selectedMock.easy_ratio && (
-                                  <div 
-                                    className="bg-green-500 flex items-center justify-center text-xs text-white font-medium"
-                                    style={{ width: `${selectedMock.easy_ratio}%` }}
-                                  >
-                                    {selectedMock.easy_ratio}%
-                                  </div>
-                                )}
-                                {selectedMock.medium_ratio && (
-                                  <div 
-                                    className="bg-yellow-500 flex items-center justify-center text-xs text-white font-medium"
-                                    style={{ width: `${selectedMock.medium_ratio}%` }}
-                                  >
-                                    {selectedMock.medium_ratio}%
-                                  </div>
-                                )}
-                                {selectedMock.hard_ratio && (
-                                  <div 
-                                    className="bg-red-500 flex items-center justify-center text-xs text-white font-medium"
-                                    style={{ width: `${selectedMock.hard_ratio}%` }}
-                                  >
-                                    {selectedMock.hard_ratio}%
-                                  </div>
-                                )}
-                              </div>
-                              <div className="flex gap-3 text-xs text-muted-foreground">
-                                {selectedMock.easy_ratio && <span>🟢 Easy</span>}
-                                {selectedMock.medium_ratio && <span>🟡 Medium</span>}
-                                {selectedMock.hard_ratio && <span>🔴 Hard</span>}
-                              </div>
-                            </div>
-                          )}
-
-                          {selectedMock.unit_scope && selectedMock.unit_scope.length > 0 && (
-                            <div className="space-y-2">
-                              <div className="text-sm font-medium">Focus Units</div>
-                              <div className="flex flex-wrap gap-1.5">
-                                {selectedMock.unit_scope.slice(0, 8).map(unit => (
-                                  <Badge key={unit} variant="secondary" className="text-xs">
-                                    {unit}
-                                  </Badge>
-                                ))}
-                                {selectedMock.unit_scope.length > 8 && (
-                                  <Badge variant="secondary" className="text-xs">
-                                    +{selectedMock.unit_scope.length - 8} more
-                                  </Badge>
-                                )}
-                              </div>
-                            </div>
-                          )}
-                        </CardContent>
-                      </Card>
-                    )}
-
-                    {/* Exam Length Selection (only when no mock selected) */}
-                    {!selectedMock && (
-                      <div className="space-y-2">
-                        <label className="text-sm font-medium">Exam Length</label>
-                        <div className="grid grid-cols-3 gap-3">
-                          <button onClick={() => setExamLength("quick")} className={`p-4 rounded-lg border-2 transition-all ${examLength === "quick" ? "border-primary bg-primary/10" : "border-muted hover:border-muted-foreground/50"}`}>
-                            <div className="font-semibold">Quick</div>
-                            <div className="text-sm text-muted-foreground">15 Questions</div>
-                            <div className="text-xs text-muted-foreground">36 minutes</div>
-                          </button>
-                          <button onClick={() => setExamLength("half")} className={`p-4 rounded-lg border-2 transition-all ${examLength === "half" ? "border-primary bg-primary/10" : "border-muted hover:border-muted-foreground/50"}`}>
-                            <div className="font-semibold">Half</div>
-                            <div className="text-sm text-muted-foreground">25 Questions</div>
-                            <div className="text-xs text-muted-foreground">60 minutes</div>
-                          </button>
-                          <button onClick={() => setExamLength("full")} className={`p-4 rounded-lg border-2 transition-all ${examLength === "full" ? "border-primary bg-primary/10" : "border-muted hover:border-muted-foreground/50"}`}>
-                            <div className="font-semibold">Full</div>
-                            <div className="text-sm text-muted-foreground">50 Questions</div>
-                            <div className="text-xs text-muted-foreground">120 minutes</div>
-                          </button>
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Exam Rules */}
+                    {/* Exam Length Selection */}
                     <div className="space-y-2">
                       <label className="text-sm font-medium">Exam Length</label>
                       <div className="grid grid-cols-3 gap-3">
@@ -723,23 +568,11 @@ export default function MockExam() {
                     <div className="bg-muted p-4 rounded-lg space-y-2">
                       <h3 className="font-semibold">What to expect:</h3>
                       <ul className="list-disc ml-6 space-y-1 text-sm">
-                        {selectedMock ? (
-                          <>
-                            <li>Questions from {selectedMock.unit_scope && selectedMock.unit_scope.length > 0 ? `${selectedMock.unit_scope.length} targeted units` : `all ${selectedPaper} units`}</li>
-                            <li>{selectedMock.easy_ratio && selectedMock.medium_ratio && selectedMock.hard_ratio ? `Difficulty: ${selectedMock.easy_ratio}% easy, ${selectedMock.medium_ratio}% medium, ${selectedMock.hard_ratio}% hard` : "Balanced difficulty levels"}</li>
-                            <li>{selectedMock.total_questions} questions in {selectedMock.duration_minutes} minutes</li>
-                            <li>Mixed question formats (MCQ, calculations, scenario questions)</li>
-                            <li>Detailed results after submission</li>
-                          </>
-                        ) : (
-                          <>
-                            <li>Questions cover all {selectedPaper} units</li>
-                            <li>Mixed difficulty levels</li>
-                            <li>Mixed question formats (MCQ, calculations, scenario questions)</li>
-                            <li>Realistic exam format</li>
-                            <li>Detailed results after submission</li>
-                          </>
-                        )}
+                        <li>Questions cover all {selectedPaper} units</li>
+                        <li>Mixed difficulty levels</li>
+                        <li>Mixed question formats (MCQ, calculations, scenario questions)</li>
+                        <li>Realistic exam format</li>
+                        <li>Detailed results after submission</li>
                       </ul>
                     </div>
                   </>)}
