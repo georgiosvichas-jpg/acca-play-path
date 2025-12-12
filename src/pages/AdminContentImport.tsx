@@ -7,10 +7,9 @@ import { Alert, AlertDescription } from "@/components/ui/alert";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { usePapers } from "@/hooks/usePapers";
-import { Loader2, Upload, CheckCircle, AlertCircle, Download } from "lucide-react";
+import { Loader2, Upload, CheckCircle, AlertCircle } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import FormulaCardImporter from "@/components/FormulaCardImporter";
 
 interface ImportSummary {
   total: number;
@@ -24,13 +23,6 @@ interface ImportError {
   row: number;
   error: string;
   data: string;
-}
-
-interface MockConfigPreview {
-  paper_code: string;
-  duration_minutes: number;
-  total_questions: number;
-  pass_mark_percentage: number;
 }
 
 interface SyllabusUnitPreview {
@@ -81,34 +73,14 @@ interface MiniTestBuildResult {
   };
 }
 
-interface MockConfigImportResult {
-  success: boolean;
-  summary: {
-    configs_created: number;
-    configs_updated: number;
-  };
-  preview: Array<{
-    paper_code: string;
-    duration_minutes: number;
-    total_questions: number;
-    pass_mark_percentage: number;
-    sections: any[];
-  }>;
-}
-
 export default function AdminContentImport() {
   const { toast } = useToast();
   const { papers } = usePapers();
   
   const [syllabusFile, setSyllabusFile] = useState<File | null>(null);
-  const [mockFile, setMockFile] = useState<File | null>(null);
   const [syllabusLoading, setSyllabusLoading] = useState(false);
-  const [mockLoading, setMockLoading] = useState(false);
   const [syllabusSummary, setSyllabusSummary] = useState<ImportSummary | null>(null);
   const [syllabusErrors, setSyllabusErrors] = useState<ImportError[]>([]);
-  const [mockSummary, setMockSummary] = useState<ImportSummary | null>(null);
-  const [mockErrors, setMockErrors] = useState<ImportError[]>([]);
-  const [mockConfigs, setMockConfigs] = useState<MockConfigPreview[]>([]);
   const [syllabusUnits, setSyllabusUnits] = useState<SyllabusUnitPreview[]>([]);
   
   // Unified Question Import State
@@ -177,59 +149,6 @@ export default function AdminContentImport() {
       });
     } finally {
       setSyllabusLoading(false);
-    }
-  };
-
-  const handleMockImport = async () => {
-    if (!mockFile) {
-      toast({
-        title: "No file selected",
-        description: "Please select a CSV file to import",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setMockLoading(true);
-    setMockSummary(null);
-    setMockErrors([]);
-    setMockConfigs([]);
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Not authenticated");
-      }
-
-      const formData = new FormData();
-      formData.append("file", mockFile);
-
-      const response = await supabase.functions.invoke("import-mock-config", {
-        body: formData,
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
-
-      const result = response.data;
-      setMockSummary(result.summary);
-      setMockErrors(result.errors || []);
-      setMockConfigs(result.configs || []);
-
-      toast({
-        title: "Import completed",
-        description: `${result.summary.inserted} inserted, ${result.summary.updated} updated, ${result.summary.skipped} skipped`,
-      });
-    } catch (error) {
-      console.error("Error importing mock config:", error);
-      toast({
-        title: "Import failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
-    } finally {
-      setMockLoading(false);
     }
   };
 
@@ -344,7 +263,6 @@ export default function AdminContentImport() {
       setMinitestBuilding(false);
     }
   };
-
 
   const handleSyllabusFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -520,7 +438,7 @@ export default function AdminContentImport() {
     <div className="container mx-auto py-8 space-y-8">
       <div>
         <h1 className="text-3xl font-bold mb-2">Admin Content Import</h1>
-        <p className="text-muted-foreground">Import syllabus units and mock exam configurations</p>
+        <p className="text-muted-foreground">Import syllabus units and question banks</p>
       </div>
 
       {/* Syllabus Units Import */}
@@ -654,7 +572,7 @@ export default function AdminContentImport() {
                       <Button
                         variant="outline"
                         size="sm"
-                        onClick={() => downloadSkippedQuestions(questionResult.skipped_details)}
+                        onClick={() => downloadSkippedQuestions(questionResult.skipped_details!)}
                         className="mt-2"
                       >
                         Download Skipped Questions Log
@@ -664,117 +582,6 @@ export default function AdminContentImport() {
                 </div>
               </AlertDescription>
             </Alert>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Mock Config Import */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Import Mock Exam Configuration</CardTitle>
-          <CardDescription>
-            Upload a CSV file to configure mock exams for each paper. Required columns: paper_code, duration_minutes, total_questions
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="mock-file">CSV File</Label>
-            <Input
-              id="mock-file"
-              type="file"
-              accept=".csv"
-              onChange={(e) => setMockFile(e.target.files?.[0] || null)}
-            />
-          </div>
-
-          <Button
-            onClick={handleMockImport}
-            disabled={!mockFile || mockLoading}
-            className="w-full sm:w-auto"
-          >
-            {mockLoading ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Importing...
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                Import Mock Config
-              </>
-            )}
-          </Button>
-
-          {mockSummary && (
-            <Alert>
-              <CheckCircle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="font-semibold mb-2">Import Summary</div>
-                <div className="space-y-1 text-sm">
-                  <div>Total rows: {mockSummary.total}</div>
-                  <div>Inserted: {mockSummary.inserted}</div>
-                  <div>Updated: {mockSummary.updated}</div>
-                  <div>Skipped: {mockSummary.skipped}</div>
-                  <div>Errors: {mockSummary.errors}</div>
-                </div>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {mockErrors.length > 0 && (
-            <div className="space-y-2">
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  {mockErrors.length} rows had errors during import
-                </AlertDescription>
-              </Alert>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={() => {
-                  const csv = mockErrors.map(e => `${e.row},${e.error},${e.data}`).join('\n');
-                  const blob = new Blob([csv], { type: 'text/csv' });
-                  const url = URL.createObjectURL(blob);
-                  const a = document.createElement('a');
-                  a.href = url;
-                  a.download = "mock-config-import-errors.csv";
-                  a.click();
-                  URL.revokeObjectURL(url);
-                }}
-              >
-                <Download className="mr-2 h-4 w-4" />
-                Download Error Log
-              </Button>
-            </div>
-          )}
-
-          {mockConfigs.length > 0 && (
-            <div className="space-y-2">
-              <h3 className="text-sm font-semibold">Imported Configurations</h3>
-              <div className="border rounded-lg overflow-hidden">
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Paper Code</TableHead>
-                      <TableHead>Duration (min)</TableHead>
-                      <TableHead>Total Questions</TableHead>
-                      <TableHead>Pass Mark %</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {mockConfigs.map((config) => (
-                      <TableRow key={config.paper_code}>
-                        <TableCell className="font-medium">{config.paper_code}</TableCell>
-                        <TableCell>{config.duration_minutes}</TableCell>
-                        <TableCell>{config.total_questions}</TableCell>
-                        <TableCell>{config.pass_mark_percentage}%</TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-              </div>
-            </div>
           )}
         </CardContent>
       </Card>
@@ -946,8 +753,8 @@ export default function AdminContentImport() {
                 <AlertDescription>
                   <div className="font-semibold mb-2">Warnings/Errors</div>
                   <ul className="text-sm space-y-1">
-                    {minitestResult.summary.errors.map((error, idx) => (
-                      <li key={idx}>• {error}</li>
+                    {minitestResult.summary.errors.map((err, i) => (
+                      <li key={i}>• {err}</li>
                     ))}
                   </ul>
                 </AlertDescription>
@@ -956,9 +763,6 @@ export default function AdminContentImport() {
           )}
         </CardContent>
       </Card>
-
-      {/* Formula Card Importer */}
-      <FormulaCardImporter />
     </div>
   );
 }
