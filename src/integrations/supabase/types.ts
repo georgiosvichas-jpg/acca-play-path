@@ -1030,6 +1030,40 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_random_questions: {
+        Args: {
+          p_difficulty?: string
+          p_paper: string
+          p_size: number
+          p_type?: string
+          p_unit_code?: string
+        }
+        Returns: {
+          answer: string | null
+          correct_option_index: number | null
+          created_at: string | null
+          difficulty: string | null
+          estimated_time_seconds: number | null
+          explanation: string | null
+          external_id: string | null
+          id: string
+          is_active: boolean | null
+          learning_outcome_code: string | null
+          metadata: Json | null
+          options: Json | null
+          paper: string
+          question: string
+          tags: Json | null
+          type: string
+          unit_code: string | null
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "sb_questions"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
       get_user_leaderboard_rank: {
         Args: { p_user_id: string }
         Returns: {

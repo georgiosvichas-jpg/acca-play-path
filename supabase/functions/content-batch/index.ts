@@ -43,27 +43,30 @@ serve(async (req) => {
 
     const { paper, unit_code, type, difficulty, size } = validation.data;
 
-    // Build query
-    let query = supabaseClient
-      .from("sb_questions")
-      .select("*")
-      .eq("paper", paper);
+    console.log(`Fetching ${size} random questions for paper ${paper}, unit: ${unit_code || 'all'}, type: ${type || 'all'}, difficulty: ${difficulty || 'all'}`);
 
-    if (unit_code) query = query.eq("unit_code", unit_code);
-    if (type) query = query.eq("type", type);
-    if (difficulty) query = query.eq("difficulty", difficulty);
+    // Use RPC function for true database-level random sampling
+    const { data: questions, error } = await supabaseClient.rpc('get_random_questions', {
+      p_paper: paper,
+      p_size: size,
+      p_unit_code: unit_code || null,
+      p_type: type || null,
+      p_difficulty: difficulty || null
+    });
 
-    // Get questions (fetch more than needed for randomization)
-    const { data: questions, error } = await query.limit(size * 5);
+    if (error) {
+      console.error("RPC error:", error);
+      throw error;
+    }
 
-    if (error) throw error;
+    // Log question type distribution for debugging
+    const typeDistribution = questions?.reduce((acc: Record<string, number>, q: any) => {
+      acc[q.type] = (acc[q.type] || 0) + 1;
+      return acc;
+    }, {}) || {};
+    console.log(`Fetched ${questions?.length || 0} questions. Type distribution:`, typeDistribution);
 
-    // Shuffle and limit to requested size
-    const shuffled = questions?.sort(() => Math.random() - 0.5).slice(0, size) || [];
-
-    console.log(`Fetched ${shuffled.length} questions for paper ${paper}`);
-
-    return new Response(JSON.stringify(shuffled), {
+    return new Response(JSON.stringify(questions || []), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (error) {
