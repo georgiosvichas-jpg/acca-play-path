@@ -64,15 +64,6 @@ interface FlashcardGenerationResult {
   }>;
 }
 
-interface MiniTestBuildResult {
-  success: boolean;
-  summary: {
-    tests_created: number;
-    questions_per_test: Record<string, number>;
-    errors: string[];
-  };
-}
-
 export default function AdminContentImport() {
   const { toast } = useToast();
   const { papers } = usePapers();
@@ -92,12 +83,9 @@ export default function AdminContentImport() {
   
   // Content Tools Paper Selection
   const [flashcardPaper, setFlashcardPaper] = useState("");
-  const [minitestPaper, setMinitestPaper] = useState("");
   
   const [flashcardGenerating, setFlashcardGenerating] = useState(false);
   const [flashcardResult, setFlashcardResult] = useState<FlashcardGenerationResult | null>(null);
-  const [minitestBuilding, setMinitestBuilding] = useState(false);
-  const [minitestResult, setMinitestResult] = useState<MiniTestBuildResult | null>(null);
 
   const handleSyllabusImport = async () => {
     if (!syllabusFile) {
@@ -203,66 +191,6 @@ export default function AdminContentImport() {
     }
   };
 
-  const handleBuildMinitests = async () => {
-    if (!minitestPaper) {
-      toast({
-        title: "No Paper Selected",
-        description: "Please select a paper before building mini tests",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    setMinitestBuilding(true);
-    setMinitestResult(null);
-
-    try {
-      const { data: { session } } = await supabase.auth.getSession();
-      if (!session) {
-        throw new Error("Not authenticated");
-      }
-
-      toast({
-        title: "Building mini tests",
-        description: `Processing templates and selecting ${minitestPaper} questions...`,
-      });
-
-      // Load template file for the selected paper
-      const templateResponse = await fetch(`/data/${minitestPaper.toLowerCase()}_assessment_templates.json`);
-      if (!templateResponse.ok) {
-        throw new Error(`No assessment templates found for ${minitestPaper}`);
-      }
-      const templateData = await templateResponse.json();
-
-      const response = await supabase.functions.invoke("build-minitests", {
-        body: { 
-          paper_code: minitestPaper,
-          mini_tests: templateData.mini_tests 
-        },
-      });
-
-      if (response.error) {
-        throw response.error;
-      }
-
-      const result = response.data as MiniTestBuildResult;
-      setMinitestResult(result);
-
-      toast({
-        title: "Mini tests created",
-        description: `${result.summary.tests_created} tests built successfully`,
-      });
-    } catch (error) {
-      console.error("Error building mini tests:", error);
-      toast({
-        title: "Build failed",
-        description: error instanceof Error ? error.message : "Unknown error",
-        variant: "destructive",
-      });
-    } finally {
-      setMinitestBuilding(false);
-    }
-  };
 
   const handleSyllabusFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -683,86 +611,6 @@ export default function AdminContentImport() {
         </CardContent>
       </Card>
 
-      {/* Auto-Build Mini Tests */}
-      <Card>
-        <CardHeader>
-          <CardTitle>Auto-Build Mini Tests</CardTitle>
-          <CardDescription>
-            Automatically create mini tests from templates by randomly sampling questions from target syllabus units.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="space-y-2">
-            <Label htmlFor="minitest-paper">Select Paper</Label>
-            <Select value={minitestPaper} onValueChange={setMinitestPaper}>
-              <SelectTrigger id="minitest-paper">
-                <SelectValue placeholder="Select a paper" />
-              </SelectTrigger>
-              <SelectContent>
-                {papers.map((paper) => (
-                  <SelectItem key={paper.id} value={paper.paper_code}>
-                    {paper.paper_code} - {paper.title}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <p className="text-sm text-muted-foreground">
-              This tool uses assessment templates to create curated mini tests. Each test targets specific units with recommended timing.
-            </p>
-          </div>
-
-          <Button
-            onClick={handleBuildMinitests}
-            disabled={minitestBuilding || !minitestPaper}
-            className="w-full sm:w-auto"
-          >
-            {minitestBuilding ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Building Tests...
-              </>
-            ) : (
-              <>
-                <Upload className="mr-2 h-4 w-4" />
-                Build {minitestPaper || ''} Mini Tests
-              </>
-            )}
-          </Button>
-
-          {minitestResult && (
-            <Alert>
-              <CheckCircle className="h-4 w-4" />
-              <AlertDescription>
-                <div className="font-semibold mb-2">Build Summary</div>
-                <div className="space-y-1 text-sm">
-                  <div>Tests created: {minitestResult.summary.tests_created}</div>
-                  {Object.entries(minitestResult.summary.questions_per_test).map(([title, count]) => (
-                    <div key={title} className="ml-4">
-                      • {title}: {count} questions
-                    </div>
-                  ))}
-                </div>
-              </AlertDescription>
-            </Alert>
-          )}
-
-          {minitestResult && minitestResult.summary.errors.length > 0 && (
-            <div className="space-y-2">
-              <Alert variant="destructive">
-                <AlertCircle className="h-4 w-4" />
-                <AlertDescription>
-                  <div className="font-semibold mb-2">Warnings/Errors</div>
-                  <ul className="text-sm space-y-1">
-                    {minitestResult.summary.errors.map((err, i) => (
-                      <li key={i}>• {err}</li>
-                    ))}
-                  </ul>
-                </AlertDescription>
-              </Alert>
-            </div>
-          )}
-        </CardContent>
-      </Card>
     </div>
   );
 }
