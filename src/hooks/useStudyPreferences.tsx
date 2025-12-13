@@ -13,8 +13,25 @@ interface Unit {
   id: string;
   unit_code: string;
   unit_title: string;
+  unit_name: string | null;
+  parent_unit_code: string | null;
   paper_code: string;
 }
+
+// Helper to get the best available unit display name
+// For some papers (like AA), the actual name is in parent_unit_code
+const getUnitDisplayName = (unit: Unit): string => {
+  if (unit.parent_unit_code && unit.parent_unit_code !== 'unit' && unit.parent_unit_code.length > 3) {
+    return unit.parent_unit_code;
+  }
+  if (unit.unit_name && unit.unit_name !== 'unit') {
+    return unit.unit_name;
+  }
+  if (unit.unit_title && unit.unit_title !== 'unit') {
+    return unit.unit_title;
+  }
+  return unit.unit_code;
+};
 
 export function useStudyPreferences(options: UseStudyPreferencesOptions = {}) {
   const { allowAll = false, defaultToFirst = true } = options;
@@ -41,7 +58,7 @@ export function useStudyPreferences(options: UseStudyPreferencesOptions = {}) {
       try {
         const { data, error } = await supabase
           .from("syllabus_units")
-          .select("id, unit_code, unit_title, paper_code")
+          .select("id, unit_code, unit_title, unit_name, parent_unit_code, paper_code")
           .eq("paper_code", selectedPaper)
           .order("unit_code");
 
@@ -141,6 +158,9 @@ export function useStudyPreferences(options: UseStudyPreferencesOptions = {}) {
     // Data
     papers,
     availableUnits,
+    
+    // Helpers
+    getUnitDisplayName,
     
     // State
     loading,

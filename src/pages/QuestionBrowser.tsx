@@ -8,8 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Search, CheckCircle2 } from "lucide-react";
-import { usePapers } from "@/hooks/usePapers";
-import { useUserProfile } from "@/hooks/useUserProfile";
+import { useStudyPreferences } from "@/hooks/useStudyPreferences";
 
 interface Question {
   id: string;
@@ -24,51 +23,34 @@ interface Question {
 }
 
 export default function QuestionBrowser() {
-  const { papers, loading: papersLoading } = usePapers();
-  const { profile } = useUserProfile();
+  const {
+    selectedPaper: paper,
+    selectedUnit: unitCode,
+    selectedDifficulty: difficulty,
+    setSelectedPaper: setPaper,
+    setSelectedUnit: setUnitCode,
+    setSelectedDifficulty: setDifficulty,
+    papers,
+    availableUnits,
+    getUnitDisplayName,
+    loading: prefsLoading,
+  } = useStudyPreferences();
   
   const [questions, setQuestions] = useState<Question[]>([]);
   const [filteredQuestions, setFilteredQuestions] = useState<Question[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedQuestion, setSelectedQuestion] = useState<Question | null>(null);
-  
-  // Filters
-  const [paper, setPaper] = useState<string>("");
-  const [unitCode, setUnitCode] = useState<string>("all");
-  const [difficulty, setDifficulty] = useState<string>("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [availableUnits, setAvailableUnits] = useState<string[]>([]);
 
-  // Set initial paper from user profile or first available paper
   useEffect(() => {
-    if (!papersLoading && papers.length > 0 && !paper) {
-      const defaultPaper = profile?.selected_paper || papers[0].paper_code;
-      setPaper(defaultPaper);
+    if (paper) {
+      fetchQuestions();
     }
-  }, [papersLoading, papers, paper, profile]);
-
-  useEffect(() => {
-    fetchQuestions();
-    fetchAvailableUnits();
   }, [paper]);
 
   useEffect(() => {
     applyFilters();
   }, [questions, unitCode, difficulty, searchTerm]);
-
-  const fetchAvailableUnits = async () => {
-    const { data, error } = await supabase
-      .from("sb_questions")
-      .select("unit_code")
-      .eq("paper", paper)
-      .not("unit_code", "is", null)
-      .order("unit_code");
-
-    if (!error && data) {
-      const units = [...new Set(data.map(d => d.unit_code).filter(Boolean))] as string[];
-      setAvailableUnits(units);
-    }
-  };
 
   const fetchQuestions = async () => {
     setLoading(true);
@@ -114,6 +96,13 @@ export default function QuestionBrowser() {
     }
   };
 
+  // Helper to get unit display name for a unit_code
+  const getUnitNameForCode = (unitCodeVal: string | null) => {
+    if (!unitCodeVal) return null;
+    const unit = availableUnits.find(u => u.unit_code === unitCodeVal);
+    return unit ? getUnitDisplayName(unit) : unitCodeVal;
+  };
+
   return (
     <div className="container mx-auto p-6 space-y-6">
       <div>
@@ -129,9 +118,9 @@ export default function QuestionBrowser() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div className="space-y-2">
               <Label>Paper</Label>
-              <Select value={paper} onValueChange={setPaper} disabled={papersLoading}>
+              <Select value={paper} onValueChange={setPaper} disabled={prefsLoading}>
                 <SelectTrigger>
-                  <SelectValue placeholder={papersLoading ? "Loading papers..." : "Select a paper"} />
+                  <SelectValue placeholder={prefsLoading ? "Loading papers..." : "Select a paper"} />
                 </SelectTrigger>
                 <SelectContent>
                   {papers.map((p) => (
@@ -152,7 +141,9 @@ export default function QuestionBrowser() {
                 <SelectContent>
                   <SelectItem value="all">All Units</SelectItem>
                   {availableUnits.map(unit => (
-                    <SelectItem key={unit} value={unit}>{unit}</SelectItem>
+                    <SelectItem key={unit.id} value={unit.unit_code}>
+                      {unit.unit_code} - {getUnitDisplayName(unit)}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -203,7 +194,9 @@ export default function QuestionBrowser() {
                   <div className="flex-1">
                     <div className="flex gap-2 mb-2">
                       {q.unit_code && (
-                        <Badge variant="outline">{q.unit_code}</Badge>
+                        <Badge variant="outline">
+                          {q.unit_code} - {getUnitNameForCode(q.unit_code)}
+                        </Badge>
                       )}
                       {q.difficulty && (
                         <Badge className={getDifficultyColor(q.difficulty)}>{q.difficulty}</Badge>
@@ -223,7 +216,9 @@ export default function QuestionBrowser() {
           <DialogHeader>
             <div className="flex gap-2 mb-2">
               {selectedQuestion?.unit_code && (
-                <Badge variant="outline">{selectedQuestion.unit_code}</Badge>
+                <Badge variant="outline">
+                  {selectedQuestion.unit_code} - {getUnitNameForCode(selectedQuestion.unit_code)}
+                </Badge>
               )}
               {selectedQuestion?.difficulty && (
                 <Badge className={getDifficultyColor(selectedQuestion.difficulty)}>
