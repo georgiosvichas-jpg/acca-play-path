@@ -148,6 +148,7 @@ export default function PracticeQuiz() {
     setSelectedDifficulty: setDifficulty,
     papers,
     availableUnits,
+    getUnitDisplayName,
     loading: prefsLoading,
   } = useStudyPreferences();
   
@@ -241,15 +242,21 @@ export default function PracticeQuiz() {
       // Fetch unit names for this paper
       const { data: unitsData, error: unitsError } = await supabase
         .from("syllabus_units")
-        .select("unit_code, unit_name, unit_title")
+        .select("unit_code, unit_name, unit_title, parent_unit_code")
         .eq("paper_code", paper);
 
       if (unitsError) {
         console.error("Failed to fetch syllabus units for practice quiz", unitsError);
       }
 
+      // Build unit map with best display name (prioritize parent_unit_code for papers like AA)
       const unitMap = new Map(
-        (unitsData ?? []).map((u) => [u.unit_code, u.unit_name || u.unit_title])
+        (unitsData ?? []).map((u) => {
+          const displayName = u.parent_unit_code && u.parent_unit_code !== 'unit' && u.parent_unit_code.length > 3
+            ? u.parent_unit_code
+            : (u.unit_name && u.unit_name !== 'unit' ? u.unit_name : u.unit_title);
+          return [u.unit_code, displayName];
+        })
       );
 
       // Shuffle questions and take requested number, adding unit names
@@ -598,7 +605,7 @@ export default function PracticeQuiz() {
                   <SelectItem value="all">All Units</SelectItem>
                   {availableUnits.map(unit => (
                     <SelectItem key={unit.id} value={unit.unit_code}>
-                      {unit.unit_code} - {unit.unit_title}
+                      {unit.unit_code} - {getUnitDisplayName(unit)}
                     </SelectItem>
                   ))}
                 </SelectContent>
