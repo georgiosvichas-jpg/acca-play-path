@@ -76,9 +76,21 @@ serve(async (req) => {
     console.log(`Fetching ${paperCode} syllabus units...`);
     const { data: syllabusUnits, error: syllabusError } = await supabase
       .from("syllabus_units")
-      .select("unit_code, unit_name, description")
+      .select("unit_code, unit_name, parent_unit_code, description")
       .eq("paper_code", paperCode)
       .order("unit_code");
+
+    // Helper to get the best available unit display name
+    // For some papers (like AA), the actual name is in parent_unit_code
+    const getUnitDisplayName = (unit: any): string => {
+      if (unit.parent_unit_code && unit.parent_unit_code !== 'unit' && unit.parent_unit_code.length > 3) {
+        return unit.parent_unit_code;
+      }
+      if (unit.unit_name && unit.unit_name !== 'unit') {
+        return unit.unit_name;
+      }
+      return unit.unit_code;
+    };
 
     if (syllabusError) throw syllabusError;
     if (!syllabusUnits || syllabusUnits.length === 0) {
@@ -104,7 +116,8 @@ serve(async (req) => {
 
     // Process each unit
     for (const unit of syllabusUnits) {
-      console.log(`Processing unit: ${unit.unit_code} - ${unit.unit_name}`);
+      const unitDisplayName = getUnitDisplayName(unit);
+      console.log(`Processing unit: ${unit.unit_code} - ${unitDisplayName}`);
 
       // Get questions for this unit
       const unitQuestions = questions?.filter(q => q.unit_code === unit.unit_code) || [];
@@ -112,7 +125,7 @@ serve(async (req) => {
       // Build context for AI
       const context = {
         unit_code: unit.unit_code,
-        unit_name: unit.unit_name,
+        unit_name: unitDisplayName,
         unit_description: unit.description || "",
         sample_questions: unitQuestions.slice(0, 5).map(q => ({
           question: q.question,
@@ -216,7 +229,7 @@ Generate between 5-15 flashcards depending on the complexity of the unit.`;
             .select("id")
             .eq("paper_code", paperCode)
             .eq("question", card.front)
-            .eq("unit_title", unit.unit_name)
+            .eq("unit_title", unitDisplayName)
             .maybeSingle();
 
           if (existing) {
@@ -230,7 +243,7 @@ Generate between 5-15 flashcards depending on the complexity of the unit.`;
             .insert({
               paper_code: paperCode,
               paper_name: paperTitle,
-              unit_title: unit.unit_name,
+              unit_title: unitDisplayName,
               question: card.front,
               answer: card.back,
               category: card.tag,
@@ -249,7 +262,7 @@ Generate between 5-15 flashcards depending on the complexity of the unit.`;
             if (preview.length < 10) {
               preview.push({
                 unit_code: unit.unit_code,
-                unit_name: unit.unit_name,
+                unit_name: unitDisplayName,
                 front: card.front,
                 back: card.back,
                 tag: card.tag,
